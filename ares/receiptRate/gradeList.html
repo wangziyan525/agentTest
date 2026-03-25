@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/common.css?v=1.0.1">
+    <link rel="stylesheet" href="css/index.css?v=1.0.1">
+    <title>银行档位管理</title>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <!-- 搜索 -->
+        <div class="gradeList_t">
+            <div class="searchTnput">
+                <form action="javascript:return true;">
+                    <input type="text" style="display: none;">
+                    <input type="search" placeholder="请输入名字" v-model='keyword' @keyup.enter='searchTap()'>
+                    <img src="./images/search_icon.png" class="searchIcon" alt="">
+                </form>
+            </div>
+            <div style="position: relative;">
+                <div class="display_start tab">
+                    <span v-for="(item,index) in tabList" :key='item.keys'
+                        :class='tabIndex==index?"tab_active_text":""'
+                        @click='tabTap(index,item.id)'>{{item.text}}<i v-if='tabIndex==index'
+                            class="tab_active"></i></span>
+                </div>
+            </div>
+        </div>
+        <!-- 银行列表 -->
+        <div class="gradeList_m">
+            <div v-if='firstBank.length>0'>
+                <div class="gradeList_m_t">
+                    一档
+                </div>
+                <div class="gradeList_m_b display_start">
+                    <div v-for="(item,index) in firstBank" :key='index' class="gradeList_m_item" @click='selectBank(item)'>
+                        <img v-show='item.loadFlag' class="bank_img" :src="imgUrl+item.memberBankNo+'.png'" @error="imgError" @load='loadImg(firstBank,index)' alt="">
+                        <img v-show='!item.loadFlag' class="bank_img" src="./bankIcon/bank_icon.png" alt="">
+                        <div>{{item.memberBankName}}</div>
+                    </div>
+                </div>
+            </div>
+            <div v-if='secondBank.length>0'>
+                <div class="gradeList_m_t">
+                    二档
+                </div>
+                <div class="gradeList_m_b display_start">
+                    <div v-for="(item,index) in secondBank" :key='index' class="gradeList_m_item" @click='selectBank(item)'>
+                        <img v-show='item.loadFlag' class="bank_img" :src="imgUrl+item.memberBankNo+'.png'" @error="imgError" @load='loadImg(secondBank,index)' alt="">
+                        <img v-show='!item.loadFlag' class="bank_img" src="./bankIcon/bank_icon.png" alt="">
+                        <div>{{item.memberBankName}}</div>
+                    </div>
+                </div>
+            </div>
+            <div v-if='thirdBank.length>0'>
+                <div class="gradeList_m_t">
+                    三档
+                </div>
+                <div class="gradeList_m_b display_start">
+                    <div v-for="(item,index) in thirdBank" :key='index' class="gradeList_m_item" @click='selectBank(item)'>
+                        <img v-show='item.loadFlag' class="bank_img" :src="imgUrl+item.memberBankNo+'.png'" @error="imgError" @load='loadImg(thirdBank,index)' alt="">
+                        <img v-show='!item.loadFlag' class="bank_img" src="./bankIcon/bank_icon.png" alt="">
+                        <div>{{item.memberBankName}}</div>
+                    </div>
+                </div>
+            </div>
+            <div v-if='fourthBank.length>0'>
+                <div class="gradeList_m_t">
+                    四档
+                </div>
+                <div class="gradeList_m_b display_start">
+                    <div v-for="(item,index) in fourthBank" :key='item.keys' class="gradeList_m_item" @click='selectBank(item)'>
+                        <img v-show='item.loadFlag' class="bank_img" :src="imgUrl+item.memberBankNo+'.png'" @error="imgError" @load='loadImg(fourthBank,index)' alt="">
+                        <img v-show='!item.loadFlag' class="bank_img" src="./bankIcon/bank_icon.png" alt="">
+                        <div>{{item.memberBankName}}</div>
+                    </div>
+                </div>
+            </div>
+            <div v-if='fifthBank.length>0'>
+                <div class="gradeList_m_t">
+                    五档
+                </div>
+                <div class="gradeList_m_b display_start">
+                    <div v-for="(item,index) in fifthBank" :key='item.keys' class="gradeList_m_item" @click='selectBank(item)'>
+                        <img v-show='item.loadFlag' class="bank_img" :src="imgUrl+item.memberBankNo+'.png'" @error="imgError" @load='loadImg(fifthBank,index)' alt="">
+                        <img v-show='!item.loadFlag' class="bank_img" src="./bankIcon/bank_icon.png" alt="">
+                        <div>{{item.memberBankName}}</div>
+                    </div>
+                </div>
+            </div>
+            <div v-if='sixthBank.length>0'>
+                <div class="gradeList_m_t">
+                    六档
+                </div>
+                <div class="gradeList_m_b display_start">
+                    <div v-for="(item,index) in sixthBank" :key='item.keys' class="gradeList_m_item" @click='selectBank(item)'>
+                        <img v-show='item.loadFlag' class="bank_img" :src="imgUrl+item.memberBankNo+'.png'" @error="imgError" @load='loadImg(sixthBank,index)' alt="">
+                        <img v-show='!item.loadFlag' class="bank_img" src="./bankIcon/bank_icon.png" alt="">
+                        <div>{{item.memberBankName}}</div>
+                    </div>
+                </div>
+            </div>
+            <div v-if='seventhBank.length>0'>
+                <div class="gradeList_m_t">
+                    七档
+                </div>
+                <div class="gradeList_m_b display_start">
+                    <div v-for="(item,index) in seventhBank" :key='item.keys' class="gradeList_m_item" @click='selectBank(item)'>
+                        <img v-show='item.loadFlag' class="bank_img" :src="imgUrl+item.memberBankNo+'.png'" @error="imgError" @load='loadImg(seventhBank,index)' alt="">
+                        <img v-show='!item.loadFlag' class="bank_img" src="./bankIcon/bank_icon.png" alt="">
+                        <div>{{item.memberBankName}}</div>
+                    </div>
+                </div>
+            </div>
+            <!-- 暂无数据 -->
+            <div v-if='(tabIndex==0&&firstBank.length==0&&secondBank.length==0&&thirdBank.length==0&&fourthBank.length==0&&fifthBank.length==0&&sixthBank.length==0)||(tabIndex==1&&firstBank.length==0)||(tabIndex==2&&secondBank.length==0)||(tabIndex==3&&thirdBank.length==0)||(tabIndex==4&&fourthBank.length==0)||(tabIndex==5&&fifthBank.length==0)||(tabIndex==6&&sixthBank.length==0)||(tabIndex==7&&seventhBank.length==0)' class="noData">
+               <div>暂无数据</div> 
+            </div>
+        </div>
+        <!-- 占位 -->
+        <div style="height:60px"></div>
+        <div class="gradeList_b" @click='toAddTap()'>新增银行</div>
+    </div>
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/gradeList.js?v=1.1.5"></script>
+<!-- <script src='../common/js/vConsole.min.js'></script> -->
+<script>
+    // var vConsole = new VConsole();
+    initJSSDK(['hideAllNonBaseMenuItem'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

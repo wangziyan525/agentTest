@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="tts/bootstrap.min.css">
+    <link rel="stylesheet" href="css/total.css?v=2.0">
+</head>
+<body >
+
+  <div id="app" style="display: none;">
+    <div class="contentPart">
+        <div class="totalNum">
+            <div >
+                <div class="totalPart">
+                    <img src="images/totalbk.png">
+                    <div>总任务数</div>
+                    <div>{{report.allTaskNum}}</div>
+                </div>
+            </div>
+            <div >
+                <div class="totalPart">
+                    <img src="images/totalbk.png">
+                    <div>已完成任务数</div>
+                    <div>{{report.finishTaskNum}}</div>
+                </div>
+            </div>
+            <div >
+                <div class="totalPart">
+                    <img src="images/totalbk.png">
+                    <div>未完成任务数</div>
+                    <div>{{report.allTaskNum - report.finishTaskNum}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="processPart">
+            <img src="images/process.png" class="processImg">
+            <div class="processLine">
+                <div class="processText">
+                    <div>恢复总进度<span class="processNum"> {{report.allProcess}}%</span></div>
+                </div>
+                <div class="process-back">
+                    <div class="processColor" :style="report.process_bar"> </div>
+                </div>
+                <div class="processTime" @click="queryTaskName">
+                    <span class="processNum">{{countdown}}s</span> 自动刷新
+                </div>
+            </div>
+        </div>
+
+        
+
+        <div class="reportPart">
+            <div class="reportOne" v-for="item in TaskList">
+                <div class="reportLine">
+                    <div class="bkCircle">
+                        <div class="bkSecCircle">
+                            <div class="report" :id="item.id" style="height: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reportName">{{item.taskGroup1}}</div>
+            </div>
+        </div>
+    </div>
+    
+
+    
+   
+    
+   
+  </div>
+    
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js"></script>
+<script type="text/javascript" src="../common/js/chart/echarts.min.js"></script>
+<script type="text/javascript" src="../common/js/chart/macarons.js"></script>
+<script type="text/javascript" src="js/total.js"></script>
+<script type="text/javascript">
+   initFun();
+</script>
+
+
+
+</html>

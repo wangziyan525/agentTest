@@ -1,0 +1,195 @@
+function initFun() {
+    new Vue({
+        el: '#app',
+        data: {
+            baseUrl: {
+                detailDoctorUrl: 'qywx/clinic/appointDocDetail.xa', //医师详情
+                detailDeviceUrl:'qywx/clinic/appointdeviceDetail.xa',//设备详情
+                appointmentDoctorUrl:'qywx/clinic/userAppointDoc.xa',//预约医师接口
+                appointmentDeviceUrl:'qywx/clinic/userAppointDevice.xa',//预约设备接口
+            },
+            dateShow: false,
+            currentDate:'',
+            minDate:null,
+            maxDate:null,
+            date: '',
+            time:'',
+            morningList: [],
+            afternoonList: [],
+            detail: "",
+            intrFlag:true,
+            flag:''
+        },
+        created() {
+            var that = this;
+            that.flag = that.getQueryString('flag')?that.getQueryString('flag'):'';
+            if(that.flag=="doctor"){
+                document.title = '问诊预约'
+           }else if(that.flag=='device'){
+                document.title = '理疗设备预约'
+           }
+            if(localStorage.getItem('detailObj')){
+                that.detail = JSON.parse(localStorage.getItem('detailObj'));
+                var dealine = that.detail.dailyDeadLine.split(':');
+                if (dealine[0] > 8) {
+                    that.morningList = that.handleTime(dealine,'09',7);
+                }
+                if (dealine[0] > 12) {
+                    that.afternoonList = that.handleTime(dealine,'13',19);
+                }
+            }
+        },
+        mounted() {
+            var that = this;
+            var date1 = that.detail.startTime.split('-');
+            var date2 = that.detail.endTime.split('-');
+            that.currentDate = moment(that.detail.startTTime,'YYYY-MM-DD').toDate();
+            that.minDate = new Date(date1[0],date1[1]-1,date1[2]);
+            that.maxDate = new Date(date2[0],date2[1]-1,date2[2]);
+        },
+        methods: {
+            //获取url参数
+            getQueryString(name) {
+                let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                let r = window.location.search.substr(1).match(reg);
+                if (r != null)
+                    return (r[2]);
+                return null;
+            },
+            // 时间段处理
+            handleTime(dealine, startNum, len) {
+                var date = new Date();
+                date.setHours(startNum);
+                date.setSeconds(00);
+                date.setUTCMinutes(00);
+                var timerArr = [];
+                for (var i = 0; i < len; i++) {
+                    var time = new Date(Number(date.getTime()) + Number(30 * 60 * 1000 * i));
+                    var hour = '', sec = '';
+                    time.getHours() < 10 ? hour = '0' + time.getHours() : hour = time.getHours();
+                    time.getMinutes() < 10 ? sec = '0' + time.getMinutes() : sec = time.getMinutes();
+                    var obj = { text: '', checked: false }
+                    if (hour == dealine[0] && 0 < dealine[1]&&dealine[1]<= 30) {
+                        sec = dealine[1];
+                        timerArr.push({ text: hour + ':' + '00', checked: false });
+                        obj.text = hour + ':' + sec;
+                        timerArr.push(obj);
+                        return timerArr;
+                    } else if(hour == dealine[0] && 0 == dealine[1]){
+                        sec = dealine[1];
+                        obj.text = hour + ':' + sec;
+                        timerArr.push(obj);
+                        return timerArr;
+                    }else if (hour > dealine[0] && dealine[1] > 30) {
+                        sec = dealine[1];
+                        var newHour = hour - 1;
+                        newHour < 10 ? newHour = '0' + newHour : newHour;
+                        obj.text = newHour + ':' + sec;
+                        timerArr.push(obj);
+                        return timerArr;
+                    }
+                    obj.text = hour + ':' + sec;
+                    timerArr.push(obj);
+                }
+                return timerArr;
+            },
+            //插件时间选择确定
+            chooseDate(val) {
+                var chooseDate = this.initDateTimer(val);
+                this.date = chooseDate;
+                this.dateShow = false;
+            },
+            //时间格式化
+            initDateTimer(param) {
+                var month = param.getMonth() + 1;
+                if (month < 10) {
+                    month = '0' + month;
+                }
+                var day = param.getDate();
+                if (day < 10) {
+                    day = '0' + day;
+                }
+                return param.getFullYear() + '-' + month + '-' + day;
+            },
+
+            //时间格式化
+            formatter(type, val) {
+                if (type == "year") {
+                    return `${val}年`
+                } else if (type == "month") {
+                    return `${val}月`
+                } else if (type == "day") {
+                    return `${val}日`
+                }
+                return val;
+            },
+            formatterTime(type, val) {
+                if (type == "hour") {
+                    return `${val}时`
+                } else if (type == "minute") {
+                    return `${val}分`
+                }
+                return val;
+            },
+            selectTime(flag,index){
+                var list = '';
+                var list1 = this.morningList;
+                var list2 = this.afternoonList;
+                if(flag=='morning'){
+                    list = this.morningList;
+                }else if(flag=='afternoon'){
+                    list = this.afternoonList;
+                }
+                list1.map((v,i)=>{
+                    v.checked = false;
+                });
+                list2.map((v,i)=>{
+                    v.checked = false;
+                });
+                list[index].checked = true;
+                this.time = list[index].text;
+                if(list.length-1==index){
+                    this.startTime = this.date + " " + this.time + ':00';
+                    this.endTime = this.date + " " + this.time + ':00';
+                }else{
+                    this.startTime = this.date + " " + this.time + ':00';
+                    this.endTime = this.date + " " + list[index+1].text + ':00';
+                } 
+            },
+            // 预约提交
+            submitTap() {
+                let that = this;
+                if (that.date == "") {
+                    $.alert('', '请选择预约日期');
+                    return false;
+                } else if (that.time == "") {
+                    $.alert('', '请选择预约时间');
+                    return false;
+                }
+                var title = '确认预约该医师？';
+                var url = that.baseUrl.appointmentDoctorUrl;
+                var tabIndex = 0;
+               if(that.flag=='device'){
+                    title = '确认预约该理疗设备？';
+                    url = that.baseUrl.appointmentDeviceUrl;
+                    tabIndex = 1;
+                }
+                var params = {
+                    startTime:that.startTime,
+                    endTime:that.endTime,
+                    id:that.detail.id
+                }
+                $.confirm("", title, function () {
+                    $http(url, true, params, false)
+                        .then(res => {
+                            $.alert('', '预约成功！', function () {
+                                localStorage.removeItem('detailObj');
+                                window.location.replace('../detail.html?id='+res.data.id+'&tabIndex='+tabIndex)
+                            });
+                        });
+                })
+            },
+        },
+       
+    })
+};

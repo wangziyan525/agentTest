@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+    name="viewport" />
+  <link rel="stylesheet" href="../common/css/weui.min.css">
+  <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+  <link rel="stylesheet" href="../common/css/vant-2.12.css">
+  <link rel="stylesheet" href="css/branchMangerAssignList.css">
+  <link rel="stylesheet" href="css/common.css">
+  <title>客户经理对接情况</title>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+
+    <!-- 客户经理信息 -->
+    <div class="manager-info">
+      <div class="manager-name">客户经理：<span>{{ managerName }}</span></div>
+      <div class="manager-phone" @click="callPhone">
+        <span class="phone-number">{{ managerPhone }}</span>
+        <img  class="phone" src="./images/phone.png" alt="">
+      </div>
+    </div>
+
+    <!-- 状态Tab -->
+    <div class="status-tabs">
+      <div 
+        class="status-tab" 
+        :class="{ active: statusTab === 0 }"
+        @click="onStatusChange(0)"
+      >待对接</div>
+      <div 
+        class="status-tab" 
+        :class="{ active: statusTab === 1 }"
+        @click="onStatusChange(1)"
+      >已对接</div>
+    </div>
+
+    <!-- 统计条 -->
+    <div class="count-bar">
+      {{ statusTab === 0 ? '待对接' : '已对接' }}总数：{{ totalCount }}
+    </div>
+
+    <!-- 列表区域 -->
+    <div class="list-container">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          @load="onLoad"
+          :immediate-check="false"
+        >
+          <div class="list-item" v-for="(item, index) in listData" :key="index">
+            <div class="item-header" @click="goToDetail(item)">
+              <div class="company-name">{{ item.companyName }}</div>
+              <div class="status-tag" v-if="statusTab == 0"  >
+                <van-icon name="arrow" />
+              </div>
+              <div class="status-tag" v-if="statusTab == 1"   :class="getStatusClass(item.datastage)">
+                {{ item.statusText }}
+                <van-icon name="arrow" />
+              </div>
+            </div>
+            <div class="item-info" @click="goToDetail(item)">
+              <div class="info-row">
+                <span class="info-label">客户类型：</span>
+                <span class="info-value">{{ item.custtype }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">资金需求：</span>
+                <span class="info-value">{{ item.fundingrequ }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">资金用途：</span>
+                <span class="info-value">{{ item.purpose }}</span>
+              </div>
+            </div>
+            <div class="item-footer">
+              <div class="contact-phone">申请时间：<span>{{ item.createtime }}</span></div>
+            </div>
+          </div>
+          
+          <!-- 空状态 -->
+          <div class="empty-state" v-if="listData.length === 0">
+            <div class="empty-icon">
+              <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="15" width="80" height="95" rx="4" fill="#E8F4FC" stroke="#7EB8E7" stroke-width="2"/>
+                <path d="M75 15V35H95" stroke="#7EB8E7" stroke-width="2" fill="#E8F4FC"/>
+                <rect x="35" y="50" width="50" height="6" rx="2" fill="#7EB8E7"/>
+                <rect x="35" y="65" width="40" height="6" rx="2" fill="#7EB8E7"/>
+                <rect x="35" y="80" width="45" height="6" rx="2" fill="#7EB8E7"/>
+              </svg>
+            </div>
+            <div class="empty-text">暂无数据</div>
+          </div>
+        </van-list>
+    </div>
+  </div>
+
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/branchMangerAssignList.js"></script>
+<script src="js/DICT.js"></script>
+<script src="../common/js/vConsole.min.js"></script>
+
+<script>
+  //  var vConsole = new VConsole();
+  initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+  wx.ready(function () {
+    wx.hideAllNonBaseMenuItem();
+  });
+  function getUserFinish() {
+    var username = $.parseJSON($.cookie("user")).name;
+    __canvasWM({
+      content: username
+    });
+    initFun()
+  } 
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

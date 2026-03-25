@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="css/submitResult.css">
+
+    <title>提交结果</title>
+</head>
+
+<body>
+    <div class="container" v-cloak>
+        <div class="topArea">
+            <img class="topImg" src="./images/success.png" alt="">
+            <div>提交成功</div>
+        </div>
+        <div class="midArea">
+            <div>温馨提示</div>
+            <div class="midtext">
+                <p>1、在您申请完成后，系统将此信息推送至支行长、总行零售部管理专员线上审核，审核通过后自动上报中国银保监会备案；</p>
+                <p>2、请您及时关注企业微信“金融小站”版块中的相关推送信息；</p>
+                <p>3、根据中国银保监会要求，在备案时需本人手机下载“金事通APP”，并完成相关信息核实。</p>
+            </div>
+        </div>
+        <div class="btmBtn" @click="toHomePage">
+            确定
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/submitResult.js"></script>
+<script src="../common/js/vConsole.min.js"></script>
+
+<script>
+     //var vConsole = new VConsole();
+    initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+    wx.ready(function () {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

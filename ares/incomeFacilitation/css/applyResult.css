@@ -1,0 +1,96 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f6f6f6;
+    /* overflow: hidden; */
+}
+#app{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+/* ----------------------------------------------------- banner ------------------------------------------------ */
+.banner{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+.banner img{
+    display: block;
+    width: 50%;
+}
+/* ----------------------------------------------------- detail ------------------------------------------------ */
+.detail{
+    width: 100%;
+    padding: 0 12px;
+    box-sizing: border-box;
+    margin-top: 15px;
+    background-color: #fff;
+}
+.detail .list{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+.detail .list::before{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #DDD;
+    -ms-transform: scaleY(.3);
+    -webkit-transform: scaleY(.3);
+    transform: scaleY(.3);
+    position: absolute;
+    top: 0px;
+    left: 0;
+    z-index: 1;
+}
+.detail .list:first-child::before{
+    display: none;
+}
+.detail .list span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+}
+.detail .list span:first-child{
+    width: 120px;
+    color: #333;
+}
+.detail .list span:last-child{
+   flex: 1;
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+   color: #999;
+}
+/* ----------------------------------------------------- btn ------------------------------------------------ */
+.btn{
+    width: 100%;
+    padding: 0 12px;
+    box-sizing: border-box;
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+.btn .btnBig{
+    width: 100%;
+    border-radius: 6px;
+    font-size: 15px;
+    text-align: center;
+    line-height: 20px;
+    color: #fff;
+    background-color: #409eff;
+    padding: 10px 0;
+}

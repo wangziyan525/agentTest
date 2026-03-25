@@ -1,0 +1,152 @@
+[v-cloak]{
+    display: none;
+}
+
+html, body {
+    min-height: 100vh;
+    background-color: #f3f4f6;
+}
+.result-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8fafc;
+    margin-top: -60vh
+}
+
+.progress-ring-container {
+    position: relative;
+    width: 220px;
+    height: 220px;
+}
+
+/* 背景圆环 */
+.progress-ring-bg {
+    fill: none;
+    stroke: #e2e8f0;
+    stroke-width: 15;
+}
+
+/* 进度圆环 */
+.progress-ring-progress {
+    fill: none;
+    stroke-width: 15;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 0.5s ease;
+}
+.scoreTitle{
+    /* padding: 65px 85px 0px 85px; */
+    width: 55%;
+    margin: 65px 0px 35px 0px;
+}
+/* 分数显示 */
+.score-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.score-value {
+    font-size: 48px;
+    font-weight: bold;
+    color: #1e293b;
+}
+
+.score-percentage {
+    font-family: PingFangSC-Regular;
+font-size: 16px;
+color: #ACACAC;
+letter-spacing: 0;
+text-align: center;
+line-height: 22px;
+font-weight: 400;
+padding: 3px 10px
+}
+
+.scoreLabel{
+    font-family: PingFangSC-Medium;
+font-size: 20px;
+color: #000000;
+text-align: center;
+font-weight: 600;
+margin-top: 20px;
+}
+.testBtn{
+    background: #267EF0;
+border-radius: 6px;
+font-family: PingFangSC-Regular;
+font-size: 17px;
+color: #FFFFFF;
+text-align: center;
+font-weight: 400;
+padding: 11px 0px;
+margin-top: 127px;
+width: 60%;
+}
+.control-panel {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 300px;
+}
+
+.score-input {
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    background-color: #4299e1;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn:hover {
+    background-color: #3182ce;
+}
+
+/* 不同成绩对应的颜色 */
+.excellent {
+    stroke: #44C966; /* 优秀 - 深青色 */
+}
+
+.good {
+    stroke: #44C966; /* 良好 - 绿色 */
+}
+
+.pass {
+    stroke: #ed8936; /* 及格 - 橙色 */
+}
+
+.fail {
+    stroke: #F26A62; /* 不及格 - 红色 */
+}
+
+.label-excellent {
+    color:#44C966;
+}
+
+.label-good {
+    color: #48bb78;
+}
+
+.label-pass {
+    color: #ed8936;
+}
+
+.label-fail {
+    color: #e53e3e;
+}

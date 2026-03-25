@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>上传申请</title>
+	<link rel="stylesheet" href="../common/css/weui.min.new.css">
+	<link rel="stylesheet" href="../common/css/jquery-weui.min.new.css">
+<!--	<link rel="stylesheet" href="../vant/css/vant-1.2.3.min.css">-->
+	<link rel="stylesheet" href="css/index.css?v=0.1.9">
+</head>
+<body style="background: #f7f7f7;">
+<!--我的申请 -->
+<div class="page3">
+	<div class="navbar">
+		<a class="navbar__item" data-currentTab="tab1" id="tab11">
+			上传申请
+		</a>
+		<a class="navbar__item" data-currentTab="tab2" id="tab22">
+			历史记录
+		</a>
+	</div>
+	<div id="tab1" style="width: 100%;display:none">
+		<div class="text_line">
+			<div class="text_info" style="border-top: 1px solid #FFFFFF; border-radius: 4px 4px 0px 0px;">
+				<div class="text_title">标题</div>
+				<div class="text_input"><input type="text" class="input_info" placeholder="请输入上传视频标题" maxlength="200" id="title"></div>
+			</div>
+			<div class="text_info">
+				<div class="text_title">选择类型</div>
+				<div class="text_input selectDowm" >
+					<input type="text" readonly="readonly"  class="input_info" placeholder="请选择视频类型" id="videoType">
+				</div>
+			</div>
+			<div class="text_info">
+				<div class="text_title">可见范围</div>
+				<div class="text_input selectDowm" >
+					<input type="text" readonly="readonly"  class="input_info" placeholder="请选择视频可见范围" id="range" >
+				</div>
+			</div>
+			<div class="text_info">
+				<div class="text_title">视频描述</div>
+			</div>
+			<div style="background: #FFFFFF; padding: 0px 12px 10px 12px;">
+				<div style=" position: relative;">
+					<textarea class="textarea_info" placeholder=" 请输入视频信息（最少10个字）" rows="3" maxlength="500"  id="describe"></textarea>
+					<div class="textarea-counter"><span id="currentNum1">0</span>/500</div>
+				</div>
+			</div>
+			<div class="text_info" style="border-radius: 0px 0px 4px 4px;">
+				<div class="text_title">验证码</div>
+				<div class="text_input">
+					<input style="margin-top: 9px; display: block; width:65%; float:left;" type="text" class="input_info" placeholder="请输入图形验证码" maxlength="4" id="validateCode">
+					<!--					<img id = "imgcodeImg" src="" width="100%" >-->
+					<!--					<input type="text" id="validateCode" name="validateCode" placeholder="请输入图形验证码" maxlength="4" >-->
+					<div style="width: 34%; float:right;">
+						<img id="imgcodeImg" src="" style="width: 100%; margin-top: 10px; "/>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="text_info">
+                <div class="text_title">备&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp注</div>
+                <div class="text_input">
+                    <textarea class="textarea_info" placeholder="请输入备注信息" rows="3" maxlength="500"  id="beizhu"></textarea>
+                    <div class="textarea-counter"><span id="currentNum2">0</span>/500</div>
+                </div>
+            </div> -->
+			<div id="warnTo" class="warnTo" style="margin-top: 10px;">温馨提示</div>
+		</div>
+		<div class="butApply">
+			<a href="javascript:;" class="btn btn_primary" style="margin-top: 20px;">提交申请</a>
+		</div>
+		<div class="warn">
+			<div>提交申请后会有专员与您联系</div>
+			<div>如有疑问，请联系互联网金融部刘惠惠</div>
+			<div><a href="tel:029-88992490" class="telphone" style="margin-right: 10px;">029-88992490</a><a href="tel:17795602507" class="telphone">17795602507</a></div>
+		</div>
+	</div>
+	<div id="tab2" style="display:none">
+		<div class="apply-biaoti"  style="border-top: 1px solid #dddddd; padding: 0px 12px;">
+			<div id="biaoti1" class="apply-xuanzhong">全部</div>
+			<div id="biaoti2" class="apply-weixuan">处理中</div>
+			<div id="biaoti3" class="apply-weixuan">处理完成</div>
+		</div>
+		<div id="listPart">
+		</div>
+		<div class="zwsj" style="width: 100%; margin-top: 20%; text-align: center">
+			<img src="image/zwsq.png" style="width: 50%; margin: 0px auto" />
+		</div>
+		<div class="notips">
+			暂无上传申请
+		</div>
+		<div class="hiddenroot"></div>
+
+	</div>
+	<div id="tab3" class="v-meng" style="display:none;">
+		<div class="meng-tishi">
+			<div class="warn_title meng-biaoti">企业号视频上传说明</div>
+			<div class="warn_text meng-test">
+				<div>1、视频名称：15字以内。</div>
+				<div>2、视频格式：MP4。</div>
+				<div>3、视频时长不超过15分钟，大小不超过50MB。</div>
+				<div>4、视频首图和不可播放图片，不可白色背景。</div>
+				<div>5、视频需至少提前三天提供。</div>
+				<div>6、跨部门的视频内容最终确认请提工作联系单。</div>
+				<div>7、视频发出后如需推送消息，请提供消息素材，图文最佳。</div>
+				<div>8、视频上传前需填写视频上传登记表。</div>
+			</div>
+			<div style=" border-top: 1px solid #dddddd;margin-top: 20px">
+				<div class="butApply" style="margin-top: 10px;">
+					<a href="javascript:;" class="btn btn_primary meng-button" >我知道了</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="tab4" class="v-meng" style="display:none;" >
+		<div class="range-list">
+			<div class="range-biaoti">
+				可见范围
+			</div>
+			<div class="range-test" id="range0">
+				全行可见
+				<img src="./image/xuanxzhe.png" class="range-img">
+			</div>
+			<div class="range-test" id="range1">
+				白名单
+				<img src="./image/xuanxzhe.png" class="range-img">
+			</div>
+			<div style="width: 100%; height: 4px; background: #F5F6F7;"></div>
+			<div class="range-quxiao" onclick="quxiao()"> 取消</div>
+		</div>
+	</div>
+	<div id="tab5" class="v-meng" style="display:none;" >
+
+	</div>
+	<div class="root">
+		<div class="step_root input_border_bottom">
+			<div class="step_item video_page">
+				<div class="flow_img">
+					<img src="image/video.png" />
+				</div>
+				<div class="step_intro nosel_step">学习视频</div>
+			</div>
+			<div class="step_item fee_page">
+				<div class="flow_img">
+					<img src="image/fee.png" />
+				</div>
+				<div class="step_intro nosel_step">我的积分</div>
+			</div>
+			<div class="step_item apply_page">
+				<div class="flow_img">
+					<img src="image/count_act.png" />
+				</div>
+				<div class="step_intro curr_step">学习记录</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<!--<script type="text/javascript" src="../vant/js/vant.js"></script>-->
+<!--<script type="text/javascript" src="../vant/js/vant-1.2.3.min.js"></script>-->
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript">
+	function getUserFinish(){
+		var username = $.parseJSON($.cookie("user")).name;
+		__canvasWM({
+			content: username
+		});
+		$.getScript("js/apply.js?v=1.5")
+	}
+</script>
+<script type="text/javascript" src="../common/js/getbase_new.js"></script>
+<script type="text/html" id="listTemp">
+	<div class="list_info">
+		<div class="list-cell" style="border-bottom: 1px solid #dddddd;">
+			<div class="list-cell__bd" style="width:60%;color:#121212; padding: 10px 0px;">
+				<p>{createtime}</p>
+			</div>
+<!--			<div class="list-cell__ft" style="width:40%;color:{status};">{auditstatus}</div>-->
+		</div>
+		<div class="list-cell">
+			<div class="list-cell__bd">
+				<p>标题</p>
+			</div>
+			<div class="list-cell__ft">{title}</div>
+		</div>
+		<div class="list-cell">
+			<div class="list-cell__bd">
+				<p>视频类型</p>
+			</div>
+			<div class="list-cell__ft">{chinesename}</div>
+		</div>
+		<div class="list-cell">
+			<div class="list-cell__bd">
+				<p>可见范围</p>
+			</div>
+			<div class="list-cell__ft">{scope}</div>
+		</div>
+		<div class="list-cell">
+			<div class="list-cell__bd">
+				<p>视频描述</p>
+			</div>
+			<div class="list-cell__ft">{describe}</div>
+		</div>
+
+	</div>
+</script>
+<script type="text/javascript" src="../js/getbase_new.js"></script>
+
+<script src="../js/watermark.js?v=1.2"></script>
+</html>

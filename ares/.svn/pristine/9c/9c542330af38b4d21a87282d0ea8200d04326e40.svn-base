@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>员工绩效面谈</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/detail.css?v=0.13">
+    <link rel="stylesheet" href="./css/score.css">
+</head>
+<body>
+
+    <div id="app" v-cloak>
+
+        <!-- 标题 -->
+        <div class="title">
+            <span>{{titleText}}</span>员工绩效面谈反馈表
+        </div>
+        
+        <!-- 汇报 -->
+        <div class="report">
+            <div class="reportTime">员工姓名：{{infos.idcardname}}</div>
+            <div class="reportTime">提交时间：{{examineTime}}</div>
+            <div class="reportTime">考核人：{{examinedPeopels}}</div>
+        </div>
+
+        <!-- 考核填写 -->
+        <div class="examine">
+
+             <!-- tab切换 -->
+            <div class="tabs">
+                <van-tabs v-model="active" :ellipsis="false" color="#4675C9"  @change="changeActive">
+                    <van-tab :title="monthTitle"></van-tab>
+                    <van-tab title="优点与进步"></van-tab>
+                    <van-tab title="不足之处和原因分析"></van-tab>
+                    <van-tab title="下月工作计划"></van-tab>
+                </van-tabs>
+            </div>
+            <div class="examineCt">
+                <van-swipe :loop="false" :show-indicators="false" @change="monthChange" ref="mySwipe">
+                    <!-- 回显 -->
+                    <template v-for="(it,i) in examineingList">
+                        <van-swipe-item>
+                            <div class="examineCtList examineCtList1">
+                                <span v-html="it.reason"></span>
+                            </div>
+                        </van-swipe-item>
+                    </template>
+                </van-swipe>
+            </div>
+
+            <!-- 流转信息 -->
+            <div class="flowInfo">
+                <!-- 第一考核情况 -->
+                <div class="flowList" v-if="infos.firstcheckTime && infos.firstcheckTime !=''">
+                    <div class="flowLis">
+                        <span>考核人1评分</span><span>{{infos.firstcheckScore}}</span>
+                    </div>
+                    <div class="flowLis1">
+                        <span>考核人1谈话要点</span><span>{{infos.firstcheckTalkingpoints}}</span>
+                    </div>
+                    <div class="flowLis">
+                        <span>考核人1</span><span>{{infos.firstcheckIdcardname}}</span>
+                    </div>
+                    <div class="flowLis">
+                        <span>考核时间</span><span>{{readTime1(infos.firstcheckTime)}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- 评分 -->
+         <template v-if="status == 1 || status == 2">
+            <!-- 评语输入 -->
+            <div class="scoreReason">
+                <div class="title">考核人1谈话要点</div>
+                <textarea rows="10" placeholder="请输入谈话要点" v-model="reason"></textarea>
+            </div>
+            <!-- 评分 -->
+            <div class="scoreNum">
+                <span @click="toExamine">评分</span>
+                <input type="number" placeholder="请输入(0-100分)" v-model="scoreNum">
+            </div>
+        </template>
+
+        <!-- 底部提交 -->
+        <template v-if="status == 1 || status == 2">
+            <div class="btn">
+                <div style="width: 100%;height: 20px;"></div>
+                <div class="bigBtn" @click="toExamine">提交</div>
+                <div style="width: 100%;height: 30px;"></div>
+            </div>
+        </template>
+        <template v-else>
+            <div style="width: 100%;height: 50px;"></div>
+        </template>
+
+    </div>
+
+</body>
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../../common/js/jwxwork.js"></script>
+<script type="text/javascript" src="../../common/js/watermark.js?v=1.2"></script>
+<script type="text/javascript" src="../../common/js/vConsole.min.js"></script>
+<script type="text/javascript" src="../../common/js/server.js"></script>
+<script type="text/javascript" src="./js/detail.js?v=0.0.23"></script>
+<script>
+
+    // var vConsole = new VConsole();
+
+
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem','invoke','chooseImage','uploadImage','previewImage']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+
+    function getUserFinish() {
+        action();
+    }
+
+
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>

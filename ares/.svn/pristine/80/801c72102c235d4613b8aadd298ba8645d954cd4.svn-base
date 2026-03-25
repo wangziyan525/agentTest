@@ -1,0 +1,347 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+    name="viewport" />
+  <link rel="stylesheet" href="../common/css/weui.min.css">
+  <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+  <link rel="stylesheet" href="../common/css/vant-2.12.css">
+  <link rel="stylesheet" href="css/apply.css">
+  <title>临时提额申请</title>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <div v-if="page==1">
+      <!-- 内容区域 -->
+      <div class="content">
+        <!-- 客户经理信息 -->
+        <div class="manager-section">
+          <div class="manager-header">
+            <span class="manager-title">客户经理:{{ managerInfo.name }}(工号:{{ managerInfo.humancode }})</span>
+            <div class="manager-toggle" @click="handleToggle">
+              <span>{{ isExpand ? '收起' : '展开' }}</span>
+              <img :src="isExpand ? 'images/upArrow.png' : 'images/downArrow.png'" alt="">
+            </div>
+          </div>
+          <div class="manager-detail" v-show="isExpand">
+            <div class="manager-row">
+              <span class="manager-label">手机号码</span>
+              <span class="manager-value">{{ managerInfo.mobile }}</span>
+            </div>
+            <div class="manager-row">
+              <span class="manager-label">所属机构</span>
+              <span class="manager-value">{{ managerInfo.bu_descr }}</span>
+            </div>
+            <div class="manager-row">
+              <span class="manager-label">岗位</span>
+              <span class="manager-value">{{ managerInfo.postion }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-gap"></div>
+        <!-- 运营经理选择 -->
+        <div class="select-item" @click="openPopup">
+          <span class="select-label">运营经理</span>
+          <div class="select-value" :class="{ placeholder: !reasonText }">
+            <div class="manager-select-info" v-if="operaterManagerInfo.name">
+              <span class="manager-name">{{operaterManagerInfo.name}}</span>
+              <span class="manager-org">{{operaterManagerInfo.bu_descr}}</span>
+            </div>
+            <span v-else>请选择</span>
+            <img src="images/rightArrow.png" alt="">
+          </div>
+        </div>
+        <div class="section-gap"></div>
+        <!-- 客户信息表单 -->
+        <div class="form-section">
+          <div class="form-item">
+            <span class="form-label">客户姓名</span>
+            <input class="form-input" type="text" v-model="formData.customerName" placeholder="请输入">
+          </div>
+          <div class="form-item">
+            <span class="form-label">证件号码</span>
+            <input class="form-input" type="text" v-model="formData.idCard" placeholder="请输入" maxlength="18">
+          </div>
+          <div class="form-item">
+            <span class="form-label">卡号后4位</span>
+            <input class="form-input" type="text" inputmode="numeric" v-model="formData.cardLast4" placeholder="请输入"
+              maxlength="4">
+          </div>
+          <div class="form-item">
+            <span class="form-label">客户手机号码</span>
+            <input class="form-input" type="tel" v-model="formData.customerPhone" placeholder="请输入" maxlength="11">
+          </div>
+        </div>
+        <div class="section-gap"></div>
+
+        <!-- 临时提额原因 -->
+        <div class="select-item" @click="handleSelectCustom">
+          <span class="select-label">是否营销客户</span>
+          <div class="select-value" :class="{ placeholder: !reasonText }">
+            <span>{{ customText || '请选择' }}</span>
+            <img src="images/rightArrow.png" alt="">
+          </div>
+        </div>
+        <div class="section-gap"></div>
+
+        <!-- 临时提额原因 -->
+        <div class="select-item" @click="handleSelectReason">
+          <span class="select-label">临时提额原因</span>
+          <div class="select-value" :class="{ placeholder: !reasonText }">
+            <span>{{ reasonText || '请选择' }}</span>
+            <img src="images/rightArrow.png" alt="">
+          </div>
+        </div>
+        <div class="select-item" v-if=" reasonText=='其他需要'  " style="padding:0px 16px">
+          <div class="popup-content">
+            <van-field v-model="reasonInput" rows="2" autosize type="textarea" class="popup-input"
+            maxlength="50" show-word-limit placeholder="请填写">
+          </div>
+        </div>
+
+        <!-- 上传证明材料 -->
+        <div class="upload-section">
+          <div class="upload-title">上传证明材料 <span>（最多上传5张）</span></div>
+          <div class="upload-tip">(如有特殊情况可上传情况说明)</div>
+          <div class="upload-list">
+            <!-- 已上传的图片 -->
+            <div class="upload-item-wrap" v-for="(img, index) in imageList" :key="index">
+              <div class="upload-item">
+                <img :src="img.url" alt="" @click="handlePreviewImage(index)">
+                <div class="delete-btn" @click="handleDeleteImage(index)">×</div>
+                <div class="edit-btn" @click="handleEditImage(index)">修改/查看</div>
+              </div>
+              <!-- <div class="upload-item-name">照片{{ index + 1 }}</div> -->
+            </div>
+            <!-- 添加按钮 -->
+            <div class="upload-item-wrap" v-if="imageList.length < 5">
+              <div class="upload-add" @click="handleAddImage">
+                <img class="upload-bg" src="images/supportDoc.png" alt="">
+                <img class="upload-icon" src="images/photo.png" alt="">
+              </div>
+              <!-- <div class="upload-item-name">添加照片</div> -->
+            </div>
+          </div>
+        </div>
+        <div class="section-gap"></div>
+      </div>
+
+      <!-- 底部按钮 -->
+      <div class="bottom-btn-wrap">
+        <button class="bottom-btn" @click="handleConfirm">确认</button>
+      </div>
+
+      <!-- 临时提额原因选择弹窗 -->
+      <van-popup v-model="showReasonPicker" position="bottom">
+        <van-picker :columns="reasonList" show-toolbar title="请选择临时提额原因" @cancel="handleReasonClose"
+          @confirm="handleReasonSelect">
+        </van-picker>
+      </van-popup>
+      <van-popup v-model="showCustomPicker" position="bottom">
+        <van-picker :columns="customList" show-toolbar title="请选择是否营销客户" @cancel="handleCustomClose"
+          @confirm="handleCustomSelect">
+        </van-picker>
+      </van-popup>
+      <!-- 搜索选择弹窗 -->
+      <van-popup v-model="showPopup" position="bottom" round :style="{ height: '70%' }">
+        <div class="popup-container">
+          <!-- 弹窗头部 -->
+          <div class="popup-header">
+            <span class="popup-title">选择运营经理</span>
+            <div class="popup-close" @click="closePopup">×</div>
+          </div>
+
+          <!-- 搜索框 -->
+          <div class="search-wrap">
+            <div class="search-box">
+              <img class="search-icon" src="images/search.png" alt="">
+              <input class="search-input" type="text" v-model="searchKey" placeholder="输入机构名称或机构号搜索"
+                >
+            </div>
+            <span class="search-cancel" @click="handleSearch">搜索</span>
+          </div>
+
+          <!-- 列表区域 -->
+          <div class="list-wrap">
+            <!-- 默认列表 -->
+            <template>
+                <div class="list-empty" v-if="operaterManagerList.length === 0">
+                    <span>暂无搜索结果</span>
+                  </div>
+              <!-- <div class="list-title">当前运营经理</div> -->
+              <div class="list-item" v-for="(item, index) in operaterManagerList" :key="index" @click="selectItem(item)">
+                <div class="item-name">{{ item.name }}</div>
+                <div class="item-org">{{ item.bu_descr }}</div>
+                <img v-if="selectedItem.name === item.name" class="item-check" src="images/complete.png" alt="">
+              </div>
+            </template>
+          </div>
+        </div>
+      </van-popup>
+    </div>
+    <div v-if="page==2">
+      <!-- 内容区域 -->
+      <div class="content">
+        <!-- 当前银行卡 -->
+        <div class="bank-card-section">
+          <span class="bank-label">当前银行卡</span>
+          <span class="bank-value">西安银行借记卡({{formData.cardLast4}})</span>
+        </div>
+
+        <div class="section-gap"></div>
+
+        <!-- 限额设置表单 -->
+        <div class="limit-form-section">
+          <!-- 单笔转出限额 -->
+          <div class="limit-form-item">
+            <span class="limit-label">单笔转出限额(元)</span>
+            <div class="limit-input-wrap">
+              <input class="limit-input" type="text" inputmode="decimal" :value="formData.singleLimitDisplay"
+                id="myinput" @click="showTips" @input="handleAmountInput($event, 'singleLimit')"
+                @blur="handleAmountBlur('singleLimit')" placeholder="请输入">
+              <div class="limit-amount-chinese" v-if="formData.singleLimit">
+                {{ formatChineseAmount(formData.singleLimit) }}</div>
+            </div>
+          </div>
+          <!-- 日累计转出笔数 -->
+          <div class="limit-form-item">
+            <span class="limit-label">日累计转出笔数(笔)</span>
+            <div class="limit-input-wrap">
+              <input class="limit-input" type="text" inputmode="numeric" :value="formData.dailyCount"
+                @blur="handleCount('dailyCount')" @input="handleCountInput($event, 'dailyCount')" placeholder="请输入">
+            </div>
+          </div>
+          <!-- 日累计转出限额 -->
+          <div class="limit-form-item">
+            <span class="limit-label">日累计转出限额(元)</span>
+            <div class="limit-input-wrap">
+              <input class="limit-input" type="text" inputmode="decimal" :value="formData.dailyLimitDisplay"
+                @input="handleAmountInput($event, 'dailyLimit')" @blur="handleAmountBlur('dailyLimit')"
+                placeholder="请输入">
+              <div class="limit-amount-chinese" v-if="formData.dailyLimit">
+                {{ formatChineseAmount(formData.dailyLimit) }}
+              </div>
+            </div>
+          </div>
+          <!-- 月累计转出笔数 -->
+          <div class="limit-form-item">
+            <span class="limit-label">月累计转出笔数(笔)</span>
+            <div class="limit-input-wrap">
+              <input class="limit-input" type="text" inputmode="numeric" :value="formData.monthlyCount"
+                @blur="handleCount('monthlyCount')" @input="handleCountInput($event, 'monthlyCount')" placeholder="请输入">
+            </div>
+          </div>
+          <!-- 月累计转出限额 -->
+          <div class="limit-form-item">
+            <span class="limit-label">月累计转出限额(元)</span>
+            <div class="limit-input-wrap">
+              <input class="limit-input" type="text" inputmode="decimal" :value="formData.monthlyLimitDisplay"
+                @input="handleAmountInput($event, 'monthlyLimit')" @blur="handleAmountBlur('monthlyLimit')"
+                placeholder="请输入">
+              <div class="limit-amount-chinese" v-if="formData.monthlyLimit">
+                {{ formatChineseAmount(formData.monthlyLimit) }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部按钮 -->
+      <div class="bottom-btn-wrap">
+        <button class="bottom-btn" @click="handleSubmit">确认提交</button>
+      </div>
+    </div>
+    <div v-if="page==3">
+      <!-- 内容区域 -->
+      <div class="content">
+        <!-- 成功图标和提示 -->
+        <div class="result-header">
+          <img class="result-icon" src="images/success.png" alt="">
+          <span class="result-text">申请提交成功</span>
+        </div>
+
+        <!-- 信息展示区域 -->
+        <div class="info-section">
+          <div class="info-item">
+            <span class="info-label">姓名</span>
+            <span class="info-value">{{ resultData.clientNm }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">银行卡</span>
+            <span class="info-value">西安银行借记卡({{resultData.crdNum}})</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">单笔转出限额(元)</span>
+            <span class="info-value">{{ accounting.formatNumber(resultData.snglTfrLmt,2) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">日累计转出笔数(笔)</span>
+            <span class="info-value">{{ resultData.dlyAcmltnTfrQnty }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">日累计转出限额(元)</span>
+            <span class="info-value">{{ accounting.formatNumber(resultData.dlyAcmltnTfrLmt,2) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">月累计转出笔数(笔)</span>
+            <span class="info-value">{{ resultData.monAcmltnTfrQnty }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">月累计转出限额(元)</span>
+            <span class="info-value">{{ accounting.formatNumber(resultData.monAcmltnTfrLmt,2) }}</span>
+          </div>
+        </div>
+
+        <!-- 客户经理和申请时间 -->
+        <div class="extra-section">
+          <div class="info-item">
+            <span class="info-label">客户经理</span>
+            <span class="info-value">{{ resultData.aplNm }}(工号:{{ resultData.aplStaffId }})</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">申请时间</span>
+            <span class="info-value">{{ resultData.aplyTm }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部按钮 -->
+      <div class="bottom-btn-wrap">
+        <button class="bottom-btn" @click="handleComplete">完成</button>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js"></script>
+<script src="./../common/js/server.js"></script>
+<script src="js/apply.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/accounting.min.js"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+
+<script>
+  // var vConsole = new VConsole();
+  initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'chooseImage', 'uploadImage', 'downloadImage', 'selectEnterpriseContact','getLocalImgData'])
+  wx.ready(function () {
+    wx.hideAllNonBaseMenuItem();
+  });
+  function getUserFinish() {
+    var username = $.parseJSON($.cookie("user")).name;
+    __canvasWM({
+      content: username
+    });
+    initFun()
+  }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

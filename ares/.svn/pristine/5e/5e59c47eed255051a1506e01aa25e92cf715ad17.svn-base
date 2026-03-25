@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
+        name="viewport" />
+    <mata http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    <title>西安银行</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../css/style.css?v=1.1.2">
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <!-- 问诊预约 -->
+        <div v-if='flag=="doctor"'>
+            <div class="doctorListInfo">
+                <div class="displayStart">
+                    <span class="doctor_name">{{detail.docName}}</span>
+                    <span class="doctor_postion">{{detail.docRank}}</span>
+                </div>
+                <!-- <div style="padding:10px 0;box-sizing: border-box;">
+                    中国人民解放军火箭军总医院｜皮肤科
+                </div>
+                <div style="font-size: 12px;
+                color: #333333;"> 已预约数：34 ｜ 剩余号数：5</div> -->
+            </div>
+            <div style="height:10px;"></div>
+            <!-- 医师简介 -->
+            <div class="doctorIntr">
+                <div class="doctorIntr_t displayFlex lineBottom">
+                    <span>医师简介</span>
+                    <span style="width:60px;text-align: right;" @click='intrFlag=!intrFlag'>
+                         <img class="more_img" :style='{transform:intrFlag?"rotate(-90deg)":"rotate(90deg)"}' src="../images/more.png" alt="">
+                    </span>
+                </div>
+                <div v-if='intrFlag' class="doctorIntr_b1">
+                    {{detail.introduction}}
+                </div>
+            </div>
+        </div>
+        <!-- 设备预约 -->
+        <div v-if='flag=="device"'>
+            <div class="doctorListInfo">
+                <div class="doctor_name">
+                    {{detail.deviceName}}
+                </div>
+            </div>
+            <div style="height:10px;"></div>
+            <!-- 医师简介 -->
+            <div class="doctorIntr">
+                <div class="doctorIntr_t lineBottom">设备简介</div>
+                <div class="doctorIntr_b1">
+                    {{detail.introduction}}
+                </div>
+            </div>
+        </div>
+        <div style="height:10px;"></div>
+        <div class="edit_m_t displayFlex lineBottom">
+            <span>选择日期</span>
+            <div class="displayEnd">
+                <span @click='dateShow=true' :style="date==''?'color:#999':''">{{date==''?'请选择日期':date}}</span>
+                <img class="more_img" src="../images/more.png" alt="">
+            </div>
+        </div>
+        <div v-if='date' class="client_book_date">
+            <div v-if='morningList.length>0'>
+                <div class="client_book_date_t lineBottom">{{date}} 上午</div>
+                <div class="client_book_date_m">
+                    <span v-for='(item,index) in morningList' :key='index'
+                        :class="item.checked?'book_date book_date_active':'book_date'" @click='selectTime("morning",index)'>{{item.text}}</span>
+                </div>
+            </div>
+            <div v-if='afternoonList.length>0'>
+                <div class="client_book_date_t lineBottom">{{date}} 下午</div>
+                <div class="client_book_date_m">
+                    <span v-for='(item,index) in afternoonList' :key='index'
+                    :class="item.checked?'book_date book_date_active':'book_date'" @click='selectTime("afternoon",index)'>{{item.text}}</span>
+                </div>
+            </div>
+        </div>
+        <!-- 占位 -->
+        <div style="height:100px"></div>
+        <div class="footer_btn" @click='submitTap'>立即预约</div>
+        <van-popup v-model="dateShow" position="bottom" style="border-radius: 6px;">
+            <van-datetime-picker type="date" title="按年月筛选" v-model="currentDate" :min-date='minDate'
+                :max-date='maxDate' :formatter="formatter" @cancel="dateShow=false"
+                @confirm="chooseDate">
+            </van-datetime-picker>
+        </van-popup>
+    </div>
+</body>
+
+</html>
+<!-- 引入 Vue 的 JS 文件 -->
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../../common/js/server.js"></script>
+<script type="text/javascript" src="./js/detail.js?v=1.6.8"></script>
+<script type="text/javascript" src="../../common/js/watermark.js?v=1.2"></script>
+<script>
+    // /初始化微信社区
+    $(function () {
+            initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'closeWindow']);
+            wx.ready(function () {
+                wx.hideAllNonBaseMenuItem();
+            });
+        });
+        function getUserFinish() {
+            // 调用水印
+            var username = $.parseJSON($.cookie("user")).name;
+            __canvasWM({
+                content: username
+            });
+            initFun();
+        }
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>

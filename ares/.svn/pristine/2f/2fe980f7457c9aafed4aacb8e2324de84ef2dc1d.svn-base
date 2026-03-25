@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>银⾏承兑汇票在线承兑审批</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/applyDetail.css?v=0.0.9">
+    <link rel="stylesheet" href="./css/appendix.css?v=0.0.14">
+</head>
+<body>
+
+    <div id="app" v-cloak>
+
+        <!-- 顶部tab -->
+        <div class="tabs">
+            <span :class="tabActive==0?'tabActive':''" @click="changeTabActive(0)">开票信息</span>
+            <span :class="tabActive==1?'tabActive':''" @click="changeTabActive(1)">业务信息</span>
+            <span :class="tabActive==2?'tabActive':''" @click="changeTabActive(2)">担保信息</span>
+            <span :class="tabActive==3?'tabActive':''" @click="changeTabActive(3)">押品信息</span>
+        </div>
+
+        <!-- 内容 -->
+        <div class="main" ref="main">
+
+            <!-- 开票信息 -->
+            <template v-if="tabActive==0">
+
+                <div class="baseInfo" v-if="isApproved">
+                    <div class="title">审批信息</div>
+                    <div class="content">
+                        <div class="infoRow" @click="flowPopup=true" style="padding: 15px 5px 15px 12px;">
+                            <span>审批结果</span><span :class="readStatus(approveStatus)">{{approveStatus}}</span>
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="infoRow">
+                            <span>审批意见</span><span>{{approveReason}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>审批时间</span><span>{{approveTime}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="baseInfo">
+                    <div class="title">票据相关信息</div>
+                    <div class="content">
+                        <div class="infoRow">
+                            <span>出票⼈名称</span><span>{{invoiveInfo.DRWR_NAME}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>出票⼈账号</span><span>{{invoiveInfo.DRWR_ACCT}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>票据总⾦额</span><span>{{numFormat(invoiveInfo.BILL_TOT_AMT)}}</span><em>元</em>
+                        </div>
+                        <div class="infoRow" style="padding: 15px 5px 15px 12px;" v-if="invoiveInfo.BILL_TOT_NUM && invoiveInfo.BILL_TOT_NUM != '' && invoiveInfo.BILL_TOT_NUM > 0">
+                            <span>票据总笔数</span>
+                            <div class="allNumber" @click="toBillDetail">
+                                <p>{{invoiveInfo.BILL_TOT_NUM}}</p>
+                                <p>查看详情</p>
+                            </div>
+                            <i @click="toBillDetail"><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="infoRow"  style="padding: 15px 5px 15px 12px;" @click="toAppendixDetail(1)">
+                            <span>承兑信息</span><span style="color:#4675c9;">查看详情</span>
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="infoRow">
+                            <span>提交时间</span><span>{{invoiveInfo.SUBMIT_TIME}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="baseInfo" v-if="!isApproved">
+                    <div class="title">审批信息</div>
+                    <div class="applyContent">
+                        <div class="applyInfoRow">
+                            <span style="width: 75px;"><b style="color: red;margin-right: 5px;">*</b>审批方式</span>
+                            <input type="text" placeholder="请选择" readonly @click="showPickerType=true" v-model="subType">
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="applyInfoRow" v-if="isShowkerPeopleDom">
+                            <span><b style="color: red;margin-right: 5px;">*</b>选择审查人</span>
+                            <input type="text" placeholder="请选择" readonly @click="showPickerPeople=true" v-model="subPeople">
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="applyInfoRow">
+                            <span><b style="color: red;margin-right: 5px;">*</b>审批意见</span>
+                        </div>
+                        <div class="applyInfoRow" style="padding: 5px 12px;">
+                            <textarea cols="30" rows="4" placeholder="请输⼊审批意见" v-model.trim="reason" maxlength="30" @blur="scrollBank"></textarea>
+                        </div>
+                    </div>
+                </div>
+               
+            </template>
+
+            <!-- 业务信息 -->
+            <template v-if="tabActive==1">
+               
+                <div class="baseInfo" v-if="isApproved">
+                    <div class="title">审批信息</div>
+                    <div class="content">
+                        <div class="infoRow" @click="flowPopup=true" style="padding: 15px 5px 15px 12px;">
+                            <span>审批结果</span><span :class="readStatus(approveStatus)">{{approveStatus}}</span>
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="infoRow">
+                            <span>审批意见</span><span>{{approveReason}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>审批时间</span><span>{{approveTime}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="baseInfo">
+                    <div class="title1" @click="toAppendixDetail(2)">
+                        <span>业务基本信息</span><span>查看全部</span><i><img src="./image/jinru.png" alt=""></i>
+                    </div>
+                    <div class="content">
+                        <div class="infoRow">
+                            <span>业务流⽔号</span><span>{{busInfos.AplySeqNum}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>承兑申请⼈编号</span><span>{{busInfos.ApltNum}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>承兑申请⼈名称</span><span>{{busInfos.AppName}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>业务品种</span><span>{{busInfos.BsnVry}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>申请⾦额</span><span>{{numFormat(busInfos.ApplyAmt)}}</span><em>元</em>
+                        </div>
+                        <div class="infoRow">
+                            <span>保证⾦⽐例</span><span>{{busInfos.MrgnRate}}</span><em>%</em>
+                        </div>
+                        <div class="infoRow">
+                            <span>⼿续费率</span><span>{{busInfos.FeeRate}}</span><em>‰</em>
+                        </div>
+                        <div class="infoRow">
+                            <span>⼿续费⾦额</span><span>{{numFormat(busInfos.PcdFeeAmt)}}</span><em>元</em>
+                        </div>
+                    </div>
+                </div>
+                <div class="baseInfo">
+                    <div class="title">利率期限信息</div>
+                    <div class="content">
+                        <div class="infoRow">
+                            <span>期限</span><span>{{busInfos.Trm}}</span><em>个月</em>
+                        </div>
+                    </div>
+                </div>
+                <div class="baseInfo">
+                    <div class="title">担保⽅式</div>
+                    <div class="content">
+                        <div class="infoRow">
+                            <span>担保⽅式</span><span>{{busInfos.GntWay}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>主要担保⽅式</span><span>{{busInfos.MainGntWay}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>综合抵质押率</span><span>{{busInfos.CmprhCltlRt}}</span><em>%</em>
+                        </div>
+                    </div>
+                </div>
+                <div class="baseInfo">
+                    <div class="title">还款信息</div>
+                    <div class="content">
+                        <div class="infoRow">
+                            <span>还款来源</span><span>{{busInfos.RepymtSrc}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="baseInfo">
+                    <div class="title1" @click="toAppendixDetail(3)">
+                        <span>统计指标</span><span>查看全部</span><i><img src="./image/jinru.png" alt=""></i>
+                    </div>
+                    <div class="content">
+                        <div class="infoRow">
+                            <span style="width:70px">投向</span><span>{{busInfos.Field}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>战略新兴产业类型</span><span>{{busInfos.IndustStgTp}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>产业结构调整类型</span><span>{{busInfos.IndustRstructFlg}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span style="width:100px">涉农标志</span><span>{{busInfos.RfrFrmFlg}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>数字化效率提升业</span><span>{{busInfos.DgtEfcyIpvtIdt}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="baseInfo">
+                    <div class="title1" @click="toAppendixDetail(4)">
+                        <span>其他信息</span><span>查看全部</span><i><img src="./image/jinru.png" alt=""></i>
+                    </div>
+                    <div class="content">
+                        <div class="infoRow">
+                            <span>是否经过公证</span><span>{{busInfos.IsNtry}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>公证号</span><span>{{busInfos.NtryNo}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>登记机构</span><span>{{busInfos.RgstInst}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>登记⼈员</span><span>{{busInfos.RgstPsnl}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>登记⽇期</span><span>{{busInfos.RgstDt}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="baseInfo" v-if="!isApproved">
+                    <div class="title">审批信息</div>
+                    <div class="applyContent">
+                        <div class="applyInfoRow">
+                            <span style="width: 75px;"><b style="color: red;margin-right: 5px;">*</b>审批方式</span>
+                            <input type="text" placeholder="请选择" readonly @click="showPickerType=true" v-model="subType">
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="applyInfoRow" v-if="isShowkerPeopleDom">
+                            <span><b style="color: red;margin-right: 5px;">*</b>选择审查人</span>
+                            <input type="text" placeholder="请选择" readonly @click="showPickerPeople=true" v-model="subPeople">
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="applyInfoRow">
+                            <span><b style="color: red;margin-right: 5px;">*</b>审批意见</span>
+                        </div>
+                        <div class="applyInfoRow" style="padding: 5px 12px;">
+                            <textarea cols="30" rows="4" placeholder="请输⼊审批意见" v-model.trim="reason" maxlength="30" @blur="scrollBank"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- 担保信息 -->
+            <template v-if="tabActive==2">
+
+                <div class="baseInfo" v-if="isApproved">
+                    <div class="title">审批信息</div>
+                    <div class="content">
+                        <div class="infoRow" @click="flowPopup=true" style="padding: 15px 5px 15px 12px;">
+                            <span>审批结果</span><span :class="readStatus(approveStatus)">{{approveStatus}}</span>
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="infoRow">
+                            <span>审批意见</span><span>{{approveReason}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>审批时间</span><span>{{approveTime}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="baseInfo">
+                    <div class="title">担保信息</div>
+                    <div class="content">
+                        <div class="infoRow">
+                            <span>流⽔号</span><span>{{guaranteeInfos.GnrCtrSqNum}}</span>
+                        </div>
+                        <!-- <div class="infoRow">
+                            <span>担保合同书⾯编号</span><span>{{guaranteeInfos.GntCtrWrtnId}}</span>
+                        </div> -->
+                        <div class="infoRow">
+                            <span>担保类型</span><span>{{guaranteeInfos.GuarTp}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>担保⽅式</span><span>{{guaranteeInfos.GntWay}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>保证类型</span><span>{{guaranteeInfos.GnrType}}</span>
+                        </div>
+                        <!-- <div class="infoRow" v-if="guaranteeInfos.GnrType == '保证' && guaranteeInfos.GnrWay1 && guaranteeInfos.GnrWay1 !='' ">
+                            <span>保证⽅式一</span><span>{{guaranteeInfos.GnrWay1}}</span>
+                        </div>
+                        <div class="infoRow" v-if="guaranteeInfos.GnrType == '保证' && guaranteeInfos.GnrWay2 && guaranteeInfos.GnrWay2 !='' ">
+                            <span>保证⽅式二</span><span>{{guaranteeInfos.GnrWay2}}</span>
+                        </div> -->
+                        <div class="infoRow">
+                            <span>担保⼈编号</span><span>{{guaranteeInfos.GnrId}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>担保⼈姓名</span><span>{{guaranteeInfos.GnrNm}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>币种</span><span>{{guaranteeInfos.Ccy}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>担保合同⾦额</span><span>{{numFormat(guaranteeInfos.GnrCtrAmt)}}</span><em>元</em>
+                        </div>
+                        <div class="infoRow">
+                            <span style="width: 180px;">担保合同⾦额折⼈⺠币</span><span>{{numFormat(guaranteeInfos.GntContamtCnvrtAtmCny)}}</span><em>元</em>
+                        </div>
+                        <div class="infoRow">
+                            <span>汇率</span><span>{{guaranteeInfos.ExgRt}}</span>
+                        </div>
+
+                        <div class="infoRow">
+                            <span>担保合同状态</span><span>{{guaranteeInfos.GnrCtrSt}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span style="width: 300px;">是否具有实质的正相关性</span><span>{{guaranteeInfos.HvEsnPstColaFlg}}</span>
+                        </div>
+                        <!-- <div class="infoRow">
+                            <span style="width:70px">备注</span><span>{{guaranteeInfos.Rak}}</span>
+                        </div> -->
+                        <div class="infoRow">
+                            <span style="width:250px">担保合同综合抵质押率</span>
+                            <span>{{guaranteeInfos.GntContRatio}}</span>
+                            <em>%</em>
+                        </div>
+
+                        <div class="infoRow">
+                            <span>登记⼈员</span><span>{{guaranteeInfos.RgstPsnl}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>登记机构</span><span>{{guaranteeInfos.RgstInst}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>登记⽇期</span><span>{{guaranteeInfos.RgstDt}}</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="baseInfo" v-if="!isApproved">
+                    <div class="title">审批信息</div>
+                    <div class="applyContent">
+                        <div class="applyInfoRow">
+                            <span style="width: 75px;"><b style="color: red;margin-right: 5px;">*</b>审批方式</span>
+                            <input type="text" placeholder="请选择" readonly @click="showPickerType=true" v-model="subType">
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="applyInfoRow" v-if="isShowkerPeopleDom">
+                            <span><b style="color: red;margin-right: 5px;">*</b>选择审查人</span>
+                            <input type="text" placeholder="请选择" readonly @click="showPickerPeople=true" v-model="subPeople">
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="applyInfoRow">
+                            <span><b style="color: red;margin-right: 5px;">*</b>审批意见</span>
+                        </div>
+                        <div class="applyInfoRow" style="padding: 5px 12px;">
+                            <textarea cols="30" rows="4" placeholder="请输⼊审批意见" v-model.trim="reason" maxlength="30" @blur="scrollBank"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+            </template>
+
+            <!-- 押品信息 -->
+            <template v-if="tabActive==3">
+              
+                <div class="baseInfo" v-if="isApproved">
+                    <div class="title">审批信息</div>
+                    <div class="content">
+                        <div class="infoRow" @click="flowPopup=true" style="padding: 15px 5px 15px 12px;">
+                            <span>审批结果</span><span :class="readStatus(approveStatus)">{{approveStatus}}</span>
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="infoRow">
+                            <span>审批意见</span><span>{{approveReason}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>审批时间</span><span>{{approveTime}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="baseInfo">
+                    <div class="title">押品信息</div>
+                    <div class="content">
+                        <div class="infoRow">
+                            <span>权利⼈编号</span><span>{{collateralInfos.RghtId}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>权利⼈姓名</span><span>{{collateralInfos.RghtNm}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>质押物名称</span><span>{{collateralInfos.CltlName}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>质押物类型</span><span>{{collateralInfos.PldgVrty}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>质押顺位</span><span>{{collateralInfos.PlgdSrl}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>存⼊⽇期</span><span>{{collateralInfos.StoreDt}}</span>
+                        </div>
+
+
+                        <div class="infoRow">
+                            <span>到期⽇期</span><span>{{collateralInfos.MatDt}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>保证⾦币种</span><span>{{collateralInfos.MrgnCurr}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>保证⾦账号</span><span>{{collateralInfos.MrgnAtNum}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>保证⾦⾦额</span><span>{{numFormat(collateralInfos.SecurityAmt)}}</span><em>元</em>
+                        </div>
+                        <div class="infoRow">
+                            <span>质押物评估价值</span><span>{{numFormat(collateralInfos.PlgdAsVl)}}</span><em>元</em>
+                        </div>
+
+                        <div class="infoRow">
+                            <span>质押物认定价值</span><span>{{numFormat(collateralInfos.PlgdFrmlyVl)}}</span><em>元</em>
+                        </div>
+                        <div class="infoRow">
+                            <span>优先受偿权数额</span><span>{{collateralInfos.PrtyBsnsSm}}</span><em>元</em>
+                        </div>
+                        <div class="infoRow">
+                            <span>押品抵/质押率</span><span>{{collateralInfos.GnrRt}}</span><em>%</em>
+                        </div>
+                        <div class="infoRow">
+                            <span>抵质押物简述</span><span>{{collateralInfos.CollDscrpt}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>他项权利证编号</span><span>{{collateralInfos.AstRghtId}}</span>
+                        </div>
+
+                        <div class="infoRow">
+                            <span>所属权利证编号</span><span>{{collateralInfos.GrntyRgNo}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>备注</span><span>{{collateralInfos.Rak}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>登记⼈员</span><span>{{collateralInfos.RgstPsnl}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>登记机构</span><span>{{collateralInfos.RgstInst}}</span>
+                        </div>
+                        <div class="infoRow">
+                            <span>登记⽇期</span><span>{{collateralInfos.RgstDt}}</span>
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <div class="baseInfo" v-if="!isApproved">
+                    <div class="title">审批信息</div>
+                    <div class="applyContent">
+                        <div class="applyInfoRow">
+                            <span style="width: 75px;"><b style="color: red;margin-right: 5px;">*</b>审批方式</span>
+                            <input type="text" placeholder="请选择" readonly @click="showPickerType=true" v-model="subType">
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="applyInfoRow" v-if="isShowkerPeopleDom">
+                            <span><b style="color: red;margin-right: 5px;">*</b>选择审查人</span>
+                            <input type="text" placeholder="请选择" readonly @click="showPickerPeople=true" v-model="subPeople">
+                            <i><img src="./image/jinru.png" alt=""></i>
+                        </div>
+                        <div class="applyInfoRow">
+                            <span><b style="color: red;margin-right: 5px;">*</b>审批意见</span>
+                        </div>
+                        <div class="applyInfoRow" style="padding: 5px 12px;">
+                            <textarea cols="30" rows="4" placeholder="请输⼊审批意见" v-model.trim="reason" maxlength="30" @blur="scrollBank"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+            </template>
+
+            <div style="width: 100%;height: 20px;"></div>
+
+        </div>
+
+        <!-- 按钮 -->
+        <div class="btnModel">
+            <template v-if="!isApproved">
+                <div v-if="!isClicked" class="bigBtn" @click="toSub">提交</div>
+                <div v-else class="bigBtn" style="opacity: .5;">提交</div>
+            </template>
+            <template v-else>
+                <div class="bigBtn" @click="back">返回</div>
+            </template>
+        </div>
+
+        <!-- 下拉选择(选节点) -->
+        <van-popup v-model="showPickerType" position="bottom">
+            <van-picker
+                    show-toolbar
+                    :columns="applyTypeList"
+                    @confirm="onTypeConfirm"
+                    @cancel="showPickerType=false"
+            >
+            </van-picker>
+        </van-popup>
+
+        <!-- 下拉选择(选人) -->
+        <van-popup v-model="showPickerPeople" position="bottom">
+            <van-picker
+                    show-toolbar
+                    :columns="choosePeopleList"
+                    @confirm="onPeopleConfirm"
+                    @cancel="showPickerPeople=false"
+            >
+            </van-picker>
+        </van-popup>
+
+        <!-- 票据承兑信息-查看详情 -->
+        <van-popup v-model="showMain1" position="left">
+            <div class="appendix">
+                <div class="appendixMain" ref="appendixMain">
+                    <div class="baseInfo">
+                        <div class="title">利率信息（⽹银保证⾦开户使⽤）</div>
+                        <div class="content">
+                            <div class="infoRow">
+                                <span>利率</span><span>{{invoiveInfo.OPEN_ACCT_RATE}}</span><em>%</em>
+                            </div>
+                            <div class="infoRow">
+                                <span>计息⽅式</span><span>{{invoiveInfo.PAY_TYPE==2?'按季度计息':invoiveInfo.PAY_TYPE==5?'销户结息':'--'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="baseInfo">
+                        <div class="title">承兑⼈信息（合同签署使⽤）</div>
+                        <div class="content">
+                            <div class="infoRow">
+                                <span>承兑⼈名称</span><span>{{invoiveInfo.ACCP_NAME}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>法定代表⼈</span><span>{{invoiveInfo.ACCP_LEGAL_NAME}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>通讯地址</span><span>{{invoiveInfo.ACCP_ADDR}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>联系电话</span><span>{{invoiveInfo.ACCP_MOBILE}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>邮编</span><span>{{invoiveInfo.ACCP_ZIP_CODE}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>传真</span><span>{{invoiveInfo.ACCP_FAX}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="baseInfo">
+                        <div class="title">承兑申请⼈信息（合同签署使⽤）</div>
+                        <div class="content">
+                            <div class="infoRow">
+                                <span>承兑申请⼈名称</span><span>{{invoiveInfo.REQ_NAME}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>法定代表⼈</span><span>{{invoiveInfo.REQ_LEGAL_NAME}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>通讯地址</span><span>{{invoiveInfo.REQ_ADDR}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>联系电话</span><span>{{invoiveInfo.REQ_MOBILE}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>邮编</span><span>{{invoiveInfo.REQ_ZIP_CODE}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>传真</span><span>{{invoiveInfo.REQ_FAX}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 100%;height: 10px;"></div>
+                </div>
+                <div class="back">
+                    <span class="bigBtn" @click="appendixBack()">返回</span>
+                </div>
+            </div>
+        </van-popup>
+
+        <!-- 业务基础信息 -->
+        <van-popup v-model="showMain2" position="left">
+            <div class="appendix">
+                <div class="appendixMain" ref="appendixMain">
+                    <div class="baseInfo">
+                        <div class="content">
+                            <div class="infoRow">
+                                <span>业务流⽔号</span><span>{{busInfos.AplySeqNum}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>承兑申请⼈编号</span><span>{{busInfos.ApltNum}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>承兑申请⼈名称</span><span>{{busInfos.AppName}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>低⻛险业务标志</span><span>{{busInfos.LowRskBsnFlg}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>循环授信项下业务标志</span><span>{{busInfos.RvlvCreetsBsnFlg}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>额度协议号</span><span>{{busInfos.LmtAgrmNum}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>发票提供期限</span><span>{{busInfos.InvProTrm}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>发⽣类型</span><span>{{busInfos.TrgrTp}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>贷款产品</span><span>{{busInfos.LoanPrdct}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>书⾯合同编号</span><span>{{busInfos.WrtnCtrId}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>币种</span><span>{{busInfos.Ccy}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>申请⾦额</span><span>{{numFormat(busInfos.ApplyAmt)}}</span><em>元</em>
+                            </div>
+                            <div class="infoRow">
+                                <span>外币利率类型</span><span>{{busInfos.FrgnCcyInstTp}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>保证⾦⽐例</span><span>{{busInfos.MrgnRate}}</span><em>%</em>
+                            </div>
+
+                            <div class="infoRow">
+                                <span>⼿续费率</span><span>{{busInfos.FeeRate}}</span><em>‰</em>
+                            </div>
+
+                            <div class="infoRow">
+                                <span>⼿续费⾦额</span><span>{{numFormat(busInfos.PcdFeeAmt)}}</span><em>元</em>
+                            </div>
+                            <div class="infoRow">
+                                <span>⼿续费收取⽅式</span><span>{{busInfos.PdgCltFlg}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>⽤途</span><span>{{busInfos.LoanPps}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>贷款⽤途描述</span><span>{{busInfos.LoanPpsDsc}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 100%;height: 10px;"></div>
+                </div>
+                <div class="back">
+                    <span class="bigBtn" @click="appendixBack()">返回</span>
+                </div>
+            </div>
+        </van-popup>
+
+        <!-- 统计指标 -->
+        <van-popup v-model="showMain3" position="left">
+            <div class="appendix">
+                <div class="appendixMain" ref="appendixMain">
+                    <div class="baseInfo">
+                        <div class="content">
+                            <div class="infoRow">
+                                <span style="width:70px">投向</span><span>{{busInfos.Field}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>战略新兴产业类型</span><span>{{busInfos.IndustStgTp}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>产业结构调整类型</span><span>{{busInfos.IndustRstructFlg}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span style="width:100px">涉农标志</span><span>{{busInfos.RfrFrmFlg}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span style="width:100px">涉农类型</span><span>{{busInfos.RfrFrmType}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="baseInfo">
+                        <div class="content">
+                            <div class="infoRow">
+                                <span>平台贷款类型 </span><span>{{busInfos.PltLoanTp}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>平台贷款投向 </span><span>{{busInfos.PltLoanField}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>平台贷款还款来源 </span><span>{{busInfos.PltLoanRfdSrc}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="baseInfo">
+                        <div class="content">
+                            <div class="infoRow">
+                                <span>是否养老产业 </span><span>{{busInfos.IsPnsnIndust}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>高新技术产业 </span><span>{{busInfos.HgAdNwtTechIdt}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="baseInfo">
+                        <div class="content">
+                            <div class="infoRow">
+                                <span>数字产品制造业 </span><span>{{busInfos.DgtPrdctMafctIdt}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>数字技术应用业 </span><span>{{busInfos.DgtTechAptIdt}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>数字要素驱动业 </span><span>{{busInfos.DgtEletDvnIdt}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>数字化效率提升业 </span><span>{{busInfos.DgtEfcyIpvtIdt}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 100%;height: 10px;"></div>
+                </div>
+                <div class="back">
+                    <span class="bigBtn" @click="appendixBack()">返回</span>
+                </div>
+            </div>
+        </van-popup>
+
+        <!-- 其他信息 -->
+        <van-popup v-model="showMain4" position="left">
+            <div class="appendix">
+                <div class="appendixMain" ref="appendixMain">
+                    <div class="baseInfo">
+                        <div class="content">
+                            <div class="infoRow">
+                                <span>⻛险度</span><span>{{busInfos.RskLmt}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>是否经过公证</span><span>{{busInfos.IsNtry}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>公证号</span><span>{{busInfos.NtryNo}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>⾸次发放⽇</span><span>{{busInfos.FrstDstrDy}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>备注</span><span>{{busInfos.Rak}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="baseInfo">
+                        <div class="content">
+                            <div class="infoRow">
+                                <span>登记机构</span><span>{{busInfos.RgstInst}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>登记⼈员</span><span>{{busInfos.RgstPsnl}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>登记⽇期</span><span>{{busInfos.RgstDt}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="baseInfo">
+                        <div class="content">
+                            <div class="infoRow">
+                                <span>更新⽇期</span><span>{{busInfos.UdtDt}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>更新⼈员</span><span>{{busInfos.UdtPsnl}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>更新机构</span><span>{{busInfos.UdtInst}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="baseInfo">
+                        <div class="content">
+                            <div class="infoRow">
+                                <span>管户⼈员</span><span>{{busInfos.MgActPsnl}}</span>
+                            </div>
+                            <div class="infoRow">
+                                <span>管户机构</span><span>{{busInfos.MgActInst}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 100%;height: 10px;"></div>
+                </div>
+                <div class="back">
+                    <span class="bigBtn" @click="appendixBack()">返回</span>
+                </div>
+            </div>
+        </van-popup>
+
+        <!-- 流转信息弹框 -->
+        <van-popup v-model="flowPopup" round position="bottom" :style="{height:'80%'}">
+            <div class="flowModel">
+                <div class="title">查看审批流程</div>
+                <div class="flowCt">
+                    <template v-for="(it,i) in flowList">
+                        <div class="flow">
+                            <div class="left"><i><img src="./image/flow.png" alt=""></i></div>
+                            <div class="right">
+                                <div class="peopleType">{{it.AprvPost}}</div>
+                                <div class="nameTime">
+                                    <div class="name">
+                                        {{it.AprvManNm}} 
+                                        (   
+                                            <span :class="readStatus(it.AprvSt)">{{it.AprvSt}}</span>
+                                        )
+                                    </div>
+                                    <div class="time">{{it.EmnAprvTm}}</div>
+                                </div>
+                                <template v-if="it.AprvRsn && it.AprvRsn != ''">
+                                    <div class="reason">审批意见：{{it.AprvRsn}}</div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <diiv style="width: 100%;height: 20px;"></diiv>
+            </div>
+        </van-popup>
+
+
+    </div>
+
+</body>
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/jwxwork.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js?v=1.2"></script>
+<script type="text/javascript" src="../common/js/vConsole.min.js"></script>
+<script type="text/javascript" src="../common/js/newServer.js"></script>
+<script type="text/javascript" src="./js/applyDetail.js?v=202508140432231112"></script>
+<script>
+
+    // var vConsole = new VConsole();
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem','invoke','chooseImage','uploadImage','previewImage']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+
+    function getUserFinish() {
+        action();
+    }
+
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

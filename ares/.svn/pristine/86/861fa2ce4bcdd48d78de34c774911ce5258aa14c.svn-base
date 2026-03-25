@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/randomCheck/checkRegisterListZH.css">
+</head>
+<!--经营支行、一级机构自查情况登记列表-->
+<body style="overflow: hidden">
+<div id="app" style="overflow-y: hidden;height: 100%;display: none">
+    <div class="topDiv">
+        <div class="selectDiv" style="display: block">
+            <div class="selectState" style="position: relative;margin-bottom: 10px">
+                <input class="weui-input" type="text" placeholder="请选择一级机构" @click="showTap('2')" v-model='checkFirstOrgName' readonly>
+                <img src="../image/down.png" class="year">
+            </div>
+            <div class="selectState" style="position: relative">
+                <input class="weui-input" type="text" placeholder="请选择经营支行" @click="showTap('3')" v-model='checkSecondOrgName' readonly>
+                <img src="../image/down.png" class="year">
+            </div>
+        </div>
+    </div>
+    <div class="listScroll" style="overflow-y: auto;margin-top: 10px">
+        <van-list><!--v-model="paging.loading" :finished="paging.finished" :finished-text="paging.text"
+            @load="onload"-->
+            <div v-if="tabsDataList.length>0" v-for="(item, index) in tabsDataList">
+                <div class="listParts" style="margin-bottom: 10px">
+                    <div class="containList" @click="jump1(item)">
+                        <div style="width: 100%">
+                            <div class="listLine" style="justify-content: space-between">
+                                <div style="font-size: 18px;font-weight: 600;width: 100%" v-if="item.checkSecondOrgName">{{item.checkSecondOrgName?item.checkSecondOrgName:'--'}}</div>
+                                <div style="font-size: 18px;font-weight: 600;width: 100%" v-else>{{item.checkFirstOrgName?item.checkFirstOrgName:'--'}}</div>
+                                <div style="width: 25%">
+                                    <div class="listLine" style="text-align: right;padding-right: 0">
+                                        <div v-if="item.status=='01'" style="color: #FF9430;width: 100%">待审核</div>
+                                        <div v-if="item.status=='02'" style="color: #44C966;width: 100%">已通过</div>
+                                        <div v-if="item.status=='03'" style="color: #F91717;width: 100%">已驳回</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="listLine">
+                                <div style="color: #9DA0A3;font-size: 14px;width: 100%" v-if="item.specialCheck=='1'">检查类型: 专项检查</div>
+                                <div style="color: #9DA0A3;font-size: 14px;width: 100%" v-if="item.specialCheck=='2'">检查类型: 常规检查</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--<div class="checkTime">
+                        <div style="color: #9DA0A3;font-size: 14px;width: 100%">检查时间:{{item.time?item.time:'&#45;&#45;'}}</div>
+                    </div>-->
+                </div>
+            </div>
+        </van-list>
+
+        <div class="" v-if="moreStatus" @click="addMore()" style="color:#377ae6;text-align: center;padding-bottom: 10px;box-sizing: border-box;font-size: 15px">----点击加载更多----</div>
+        <div class="" v-if="noMoreStatus" style="color:#999;text-align: center;padding-bottom: 10px;box-sizing: border-box;font-size: 15px">----没有更多数据了----</div>
+        <div class="nodata" v-if="nodata">暂无数据</div>
+    </div>
+    <div class="regBtn" @click="jump()"><img src="../image/addicon.png">抽查登记</div>
+    <!-- 时间选择器 -->
+    <van-popup v-model="popupBottomShow2" @click-overlay="closeOverlayBindtap" :close-on-click-overlay="false"
+               position="bottom">
+        <van-picker show-toolbar item-height="50px" visible-item-count="5" :title="popupObject2.title"
+                    :columns="popupObject2.columns" @cancel="closeOverlayBindtap" @confirm="onConfirm">
+        </van-picker>
+    </van-popup>
+    <van-popup v-model="popupBottomShow3" @click-overlay="closeOverlayBindtap" :close-on-click-overlay="false"
+               position="bottom">
+        <van-picker show-toolbar item-height="50px" visible-item-count="5" :title="popupObject3.title"
+                    :columns="popupObject3.columns" @cancel="closeOverlayBindtap" @confirm="onConfirm">
+        </van-picker>
+    </van-popup>
+</div>
+
+
+</body>
+<script src="../../common/js/vue.min.js"></script>
+<script src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="../js/randomCheck/checkRegisterListZH.js?v=2.1.0"></script>
+<script type="text/javascript" src="../../common/js/vConsole.min.js"></script>
+<script type="text/javascript">
+
+    //var vConsole = new VConsole();
+
+    //初始化微信社区
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem','chooseImage','uploadImage','downloadImage', 'startRecord', 'stopRecord', 'translateVoice','closeWindow']);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+    function getUserFinish(){
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js?v=202110229"></script>
+</html>

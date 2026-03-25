@@ -1,0 +1,139 @@
+[v-cloak]{
+    display: none;
+}
+
+.container {
+    background-color: #f5f6f7;
+    height: 100vh;
+}
+
+.search_header {
+    padding: 12px;
+    padding-bottom: 0;
+    background-color: #fff;
+}
+
+
+.search_icon {
+    width: 14px;
+    vertical-align: middle;
+}
+
+.display {
+    display: flex;
+}
+
+.flex {
+    flex: 1;
+}
+
+/* vant */
+
+.van-field__left-icon {
+    display: flex;
+    align-items: center;
+}
+
+.van-search__content {
+    background-color: #f5f6f7;
+}
+
+.van-search {
+    padding: 0;
+    background-color: #f5f6f7;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.van-search__action {
+    padding: 5px;
+    line-height: 0;
+}
+
+.van-search__action >div {
+    padding: 12px 15px;
+    background-color: #3975c6;
+    border-radius: 24px;
+    color: #fff;
+    font-size: 12px;
+}
+
+.van-tabs__line {
+    background-color: #4675c9;
+}
+
+.van-tab {
+    font-size: 16px;
+}
+
+.van-tab--active {
+    color: #4675c9;
+    font-size: 17px;
+    font-family: PingFang-Medium;
+    font-weight: 500;
+}
+
+/* section */
+
+.section_container {
+    padding: 10px 12px;
+    /* padding-bottom: 85px; */
+}
+
+.section_item {
+    padding: 0 16px;
+    background-color: #fff;
+    border-radius: 4px;
+    margin-top: 12px;
+}
+
+.sum_timer {
+    font-size: 14px;
+    font-family: PingFang-Regular;
+    color: #9da0a3;
+}
+
+.section_item:first-child {
+    margin-top: 0;
+}
+
+.section_title {
+    /* border-bottom: 1px solid #e6e7e8; */
+    padding: 10px 0;
+}
+
+.border_top {
+    border-top: 1px solid #e6e7e8;
+}
+
+.section_title .left {
+    width: calc(100% - 150px);
+    font-size: 16px;
+    font-family: PingFang-Mediumbold;
+    font-weight: 600;
+}
+
+.section_title .right {
+    font-size: 14px;
+    justify-content: flex-end;
+}
+
+.end_time {
+    margin-top: 5px;
+    font-family: PingFang-Regular;
+    font-weight: 400;
+    color: #9da0a3;
+    font-size: 14px;
+}
+
+.section_main {
+    padding: 5px 0 12px;
+    font-size: 14px;
+    color: #9da0a3;
+    font-weight: 400;
+    font-family: PingFang-Regular;
+}
+
+.section_main >.display {
+    margin-top: 5px;
+}

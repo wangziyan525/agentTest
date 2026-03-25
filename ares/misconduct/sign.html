@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/sign.css">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;">
+
+        <div id="signId" style="display: none"></div>
+     <div class="page" id="page1" style="display: block;">
+         <div class="mid1" style="overflow-y: auto">
+             <div class="mid2">
+                 <div style="font-size: 22px;font-weight: bold;margin: 15px 0;text-align: center">西安银行员工失范行为排查承诺书</div>
+                 <p>我仅以个人名义郑重作出以下承诺，并愿意接受本单位领导以及员工和上级组织的监督。</p>
+                 <p>一、严格按照我行《西安银行员工失范行为排查管理办法》要求，如实汇报各类排查情况。</p>
+                 <p>二、认真学习国家金融法律法规，严格按照国家法律，行业规章以及本行相关制度，坚持恪尽职守的原则，尽力履行所在岗位职责。</p>
+                 <p>三、不参与民间借贷、不充当资金掮客、不经商办企业、不在工商企业兼职，不从事或参与经商活动，或授意、指使、纵容包庇亲属及其他人员从事违规经商等活动。</p>
+                 <p>四、不利用工作之便为亲属、朋友等关系人违规办理贷款、投资、担保、融资、结算、提现等业务。</p>
+                 <p>五、不参加有碍公务的宴请及娱乐，不涉足有色情服务的场所。</p>
+                 <p>六、艰苦奋斗，勤俭节约，自觉抵制低级庸俗和腐朽思想文化的侵蚀</p>
+                 <p>七、作风正派，品行端正，铭记身份，注重形象，自觉维护社会稳定和社会秩序。</p>
+                 <p>八、不拉帮结派，搞小圈子。筑牢思想防线，不和社会闲散人员或不了解底细人员来往。</p>
+                 <p>九、自己及近亲属不组织、不参加黑社会性质的组织；发现涉黑涉恶线索，及时、如实向相关部门举报；主动参与涉黑涉恶线索摸排；不为涉黑涉恶人员通风报信或说情，坚决不做黑恶势力的“保护伞”。</p>
+                 <p style="margin-top: 10px; font-weight: 600;">
+                    本人保证严格遵守以上承诺并自觉配合本单位对以上事项的检查、调查工作，如有违反，本人自愿承担因违反上述承诺所产生的一切责任及不利后果。
+                 </p>
+
+                 <div class="footname footer">
+                    <p>承诺人（签名）：</p>
+
+                 </div>
+                 <div class="date" style="display: none"></div>
+                                    
+
+             </div>
+         </div>
+         <div class="bottom">
+             <div class="btn">去签名</div>
+         </div>
+     </div>
+     <div class="page" id="page2" >
+         <div style="background: #fff;border-radius: 5px">
+             <!--<div class="title" id="title"><p>请手写您的签名</p></div>-->
+             <div class="mid1">
+                 <div class="mid2 myCanvasDiv" style="height: 200px">
+                     <canvas id="myCanvas"></canvas>
+                 </div>
+             </div>
+             <p style="font-size: 14px;padding: 0 10px 10px 10px"><span style="color: red">*</span>签名时请使用正楷字体；横屏签名时请确保手机及企业微信自动旋转打开</p>
+         </div>
+         <div class="control-ops control" onclick="clearArea()">清空签名</div>
+         <div class="btns">
+             <p class="back">返回</p>
+             <p class="sureSign" @click="saveImageInfozz()">确认签名</p>
+         </div>
+
+     </div>
+     <div class="page" id="page3" style="overflow: auto;padding: 0 10px 0 6px">
+         <img src="" />
+     </div>
+        
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="js/mobile-detect.min.js"></script>
+<script type="text/javascript" src="js/draw.js?v=1.0" ></script>
+<script src="./../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="js/sign.js?v=2"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+    var batch="";
+    batch=GetQueryString("batch")?GetQueryString("batch"):"";
+    var humancode="";
+    humancode=GetQueryString("humancode")?GetQueryString("humancode"):"";
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           queryImginfo();
+            InitThis();
+            initDate();
+
+          
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

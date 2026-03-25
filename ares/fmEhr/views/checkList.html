@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport" />
+    <title>建档抽查</title>
+    <!-- 建档抽查 -->
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/checkList.css">
+    
+</head>
+<body>
+    <div class="container" v-cloak>
+        <header
+            class="colorFF353B display flex align_item_center fs15 justify_content_center header_banner"
+            v-if="searchData.batchstatus == 0 && dataList.length > 0">
+            抽查人需在{{ headerString }}之前完成{{ searchData.checkbatchnumName }}的建档申报抽查
+        </header>
+        <header>
+            <van-tabs
+                v-model:active="searchData.batchstatus"
+                @click="tabsHandle">
+                <van-tab title="待抽查" name="0"></van-tab>
+                <van-tab title="已通过" name="2"></van-tab>
+                <van-tab title="已拒绝" name="1"></van-tab>
+            </van-tabs>
+        </header>
+        <header class="header_select display fs13">
+            <div
+                class="header_select_content display align_item_center triangle fs13  margin_right10"
+                @click="selectHandel('checkbatchnum')">
+                {{ searchData.checkbatchnumName ? searchData.checkbatchnumName : '请选择' }}
+            </div>
+            <div
+                class="display flex justify_content_right color1482FF align_item_center fs15"
+                @click="popupBottom.show = true">
+                申报批次说明
+            </div>
+            <!-- <div
+                class="header_select_content display align_item_center triangle"
+                @click="selectHandel('datastatus')">
+                {{ searchData.datastatusName ? searchData.datastatusName : '请选择' }}
+            </div> -->
+        </header>
+        <section class="section_container">
+            <div
+                class="seciont_container_item"
+                v-for="(item, index) in dataList"
+                :key="index">
+                <div class="">
+                    <div class="item_views_header display align_item_center fs15">
+                        <div>{{ item.checkbatchname }}—{{ item.idcardname }}</div>
+                        <div
+                            class="view_right display justify_content_right flex color267EF0 _right_link"
+                            @click="goPage(item)">详情</div>
+                    </div>
+                    <div class="item_views display fs13 color9DA0A3">
+                        <div class="view_left fs13">建档申报总数</div>
+                        <div class="view_right fs13 flex display justify_content_right">{{ item.total || '' }}</div>
+                    </div>
+                    <div class="item_views display fs13 color9DA0A3">
+                        <div class="view_left fs13 view_left_100">已抽查</div>
+                        <div class="view_right fs13 flex display justify_content_right">{{ formatCheckedNum(item.checkedagree, item.checkedrefuse) }}（抽查数占总体的{{ item.checkpercent ? item.checkpercent : '0' }}%）</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div v-if='dataList.length == 0' class="noData">
+            <img src="../images/noMessage.png" alt="">
+            <div class="color999999 fs14">暂无数据</div>
+        </div>
+        <van-popup
+            v-model="checkbatchnum.show"
+            position="bottom">
+            <van-picker
+                title="选择"
+                show-toolbar
+                :columns="checkbatchnum.list"
+                @cancel="checkbatchnum.show = false"
+                @confirm="checkbatchnumConfirm">
+            </van-picker>
+        </van-popup>
+
+        <van-popup
+            v-model="popupBottom.show"
+            round
+            position="bottom">
+            <div class="bottomTop">
+                <div>申报批次说明</div>
+                <div @click="popupBottom.show = false">取消</div>
+            </div>
+            <div class="bottomContent">
+                1、申报将按月分为两个批次：上月末倒数第3天（含）~本月12号（含）为1个批次、本月13号（含）至本月末倒数第4天（含）为当月第2个批次。如7月29号~8月12号为一个批次；8月13号~8月28号为一个批次。按照申报时间归属至相应批次。
+                <br/>2、可随时对一个批次中建档进行抽查，批次抽查比例大于10%才可对该批次进行批量通过“提交”处理，且该处理仅在该批次最后一天过后才可操作。
+                <br/>3、若一个批次小于10个，则至少抽查1个。
+                <br/>4、抽查批次中若有一个建档存在问题，需进行批量“拒绝”处理，将会对该批次中未抽查的及抽查未通过的均进行退回，建档人重新检查后可再次发起有效申报，该“批量拒绝”仅在该批次最后一天过后才可操作。
+                <br/>5、上半月批次须在当月月底前三天之前审批完成，下半月批次须在次月13日之前审批完成。
+            </div>
+            <div class="popup_bottom_footer"  @click="popupBottom.show = false">
+                <div >我知道了</div>
+            </div>
+        </van-popup>
+    </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/clipboard.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script src="../../common/js/server.js"></script>
+<script src="../js/checkList.js?v=1.1"></script>
+<!-- <script>
+    initFun()
+</script> -->
+<script>
+    $(function () {
+        initJSSDK(['hideAllNonBaseMenuItem', 'closeWindow']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        })
+    });
+     function getUserFinish (){
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>西安银行</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/detail.css?v=0.0.9">
+</head>
+<body>
+
+    <div id="app" v-cloak>
+
+
+        <!-- 基础信息 -->
+        <div class="baseInfo">
+            <div class="info"><span>推送日期</span><span>{{readDate(infos.transactionDate)}}</span></div>
+            <div class="info"><span>产品代码</span><span>{{infos.productCode}}</span></div>
+            <div class="info"><span>产品名称</span><span>{{infos.productName}}</span></div>
+            <div class="info"><span>募集开始日</span><span>{{readDate(infos.raiseStartDay)}}</span></div>
+            <div class="info"><span>募集结束日</span><span>{{readDate(infos.raiseEndDay)}}</span></div>
+            <div class="info"><span>产品成立日</span><span>{{readDate(infos.productSetupDay)}}</span></div>
+            <div class="info"><span>产品起息日</span><span>{{readDate(infos.productCarryInterestDay)}}</span></div>
+            <div class="info"><span>产品到期日</span><span>{{readDate(infos.productExpireDay)}}</span></div>
+            <div class="info"><span>产品状态</span><span>{{readProductStatus(infos.productStatus)}}</span> </div>
+            <div class="info"><span>募集金额</span><span>{{numFormat(infos.establhmentAmount)}}</span> <em>元</em></div>
+            <div class="info"><span>成立最低金额</span><span>{{numFormat(infos.minimumEstablishmentAmount)}}</span> <em>元</em></div>
+            <div class="info"><span>产品参与率</span><span>{{(infos.participationRate*100).toFixed(0)}}</span> <em>%</em></div>
+        </div>
+
+        <!-- 基础信息 -->
+<!--        <div class="baseInfo">-->
+<!--            <div class="info"  @click="isshowListDetail=true">-->
+<!--                <span>利率重置日日期</span>-->
+<!--                <span style="color: #4675C9;">查看详情</span>-->
+<!--            </div>-->
+<!--        </div>-->
+
+        <div class="baseInfo">
+            <div class="info"  @click="isshowRateList=true">
+                <span style="width: 150px;">利率重置日日期</span>
+                <span style="color: #4675C9;">查看详情</span>
+            </div>
+        </div>
+
+        <div style="width: 100%;height: 50px;"></div>
+
+         <!--遮罩层(状态)-->
+         <van-action-sheet v-model="isshowListDetail" title="利率重置日日期">
+            <div class="popupContent">
+                <template v-for="(it,i) in rateList">
+                    <div class="rate">
+                        <div class="title">
+                            <div class="left">
+                                <span>{{it.rateIndex}}</span>
+                            </div>
+                            <div class="right">
+                                <span :class="it.reset==0?'reseting':'reseted'">{{it.reset==0?'非重置':'重置日'}}</span>
+                            </div>
+                        </div>
+                        <div class="rateMain">
+                            <div class="rateDe">
+                                <span>利率</span>
+                                <template v-if="it.rate && it.rate != ''">
+                                    <span>{{(it.rate*100).toFixed(4)}}%</span>
+                                </template>
+                                <template v-else>
+                                    <span>--</span>
+                                </template>
+                            </div>
+                            <div class="rateDe">
+                                <span>重置日日期</span><span>{{readDate(it.quotationDate)}}</span>
+                            </div>
+                            <div class="rateDe">
+                                <span>FR007日期</span><span>{{readDate(it.rateDate)}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </van-action-sheet>
+
+        <!--遮罩层(日历)-->
+        <van-action-sheet v-model="isshowRateList">
+            <div class="popupContent1">
+                <div class="calendar">
+                    <van-calendar
+                            title="利率重置日日期"
+                            :poppable="false"
+                            :row-height="50"
+                            @confirm="getRateDate"
+                            color="#1989fa"
+                            :min-date="minDate"
+                            :max-date="maxDate"
+                            :default-date="minDate"
+                            :show-confirm="false"
+                            :style="{height:'50vh'}"
+                    />
+                </div>
+                <div class="timeDetail">
+                    <div class="timeLis" v-if="rateInfo.reset==0 || rateInfo.reset==1">
+                        <span v-if="rateInfo.reset==0" style="color: #37a93b;">非重置</span>
+                        <span v-if="rateInfo.reset==1" style="color: #793939;">重置日</span>
+                        <span></span>
+                    </div>
+                    <div v-else>
+                        <span>--</span>
+                        <span></span>
+                    </div>
+                    <div class="timeLis" v-if="rateInfo.rate">
+<!--                        <span>利率</span><span>{{(rateInfo.rate*100).toFixed(6)}}%</span>-->
+                        <span>利率</span><span>{{toFixeda(rateInfo.rate)}}%</span>
+                    </div>
+                    <div class="timeLis" v-else>
+                        <span>利率</span><span>--</span>
+                    </div>
+                    <div class="timeLis"><span>重置日日期</span><span>{{rateInfo.resetDate?readDate(rateInfo.resetDate):'--'}}</span></div>
+                    <div class="timeLis"><span>FR007日期</span><span>{{rateInfo.rateDate?readDate(rateInfo.rateDate):'--'}}</span></div>
+                </div>
+            </div>
+        </van-action-sheet>
+
+
+    </div>
+
+</body>
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/jwxwork.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js?v=1.2"></script>
+<script type="text/javascript" src="../common/js/vConsole.min.js"></script>
+<script type="text/javascript" src="../common/js/server.js"></script>
+<script type="text/javascript" src="../common/js/decimal.min.js"></script>
+<script type="text/javascript" src="./js/fillInSubmit.js?v=0.0.21"></script>
+<script>
+
+    // var vConsole = new VConsole();
+
+
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem','invoke','chooseImage','uploadImage','previewImage']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+
+    function getUserFinish() {
+        action();
+    }
+
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

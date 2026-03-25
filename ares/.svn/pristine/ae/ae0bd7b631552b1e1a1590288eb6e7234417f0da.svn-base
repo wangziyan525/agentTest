@@ -1,0 +1,352 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f5f6f7;
+    overflow: hidden;
+}
+#app{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 0px 12px;
+    box-sizing: border-box;
+}
+/* ------------------------------------------- 信息 ------------------------------------ */
+.baseInfo{
+    width: 100%;
+    background-color: rgba(236,236,236);
+    border-radius: 6px;
+    margin-top: 10px;
+}
+.baseInfo .title{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+    color: #333;
+}
+.baseInfo .content{
+    width: 100%;
+    background: #fff;
+}
+.baseInfo .content .infoRow:last-child::before{
+    display: none;
+}
+.infoRow{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+}
+.infoRow:before{
+    content: " ";
+    position: absolute;
+    left: 12px;
+    bottom: 0;
+    width: calc(100% - 24px);
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.infoRow span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+}
+.infoRow span:nth-child(1){
+    width: 100px;
+    color: #333;
+    margin-right: 10px;
+}
+.infoRow span:nth-child(2){
+    flex: 1;
+    color: #666;
+    white-space: normal;
+    word-break: break-all;
+    text-align: right;
+}
+.infoRow em{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+    margin-left: 10px;
+    color: #666;
+}
+.infoRow input{
+    flex: 1;
+    width: 100%;
+    display: block;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    font-size: 15px;
+    color: #666;
+    line-height: 20px;
+    box-sizing: border-box;
+    text-align: right;
+}
+.infoRow i{
+    display: flex;
+    width: 15px;
+    justify-content: center;
+    align-items: center;
+}
+.infoRow i img{
+    display: block;
+    width: 50%;
+}
+.infoRow .allNumber{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.infoRow .allNumber p:nth-child(1){
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 5px;
+}
+.infoRow .allNumber p:nth-child(2){
+    font-size: 13px;
+    color: #4675c9;
+}
+
+.infoRow .likeInput{
+    flex: 1;
+    font-size: 15px;
+    line-height: 20px;
+    color: #666;
+    border: none;
+    outline: none;
+    text-align: right;
+    word-break: break-all;
+}
+.infoRow .likeInput[placeholder]:empty:before{
+    content: attr(placeholder);
+    color: #999;
+} 
+.infoRow .likeInput[placeholder]:empty:focus:before{
+    content: attr(placeholder);
+    color: #999;
+} 
+/* ------------------------------------------- 按钮 ------------------------------------ */
+.btn{
+    width: 100%;
+    display: flex;
+    padding: 50px 12px 50px;
+    box-sizing: border-box;
+    justify-content: space-between;
+}
+.btn .smallBtn{
+    width: calc((100% - 12px)/2);
+    padding: 12px 0;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+    border-radius: 6px;
+    border: 1px solid #4675c9;
+    text-align: center;
+}
+.btn .smallBtn:nth-child(1){
+    background: transparent;
+    color: #4675c9;
+    border: 1px solid #4675c9;
+}
+.btn .smallBtn:nth-child(2){
+    background: #4675c9;
+    color: #fff;
+}
+.btn .bigBtn{
+    width: 100%;
+    padding: 12px 0;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+    border-radius: 6px;
+    text-align: center;
+    background: #4675c9;
+    color: #fff;
+}
+/* ----------------------------------------- 拒绝弹框 -------------------------------------- */
+.van-popup--center{
+    top: 43% !important;
+    border-radius: 6px !important;
+}
+.refuseModel{
+    width: 85vw;
+    border-radius: 6px;
+    background-color: #fff;
+}
+.refuseModel .title{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    font-size: 15px;
+    color: #333;
+    line-height: 20px;
+    text-align: center;
+    position: relative;
+}
+.refuseModel .title:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.refuseModel .refuseCt{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+}
+.refuseModel .refuseCt .refuseTip{
+    width: 100%;
+    font-size: 15px;
+    color: #333;
+    line-height: 30px;
+}
+.refuseModel .refuseCt .refuseTip em{
+    color: red;
+    margin-right: 10px;
+}
+.refuseModel .refuseCt textarea{
+    resize: none;
+    border:none;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #F5F5F5;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #333330;
+    line-height: 20px;
+    outline: none;
+    resize: none;
+    margin: 10px auto 15px;
+}   
+.refuseModel .refuseCt .refuseBtn{
+    width: 100%;
+    display: flex;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    justify-content: space-between;
+}
+.refuseModel .refuseCt .refuseBtn span{
+    width: calc((100% - 12px)/2);
+    padding: 8px 0;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+    border-radius: 6px;
+    border: 1px solid #4675c9;
+    text-align: center;
+}
+.refuseModel .refuseCt .refuseBtn span:nth-child(1){
+    background: transparent;
+    color: #4675c9;
+    border: 1px solid #4675c9;
+}
+.refuseModel .refuseCt .refuseBtn span:nth-child(2){
+    background: #4675c9;
+    color: #fff;
+}
+
+.status1{
+    color: #1e751e !important;
+}
+.status2{
+    color: #f90808 !important;
+}
+.status3{
+    color: #e0992d !important;
+}
+
+
+
+/* 选择 */
+.chooseStatusModel{
+    width: 100%;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+}
+.chooseStatusModel .titles{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    position: relative;
+}
+.chooseStatusModel .titles span{
+    display: block;
+    width: 100%;
+    font-size: 13px;
+    line-height: 20px;
+    text-align: center;
+}
+.chooseStatusModel .titles i{
+    display: block;
+    width: 9px;
+    position: absolute;
+    right: 12px;
+    top:10px;
+}
+
+.chooseStatusModel .cts{
+    width: 100%;
+}
+.chooseStatusModel .cts .itemCt{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.chooseStatusModel .cts .itemCt::before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.chooseStatusModel .cts .itemCt span{
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+}
+.chooseStatusModel .cts .itemCt i{
+    display: flex;
+    width: 13px;
+    margin-left: 5px;
+}
+.chooseStatusModel .cts .itemCt i img{
+    display: block;
+    width: 100%;
+}

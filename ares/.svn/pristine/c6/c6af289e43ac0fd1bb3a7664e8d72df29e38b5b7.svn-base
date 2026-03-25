@@ -1,0 +1,275 @@
+function action() {
+    new Vue({
+        el: "#app",
+        data: {
+
+            getDetailUrl: 'headofficecheck/userGetDetail.xa',//详情接口
+            getExaminePeopleUrl: 'headofficecheck/userGetCheckUserList.xa',   //获取考核列表
+            getSubInfoUrl: 'headofficecheck/userGetSubmit.xa',   //保存提交
+
+
+            id:'',
+            position:'',
+            workline:'',
+
+            assessee:'',  //被考核人
+            dividingDep:'',      //分管部门
+            isshowDividingDep:false,
+            examinePeople1Name:'',   //考核人1姓名
+            examinePeople1Code:'',   //考核人1id
+            examinePeople2Name:'',   //考核人2姓名
+            examinePeople2Code:'',  //考核人2id
+            isshowChoosePeople1:false,
+            chooseList1:[
+                {name:'经营支行长',isChoose:false},
+                {name:'管理型支行部门负责人',isChoose:false},
+                {name:'管理型支行行领导',isChoose:false},
+            ],
+            isshowChoosePeople2:false,
+            chooseList2:[
+                {name:'个贷客户经理部',isChoose:false},
+                {name:'公司客户经理部',isChoose:false},
+                {name:'普惠客户经理部',isChoose:false},
+            ],
+
+            infos:{},
+
+
+        },
+        created: function () {
+
+            // 调用水印
+            var username = $.parseJSON($.cookie("user")).name;
+            __canvasWM({
+                content: username
+            });
+
+        },
+        mounted: function () {
+
+            if(this.getQueryString('id')){
+                this.id = this.getQueryString('id');
+                this.getDetail(this.id);
+            };
+
+
+        },
+        methods: {
+
+            //获取详情
+            getDetail(id){
+                let _this = this;
+                let params = {};
+                params.id = id;
+                $http(_this.getDetailUrl,true,params, true)
+                    .then(res => {
+                        if(res.retcode == 'success'){
+                            _this.infos = res.data;
+                            _this.examinePeople1Name = res.data.firstcheckIdcardname?res.data.firstcheckIdcardname:'';
+                            _this.examinePeople2Name = res.data.secondcheckIdcardname?res.data.secondcheckIdcardname:'';
+                            _this.examinePeople1Code = res.data.firstcheckHumancode?res.data.firstcheckHumancode:'';
+                            _this.examinePeople2Code = res.data.secondcheckHumancode?res.data.secondcheckHumancode:'';
+                            _this.dividingDep = res.data.responseDeptName?res.data.responseDeptName:'';
+                            if(res.data.assessmentRole == '1'){
+                                _this.assessee = '经营支行长';
+                            }else if(res.data.assessmentRole == '2'){
+                                _this.assessee = '管理型支行部门负责人';
+                            }else if(res.data.assessmentRole == '3'){
+                                _this.assessee = '管理型支行行领导';
+                            }else{
+                                _this.assessee = '';
+                            };
+                            if(res.data.assessmentRole == '2' || res.data.assessmentRole == '3'){
+                                _this.isshowDividingDep = true;
+                            }else{
+                                _this.isshowDividingDep = false;
+                            }
+
+                        }else{
+                            $.alert('',res.retmsg,function(){
+                                WeixinJSBridge.call('closeWindow');
+                            });
+                        }
+                    });
+            },
+
+
+            //选择考核人
+            chooseExaminePeople(i){
+                let _this = this;
+                ww.selectEnterpriseContact({
+                    fromDepartmentId:-1,
+                    mode:'single',
+                    type:['user'],
+                    success: function (res) {
+                        if(res.errMsg == 'selectEnterpriseContact:ok'){
+                            if(typeof res.result == 'string'){
+                                res.result = JSON.parse(res.result)
+                            };
+                            var arr = res.result.userList; //已选的成员列表
+                            console.log(arr)
+                            var id = arr[0].id;
+                            var name = arr[0].name;
+                            if(i == 1){
+                                _this.examinePeople1Name = name;
+                                _this.examinePeople1Code = id;
+                            }else if(i == 2){
+                                _this.examinePeople2Name = name;
+                                _this.examinePeople2Code = id;
+                            };
+                        }else{
+                            $.alert('','通讯录组件调用失败');
+                        }
+                    },
+                    fail: function (res) {
+                        $.alert('',JSON.stringify(res.errMsg));
+                    }
+                })
+
+            },
+
+            //选择被考核人
+            choosedDep1(i){
+                for(let j=0;j<this.chooseList1.length;j++){
+                    this.$set(this.chooseList1[j],'isChoose',false);
+                }
+                this.$set(this.chooseList1[i],'isChoose',true);
+                this.isshowChoosePeople1 = false;
+                this.assessee = this.chooseList1[i].name;
+                if(i == 0){
+                    this.isshowDividingDep = false;
+                }else{
+                    this.isshowDividingDep = true;
+                };
+                this.dividingDep = '';
+                for(let j=0;j<this.chooseList2.length;j++){
+                    this.$set(this.chooseList2[j],'isChoose',false);
+                }
+            },
+
+
+            //选择分管部门
+            choosedDep2(i){
+                for(let j=0;j<this.chooseList2.length;j++){
+                    this.$set(this.chooseList2[j],'isChoose',false);
+                }
+                this.$set(this.chooseList2[i],'isChoose',true);
+                this.isshowChoosePeople2 = false;
+                this.dividingDep = this.chooseList2[i].name;
+            },
+
+
+            //跳转
+            toTian(){
+                if(this.assessee == ''){
+                    vant.Toast('请选择被考核人');
+                    return false
+                };
+                if(this.assessee == '管理型支行部门负责人'){
+                    if(this.dividingDep == ''){
+                        vant.Toast('请选择负责部门');
+                        return false
+                    };
+                }
+                if(this.assessee == '管理型支行行领导'){
+                    if(this.dividingDep == ''){
+                        vant.Toast('请选择分管部门');
+                        return false
+                    };
+                }
+
+                if(this.examinePeople1Name == ''){
+                    vant.Toast('请选择考核人1');
+                    return false
+                };
+                if(this.examinePeople2Name == ''){
+                    vant.Toast('请选择考核人2');
+                    return false
+                };
+                this.toSave();
+            },
+
+            toSave(){
+                let _this = this;
+                let params = {};
+                params.position = '';
+                params.datastatus = '0';
+                params.monthwork = _this.infos.monthwork?_this.infos.monthwork:'';
+                params.advantagesProgress = _this.infos.advantagesProgress?_this.infos.advantagesProgress:'';
+                params.lessReasons = _this.infos.lessReasons?_this.infos.lessReasons:'';
+                params.nextmonthPlan = _this.infos.nextmonthPlan?_this.infos.nextmonthPlan:'';
+                params.firstcheckIdcardname = _this.examinePeople1Name;
+                params.secondcheckIdcardname = _this.examinePeople2Name;
+                params.firstcheckHumancode = _this.examinePeople1Code;
+                params.secondcheckHumancode = _this.examinePeople2Code;
+                params.responseDeptName = _this.dividingDep;
+                if(this.id == ''){
+                    params.id = '';
+
+                }else{
+                    params.id = _this.id;
+                }
+                if(_this.assessee == '经营支行长'){
+                    params.assessmentRole = '1';
+                }else if(_this.assessee == '管理型支行部门负责人'){
+                    params.assessmentRole = '2';
+                }else if(_this.assessee == '管理型支行行领导'){
+                    params.assessmentRole = '3';
+                }
+                params.orgType = '2';
+                params.images = 'NoUpdateImages';
+                $http(_this.getSubInfoUrl,true,params, true)
+                    .then(res => {
+                        if(res.retcode == 'success'){
+                            _this.toHerf();
+                        }else if(res.retcode == 'param.error'){
+                            $.alert('',res.retmsg);
+                        }else if(res.retcode == 'data_error'){
+                            $.alert('',res.retmsg,function(){
+
+                            });
+                        }else{
+                            $.alert('',res.retmsg,function(){
+                                WeixinJSBridge.call('closeWindow');
+                            });
+                        }
+                    });
+            },
+
+            toHerf(){
+                if(this.id != ''){
+                    var str = './branchDetail.html?firstcheckHumancode=' + this.examinePeople1Code
+                    + '&secondcheckHumancode=' + this.examinePeople2Code
+                    + '&firstcheckName=' + encodeURI(this.examinePeople1Name)
+                    + '&secondcheckName=' + encodeURI(this.examinePeople2Name)
+                    + '&assessee=' + encodeURI(this.assessee)
+                    + '&dividingDep=' + encodeURI(this.dividingDep)
+                    + '&id=' + this.id;
+                    window.location.href = str;
+                }else{
+                    var str = './branchDetail.html?firstcheckHumancode=' + this.examinePeople1Code
+                    + '&secondcheckHumancode=' + this.examinePeople2Code
+                    + '&firstcheckName=' + encodeURI(this.examinePeople1Name)
+                    + '&secondcheckName=' + encodeURI(this.examinePeople2Name)
+                    + '&assessee=' + encodeURI(this.assessee)
+                    + '&dividingDep=' + encodeURI(this.dividingDep);
+                    window.location.href = str;
+                }
+            },
+
+
+            //获取url参数
+            getQueryString(name) {
+                let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                let r = window.location.search.substr(1).match(reg);
+                if (r != null)
+                    return (r[2]);
+                return null;
+            },
+
+
+        }
+    });
+
+}
+

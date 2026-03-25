@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="css/overdueInfo.css">
+
+    <title>【西银票易贷】逾期信息</title>
+</head>
+
+<body>
+    <div class="container" v-cloak>
+        <div class="timeSelect">
+            <p>{{formatMonth}}</p>
+            <div class="downPushImg" @click="monthShow=true"></div>
+
+        </div>
+        <div class="overDueTable">
+            <div class="tabArea">
+                <van-tabs v-model="activeTab" @change="onTabChange">
+                    <van-tab title="利息逾期"></van-tab>
+                    <van-tab title="本金逾期"></van-tab>
+                </van-tabs>
+            </div>
+
+            <!-- 表头 -->
+            <div class="custom-header">
+            <div class="header-item" style=" width: 32%;">逾期天数</div>
+            <div class="header-item">逾期户数</div>
+            <div class="header-item">逾期笔数</div>
+            <div class="header-item" style=" width: 32%;">逾期金额(万元)</div>
+            </div>
+            <div class="listItem" v-for="(item,index) in overDueList0" v-show="activeTab == 0">
+                <div style=" width: 32%;">{{item.DataCntnt.overdueDays}}</div>
+                <div>{{item.DataCntnt.overdueHouses}}</div>
+                <div>{{item.DataCntnt.overdueNum}}</div>
+                <div style=" width: 32%;">{{item.DataCntnt.overdueAmount}}</div>
+            </div>
+            <div class="listItem" v-for="(item,index) in overDueList1" v-show="activeTab == 1">
+                    <div style=" width: 32%;">{{item.DataCntnt.overdueDays}}</div>
+                    <div>{{item.DataCntnt.overdueHouses}}</div>
+                    <div>{{item.DataCntnt.overdueNum}}</div>
+                    <div style=" width: 32%;">{{item.DataCntnt.overdueAmount}}</div>
+                </div>
+            <div  class="nodate" v-if="nodata1">
+                    <div class="noMessage">
+                        <img src="images/noList.png">
+                    </div>
+                    暂无数据
+                </div> 
+
+        </div>
+        <div class="custom-btm"  v-show="activeTab==0">
+            <div class="detailTitle">逾期明细信息</div>
+            <div class="detailTotalNum">共<span class="totalNum">{{total0}}</span>条逾期明细信息</div>
+            <div class="btm-table">
+                <div class="detailList" v-for="(item,index) in detailList0">
+                    <div class="detailListCol">
+                            <div class="detailListTitle">机构名称：</div>
+                            <div class="detailValue">{{item.DataCntnt.comName}}</div>
+                    </div>
+                    <div class="detailListCol">
+                            <div class="detailListTitle">借款人：</div>
+                            <div class="detailValue">{{item.DataCntnt.borrower}}</div>
+                    </div>
+                    <div class="detailListCol">
+                            <div class="detailListTitle">逾期笔数：</div>
+                            <div class="detailValue">{{item.DataCntnt.overdueNum}}</div>
+                    </div>
+                    <div class="detailListCol">
+                            <div class="detailListTitle">最大逾期天数：</div>
+                            <div class="detailValue">{{item.DataCntnt.overdueMaxDays}}天</div>
+                    </div>
+                    <div class="detailListCol">
+                            <div class="detailListTitle">逾期金额：</div>
+                            <div class="detailValue">{{item.DataCntnt.overdueAmount}}万元</div>
+                    </div>
+                    <div class="detailListCol">
+                            <div class="detailListTitle">票据承兑人：</div>
+                            <div class="detailValue">{{item.DataCntnt.acceptor}}</div>
+                    </div>
+                    <div class="detailListCol">
+                            <div class="detailListTitle">管户经理：</div>
+                            <div class="detailValue">{{item.DataCntnt.custManagerName}}</div>
+                    </div>
+                </div>
+            </div>
+            <div  class="nodate" v-if="nodata2">
+                    <div class="noMessage">
+                        <img src="images/noList.png">
+                    </div>
+                    暂无数据
+                </div> 
+        </div>
+        <div class="custom-btm" v-show="activeTab==1">
+                <div class="detailTitle">逾期明细信息</div>
+                <div class="detailTotalNum">共<span class="totalNum">{{total1}}</span>条逾期明细信息</div>
+                <div class="btm-table">
+                    <div class="detailList" v-for="(item,index) in detailList1">
+                        <div class="detailListCol">
+                                <div class="detailListTitle">机构名称：</div>
+                                <div class="detailValue">{{item.DataCntnt.comName}}</div>
+                        </div>
+                        <div class="detailListCol">
+                                <div class="detailListTitle">借款人：</div>
+                                <div class="detailValue">{{item.DataCntnt.borrower}}</div>
+                        </div>
+                        <div class="detailListCol">
+                                <div class="detailListTitle">逾期笔数：</div>
+                                <div class="detailValue">{{item.DataCntnt.overdueNum}}</div>
+                        </div>
+                        <div class="detailListCol">
+                                <div class="detailListTitle">最大逾期天数：</div>
+                                <div class="detailValue">{{item.DataCntnt.overdueMaxDays}}天</div>
+                        </div>
+                        <div class="detailListCol">
+                                <div class="detailListTitle">逾期金额：</div>
+                                <div class="detailValue">{{item.DataCntnt.overdueAmount}}万元</div>
+                        </div>
+                        <div class="detailListCol">
+                                <div class="detailListTitle">票据承兑人：</div>
+                                <div class="detailValue">{{item.DataCntnt.acceptor}}</div>
+                        </div>
+                        <div class="detailListCol">
+                                <div class="detailListTitle">管户经理：</div>
+                                <div class="detailValue">{{item.DataCntnt.custManagerName}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div  class="nodate" v-if="nodata2">
+                        <div class="noMessage">
+                            <img src="images/noList.png">
+                        </div>
+                        暂无数据
+                    </div> 
+            </div>
+        <!--时间筛选-->
+        <van-popup v-model="monthShow" position="bottom">
+            <van-datetime-picker type="date" v-model="currentDate" title="请选择日期" :max-date='maxDate'
+                :formatter="formatter" @cancel="monthShow=false" @confirm="chooseDate">
+            </van-datetime-picker>
+        </van-popup>
+    </div>
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/overdueInfo.js"></script>
+<script src="js/moment.js"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem', 'invoke','selectEnterpriseContact'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

@@ -1,0 +1,478 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f6f6f6;
+    overflow: hidden;
+}
+body{
+    -webkit-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+}
+#app{
+    width: 100%;
+    height: 100%;
+   display: flex;
+   flex-direction: column;
+   overflow: hidden;
+}
+/* --------------------------------- tab切换 ---------------------- */
+.tabs{
+    width: 100%;
+    height: 50px;
+}
+.van-tabs--line .van-tabs__wrap{
+    height: 50px !important;
+}
+.van-tab{
+    font-size: 15px !important;
+    color: #999 !important;
+}
+.van-tab--active{
+    color: #267EF0 !important;
+}
+.van-tabs__line{
+    width: 80px !important;
+    height: 2px !important;
+    background-color: #267EF0 !important;
+}
+/* --------------------------------- 内容 ---------------------- */
+.main{
+    width: 100%;
+    flex: 1;
+    overflow: auto;
+}
+/* ----------------------- 基础信息 --------------------------- */
+/* 企业 */
+.infos{
+    width: 100%;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+.infos .lis{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    background-color: #fff;
+    display: flex;
+    position: relative;
+}
+.infos .lis::after{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #DDD;
+    -ms-transform: scaleY(.3);
+    -webkit-transform: scaleY(.3);
+    transform: scaleY(.3);
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    z-index: 10;
+}
+.infos .lis:last-child::after{
+    display: none;
+}
+.infos .lis:first-child{
+    border-radius: 4px 4px 0 0;
+}
+.infos .lis:last-child{
+    border-radius: 0 0 4px 4px;
+}
+.infos .lis span{
+    display: block;
+    width: 50%;
+    font-size: 15px;
+    line-height: 20px;
+}
+.infos .lis span:nth-child(1){
+    color: #999;
+}
+.infos .lis span:nth-child(2){
+    color: #333;
+    display: flex;
+    justify-content: flex-end;
+    word-break: break-all;
+}
+.infos .lis1{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    background-color: #fff;
+    position: relative;
+}
+.infos .lis1::after{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #DDD;
+    -ms-transform: scaleY(.3);
+    -webkit-transform: scaleY(.3);
+    transform: scaleY(.3);
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    z-index: 10;
+}
+.infos .lis1:last-child::after{
+    display: none;
+    border-radius: 0 0 4px 4px;
+}
+.infos .lis1 .title{
+    width: 100%;
+    font-size: 15px;
+    line-height: 20px;
+    color: #999;
+}
+.infos .lis1 .busImg{
+    width: 100px;
+    height: 100px;
+    margin-top: 15px;
+    position: relative;
+}
+.infos .lis1 .busImg img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+}
+.infos .lis1 .busImg .loadding{
+    display: block;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 35px;
+    top:35px;
+}
+/* 个人 */
+.peopleinfos{
+    width: 100%;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+.peopleinfos .title{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    display: flex;
+    background-color: #fff;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+}
+.peopleinfos .title:after{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #DDD;
+    -ms-transform: scaleY(.3);
+    -webkit-transform: scaleY(.3);
+    transform: scaleY(.3);
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    z-index: 10;
+}
+.peopleinfos .title i{
+    display: block;
+    width: 3px;
+    height: 16px;
+    background-color: blue;
+    margin-right: 10px;
+    margin-top: 2px;
+}
+.peopleinfos .title span{
+    font-size: 15px;
+    color: #000;
+    line-height: 20px;
+    font-weight: bold;
+}
+.peopleinfos .ct{
+    width: 100%;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+.peopleinfos .ct .lis{
+    width: 100%;
+    padding: 7px 0px;
+    box-sizing: border-box;
+    display: flex;
+}
+.peopleinfos .ct .lis span{
+    display: block;
+    width: 50%;
+    font-size: 15px;
+    line-height: 20px;
+}
+.peopleinfos .ct .lis span:nth-child(1){
+    color: #999;
+}
+.peopleinfos .ct .lis span:nth-child(2){
+    color: #333;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.peopleinfos .reasond{
+    width: 100%;
+    padding: 14px 12px 18px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 0 0 4px 4px;
+}
+.peopleinfos .reasond .applyBaseInfo{
+    width: 100%;
+    display: flex;
+}
+.peopleinfos .reasond .applyBaseInfo span{
+    display: block;
+    width: 50%;
+    font-size: 15px;
+    line-height: 20px;
+}
+.peopleinfos .reasond .applyBaseInfo span:nth-child(1){
+    color: #000;
+}
+.peopleinfos .reasond .applyBaseInfo span:nth-child(2){
+    color: #333;
+    display: flex;
+    justify-content: flex-end;
+}
+.peopleinfos .reasond .time{
+    width: 100%;
+    font-size: 12px;
+    line-height: 20px;
+    margin-top: 6px;
+    color: #999;
+}
+/* ------------------------------ 审批 -------------------- */
+.apply{
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+.apply .title{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    display: flex;
+    background-color: #fff;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+}
+.apply .title::after{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #DDD;
+    -ms-transform: scaleY(.3);
+    -webkit-transform: scaleY(.3);
+    transform: scaleY(.3);
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    z-index: 10;
+}
+.apply .title i{
+    display: block;
+    width: 3px;
+    height: 16px;
+    background-color: blue;
+    margin-right: 10px;
+    margin-top: 2px;
+}
+.apply .title span{
+    font-size: 15px;
+    color: #000;
+    line-height: 20px;
+    font-weight: bold;
+}
+.apply .approvalList{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+}
+.apply .approvalList .reasonText{
+    display: block;
+    width: 150px;
+    font-size: 15px;
+    color: #999;
+    line-height: 20px;
+}
+.apply .approvalList .applyTabs{
+    flex:1;
+    display: flex;
+    justify-content: space-between;
+}
+.apply .approvalList .applyTabs .tab{
+    font-size: 15px;
+    color: #333;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+}
+.apply .approvalList .applyTabs .tab i{
+    display: block;
+    width:16px;
+    margin-right: 10px;
+}
+.apply .approvalList .applyTabs .tab i img{
+    display: block;
+    width: 100%;
+}
+.toReason{
+    width: 100%;
+    padding: 15px 12px 0px;
+    box-sizing: border-box;
+    position: relative;
+    background-color: #fff;
+    border-radius: 0 0 4px 4px;
+}
+.toReason::before{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #DDD;
+    -ms-transform: scaleY(.3);
+    -webkit-transform: scaleY(.3);
+    transform: scaleY(.3);
+    position: absolute;
+    top: 0px;
+    left: 0;
+    z-index: 10;
+}
+.toReason .speech{
+    width: 100%;
+    height: 43px;
+    border: 1px solid #3975C6;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.toReason .speech img{
+    display: block;
+    margin-right: 10px;
+    width: 15px;
+    height: 21px;
+}
+.toReason .speech span{
+    color: #3975C6;
+    font-size: 15px;
+    line-height: 43px;
+}
+.toReason textarea{
+    resize: none;
+    border:none;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #F5F5F5;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #333330;
+    line-height: 20px;
+    outline: none;
+    resize: none;
+    margin: 10px auto 15px;
+    height: 119px;
+}
+textarea::-webkit-input-placeholder {
+    color: #666;
+}
+input::-webkit-input-placeholder {
+    color: #666;
+}
+
+/*录音界面*/
+.record{
+    width: 100vw !important;
+    height: 100vh !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.record .content{
+    margin-top: -80px;
+    background:rgba(37,38,45,.7);
+    border-radius: 4px;
+    padding:20px 30px;
+    box-sizing: border-box;
+}
+.record .content img{
+    display: block;
+    width: 80px;
+}
+.record .content span{
+    display: block;
+    width: 80px;
+    height: 30px;
+    background: #fff;
+    border-radius: 7px;
+    margin-top:15px;
+    color: #000;
+    text-align: center;
+    font-size: 13px;
+    line-height: 30px;
+}
+.weui-dialog__bd{
+    color: #000 !important;
+}
+/* ----------------------- 按钮 ---------------------- */
+.btn{
+    width: 100%;
+    display: flex;
+    margin: 30px auto;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+.btn .btnBig{
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    height: 46px;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #0465FF;
+    text-align: center;
+    line-height: 46px;
+    /* margin-top: 10px; */
+}
+.btn .btnSmall{
+    display: block;
+    width: 47%;
+    height: 44px;
+    margin: 0 auto;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #fff;
+    text-align: center;
+    line-height: 44px;
+}
+.btn .btnSmall:nth-child(1){
+    border: 1px solid #0465FF;
+    color: #0465FF;
+}
+.btn .btnSmall:nth-child(2){
+    border: 1px solid #0465FF;
+    background-color: #0465FF;
+}

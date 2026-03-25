@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <script src="../common/js/vue.min.js"></script>
+    <script src="../common/js/vant-2.12.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/common.css?v=1.0.1">
+    <link rel="stylesheet" href="css/detail.css?v=1.0.1">
+</head>
+<body>
+<div id="app" v-cloak style="height: 100%;overflow-y: auto">
+    <div class="main">
+        <div><img src="image/icon1.png"></div>
+        <div>
+            <div style="width: 70%">
+                <div class="mianTitle">运营业务知识测试</div>
+                <div class="mianTime">用时：{{useTime?useTime:'--'}}</div>
+                <div class="mianPoint" v-if="point==''">状态：<span style="color: #ffa600">待判分</span></div>
+                <div class="mianPoint" v-if="point!=''">状态：<span style="color: #51c71f">已判分</span></div>
+                <div class="mianPoint">
+                    <div><span>{{point?point:'--'}}</span><span>分</span></div>
+                    <div style="color: #999;font-size: 15px">总分{{fullScore?fullScore:'--'}}</div>
+                </div>
+            </div>
+            <div style="width: 70%;text-align: right"><img src="image/banner.png" style="width: 75%"></div>
+        </div>
+
+    </div>
+    <div>
+        <div class="title">答题卡</div>
+        <div class="listScroll" style="overflow-y: auto;">
+            <van-list>
+                <div v-if="tabsDataList.length>0" v-for="(item, index) in tabsDataList">
+                    <div class="listParts">
+                        <div v-html="item.question_content"></div>
+                        <div  v-for="(i, index1) in item.answerList">
+                            <div :class="index1<item.answerList.length-1 ? 'scoreParts' : 'scoreParts1'">
+                                <div class="ansList">
+                                    <div>填空{{index1+1}}</div>
+                                    <div>
+                                        <p>{{i.answer_content}}</p>
+                                        <p v-if="point==''">待判分</p>
+                                        <p v-if="point!=''">{{i.answer_score?i.answer_score:'--'}}分</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </van-list>
+
+            <div class="nodata" v-if="nodata">暂无数据</div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js?v=20211022"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="js/detail.js?v=2.2.1"></script>
+<script src="../common/js/vConsole.min.js"></script>
+<script>
+    //var vConsole = new VConsole();
+    //初始化微信社区
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem','chooseImage','uploadImage','downloadImage', 'startRecord', 'stopRecord', 'translateVoice',]);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+    function getUserFinish(){
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

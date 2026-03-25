@@ -1,0 +1,15 @@
+[v-cloak]{
+    display: none!important;
+  }
+.yellow{
+    color: #FF9430
+}
+.blue{
+    color: #267EF0 ;
+}
+.red{
+  color:  #F64A4A ; 
+}
+.green{
+    color: #44C966; 
+}

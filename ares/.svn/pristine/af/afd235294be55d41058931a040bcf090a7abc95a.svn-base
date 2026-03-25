@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=0.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none">
+
+        <div class="detailPart">
+            <div class="detailStatus" :class="'detailcardStatus'+detail.cardStatus">
+                <div >{{cardStatusOpt[detail.cardStatus]}}</div>
+            </div>
+            <div class="detailNum">
+                <div>密钥卡编号</div>
+                <div>{{detail.cardNumber}}</div>
+            </div>
+            <div class="dashedLine"></div>
+            <div class="detailcontent">
+                <div class="detailLine">
+                    <div>申请人</div>
+                    <div>{{detail.applyPeopleName}}</div>
+                </div>
+                <div class="detailLine">
+                    <div>所属部门</div>
+                    <div>{{detail.applyDepartment}}</div>
+                </div>
+                <div class="detailLine">
+                    <div>申请时间</div>
+                    <div>{{detail.createTime}}</div>
+                </div>
+                <div class="detailLine" v-if="detail.updateTime">
+                    <div>审核时间</div>
+                    <div>{{detail.updateTime}}</div>
+                </div>
+            </div>
+        </div>
+        <div v-if="list.length>0" >
+            <div class="detailTransTitle">移交信息</div>
+            <div class="detailPart" v-for="item in list">
+                <div class="detailcontent">
+                    <div class="detailLine">
+                        <div>移交人</div>
+                        <div>{{item.username}}</div>
+                    </div>
+                    <div class="detailLine">
+                        <div>所属部门</div>
+                        <div>{{item.department}}</div>
+                    </div>
+                    <div class="detailLine" >
+                        <div>接受状态</div>
+                        <div>{{item.staus=="1"?"已接受":"待接收"}}</div>
+                    </div>
+                    <div class="detailLine" v-if="item.createTime">
+                        <div>接收时间</div>
+                        <div>{{item.createTime}}</div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="detailPart detailRefuse" v-if="detail.cardStatus=='3' && detail.remark">
+            <div>驳回理由</div>
+            <div>
+                {{detail.remark}}
+            </div>
+        </div>
+        <div>
+            <div style="height: 20px;"></div>
+            
+            <div class="toSubmit"  v-if="role=='apply' && detail.cardStatus=='1' && operate=='moveAndReturn' ">
+                <div @click="confirm('guihuanApply')">我要归还</div>
+                <div @click="selectHuman()">移交</div>
+            </div>
+
+            <div class="toSubmit" v-if="role=='admin' && detail.cardStatus=='0' && operate=='shenghe' ">
+                <div @click="showPicker">审核驳回</div>
+                <div @click="confirm('tongguo')">审核通过</div>
+            </div>
+            <div class="applyButton" @click="confirm('jieshou')" v-if="role=='move' && detail.cardStatus=='1' && operate=='moveConfirm' ">
+                <div >确认接收</div>
+            </div>
+
+            <div class="applyButton" @click="confirm('guihuan')" v-if="role=='admin' && detail.cardStatus=='4' && operate=='shenghe' ">
+                <div >确认归还</div>
+            </div>
+            <div>
+                <van-popup v-model="bottomshow" position="bottom">
+                    <van-action-sheet v-model="bottomshow" title="审核驳回理由" >
+
+                        <div class="textAreaPart" >
+                            <div class="yuyun-box" @click="showRecorddiv">
+                                <img src="./images/yuyin.png " />可尝试语音输入
+                            </div>
+                            <div class="yuyinTextArea">
+                                <van-field type="textarea" v-model="remark" rows="5" autosize placeholder="请填写审核驳回理由(必填)" maxlength="100"></van-field>
+                            </div>   
+                        </div>
+                        <div style="position: relative;">
+                            <div class="recodeblock" @click="startRecord()">
+                                <img src="images/luyin.gif"> <div start="no" class="luyinbtn">开始说话</div>
+                            </div>
+                        </div>
+
+                        <div class="applyButton" @click="confirm('bohui')">
+                            <div >提交</div>
+                        </div>
+                    </van-action-sheet>
+                </van-popup>
+                <div style="position: relative;">
+                    <div class="recodeblock" @click="startRecord()">
+                        <img src="images/luyin.gif"> <div start="no" class="luyinbtn">开始说话</div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="js/detail.js?v=2.1"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','startRecord', 'stopRecord','invoke','closeWindow','selectEnterpriseContact']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

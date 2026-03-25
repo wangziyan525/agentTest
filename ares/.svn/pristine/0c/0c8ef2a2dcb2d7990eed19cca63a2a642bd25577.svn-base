@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+    name="viewport" />
+  <link rel="stylesheet" href="../common/css/weui.min.css">
+  <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+  <link rel="stylesheet" href="../common/css/vant-2.12.css">
+  <link rel="stylesheet" href="css/detail.css">
+  <title>详情</title>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <!-- 状态展示区域 -->
+    <div class="status-section">
+      <div class="status-banner">
+        <div class="status-header">
+          <img class="status-icon" :src="statusIcon" alt="">
+          <span class="status-text">{{ statusText }}</span>
+        </div>
+        <!-- 驳回/拒绝原因 -->
+        <div class="status-reason" v-if="detailData.approvestatus == 10 || detailData.approvestatus == 2"  >
+          {{ reasonLabel }}：{{ detailData.rfsRsn }}
+        </div>
+        <!-- 预约码 -->
+        <div class="status-code" v-if="detailData.approvestatus == 3">
+          预约码：{{ detailData.yycode }}
+        </div>
+      </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+      <!-- 基本信息 -->
+      <div class="info-section">
+        <div class="info-item">
+          <span class="info-label">姓名</span>
+          <span class="info-value">{{ detailData.clientNm }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">证件号码</span>
+          <span class="info-value">{{ detailData.identNum }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">手机号码</span>
+          <span class="info-value">{{ detailData.mblNo }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">银行卡</span>
+          <span class="info-value">西安银行借记卡({{ detailData.crdNum }})</span>
+        </div>
+      </div>
+
+      <!-- 限额信息 -->
+      <div class="info-section">
+        <div class="info-item">
+          <span class="info-label">单笔转出限额(元)</span>
+          <span class="info-value">{{ accounting.formatNumber(detailData.snglTfrLmt,2) }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">日累计转出笔数(笔)</span>
+          <span class="info-value">{{ detailData.dlyAcmltnTfrQnty }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">日累计转出限额(元)</span>
+          <span class="info-value">{{ accounting.formatNumber(detailData.dlyAcmltnTfrLmt,2) }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">月累计转出笔数(笔)</span>
+          <span class="info-value">{{ detailData.monAcmltnTfrQnty }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">月累计转出限额(元)</span>
+          <span class="info-value">{{accounting.formatNumber(detailData.monAcmltnTfrLmt,2) }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">是否营销客户</span>
+          <span class="info-value">{{detailData.isAudPass == 0?'否':detailData.isAudPass == 1?'是':'--' }}</span>
+        </div>
+      </div>
+
+      <!-- 提额原因 -->
+      <div class="info-section">
+        <div class="info-item"  :class="{ borderNone: detailData.tempUpgdLmtCs==4 }">
+          <span class="info-label">提额原因</span>
+          <span class="info-value">{{tempUpgdLmtCsMap[detailData.tempUpgdLmtCs] }}</span>
+        </div>
+        <div style="margin-bottom:10px" v-if="detailData.tempUpgdLmtCs==4">
+            <van-field v-model="detailData.othrCs" rows="2" autosize type="textarea" class="popup-input"
+            maxlength="50" show-word-limit placeholder="请填写" readonly>
+        </div>
+      </div>
+
+      <!-- 上传补充证明材料 -->
+      <div class="material-section" v-if="showList.length>0">
+        <div class="material-title">上传补充证明材料</div>
+        <div class="material-list">
+          <div class="material-item-wrap" v-for="item in showList">
+            <div class="material-item" @click="bigImg('data:image/png'+';base64,'+item.base64)">
+              <img :src="'data:image/png'+';base64,'+item.base64" alt="">
+              <div class="material-view">查看</div>
+            </div>
+            <!-- <div class="material-name">照片{{ item + 1 }}</div> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 申请时间 -->
+      <div class="apply-time-section">
+        <div class="info-item">
+          <span class="info-label">申请时间</span>
+          <span class="info-value">{{ detailData.aplyTm }}</span>
+        </div>
+      </div>
+
+      <div class="section-gap"></div>
+
+      <!-- 运营经理信息 -->
+      <div class="manager-section">
+        <div class="info-item">
+          <span class="info-label">运营经理信息</span>
+          <span class="info-value">{{ detailData.approveuser }}(工号:{{ detailData.approvehumancode }})</span>
+        </div>
+      </div>
+
+      <!-- 底部灰色区域 -->
+      <div class="bottom-space"></div>
+    </div>
+
+    <!-- 底部按钮 -->
+    <div class="bottom-btn-wrap" :class="{ 'two-btn': showReapplyBtn }">
+        <button class="btn-cancel" v-if="role==1&&detailData.approvestatus==3" @click="handleCancel">撤回</button>
+      <button class="btn-back" :class="{ 'full-width': !showReapplyBtn }" @click="handleBack">返回</button>
+      <button class="btn-reapply" v-if="role==2&&(detailData.approvestatus==9||detailData.approvestatus==10)" @click="handleReapply">重新申请</button>
+    </div>
+  </div>
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+
+<script type="text/javascript" src="../common/js/watermark.js"></script>
+<script src="./../common/js/server.js"></script>
+<script src="js/detail.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/accounting.min.js"></script>
+<script src="../common/js/axiosRequest.js"></script>
+
+<script src="../common/js/vConsole.min.js"></script>
+
+<script>
+  //  var vConsole = new VConsole();
+  initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+  wx.ready(function () {
+    wx.hideAllNonBaseMenuItem();
+  });
+  function getUserFinish() {
+    var username = $.parseJSON($.cookie("user")).name;
+    __canvasWM({
+      content: username
+    });
+    initFun()
+  }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

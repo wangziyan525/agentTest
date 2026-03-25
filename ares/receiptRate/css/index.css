@@ -1,0 +1,316 @@
+.section_container {
+    padding: 0 7px;
+}
+
+.main_container {
+    background-color: #fff;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.view_content {
+    padding: 8px 10px;
+}
+
+.view_right_text {
+    margin-left: 5px;
+}
+
+.header_title {
+    padding: 10px 10px 10px 10px;
+    color: #272727;
+}
+
+.header_title .color1482FF {
+    margin-left: 20px;
+}
+
+.background_E6F5FF {
+    background-color: #E6F5FF;
+}
+/* 提交结果页面 */
+.finished_box{
+    background: #fff;
+    font-size: 15px;
+    color: #272727;
+    text-align: center;
+}
+.success_img{
+    width:80px;
+    height:80px;
+    vertical-align:bottom;
+    margin:28px 0;
+}
+
+.finished_list{
+    background: #fff;
+    font-size: 15px;
+    color: #333333;
+}
+.finished_list>div{
+    padding:15px;
+    box-sizing: border-box;
+}
+
+/* 银行挡位管理 */
+.gradeList_t{
+    background: rgba(255,255,255,0.90);
+}
+.searchTnput{
+    width:100%;
+    position: relative;
+    padding:10px;
+    box-sizing: border-box;
+}
+.searchTnput input{
+    border: 1px solid rgba(178,178,178,1);
+    border-radius: 20px;
+    width: 100%;
+    padding:9px 30px;
+    box-sizing: border-box;
+    background: #fff;
+}
+.searchTnput input::-webkit-input-placeholder{
+    font-size: 12px;
+    color: #FFFFFF;
+}
+.searchTnput input::-moz-placeholder{
+    font-size: 12px;
+    color: #FFFFFF;
+}
+.searchTnput input::-ms-placeholder{
+    font-size: 12px;
+    color: #FFFFFF;
+}
+.searchIcon{
+    position: absolute;
+    left:19px;
+    width:16px;
+    height:17px;
+    top:50%;
+    transform:translateY(-50%);
+}
+.tab{
+    width:100%;
+    overflow: auto;
+    white-space: nowrap;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+.tab::-webkit-scrollbar{
+    display: none;
+}
+.tab>span{
+    position: relative;
+    padding:10px 0;
+    box-sizing: border-box;
+    font-size: 14px;
+    margin-right:23px;
+    color: #999999;
+    -webkit-tap-highlight-color: transparent;
+}
+.tab_active{
+    position: absolute;
+    bottom:0px;
+    left: 50%;
+    transform:translateX(-50%);
+    background: #0697D9;
+    border-radius: 2px;
+    width:30px;
+    height:3px;
+}
+.tab_active_text{
+    font-size: 15px !important;
+    color: #272727 !important;
+}
+.gradeList_m{
+    padding: 10px 7px;
+    box-sizing: border-box;
+    color: #272727;
+}
+.gradeList_m>div{
+    margin-bottom: 10px;
+}
+.gradeList_m_t{
+    background: #E6F5FF;
+    border-radius: 4px 4px 0px 0px;
+    font-size: 15px;
+    line-height: 15px;
+    padding:9px 14px;
+    box-sizing: border-box;
+    font-weight:600;
+}
+.bank_img{
+    width:25px;
+    height:25px;
+    vertical-align: bottom;
+    margin-bottom:10px;
+}
+.gradeList_m_b{
+    font-size: 12px;
+    background: #FFFFFF;
+    border-radius: 0px 0px 4px 4px;
+    padding: 28px 10px 10px 10px;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+.gradeList_m_item{
+    text-align: center;
+    padding-bottom:10px;
+    box-sizing: border-box;
+    width:70px;
+    padding-right: 10px;
+}
+.gradeList_b{
+    font-size: 16px;
+    line-height: 22px;
+    color: #FFFFFF;
+    background: #3199DD;
+    position: fixed;
+    bottom: 0;
+    width:100%;
+    text-align: center;
+    padding: 14px 0;
+    box-sizing: border-box;
+}
+
+/* 添加银行 */
+.addBank_box{
+    background: #fff;
+}
+.addBank_item{
+    padding:15px;
+    box-sizing: border-box;
+    line-height:15px;
+    color: #333;
+}
+.addBank_item input{
+    text-align: right;
+}
+.addBank_item>span:first-child{
+    width:100px;
+}
+.addBank_item>span:last-child{
+    line-height:20px;
+    text-align: end;
+}
+.more_img{
+    width:6px;
+    height:11px;
+    vertical-align: middle;
+}
+.add_grade_box{
+    background: #FFFFFF;
+    border-radius: 16px 16px 0px 0px;
+}
+.add_grade_title{
+    text-align: center;
+    font-size: 15px;
+    color: #333333;
+    padding: 10px 0;
+    box-sizing: border-box;
+    position: relative;
+}
+.gradeClose_img{
+    width:10px;
+    height:10px;
+    position: absolute;
+    right:15px;
+    top:50%;
+    transform: translateY(-50%);
+}
+.add_grade_info{
+    padding:34px 22px 110px 22px;
+    box-sizing: border-box;
+
+}
+.add_grade_info>div{
+    flex-wrap: wrap;
+}
+.add_grade_info span{
+    font-size: 15px;
+    color: #272727;
+    background: #EAEAEA;
+    border-radius: 5px;
+    padding: 10px 0;
+    box-sizing: border-box;
+    width:30%;
+    text-align: center;
+    margin-bottom:13px;
+    margin-right:5%;
+}
+.add_grade_info span:nth-child(3n){
+    margin-right:0;
+}
+.add_grade_active{
+    background: #3199DD !important;
+    color: #fff !important;
+}
+/* 银行搜索页面 */
+.search_fixed{
+    width:100%;
+    position: fixed;
+    top:0;
+    left: 0;
+    z-index:9999;
+}
+.search_box{
+    background: #fff;
+    padding: 15px;
+    box-sizing: border-box;
+}
+.search_back{
+    width:10px;
+    height:16px;
+}
+.search_box input{
+    border: 1px solid rgba(43,40,66,1);
+    border-radius: 20px;
+    width:100%;
+    padding: 10px 12px 10px 36px;
+    box-sizing: border-box;
+}
+.search_icon{
+    position: absolute;
+    top:50%;
+    left:12PX;
+    transform: translateY(-50%);
+    width:16px;
+    height:17px;
+}
+.bank_box{
+    font-size: 15px;
+}
+.bank_t{
+    padding:9px 15px;
+    box-sizing: border-box;
+    color: #999999;
+}
+.bank_item{
+    padding: 8px 15px;
+    box-sizing: border-box;
+    background: #fff;
+    color: #333333;
+}
+.bank_icon{
+    width:36px;
+    height:36px;
+    margin-right: 10px;
+}
+/* BP管理 */
+.bp_box{
+    padding:0 7px;
+    box-sizing: border-box;
+}
+.bp_con{
+    background: #fff;
+}
+.bp_con input{
+    text-align: right;
+    font-size:15px;
+}
+.bp_con_item{
+    padding: 10px 15px;
+    box-sizing: border-box;
+}

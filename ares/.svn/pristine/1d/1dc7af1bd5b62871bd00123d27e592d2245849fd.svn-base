@@ -1,0 +1,257 @@
+
+body, div, ul, li, ol, h1, h2, h3, h4, h5, h6, input, textarea, select, p, dl, dt, dd, a, img, button, form, table, th, tr, td, tbody, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    margin: 0;
+    padding: 0;
+}
+ul,li{
+    list-style-type: none;
+}
+.clearfix:after {
+    content: "";
+    display: block;
+    visibility: hidden;
+    height: 0;
+    clear: both;
+}
+a {
+    text-decoration: none;
+    font-family: 'Microsoft YaHei', Tahoma, Arial, sans-serif;
+}
+ul, ol {
+    list-style: none;
+}
+img {
+    border: none;
+}
+
+.weui-dialog{
+    border-radius: 12px !important;
+}
+.weui-dialog .weui-dialog__hd{
+    padding: 2em 1.5em 1.5em;
+}
+.weui-cell_primary{
+    -webkit-box-align:start;
+    -webkit-align-items:flex-start;
+    align-items:flex-start;
+    text-align:center;
+    padding-left:25px;
+}
+.weui-label{
+    width:100% !important;
+}
+
+body,html{
+    height: 100%;
+    background: #fff;
+    overflow: hidden;
+}
+.nodata{
+    text-align: center;
+    padding: 100px 0;
+    font-size: 18px;
+    color: #121212;
+    font-weight: bold;
+}
+select:invalid{
+    color: #999999;
+}
+option{
+    color: #121212;
+}
+select{
+    height: 35px;
+    line-height: 35px;
+    vertical-align: middle;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border: 0px;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+    border-radius: 4px;
+    text-indent: 10px;
+    color: #333;
+}
+.page {
+    width: 100%;
+    height: 100%;
+    display: none;
+    box-sizing: border-box;
+    position: relative;
+}
+#page1{
+    /*background: url(../images/bg.png) 0 0 no-repeat #557C12;
+    background-size: 100% auto;
+    padding-top:36vw;*/
+}
+#page2{
+   /* background-color: #557C12;
+    padding-bottom: 20px;*/
+    background: #f5f6f7;
+}
+#page3 img{
+    width:100%;
+    vertical-align: bottom;
+    pointer-events: none;
+    user-select: none;
+}
+.mid1{
+    margin: 0 auto;
+    border-radius: 6px;
+    background-color: #fff;
+    box-sizing: border-box;
+    height: calc(100% - 100px);
+}
+.mid2{
+    /*border:1px solid #557C12;*/
+    padding:10px;
+    box-sizing: border-box;
+    width:100%;
+}
+canvas{
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #f5f6f7;
+}
+.mid2>p{
+    font-family: SourceHanSansSC-Regular;
+    font-size: 16px;
+    color: #151515;
+    letter-spacing: 0;
+    line-height: 2em;
+    text-indent: 2em;
+}
+.bottom{
+    left: 0;
+    bottom: 0;
+    height: 90px;
+    width: 100%;
+}
+.btn{
+    height: 50px;
+    line-height: 50px;
+    background: #3C6ADF;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    width: 72%;
+    margin:30px auto;
+    text-align: center;
+}
+.tips{
+    color: #000000;
+    font-weight: bold;
+    margin: 20px 0;
+}
+.title{
+    height: 50px;
+    line-height: 50px;
+    font-size: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e1e1e1;
+    padding-left: 10px;
+}
+#myCanvas{
+    display: block;
+    margin: 0 auto;
+}
+
+.control{
+    width:97%;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    text-align: right;
+    color: #3C6ADF;
+}
+.btns{
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 16px;
+    width: 92%;
+    margin:21px auto;
+}
+.btns>P:first-child{
+    width: 42%;
+    height: 45px;
+    line-height: 45px;
+    color: #3C6ADF;
+    border:1px solid #3C6ADF;
+    text-align: center;
+    border-radius: 10px;
+ }
+.btns>P:last-child{
+    width: 42%;
+    height: 45px;
+    line-height: 45px;
+    color: #fff;
+    background: #3C6ADF;
+    text-align: center;
+    border-radius: 10px;
+}
+.footname{
+    position: relative;
+    margin:12px auto;
+    width:100%;
+    text-align: right;
+    box-sizing: border-box;
+}
+.footname img{
+    height: 80px;
+    width:auto;
+    display: inline-block;
+    vertical-align: top;
+}
+.footname p{
+    font-family: SourceHanSansSC-Medium;
+    font-size: 14px;
+    color: #000000;
+    font-weight: 500;
+    display: inline-block;
+    vertical-align: top;
+    height: 80px;
+    line-height: 80px;
+}
+.date{
+    font-family: SourceHanSansSC-Medium;
+    font-size: 14px;
+    color: #000000;
+    text-align: right;
+    margin-top:12px;
+    font-weight: 500;
+    margin-right: 10px;
+}
+.footer{
+    display: none;
+}
+
+.cityUl>li{
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    border-bottom: 1px solid #e1e1e1;
+}
+.cityUl>li:last-child{
+    border-bottom: none;
+}
+.citySelect{
+    background: url(../images/select.png) no-repeat 96% !important;
+    background-size: 6% !important;
+}
+.name,.idCard{
+    text-decoration: underline;
+}
+
+.delete{
+    background: url(../images/delete.png) no-repeat 83% !important;
+    background-size: 4% !important;
+}
+
+
+
+
+
+

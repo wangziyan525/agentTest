@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>员工绩效面谈</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/detail.css?v=0.22518">
+    <style>
+        /* .van-swipe-item{
+            width: 100% !important;
+        } */
+    </style>
+</head>
+<body>
+
+    <div id="app" v-cloak>
+
+        <!-- 标题 -->
+        <div class="title">
+            <span>{{titleText}}</span>员工绩效面谈反馈表
+            <template v-if="infos.datastatus == '1'  || infos.datastatus == '2' || infos.datastatus == '3' || infos.datastatus == '4'  ">
+                <em v-if="infos.datastatus == 1" class="em1">待评分</em>
+                <em v-if="infos.datastatus == 2" class="em1">待考核人1评分</em>
+                <em v-if="infos.datastatus == 3" class="em1">待考核人2评分</em>
+                <em v-if="infos.datastatus == 4" class="em2">已评分</em>
+            </template>
+        </div>
+
+        <!-- 汇报 -->
+        <div class="report">
+            <div class="reportTime">
+                <template v-if="isExexamined">提交时间：{{examineTime}}</template>
+                <template v-else>汇报时间：{{examineTime}}</template>
+            </div>
+            <div class="reportTime">考核人：{{examinedPeopels}}</div>
+        </div>
+
+
+        <!-- 考核填写 -->
+        <div class="examine">
+
+             <!-- tab切换 -->
+            <div class="tabs">
+                <van-tabs v-model="active" :ellipsis="false" color="#4675C9"  @change="changeActive">
+                    <van-tab :title="monthTitle"></van-tab>
+                    <van-tab title="优点与进步"></van-tab>
+                    <van-tab title="不足之处和原因分析"></van-tab>
+                    <van-tab title="下月工作计划"></van-tab>
+                </van-tabs>
+            </div>
+            <div class="examineCt">
+                <!-- 回显 -->
+                <template v-if="isExexamined">
+                    <van-swipe :loop="false" :show-indicators="false" @change="monthChange" ref="mySwipe">
+                        <template v-for="(it,i) in examineingList">
+                            <van-swipe-item>
+                                <div class="examineCtList examineCtList1">
+                                    <span v-html="it.reason"></span>
+                                </div>
+                            </van-swipe-item>
+                        </template>
+                    </van-swipe>
+                </template>
+                <!-- 填写 -->
+                <template v-else>
+                    <div class="fillIn" :style="tranformX">
+                        <template v-for="(it,i) in examineingList">
+                            <div class="examineCtList2">
+                                <textarea placeholder="请输入意见" v-model="it.reason" @blur="scrollBank"></textarea>
+                                <div class="ctBtn">
+                                    <span @click="againInput(i)">重填</span>
+                                    <span @click="saveInput()">保存</span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+            <!-- 上传图片-->
+            <div class="workPic"  v-if="!isExexamined || (isExexamined && upImgsList.length > 0)">
+                <div class="title">
+                    <div class="left"></div><div class="right"><span>附件照片</span></div>
+                </div>
+                <!--  上传-->
+                <template v-if="!isExexamined">
+                    <div class="addPic">
+                        <template v-for="(item,i) in upImgsList" :key="i">
+                            <!-- 保存的本身就有的-->
+                            <template v-if="item.pathText.includes('.jpg') || item.pathText.includes('.png')">
+                                <div class="pic">
+                                    <img class="picter" :src="item.path" alt="" @click="watchImg(i)">
+                                    <template v-if="!item.isShow">
+                                        <div class="loadding"><img src="./image/loading-icon.gif" alt=""></div>
+                                    </template>
+                                    <div class="deleteImg" @click.stop="closeImg(i)"><img src="./image/delete.png" alt=""></div>
+                                </div>
+                            </template>
+                            <!-- 即时上传的-->
+                            <template v-else>
+                                <div class="pic picAddShow" >
+                                    <img :src="item.path" alt="" @click="watchImg(i)">
+                                    <div class="deleteImg" @click.stop="closeImg(i)"><img src="./image/delete.png" alt=""></div>
+                                </div>
+                            </template>
+                        </template>
+                        <template v-if="upImgsList.length < 5 ">
+                            <div class="pic picAddIcon"><img class="upPic" src="./image/add.png" alt="" @click='uploadImgs()'></div>
+                        </template>
+                    </div>
+                </template>
+                <!--  回显-->
+                <template v-else>
+                    <div class="addPic">
+                        <template v-for="(item,i) in upImgsList">
+                            <div class="pic">
+                                <img class="picter" :src="item.path" alt="" @click="watchImg(i)">
+                                <template v-if="!item.isShow">
+                                    <div class="loadding"><img src="./image/loading-icon.gif" alt=""></div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+            <!-- 流转信息 -->
+            <div class="flowInfo">
+                <!-- 第一考核情况 -->
+                <div class="flowList" v-if="infos.firstcheckTime && infos.firstcheckTime !=''">
+                    <div class="flowLis">
+                        <span>考核人1评分</span><span>{{infos.firstcheckScore}}</span>
+                    </div>
+                    <div class="flowLis1">
+                        <span>考核人1谈话要点</span><span>{{infos.firstcheckTalkingpoints}}</span>
+                    </div>
+                    <div class="flowLis">
+                        <span>考核人1</span><span>{{infos.firstcheckIdcardname}}</span>
+                    </div>
+                    <div class="flowLis">
+                        <span>考核时间</span><span>{{readTime1(infos.firstcheckTime)}}</span>
+                    </div>
+                </div>
+                <!-- 第二考核情况 -->
+                <div class="flowList" v-if="infos.secondcheckTime && infos.secondcheckTime !=''">
+                    <div class="flowLis">
+                        <span>考核人2评分</span><span>{{infos.secondcheckScore}}</span>
+                    </div>
+                    <div class="flowLis1">
+                        <span>考核人2谈话要点</span><span>{{infos.secondcheckTalkingpoints}}</span>
+                    </div>
+                    <div class="flowLis">
+                        <span>考核人2</span><span>{{infos.secondcheckIdcardname}}</span>
+                    </div>
+                    <div class="flowLis">
+                        <span>考核时间</span><span>{{readTime1(infos.secondcheckTime)}}</span>
+                    </div>
+                </div>
+                <div style="width: 100%;height: 20px;"></div>
+            </div>
+        </div>
+
+        <!-- 底部提交 -->
+        <template v-if="!isExexamined">
+            <div class="btn">
+                <div style="width: 100%;height: 20px;"></div>
+                <div class="bigBtn" @click="toSub">提交</div>
+                <div style="width: 100%;height: 30px;"></div>
+            </div>
+        </template>
+        <template v-else>
+            <div class="btn">
+                <div style="width: 100%;height: 20px;"></div>
+                <div class="bigBtn" @click="againFillin">撤回</div>
+                <div style="width: 100%;height: 30px;"></div>
+            </div>
+        </template>
+
+
+
+    </div>
+
+</body>
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../../common/js/jwxwork.js"></script>
+<script type="text/javascript" src="../../common/js/watermark.js?v=1.2"></script>
+<script type="text/javascript" src="../../common/js/vConsole.min.js"></script>
+<script type="text/javascript" src="../../common/js/server.js"></script>
+<script type="text/javascript" src="./js/headOfficeDetail.js?v=0.0.28"></script>
+<script>
+
+    // var vConsole = new VConsole();
+
+
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem','invoke','chooseImage','uploadImage','previewImage']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+
+    function getUserFinish() {
+        action();
+    }
+
+
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>

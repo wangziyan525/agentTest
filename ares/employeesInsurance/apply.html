@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>申请人基本信息</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/apply.css">
+</head>
+
+<body>
+    <div class="container" v-cloak>
+        <div class="topArea">
+            <div class="listline">
+                <div>姓名</div>
+                <div>{{userInfo.name}}</div>
+            </div>
+            <div class="listline">
+                <div>证件号码</div>
+                <div>{{userInfo.idc}}</div>
+            </div>
+            <div class="listline">
+                <div>民族</div>
+                <div @click="showNthFuc">{{nth}}</div>
+            </div>
+            <div class="listline">
+                <div>政治面貌</div>
+                <div @click="showPloFuc">{{plo}}</div>
+            </div>
+            <div class="listline">
+                <div>文化程度</div>
+                <div @click="showEduFuc">{{edu}}</div>
+            </div>
+            <div class="listline">
+                <div>用工合同类型</div>
+                <div>劳动合同</div>
+            </div>
+            <div class="listline">
+                <div>工作性质</div>
+                <div>专职</div>
+            </div>
+            <div class="listline">
+                <div>移动电话</div>
+                <div>{{userInfo.mobile}}</div>
+            </div>
+        </div>
+        <div class="midArea">
+            <div class="listline">
+                <div>所属机构代码</div>
+                <div>{{userInfo.orgId}}</div>
+            </div>
+            <div class="listline">
+                <div>所属支行</div>
+                <div>{{userInfo.ssbm}}</div>
+            </div>
+        </div>
+        <div class="btmArea" v-if = "type == 'BA'">
+            <div class="listline">
+                <div>上传证件照片</div>
+            </div>
+            <div class="listline" style="padding-top:0px;">
+                <div style="position: relative;">
+                    <img class="btmImg" id="btmImg" src="./images/addImg.png" @click="afterRead('0')" alt="">
+                    <img class="detImg" id="detImg" src="./images/delete.png" @click="deleteImg"
+                        v-if="uploadImage != '' && type != 'ZX'">
+                </div>
+
+            </div>
+            <div class="upload">
+                <p>上传须知：</p>
+                <p>● 请上传近6个月内免冠正面证件照，头部与肩部上部需清
+                    晰显示，禁止戴帽子、头巾等； ‌
+                </p>
+                <p>● JPG/JPEG格式，如通过相册上传大小不超过44K。</p>
+            </div>
+        </div>
+        <div v-if="userInfo.status == '0' || userInfo.status == '' || userInfo.status == undefined" class="testBtn" @click="saveInsuranceApplyData('1')">信息准确，在线考试</div>
+        <div v-if="userInfo.status == '3' && type == 'BG'" class="testBtn" @click="saveInsuranceApplyData('3')">变更</div>
+        <div v-if="userInfo.status == '3' && type == 'ZX'" class="testBtn" @click="logout()">注销</div>
+        <div v-if="userInfo.status == '0' || userInfo.status == '' || userInfo.status == undefined" class="info" @click="showTips = true">信息有误</div>
+        <!--民族选择-->
+        <van-popup v-model="showNth" position="bottom">
+            <van-picker :columns="nthList" show-toolbar title="请选择民族" @cancel="showNth=false" @confirm="chooseNth">
+            </van-picker>
+        </van-popup>
+        <!--文化程度选择-->
+        <van-popup v-model="showEdu" position="bottom">
+            <van-picker :columns="eduLevel" show-toolbar title="请选择文化程度" @cancel="showEdu=false" @confirm="chooseEdu">
+            </van-picker>
+        </van-popup>
+        <!--政治面貌选择-->
+        <van-popup v-model="showPlo" position="bottom">
+            <van-picker :columns="ploSta" show-toolbar title="请选择政治面貌" @cancel="showPlo=false" @confirm="choosePlo">
+            </van-picker>
+        </van-popup>
+        <!--温馨提示-->
+        <van-popup v-model="showTips" closeable>
+            <div class="tips">
+                <div class="tipsTitle">温馨提示</div>
+                <div class="tipsText">
+                    <p>请在相关原系统</p>
+                    <p>进行修改后再次提交。</p>
+                </div>
+                <div class="tipsBtn" @click="showTips = false">确定</div>
+            </div>
+        </van-popup>
+    </div>
+
+
+
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="js/apply.js?v=1.0"></script>
+<script src="../common/js/vConsole.min.js"></script>
+<script type="text/javascript">
+    //var vConsole = new VConsole();
+    //初始化微信社区
+    $(function () {
+        initJSSDK(['hideAllNonBaseMenuItem', 'chooseImage', 'getLocalImgData', 'uploadImage', 'downloadImage', 'startRecord', 'stopRecord', 'translateVoice', 'closeWindow']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+    function getUserFinish() {
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun();
+    }
+    // initFun();
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js?v=202110229"></script>
+
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/list.css">
+</head>
+<body style="overflow: hidden">
+<div id="app" style="overflow-y: hidden;height: 100%;display: none">
+    <div class="topDiv">
+        <div class="tab">
+            <div :class="tab=='0'?'activeTab':''" @click="chooseTab('0')">未申请</div>
+            <div :class="tab=='1'?'activeTab':''" @click="chooseTab('1')">待审核</div>
+            <div :class="tab=='2'?'activeTab':''" @click="chooseTab('2')">审核通过</div>
+            <div :class="tab=='4'?'activeTab':''" @click="chooseTab('4')">待终审</div>
+            <div :class="tab=='3'?'activeTab':''" @click="chooseTab('3')">审核拒绝</div>
+
+        </div>
+        <div class="searchDiv">
+            <img src="image/search.png" >
+            <input class="weui-input" v-model="keywords" type="text" placeholder="请输入商户号/商户名称" @blur="search()" @input="checkNum">
+            <img src="image/empty.png" @click="empty()" v-if="emptyFlag">
+        </div>
+        <div class="selectDiv" v-if="tab!=0">
+            <div class="selectState" style="position: relative">
+                <input class="weui-input" type="text" placeholder="选择优免状态" @click='showTap(1)' v-model='ymTypeText' readonly>
+                <img src="image/arrowB.png" class="year">
+            </div>
+        </div>
+    </div>
+    <div class="listScroll" style="overflow-y: auto;margin-top: 10px">
+        <van-list><!--v-model="paging.loading" :finished="paging.finished" :finished-text="paging.text"
+            @load="onload"-->
+            <div v-if="tabsDataList.length>0" v-for="(item, index) in tabsDataList">
+                <div class="listParts">
+                    <div class="containList" @click="jump(item)">
+                        <div>
+                            <div class="listTitle">{{item.mch_code?item.mch_code:'--'}}
+                                <img src="image/arrow.png" style="height: 22px;margin-right: -2px">
+                            </div>
+                            <div class="listLine">
+                                <div>商户全称:</div>
+                                <div>{{item.all_title?item.all_title:'--'}}</div>
+                            </div>
+                            <div class="listLine">
+                                <div>商户简称:</div>
+                                <div>{{item.title?item.title:'--'}}</div>
+                            </div>
+                            <div class="listLine" v-if="item.mch_code">
+                                <div>商户号:</div>
+                                <div>{{item.mch_code?item.mch_code:'--'}}</div>
+                            </div>
+                            <div class="listLine" v-if="tab==0">
+                                <div>优免状态:</div>
+                                <div v-if="item.is_exemption ==0">关闭</div>
+                                <div v-if="item.is_exemption ==1">开启</div>
+                            </div>
+                            <div class="listLine" v-if="tab==1">
+                                <div>优免状态:</div>
+                                <div v-if="item.is_exemption ==0">关闭</div>
+                                <div v-if="item.is_exemption ==1">开启</div>
+                            </div>
+                            <div class="listLine" v-if="tab==2 || tab==4">
+                                <div>优免状态:</div>
+                                <div v-if="item.type==''">未申请</div>
+                                <div v-if="item.type==1">开启</div>
+                                <div v-if="item.type==2">关闭</div>
+                            </div>
+                            <div class="listLine" v-if="tab==3">
+                                <div>优免状态:</div>
+                                <div v-if="item.is_exemption ==0">关闭</div>
+                                <div v-if="item.is_exemption ==1">开启</div>
+                            </div>
+
+                            <div class="listLine" v-if="item.audit_user_name">
+                                <div>审核人:</div>
+                                <div>{{item.audit_user_name?item.audit_user_name:'--'}}</div>
+                            </div>
+
+                            <div class="listLine" v-if="item.reason">
+                                <div>拒绝原因:</div>
+                                <div>{{item.reason?item.reason:'--'}}</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </van-list>
+
+        <div class="" v-if="moreStatus" @click="addMore()" style="color:#377ae6;text-align: center;padding-bottom: 10px;box-sizing: border-box;font-size: 15px">----点击加载更多----</div>
+        <div class="" v-if="noMoreStatus" style="color:#999;text-align: center;padding-bottom: 10px;box-sizing: border-box;font-size: 15px">----没有更多数据了----</div>
+        <div class="nodata" v-if="nodata">暂无数据</div>
+    </div>
+
+    <van-popup v-model="popupBottomShow1" @click-overlay="closeOverlayBindtap" :close-on-click-overlay="false"
+               position="bottom">
+        <van-picker show-toolbar item-height="50px" visible-item-count="5" :title="popupObject1.title"
+                    :columns="popupObject1.columns" @cancel="closeOverlayBindtap" @confirm="onConfirm">
+        </van-picker>
+    </van-popup>
+</div>
+
+
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="js/list.js?v=2.1.0"></script>
+<script type="text/javascript" src="../common/js/vConsole.min.js"></script>
+<script type="text/javascript">
+
+    //var vConsole = new VConsole();
+
+    //初始化微信社区
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem','chooseImage','uploadImage','downloadImage', 'startRecord', 'stopRecord', 'translateVoice','closeWindow']);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+    function getUserFinish(){
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js?v=202110229"></script>
+</html>

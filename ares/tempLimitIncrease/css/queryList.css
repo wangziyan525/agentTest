@@ -1,0 +1,295 @@
+[v-cloak] {
+  display: none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* 顶部蓝色区域 */
+.header-wrap {
+  background: #1482ff;
+  padding: 20px 16px 20px;
+}
+
+.header-title {
+  color: #fff;
+  font-size: 17px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* 搜索框 */
+.search-wrap {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 19px;
+  padding: 0 12px;
+  height: 44px;
+}
+
+.search-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+/* 筛选按钮 */
+.filter-wrap {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px;
+  background-color: #f5f5f5;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  color: #333;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+/* 列表容器 */
+.list-container {
+  padding: 0 16px 20px;
+}
+
+/* 列表卡片 */
+.list-card {
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.card-name {
+  font-size: 15px;
+  color: #272727;
+  font-weight: 400;
+}
+
+.card-arrow {
+  width: 16px;
+  height: 16px;
+}
+
+.card-body {
+  padding: 12px 16px;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.card-label {
+  font-size: 15px;
+  color: #272727;
+  font-weight: 400;
+}
+
+.card-value {
+  font-size: 14px;
+  color: #666;
+}
+
+/* 底部提示 */
+.list-finished {
+  text-align: center;
+  padding: 16px 0;
+  color: #999;
+  font-size: 13px;
+}
+
+/* 无数据状态 */
+.empty-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.empty-wrap img {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 16px;
+}
+
+.empty-wrap span {
+  color: #999;
+  font-size: 14px;
+}
+
+/* 筛选弹窗 */
+.filter-popup {
+  background-color: #fff;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+.popup-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.popup-close {
+  position: absolute;
+  right: 16px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.popup-content {
+  padding: 16px;
+}
+
+/* 筛选区块 */
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.section-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+/* 日期范围选择 */
+.date-range {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.date-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.date-item span {
+  font-size: 14px;
+  color: #333;
+}
+
+.date-item .date-placeholder {
+  color: #999;
+}
+
+.date-arrow {
+  width: 12px;
+  height: 12px;
+}
+
+.date-separator {
+  padding: 0 12px;
+  color: #999;
+}
+
+/* 状态选择 */
+.status-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.status-item {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f5f5f5;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.status-item.active {
+  background-color: #e6f4ff;
+  color: #1989fa;
+  border: 1px solid #1989fa;
+}
+
+/* 弹窗底部按钮 */
+.popup-footer {
+  display: flex;
+  border-top: 1px solid #eee;
+}
+
+.btn-reset,
+.btn-confirm {
+  flex: 1;
+  height: 50px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-reset {
+  background-color: #fff;
+  color: #333;
+}
+
+.btn-confirm {
+  background-color: #1989fa;
+  color: #fff;
+}
+
+.btn-reset:active,
+.btn-confirm:active {
+  opacity: 0.8;
+}
+.filter-icon{
+  width: 17px;
+  height: 17px;
+}

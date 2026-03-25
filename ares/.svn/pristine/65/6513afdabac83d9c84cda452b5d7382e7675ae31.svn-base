@@ -1,0 +1,395 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f5f6f7;
+    overflow: hidden;
+}
+#app{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+/* ------------------------------------------- 信息 ------------------------------------ */
+.baseInfo{
+    width: 100%;
+    margin-top: 10px;
+    background: #fff;
+}
+.baseInfo .info{
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    position: relative;
+}
+.baseInfo .info:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.baseInfo .info:last-child:before{
+    display: none;
+}
+.baseInfo .info span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+}
+.baseInfo .info span:nth-child(1){
+    width: 100px;
+    color: #a2a2a2;
+    margin-right: 10px;
+}
+.baseInfo .info span:nth-child(2){
+    flex: 1;
+    color: #313448;
+    white-space: normal;
+    word-break: break-all;
+    text-align: right;
+}
+.baseInfo .info i{
+    display: flex;
+    width: 12px;
+    align-items: center;
+    justify-content: flex-end;
+}
+.baseInfo .info i img{
+    display: block;
+    width: 50%;
+}
+.baseInfo .info input{
+    flex: 1;
+    width: 100%;
+    display: block;
+    border: none;
+    outline: none;
+    background-color: #fff;
+    box-shadow: none;
+    -webkit-appearance: none;
+    font-size: 15px;
+    color: #333;
+    line-height: 20px;
+    border-radius: 6px;
+    text-align: right;
+}
+.baseInfo .info em{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+    margin-left: 10px;
+}
+/* 查看详情 */
+.baseInfo .info1{
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    position: relative;
+    align-items: center;
+}
+.baseInfo .info1:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.baseInfo .info1:last-child:before{
+    display: none;
+}
+.baseInfo .info1 span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+}
+.baseInfo .info1 span:nth-child(2){
+    width: 70px;
+    color: #4675c9;
+    text-align: right;
+}
+.baseInfo .info1 span:nth-child(1){
+    flex: 1;
+    color: #313448;
+    white-space: normal;
+    word-break: break-all;
+    margin-right: 10px;
+}
+.baseInfo .info1 i{
+    display: flex;
+    width: 12px;
+    align-items: center;
+    justify-content: flex-end;
+}
+.baseInfo .info1 i img{
+    display: block; 
+    width: 50%;
+}
+/* ------------------------------------------- 按钮 ------------------------------------ */
+.btn{
+    width: 100%;
+    display: flex;
+    padding: 0 12px 50px;
+    box-sizing: border-box;
+    justify-content: space-between;
+}
+.btn .smallBtn{
+    width: calc((100% - 12px)/2);
+    padding: 12px 0;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+    border-radius: 6px;
+    border: 1px solid #4675c9;
+    text-align: center;
+}
+.btn .smallBtn:nth-child(1){
+    background: transparent;
+    color: #4675c9;
+    border: 1px solid #4675c9;
+}
+.btn .smallBtn:nth-child(2){
+    background: #4675c9;
+    color: #fff;
+}
+.btn .bigBtn{
+    width: 100%;
+    padding: 12px 0;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+    border-radius: 6px;
+    text-align: center;
+    background: #4675c9;
+    color: #fff;
+}
+/* ----------------------------------------- 拒绝弹框 -------------------------------------- */
+.van-popup--center{
+    top: 43% !important;
+    border-radius: 6px !important;
+}
+.refuseModel{
+    width: 85vw;
+    border-radius: 6px;
+    background-color: #fff;
+}
+.refuseModel .title{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    font-size: 15px;
+    color: #333;
+    line-height: 20px;
+    text-align: center;
+    position: relative;
+}
+.refuseModel .title:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.refuseModel .refuseCt{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+}
+.refuseModel .refuseCt .refuseTip{
+    width: 100%;
+    font-size: 15px;
+    color: #333;
+    line-height: 30px;
+}
+.refuseModel .refuseCt .refuseTip em{
+    color: red;
+    margin-right: 10px;
+}
+.refuseModel .refuseCt textarea{
+    resize: none;
+    border:none;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #F5F5F5;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #333330;
+    line-height: 20px;
+    outline: none;
+    resize: none;
+    margin: 10px auto 15px;
+}   
+.refuseModel .refuseCt .refuseBtn{
+    width: 100%;
+    display: flex;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    justify-content: space-between;
+}
+.refuseModel .refuseCt .refuseBtn span{
+    width: calc((100% - 12px)/2);
+    padding: 8px 0;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+    border-radius: 6px;
+    border: 1px solid #4675c9;
+    text-align: center;
+}
+.refuseModel .refuseCt .refuseBtn span:nth-child(1){
+    background: transparent;
+    color: #4675c9;
+    border: 1px solid #4675c9;
+}
+.refuseModel .refuseCt .refuseBtn span:nth-child(2){
+    background: #4675c9;
+    color: #fff;
+}
+/* --------------------------------- 流转信息 ------------------------------------- */
+.flowModel{
+    width: 100%;
+    padding-bottom: 20px;
+    box-sizing: border-box;
+}
+.flowModel .title{
+    width: 100%;
+    padding: 15px 0;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 15px;
+    line-height: 20px;
+    color: #333;
+    position: relative;
+}
+.flowModel .title:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.flowModel .flowCt{
+    width: 100%;
+    padding: 15px 20px;
+    box-sizing: border-box;
+}
+.flowModel .flowCt .flow{
+    width: 100%;
+    display: flex;
+    padding-bottom: 17px;
+    position: relative;
+}
+.flowModel .flowCt .flow .left{
+    width: 5px;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+}
+.flowModel .flowCt .flow .left i{
+    display: block;
+    margin-top: 5px;
+}
+.flowModel .flowCt .flow i img{
+    display: block;
+    width: 11px;
+}
+.flowModel .flowCt .flow .left::after{
+    content: '';
+    width: 1px;
+    height:-webkit-calc(100% + 17px);
+    background: #4675c9;
+    position: absolute;
+    top: 10px;
+    left: 2px;
+    -ms-transform: scaleX(.5);
+    -webkit-transform: scaleX(.5);
+    transform: scaleX(.5);
+}
+.flowModel .flowCt .flow:last-child .left::after{
+    display: none;
+}
+.flowModel .flowCt .flow .right{
+    flex: 1;
+    padding-left: 16px;
+    box-sizing: border-box;
+}
+.flowModel .flowCt .flow .right .peopleType{
+    width: 100%;
+    font-size: 15px;
+    line-height: 20px;
+    color: #999;
+}
+.flowModel .flowCt .flow .right .nameTime{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0 0;
+}
+.flowModel .flowCt .flow .right .nameTime .name,
+.flowModel .flowCt .flow .right .nameTime .time{
+    width: 50%;
+    font-size: 14px;
+    line-height: 20px;
+}
+.flowModel .flowCt .flow .right .nameTime .name{
+    color: #333;
+} 
+.flowModel .flowCt .flow .right .nameTime .time{
+    color: #999;
+    text-align: right;
+} 
+.flowModel .flowCt .flow .right .reason{
+    width: 100%;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+    margin: 5px 0 0;
+} 
+.status1{
+    color: #1e751e !important;
+}
+.status2{
+    color: #f90808 !important;
+}
+.status3{
+    color: #e0992d !important;
+}

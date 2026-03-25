@@ -1,0 +1,159 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f6f6f6;
+    overflow: hidden;
+}
+#app{
+    width: 100%;
+    height: 100%;
+}
+
+/* ------------------------------------------------ 录入 -------------------------------------- */
+.main{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+.banner{
+    width: 100%;
+    z-index: 9;
+}
+.banner img{
+    display: block;
+    width: 100%;
+}
+.enter{
+    width: calc(100% - 30px);
+    border-radius: 14px;
+    background-image: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+    border: 1px solid rgba(255,255,255,1);
+    z-index: 99;
+    position: relative;
+    top:-100px;
+    left: 15px;
+}
+.enter .contentIcon{
+    width: 100%;
+    padding: 50px 77px;
+    box-sizing: border-box;
+}
+.enter .contentIcon img{
+    display: block;
+    width: 100%;
+}
+.enter .tips{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 30px;
+    box-sizing: border-box;
+}
+.enter .tips .tip{
+    width: calc((100% - 80px)/3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.enter .tips .tip img{
+    display: block;
+    width: 80%;
+}
+.enter .tips .tip span{
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    line-height: 17px;
+    color: #9D9FA3;
+    letter-spacing: 0;
+    font-weight: 400;
+    margin-top: 8px;
+}
+.btn{
+    width: 100%;
+    padding: 0 15px;
+    box-sizing: border-box;
+    position: relative;
+    top:-50px;
+    position: relative;
+}
+.btn span{
+    display: block;
+    width: 100%;
+    background: #267EF0;
+    border-radius: 6px;
+    font-family: PingFangSC-Medium;
+    font-size: 17px;
+    line-height: 45px;
+    color: #FFFFFF;
+    text-align: center;
+    font-weight: 500;
+}
+.btn input{
+    display: block;
+    width: calc(100% - 30px);
+    height: 45px;
+    border: none;
+    outline: none;
+    position: absolute;
+    top: 0;
+    left: 15px;
+    opacity: 0;
+}
+
+/* ------------------------------------------------ 结果 -------------------------------------- */
+.main1{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.main1 .resultBtn{
+    width: 50%;
+    margin: 0 auto;
+    background: #267EF0;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #fff;
+    line-height: 45px;
+    text-align: center;
+}
+.main1 .ct{
+    width: 100%;
+    padding: 100px 0;
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.main1 .ct .resultIcon{
+    width: 80px;
+    margin: 0 auto;
+}
+.main1 .ct .resultIcon img{
+    display: block;
+    width: 100%;
+}
+.main1 .ct .resultText{
+    width: 100%;
+    text-align: center;
+    margin: 24px auto 8px;
+    font-family: PingFangSC-Medium;
+    font-size: 20px;
+    line-height: 28px;
+    color: #000000;
+    text-align: center;
+    font-weight: 500;
+}
+.main1 .ct .resultText1{
+    width: 100%;
+    font-family: PingFangSC-Regular;
+    font-size: 16px;
+    line-height: 22px;
+    color: rgba(10,17,26,0.50);
+    text-align: center;
+    font-weight: 400;
+}

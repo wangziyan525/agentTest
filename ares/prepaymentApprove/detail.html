@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>提前还款申请审批</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/detail.css?v=1.0.1">
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div v-if='!successFlag'>
+            <div class="detail_box">
+                <div>
+                    <div class="detail_title">贷款信息</div>
+                    <div class="detail_t">
+                        <div class="lineBottom">
+                            <span>企业名称</span>
+                            <span>{{detail.COMP_NAME}}</span>
+                        </div>
+                        <div class="lineBottom">
+                            <span>贷款产品名称</span>
+                            <span>{{detail.PRO_NAME}}</span>
+                        </div>
+                        <div class="lineBottom">
+                            <span>贷款账号</span>
+                            <span>{{detail.LOAN_ACCT_NO}}</span>
+                        </div>
+                        <div class="lineBottom">
+                            <span>贷款⾦额</span>
+                            <span>￥{{numFormat(detail.TOT_AMT)}}</span>
+                        </div>
+                        <div class="lineBottom">
+                            <span>本⾦余额</span>
+                            <span>￥{{numFormat(detail.BAL_AMT)}}</span>
+                        </div>
+                        <div class="lineBottom">
+                            <span>利率（月）</span>
+                            <span>{{detail.MONTH_RATE}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="detail_title">还款信息</div>
+                    <div class="detail_t">
+                        <div class="lineBottom">
+                            <span>还款账号</span>
+                            <span>{{detail.REYPAY_ACCT}}</span>
+                        </div>
+                        <div class="lineBottom">
+                            <span>还款方式</span>
+                            <span v-if='detail.REPAY_TYPE==0'>部分还本</span>
+                            <span v-if='detail.REPAY_TYPE==1'>全额还本</span>
+                        </div>
+                        <div class="lineBottom">
+                            <span>还款⾦额</span>
+                            <span>￥{{numFormat(detail.TRAN_AMT)}}</span>
+                        </div>
+                        <div class="lineBottom">
+                            <span>金额大写</span>
+                            <span>{{convertCurrency(detail.TRAN_AMT)}}</span>
+                        </div>
+                        <div class="lineBottom">
+                            <span>申请时间</span>
+                            <span>{{detail.createTime}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 审批流程 -->
+            <div v-if='approvalRecord.length>0' style="margin-bottom: 10px;">
+                <div class="detail_title">审批流程</div>
+                <div class="approval_list">
+                    <div v-for="(item,index) in approvalRecord" :key='index' class="approval_m">
+                        <div class="left">
+                            <i></i>
+                        </div>
+                        <div class="appNmae">
+                            <div class="approvalAposition displayFlex">
+                                <!-- 1：管户经理，2：部门经理，3：行长 -->
+                                <span v-if='item.post==1'>管户经理</span>
+                                <span v-if='item.post==2'>部门经理</span>
+                                <span v-if='item.post==3'>管理型⾏⻓</span>
+                                <span class="time">{{item.updateTime}}</span>
+                            </div>
+                            <div class="name">
+                                <span>{{item.name}}</span>
+                                <span v-if='item.status==0'>(待审核)</span>
+                                <span v-if='item.status==1' style="color: green;">(审核通过)</span>
+                                <span v-if='item.status==2' style="color: red;">(审核拒绝)</span>
+                            </div>
+                            <div class="reason">{{item.handleDesc}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-if='detail.status==0'>
+                <!-- 审批意见 -->
+                <div>
+                    <div class="agreeBox displayFlex lineBottom">
+                        <div>审批意见<span style="color: red;">*</span></div>
+                        <div class="displayFlex approve">
+                            <div class="displayFlex" v-for="(item,index) in approve" :key="index"
+                                @click='approveTap(index)'>
+                                <img :src="item.img" alt="">
+                                <span>{{item.text}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if='approve[0].checked==1' class="resonText lineBottom">
+                        <textarea class="textClass" rows="4" v-model='disagreeVal' placeholder="请输入拒绝原因（不超过30个字）" maxlength="30"></textarea>
+                    </div>
+                </div>
+                <!-- 审批选人 -->
+                <div v-if='(detail.role==1||detail.role==2)&&approve[0].checked==0' class="select_people displayFlex">
+                    <!-- 1：管户经理，2：部门经理，3：行长 -->
+                    <div v-if='detail.role==1'>部门经理</div>
+                    <div v-if='detail.role==2'>管理型行长</div>
+                    <div class="displayEnd" @click='choosePickerPeople()'>
+                        <span
+                            :class='approval_people==""?"color9b9":""'>{{approval_people==""?"请选择":approval_people}}</span>
+                        <img class="more" src="./image/more.png" alt="">
+                    </div>
+                </div>
+                <div class="btn_box">
+                    <span class="btn" @click='submitTap()'>审批</span>
+                </div>
+
+                <!-- 选择审批人 -->
+                <van-popup v-model="popupObj.showPickerPeople" position="bottom">
+                    <van-picker show-toolbar :title="popupObj.title" item-height="50px" visible-item-count="3"
+                        :columns="popupObj.choosePeopleList" @confirm="onPeopleConfirm"
+                        @cancel="popupObj.showPickerPeople=false">
+                    </van-picker>
+                </van-popup>
+            </div>
+
+        </div>
+        <!-- 完成页面 -->
+        <div v-if='successFlag'>
+            <div style="height:10px;"></div>
+            <div style="background: #fff;text-align: center;padding:20px 0;box-sizing: border-box;">
+                <img class="sucess_img" src="./image/success.png" alt="">
+            </div>
+            <div style="height:10px;"></div>
+            <div class="detail_t">
+                <div class="displayFlex lineBottom">
+                    <span>交易状态</span>
+                    <span v-if='detail.status==1'>审批通过</span>
+                    <span v-if='detail.status==2'>审批拒绝</span>
+                </div>
+                <div class="displayFlex lineBottom">
+                    <span>交易流⽔号</span>
+                    <span>{{detail.TRAN_SEQ}}</span>
+                </div>
+                <div class="displayFlex">
+                    <span>审批时间</span>
+                    <span>{{detail.updateTime}}</span>
+                </div>
+            </div>
+            <div class="btn_box">
+                <span class="btn" @click='finishedTap()'>完成</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/server.js"></script>
+<script type="text/javascript" src="./js/common.js?v=1.0.0"></script>
+<script type="text/javascript" src="./js/detail.js?v=1.1.2"></script>
+<script type="text/javascript" src="../common/js/watermark.js?v=1.2"></script>
+<!-- <script type="text/javascript" src="../common/js/vConsole.min.js"></script> -->
+<script>
+    // var vConsole = new VConsole();
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem','invoke',"closeWindow"]);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+    function getUserFinish() {
+    var username = $.parseJSON($.cookie("user")).name;
+    __canvasWM({
+        content: username
+    });
+        action();
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

@@ -1,0 +1,316 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f6f6f6;
+    overflow: hidden;
+}
+#app{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+/* ------------------------------------------------ 录入 -------------------------------------- */
+.visitInfo{
+    width: 100%;
+    margin-top: 10px;
+}
+.visitInfo .info{
+    width: 100%;
+    background-color: #fff;
+    padding: 15px 16px;
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+}
+.visitInfo .info::after{
+    content: '';
+    width: calc(100% - 32px);
+    height: 2px;
+    background: #E6E7E8;
+    -ms-transform: scaleY(.3);
+    -webkit-transform: scaleY(.3);
+    transform: scaleY(.3);
+    position: absolute;
+    bottom: 0px;
+    left: 16px;
+    z-index: 1;
+}
+.visitInfo .info:last-child::after{
+    display: none;
+}
+.visitInfo .info span{
+    display: block;
+    line-height: 20px;
+}
+.visitInfo .info span:nth-child(1){
+    width: 100px;
+    font-size: 15px;
+    color: #333;
+}
+.visitInfo .info span:nth-child(2){
+    flex: 1;
+    font-size: 15px;
+    color: #666;
+    text-align: right;
+}
+.visitInfo .info input{
+    flex: 1;
+    display: block;
+    border: none;
+    outline: none;
+    background-color: #fff;
+    box-shadow: none;
+    -webkit-appearance: none;
+    font-size: 15px;
+    color: #666;
+    line-height: 20px;
+    text-align: right;
+    padding: 0 0 0 7px;
+    box-sizing: border-box;
+}
+.visitInfo .info b{
+    width: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px;
+}
+.visitInfo .info b img{
+    display: block;
+    width: 100%;
+}
+.visitInfo .info .answer{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+.van-radio__label{
+    font-size: 15px !important;
+}
+.van-radio--horizontal{
+    margin-left: 40px !important;
+    margin-right: 0px !important;
+}
+.visitInfo .info1{
+    width: 100%;
+    background-color: #fff;
+    padding: 15px 16px 13px;
+    box-sizing: border-box;
+}
+.visitInfo .info1 .title{
+    display: block;
+    width: 100%;
+    font-size: 15px;
+    color: #000;
+    line-height: 20px;
+}
+.visitInfo .info1 .speech{
+    width: 100%;
+    height: 43px;
+    margin: 20px auto 10px;
+    border: 1px solid #1482FF;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.visitInfo .info1 .speech img{
+    display: block;
+    margin-right: 10px;
+    width: 15px;
+    height: 21px;
+}
+.visitInfo .info1 .speech span{
+    color: #1482FF;
+    font-size: 15px;
+    line-height: 43px;
+}
+
+
+.visitInfo .info1 textarea{
+    margin-top: 8px;
+    display: block;
+    width: 100%;
+    border: none;
+    outline: none;
+    background: #F6F7F9;
+    border-radius: 4px;
+    box-shadow: none;
+    -webkit-appearance: none;
+    font-size: 15px;
+    color: #666;
+    line-height: 20px;
+    padding:14px 11px;
+    box-sizing: border-box;
+}
+.visitInfo .info2{
+    width: 100%;
+    background-color: #fff;
+    padding: 15px 16px 13px;
+    box-sizing: border-box;
+}
+.visitInfo .info2 .title{
+    display: block;
+    width: 100%;
+    font-size: 15px;
+    color: #000;
+    line-height: 20px;
+}
+.visitInfo .info2 .title span{
+    color: #9DA0A3;
+}
+.visitInfo .info2 .uploadImg{
+    width: 100%;
+    padding: 17px 0 9px;
+    display: flex;
+}
+.visitInfo .info2 .uploadImg .uploadding{
+    width: 80px;
+    height: 80px;
+    background:url('../image/add.png')no-repeat;
+    background-size: 100% 100%;
+}
+.visitInfo .info2 input{
+    display: block;
+    width: 80px;
+    height: 80px;
+    border: none;
+    outline: none;
+    position: relative;
+    top: 0px;
+    left: -80px;
+    opacity: 0;
+}
+.visitInfo .info2 .uploadImg .uploaded{
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+    background-color: #f6f6f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+.visitInfo .info2 .uploadImg .uploaded .myFaceImg{
+    display: block;
+    width: 100%;
+    border-radius: 4px;
+}
+.visitInfo .info2 .uploadImg .uploaded .colseFaceImg{
+    display: block;
+    width: 25px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+/* ------------------------------- 按钮 --------------------- */
+.btn{
+    width: 100%;
+    margin-top: 95px;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+.btn span{
+    display: block;
+    width: 100%;
+    line-height: 45px;
+    background-color: #267EF0;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #fff;
+    text-align: center;
+}
+/* ------------------------------------------------ 结果页 -------------------------------------- */
+.main{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.main .resultBtn{
+    width: 50%;
+    margin: 0 auto;
+    background: #267EF0;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #fff;
+    line-height: 45px;
+    text-align: center;
+}
+.main .ct{
+    width: 100%;
+    padding: 100px 0;
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.main .ct .resultIcon{
+    width: 80px;
+    margin: 0 auto;
+}
+.main .ct .resultIcon img{
+    display: block;
+    width: 100%;
+}
+.main .ct .resultText{
+    width: 100%;
+    text-align: center;
+    margin: 24px auto 8px;
+    font-family: PingFangSC-Medium;
+    font-size: 20px;
+    line-height: 28px;
+    color: #000000;
+    text-align: center;
+    font-weight: 500;
+}
+.main .ct .resultText1{
+    width: 100%;
+    font-family: PingFangSC-Regular;
+    font-size: 16px;
+    line-height: 22px;
+    color: rgba(10,17,26,0.50);
+    text-align: center;
+    font-weight: 400;
+}
+/*录音界面*/
+.record{
+    width: 100vw !important;
+    height: 100vh !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.record .content{
+    margin-top: -80px;
+    background:rgba(37,38,45,.7);
+    border-radius: 4px;
+    padding:20px 30px;
+    box-sizing: border-box;
+}
+.record .content img{
+    display: block;
+    width: 80px;
+}
+.record .content span{
+    display: block;
+    width: 80px;
+    height: 30px;
+    background: #fff;
+    border-radius: 7px;
+    margin-top:15px;
+    color: #000;
+    text-align: center;
+    font-size: 13px;
+    line-height: 30px;
+}

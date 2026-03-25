@@ -1,0 +1,218 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f5f6f7;
+    overflow: hidden;
+}
+#app{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+/* --------------------------------- tab切换 ---------------------- */
+.tabs{
+    width: 100%;
+    height: 50px;
+}
+.van-tabs--line .van-tabs__wrap{
+    height: 50px !important;
+}
+.van-tab{
+    font-size: 15px !important;
+    color: #000 !important;
+}
+.van-tab--active{
+    color: #4675C9 !important;
+}
+.van-tabs__line{
+    width: 20% !important;
+    height: 2px !important;
+    background-color: #4675C9 !important;
+}
+/* --------------------------------- 填报 ---------------------- */
+.tabsChoose{
+    width: 100%;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    display: flex;
+}
+.tabsChoose span{
+    display: block;
+    padding: 6px 15px;
+    box-sizing: border-box;
+    font-size: 13px;
+    line-height: 20px;
+    border-radius: 20px;
+    background-color: #fff;
+    margin-right: 10px;
+}
+.tabsChoose .fillActive{
+    background: #4675C9;
+    color: #fff;
+}
+
+/*----------------------------------------- 列表 ---------------------------------------*/
+.mainList{
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 12px;
+    box-sizing: border-box;
+}
+.mainList .list{
+    width: 100%;
+    background: #fff;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+.mainList .list .title{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    position: relative;
+}
+.mainList .list .title:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.mainList .list .title span{
+    font-size: 15px;
+    line-height: 25px;
+    color: #333;
+    font-weight: bold;
+}
+.mainList .list .title em{
+    font-size: 12px;
+    line-height: 12px;
+    padding: 1px 2px;
+    box-sizing: border-box;
+    margin-left: 5px;
+    border-radius: 4px;
+}
+.mainList .list .title .em1{
+    border: 1px solid #32AF25;
+    color: #32AF25;
+}
+.mainList .list .title .em2{
+    border: 1px solid #FF5F0D;
+    color: #FF5F0D;
+}
+.mainList .list .listDetail{
+    width: 100%;
+    padding: 15px 12px 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+.mainList .list .listDetail .detail{
+    width: 100%;
+    display: flex;
+    margin-bottom: 10px;
+}
+.mainList .list .listDetail .detail span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+}
+.mainList .list .listDetail .detail span:nth-child(1){
+    color: #999;
+    width: 120px;
+}
+.mainList .list .listDetail .detail span:nth-child(2){
+    flex: 1;
+    color: #333;
+    text-align: right;
+}
+.mainList .list .toDetail{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+}
+.mainList .list .toDetail:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.mainList .list .toDetail .allBtn{
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 15px;
+    line-height: 20px;
+    color: #4675c9;
+}
+.mainList .list .toDetail .smallBtn{
+    display: block;
+    width: 50%;
+    text-align: center;
+    font-size: 15px;
+    line-height: 20px;
+    color: #4675c9;
+}
+.mainList .list .toDetail .smallBtn:nth-child(2){
+    position: relative;
+}
+.mainList .list .toDetail .smallBtn:nth-child(2)::after{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: -12px;
+    width: 1px;
+    height: 30px;
+    border-left:1px solid #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+/* ---------------------------------------- 没有列表 ---------------------------------------- */
+.noList img{
+    display: block;
+    width: 70%;
+}
+.noList span{
+    margin-top: 10px;
+    color: #333;
+    line-height:32px;
+    font-size:15px;
+}
+.noList{
+    width: 94%;
+    height: 100px;
+    margin: 30% auto 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #000000;
+    line-height:32px;
+}
+.noList img{
+    width:55%;
+}

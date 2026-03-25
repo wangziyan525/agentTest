@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport" />
+    <title>贴现通-贴现</title>
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.new.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../common/css/vant-1.2.3.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/details.css">
+</head>
+<body>
+    <div class="container" v-cloak>
+        <section class="main_section fs15" v-if="TranSt == '02'">
+            <div class="main_section_item">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    交易信息
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        交易状态
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ TranSt ? formatTranSt(TranSt) : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display" v-if="TranSt == ''">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        失败原因
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.RfsRsn }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        交易时间
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.TxnTm }}
+                    </div>
+                </div>
+                
+            </div>
+            <div class="main_section_item">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    贴现申请人基本信息
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        名称
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.DcnClitNm }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        统⼀信⽤代码
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.UvslSocCrCd }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        客户账号
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.ClientAcct }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        业务机构号
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BsnInstNum }}
+                    </div>
+                </div>
+            </div>
+            <div class="main_section_item">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    询价信息
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据类别
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillCgy ? formatBillCgy(dataDetails.BillCgy) : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据介质
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillMedm ? formatBillMedm(dataDetails.BillMedm) : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据总张数
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillTotShet }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据总⾦额
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillTot ? parseFloat(dataDetails.BillTot).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        贴现利率
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.DcnInst }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        应付利息
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.DueInt }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        结算⾦额
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.StlAmt ? parseFloat(dataDetails.StlAmt).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        剩余期限
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.RmanTrm }}天
+                    </div>
+                </div>
+            </div>
+            <div class="main_section_item" v-if="dataDetails.SgnSt != 'ST03'">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    交易对⼿信息
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        交易对⼿类型
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.CntprBnkTp ? formatCntprBnkTp(dataDetails.CntprBnkTp) : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        交易对⼿⾏名
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.CntprBnkNm }}
+                    </div>
+                </div>
+            </div>
+            <div class="main_section_item" v-if="dataDetails.SgnSt != 'ST03'">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    清算信息
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        清算速度
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ formatClrgTm(dataDetails.ClrgTm) }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        清算类型
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ formatClrgWay(dataDetails.ClrgWay) }}
+                    </div>
+                </div>
+                <div class="__item_list display" v-if="dataDetails.AmtSt == '00' || dataDetails.AmtSt == '02' || dataDetails.AmtSt == '03'">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        记账状态
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ formatAmtSt(dataDetails.AmtSt) }}
+                    </div>
+                </div>
+            </div>
+            <div class="main_section_item">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    票据清单
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据（包）号
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillNum }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        ⼦票区间
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.SubBillRng }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票⾯⾦额
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillAmt ? parseFloat(dataDetails.BillAmt).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据到期⽇
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillExpDt }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据实际到期⽇
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillActMatDay }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        剩余期限
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.RmanTrm }}天
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        应付利息
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.DueInt ? parseFloat(dataDetails.DueInt).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据结算⾦额
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillStleAmt ? parseFloat(dataDetails.BillStleAmt).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        出票⼈名称
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.DwrName }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        承兑⼈名称
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.AcpterNm }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        承兑⼈开户机构代码
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.AcprOpnAcctBnkNum }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        成交单表ID
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.SetlTblId }}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="main_section fs15" v-else>
+            <div class="main_section_item" v-if="dataDetails.TranSt != '00'">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    交易信息
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        交易状态
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.TranSt ? formatTranSt(dataDetails.TranSt) : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        失败原因
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.RfsRsn }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        交易时间
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.TxnTm }}
+                    </div>
+                </div>
+                
+            </div>
+            <div class="main_section_item">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    贴现申请人基本信息
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        规模
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.EntpScl ? formatEntpScl(dataDetails.EntpScl) : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        ⾏业分类
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.IndusCl ? formatIndusCl(dataDetails.IndusCl) : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        是否涉农企业
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ formatIsAll(dataDetails.IsAgrcEntp) }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        是否绿⾊企业
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ formatIsAll(dataDetails.IsGrnEntp) }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        是否科技企业
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ formatIsAll(dataDetails.IsTechEntp) }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        是否⺠营企业
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ formatIsAll(dataDetails.IsPrvtEntp) }}
+                    </div>
+                </div>
+            </div>
+            <div class="main_section_item">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    询价信息
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据所在渠道
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillCurCnl ? formatBillCurCnl(dataDetails.BillCurCnl) : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据类别
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillCgy ? formatBillCgy(dataDetails.BillCgy) : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据介质
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillMedm ? formatBillMedm(dataDetails.BillMedm) : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据（包）总额
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillTot ? parseFloat(dataDetails.BillTot).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        贴现利率
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.DcnInst }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        剩余期限
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.RmanTrm }}天
+                    </div>
+                </div>
+            </div>
+            <div class="main_section_item">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    票据清单
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据（包）号
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillNum }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        ⼦票区间
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.SubBillRng }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据（包）⾦额
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillAmt ? parseFloat(dataDetails.BillAmt).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') : '' }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        标准⾦额
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        0.01
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据到期⽇
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillExpDt }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        票据实际到期⽇
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BillActMatDay }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        承兑⼈名称
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.AcpterNm }}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        承兑⼈开户机构代码
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.AcprOpnAcctBnkNum }}
+                    </div>
+                </div>
+                
+            </div>
+            <div class="main_section_item" v-if="dataDetails.SgnSt == 'ST03' || (TranSt != '02' && dataDetails.AprvSt == '00') ">
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        业务分类
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataDetails.BsnTp }}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="now_container85"></div>
+        <footer class="footer_fiexd_container" v-if="TranSt == '02'">
+            <div class="footer_container display" v-if="dataDetails.IsFixAudFlg == '0' && dataDetails.AmtSt == '03'">
+                <div
+                    class="footer_view_right fs16 flex display align_item_center justify_content_center"
+                    @click="keepHandle">
+                    记账
+                </div>
+            </div>
+            <div class="footer_container display" v-else>
+                <div
+                    class="footer_view_right fs16 flex display align_item_center justify_content_center"
+                    @click="backHandle">
+                    返回
+                </div>
+            </div>
+        </footer>
+        <footer class="footer_fiexd_container" v-if="TranSt != '02'">
+            <div class="footer_container display" v-if="dataDetails.AprvSt == '00'">
+                <div
+                    class="footer_view_left fs16 flex display align_item_center justify_content_center"
+                    @click="rejectHandle">
+                    拒绝
+                </div>
+                <div
+                    class="footer_view_right fs16 flex display align_item_center justify_content_center"
+                    @click="submitHandle">
+                    通过
+                </div>
+            </div>
+            <div class="footer_container display" v-else>
+                <div
+                    class="footer_view_right fs16 flex display align_item_center justify_content_center"
+                    @click="backHandle">
+                    返回
+                </div>
+            </div>
+        </footer>
+        
+
+
+
+        <van-popup
+            v-model="popupCenterShow"
+            round>
+            <div class="popup_center_container">
+                <div class="popup_center_title border_bottom">
+                    <div class="fs15">审批拒绝</div>
+                </div>
+                <div class="popup_center_main">
+                    <div class="popup_center_main_text fs15 display align_item_center">
+                        <span class=" colorFF4D4F fs18">*</span>请输入您要拒绝的原因！（必输）
+                    </div>
+                    <div class="info_content__">
+                        <van-field
+                            v-model="formData.AudRfsCs"
+                            rows="3"
+                            autosize
+                            type="textarea"
+                            class="input_textarea"
+                            show-word-limit
+                            placeholder="请填写">
+                        </van-field>
+                    </div>
+                </div>
+                <div class="popup_tooter_container display fs15">
+                    <div
+                        class="flex display align_item_center justify_content_center"
+                        @click="popupCenterShow = false">
+                        取消
+                    </div>
+                    <div
+                        class="flex display align_item_center justify_content_center"
+                        @click="confirmCenterHandle">
+                        确定
+                    </div>
+                </div>
+            </div>
+        </van-popup>
+        
+    </div>
+</body>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script src="../../common/js/server.js"></script>
+<script src="../js/filter.js"></script>
+<script src="../js/loanDetails.js?v=20251125"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem','invoke','selectEnterpriseContact'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+</html>

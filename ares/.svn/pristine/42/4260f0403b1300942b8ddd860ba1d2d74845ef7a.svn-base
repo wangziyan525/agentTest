@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>学习视频</title>
+    <link rel="stylesheet" href="../common/css/weui.min.new.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.new.css">
+    <link rel="stylesheet" href="css/index.css?v=2.0">
+</head>
+<style>
+    html,body {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        -webkit-overflow-scrolling:touch;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        width: 100%;
+        height: 100%;
+        background-color: #f2f2f2;
+    }
+</style>
+<body>
+<!-- 视频列表 -->
+<div class="page1" id="videoPage">
+    <div class="videoWrap">
+    </div>
+    <div class="notips" style="margin-top:50px;"></div>
+    <div class="hiddenroot"></div>
+</div>
+
+<!--&lt;!&ndash; 观看列表 &ndash;&gt;-->
+<!--<div class="page2" style="display: none">-->
+<!--    <div class="title">-->
+<!--        <span>姓名</span><span>部门</span><span>观看时间</span>-->
+<!--    </div>-->
+<!--    <div class="main">-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--底部tab列表-->
+<div class="root">
+    <div class="step_root input_border_bottom">
+        <div class="step_item video_page">
+            <div class="flow_img">
+                <img src="image/video_act.png" />
+            </div>
+            <div class="step_intro curr_step">学习视频</div>
+        </div>
+        <div class="step_item fee_page">
+            <div class="flow_img">
+                <img src="image/fee.png" />
+            </div>
+            <div class="step_intro nosel_step">我的积分</div>
+        </div>
+        <!-- <div class="step_item apply_page">
+            <div class="flow_img">
+                <img src="image/count.png" />
+            </div>
+            <div class="step_intro nosel_step">学习记录</div>
+        </div> -->
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript " src="../common/js/jssdk.js "></script>
+<script src="../common/js/watermark.js"></script>
+<!--<script type="text/javascript" src="./js/vConsole.min.js"></script>-->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    function getUserFinish(){
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        $.getScript("js/shareVideo.js?v=2.3.2")
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+<script type="text/html" id="videoBoxTemp">
+    <div class="videoBox" style="position:relative; display: inherit">
+        <video id="{id}"
+               autoplay="autoplay"
+               muted="muted"
+               controls="controls"
+               playsinline="true"
+               x5-video-player-fullscreen="ture"
+               x5-playsinline="true"
+               x-webkit-airplay="true"
+               webkit-playsinline="true"
+               poster="{cover}"
+               width="100%">
+            <source src="{url}" type="video/mp4">
+        </video>
+<!--        preload="auto"-->
+<!--        <img id="{imgid}" src="{imgsrc}" onclick="{imgclick}" style="position:absolute;bottom:60px;left:20px;width:45px;height:45px;"></img>-->
+        <div class="videoTitle">
+            <div class="viewName" style="{ifSeeClass}" id="viewName{id}">{releaseInfo}<div class="currentTime" style="margin-left: 18px;"  id="myCurrentTime{id}"></div></div>
+            <div class="viewNum lookNums" id="viewNum{id}" onclick="lookpepers({id})">0</div>
+<!--            <div class="toShare" onclick="toShare()"><img src="./image/toShare.png" alt=""></div>-->
+        </div>
+    </div>
+</script>
+<script type="text/html" id="typeTemp">
+    <a  class="gridsLine" data_id="{id}" data_recommend="{recommend}">
+        <div class="grid__icon">
+            <img src="{photos}" style="width:100%;border-top-left-radius: 6px;border-top-right-radius: 6px;">
+        </div>
+        <div class="content">
+            <p class="grid__label">
+                {chinesename}
+            </p>
+            <p class="content_ft">
+                {englishname}
+            </p>
+        </div>
+        <div style="display: none" class="videoTitel">{chinesename}</div>
+    </a>
+</script>
+</html>

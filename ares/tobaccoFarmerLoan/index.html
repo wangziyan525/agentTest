@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>烟农贷</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=1.0">
+</head>
+<body style="overflow: hidden">
+<div id="app" style="overflow-y: scroll;height: 100%;display:none">
+   
+    <div>
+        <van-popup v-model="typeshow" position="bottom">
+            <van-picker
+                    show-toolbar
+                    :columns="typeList"
+                    @confirm="onTypeConfirm"
+                    @cancel="onTypeCancel"
+            >
+            </van-picker>
+        </van-popup>
+    </div>
+    <!-- 待审核，客户经理，管护经理，未修改 -->
+    <div v-if="detail.ifCheck=='0' && detail.role=='manager' && detail.ifUpdate=='0'">
+        <div class="topTitle">
+            基本信息
+        </div>
+        <div class="contentPart">
+            
+            <div class="contentLine">
+                <div class="textTitle">申请人姓名</div>
+                <div :class="[filltData('AplNm','CustChinNam')?'textInfoColor':'','inputLine']">
+                    {{detail.AplNm}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">申请人证件号</div>
+                <div :class="[filltData('ApltIdentNum','IdentId')?'textInfoColor':'','inputLine']">
+                    {{detail.ApltIdentNum}}
+                </div>
+            </div>
+            <div class="contentLine selectChoose">
+                <div class="textTitle">证件有效期</div>
+                <div :class="[filltData('IdentVldDt','IdentValTrm')?'textInfoColor':'','inputLine']" @click="showDate('IdentVldDt')">
+                    {{detail.IdentVldDt}}
+                </div>
+            </div>
+            <van-popup v-model="show" position="bottom">
+                <van-datetime-picker
+                        v-model="currentDate"
+                        type="date"
+                        :min-date="minDate"
+                        :max-date="maxDate"
+                        @cancel="closeDate"
+                        @confirm="chooseDate">
+                </van-datetime-picker>
+            </van-popup>
+    
+            <!-- <div class="contentLine selectChoose">
+                <div class="textTitle">性别</div>
+                <div :class="[filltData('Sex','Sex')?'textInfoColor':'','selectText']" @click="chooseShow(sexList,'Sex')">
+                    {{detail.Sex?sexObj[detail.Sex]:"请选择"}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">发证机关</div>
+                <div :class="[filltData('DstrInst','IdentDstrInst')?'textInfoColor':'','inputLine']">
+                    <van-field type="text" v-model="detail.DstrInst" rows="1" @blur="filltData('DstrInst','IdentDstrInst')" placeholder="请输入" maxlength="40"
+                                   center></van-field>
+                </div>
+            </div>
+            <div class="contentLine selectChoose">
+                <div class="textTitle">民族</div>
+                <div :class="[filltData('Ntn','Nation')?'textInfoColor':'','inputLine']" @click="chooseShow(NtnList,'Ntn')">
+                    {{detail.Ntn?NtnObj[detail.Ntn]:"请选择"}}
+                </div>
+            </div>
+            
+            <div class="contentChoose">
+                <div class="住址">
+                    <div>住址</div>
+                </div>
+                <div :class="[filltData('Adrs','HomeAdr')?'textInfoColor':'','textAreaPart']">
+                    <van-field type="textarea" v-model="detail.Adrs" rows="2" autosize placeholder="请输入"
+                               maxlength="150"></van-field>
+                </div>
+            </div> -->
+           
+            <div class="contentLine">
+                <div class="textTitle">性别</div>
+                <div :class="[filltData('Sex','Sex')?'textInfoColor':'','inputLine']">
+                    {{sexObj[detail.Sex]}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">发证机关</div>
+                <div :class="[filltData('DstrInst','IdentDstrInst')?'textInfoColor':'','inputLine']">
+                    {{detail.DstrInst}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">民族</div>
+                <div :class="[filltData('Ntn','Nation')?'textInfoColor':'','inputLine']">
+                    {{NtnObj[detail.Ntn]}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">住址</div>
+                <div :class="[filltData('Adrs','HomeAdr')?'textInfoColor':'','inputLine']">
+                    {{detail.Adrs}}
+                </div>
+            </div>
+
+
+            <div class="parterImg" style="margin-bottom: 0">
+    
+                <div>身份证照片</div>
+                <div>
+                    <div class="flexparterImg">
+                        <div class="parterPic">
+                            <img :src="imageLocal1" @click.stop="bigImg(imageLocal1)">
+                        </div>
+                        <div class="imgText">
+                            身份证正面
+                        </div>
+                    </div>
+                    <div class="flexparterImg">
+                        <div class="parterPic">
+                            <img :src="imageLocal2" @click.stop="bigImg(imageLocal2)">
+    
+                        </div>
+                        <div class="imgText">
+                            身份证反面
+                        </div>
+                    </div>
+    
+                </div>
+    
+            </div>
+    
+    
+        </div>
+        <div class="topTitle">
+            申请信息
+        </div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div class="textTitle">贷款类型</div>
+                <div class="inputLine">
+                    {{TpOpt[detail.Tp]}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">联系电话</div>
+                <div class="inputLine">
+                    <!-- <van-field type="digit" v-model="detail.CtcTel" rows="1" placeholder="请输入" maxlength="11"
+                               center></van-field> -->
+                               {{detail.CtcTel}}
+                </div>
+            </div>
+            <div class="contentLine selectChoose">
+                <div class="textTitle">婚姻状况</div>
+                <div class="selectText" @click="chooseShow(MrgCcstList,'MrgCcst')">
+                    {{detail.MrgCcst?MrgCcstObj[detail.MrgCcst]:'请选择'}}
+                </div>
+               
+
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">籍贯</div>
+                <div class="selectText" >
+                              {{detail.NaPlc}}
+                </div>
+            </div>
+            <!-- <van-popup v-model="showAreaPicker" position="bottom">
+                <van-area
+                        title="选择省市区"
+                        :area-list="areaList"
+                        value="610100"
+                        @confirm="areaConfirm"
+                        @cancel="showAreaPicker=false"
+                >
+                </van-area>
+            </van-popup> -->
+
+            <div>
+                <van-popup v-model="showAreaPicker" round position="bottom">
+                    <van-cascader
+                            v-model="cascaderValue"
+                            title="选择省市区"
+                            active-color="#0764FF"
+                            :options="areaList"
+                            @close="showAreaPicker=false"
+                            @finish="onFinished"
+
+                    >
+                    </van-cascader>
+
+                </van-popup>
+            </div>
+
+            <div class="contentLine selectChoose">
+                <div class="textTitle">本市居住情况</div>
+                <div class="selectText" @click="chooseShow(CtyRsdnCcstList,'CtyRsdnCcst')">
+                    {{detail.CtyRsdnCcst?CtyRsdnCcstObj[detail.CtyRsdnCcst]:'请选择'}}
+                </div>
+
+            </div>
+            <div class="contentLine selectChoose">
+                <div class="textTitle">家庭结构</div>
+                <div class="selectText" @click="chooseShow(FamStcList,'FamStc')">
+                    {{detail.FamStc?FamStcObj[detail.FamStc]:'请选择'}}
+                </div>
+
+            </div>
+            <div class="contentLine selectChoose">
+                <div class="textTitle">健康状况</div>
+                <div class="selectText" @click="chooseShow(HltCcstList,'HltCcst')">
+                    {{detail.HltCcst?HltCcstObj[detail.HltCcst]:'请选择'}}
+                </div>
+
+            </div>
+
+            <!-- <div class="contentLine selectChoose">
+                <div class="textTitle">
+                    <div>申请人住所地址</div>
+                </div>
+                <div class="textAreaPart">
+                    <van-field type="textarea" v-model="detail.ApltPlcAdr" rows="2" autosize placeholder="请输入"
+                               maxlength="150"></van-field>
+                </div>
+                <div class="selectText" @click="showAreas('ApltPlcAdr')">
+                    {{detail.ApltPlcAdr?detail.ApltPlcAdr:'请选择'}}
+                </div>
+            </div> -->
+            <div class="contentChoose">
+                <div class="chooseTitle">
+                    <div>申请人住所地址</div>
+                </div>
+                <div class="textAreaPart">
+                    <van-field type="textarea" v-model="detail.ApltPlcAdr" rows="2" autosize placeholder="请输入"
+                               maxlength="150"></van-field>
+                </div>
+            </div>
+            <div class="contentLine selectChoose">
+                <div class="textTitle">种植经验</div>
+                <div class="selectText" @click="chooseShow(PltErcList,'PltErc')">
+                    {{detail.PltErc?PltErcObj[detail.PltErc]:'请选择'}}
+                </div>
+
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">合同种植面积(亩)</div>
+                <div class="inputLine">
+                    <van-field type="digit" @blur="checkNumber('CtrPltAra')"  v-model="detail.CtrPltAra" rows="1" placeholder="请输入" maxlength="11"
+                               center></van-field>
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">近两年每一亩产量（斤）</div>
+                <div class="inputLine">
+                    <van-field type="digit" @blur="checkNumber('NarTwoYrPerMuOtpt')" v-model="detail.NarTwoYrPerMuOtpt" rows="1" placeholder="请输入"
+                               maxlength="11" center></van-field>
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">近两年平均销售单价(元/斤)</div>
+                <div class="inputLine">
+                    <van-field type="number" @blur="checkNumber('NarTwoYrAvSaleUtPrc')" v-model="detail.NarTwoYrAvSaleUtPrc" rows="1" placeholder="请输入"
+                               maxlength="11" center></van-field>
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">近两年投入亩均成本（元）</div>
+                <div class="inputLine">
+                    <van-field type="number" @blur="checkNumber('NarTwoYrPutInMuAvCost')" v-model="detail.NarTwoYrPutInMuAvCost" rows="1" placeholder="请输入"
+                               maxlength="11" center></van-field>
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">本年度预计亩均成本（元）</div>
+                <div class="inputLine">
+                    <van-field type="number" @blur="checkNumber('CurYrExpcMuAvCost')" v-model="detail.CurYrExpcMuAvCost" rows="1" placeholder="请输入"
+                               maxlength="11" center></van-field>
+                </div>
+            </div>
+            <div class="contentLine selectChoose">
+                <div class="textTitle">烤烟设备</div>
+                <div class="selectText" @click="chooseShow(CurTobEqmtList,'CurTobEqmt')">
+                    {{detail.CurTobEqmt?CurTobEqmtObj[detail.CurTobEqmt]:'请选择'}}
+                </div>
+
+            </div>
+            <!-- <div class="contentLine selectChoose">
+                <div class="textTitle">资产</div>
+                <div class="selectText" @click="chooseShow(AstList,'Ast')"> {{detail.Ast?AstObj[detail.Ast]:'请选择'}}
+                </div>
+
+            </div> -->
+            <div class="contentChoose ">
+                <div class="chooseTitle">资产</div>
+                <div class="choosePart">
+                    <div class="chooseOne" v-for="item in AstList" @click="multipleChoose('Ast',item.value)">
+                        <img :src="detail.Ast && detail.Ast.indexOf(item.value)!==-1?'images/aggre.png':'images/refuse.png'">
+                        <div>{{item.text}}</div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">总资产金额（元）</div>
+                <div class="inputLine">
+                    <van-field type="number" @blur="checkNumber('TotAstAmt')" v-model="detail.TotAstAmt" rows="1" placeholder="请输入" maxlength="11"
+                               center></van-field>
+
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">借款期限（月）</div>
+                <div class="inputLine">
+                    <!-- <van-field type="number" @blur="checkNumber('DbTrm')" v-model="detail.DbTrm" rows="1" placeholder="请输入" maxlength="11"
+                               center></van-field> -->
+                               {{detail.DbTrm}}
+
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">营销人员编号</div>
+                <div class="inputLine">
+                    <van-field type="number" v-model="detail.CmpnrCd" rows="1" placeholder="请输入" maxlength="11"
+                               center></van-field>
+
+                </div>
+            </div>
+            
+            <div class="contentLine selectChoose">
+                <div class="textTitle">
+                    <div>种植地址</div>
+                </div>
+                <!-- <div class="textAreaPart">
+                    <van-field type="textarea" v-model="detail.PltAdr" rows="2" autosize placeholder="请输入"
+                               maxlength="150"></van-field>
+                </div> -->
+                <div class="selectText" @click="showAreas('PltAdr')">
+                    {{detail.PltAdrText?detail.PltAdrText:'请选择'}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">利率（%）</div>
+                <div class="inputLine">
+                    <van-field type="number" @blur="checkNumber('IntRt')" v-model="detail.IntRt" rows="1" placeholder="请输入" maxlength="11"
+                               center></van-field>
+
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">申请额度（元）</div>
+                <div class="inputLine">
+                    <van-field type="digit" @blur="checkNumber('ApplyAmt')" v-model="detail.ApplyAmt" rows="1" placeholder="请输入" maxlength="11"
+                               center></van-field>
+
+                </div>
+            </div>
+            <div class="contentLine selectChoose" v-if="detail.Tp=='0'">
+                <div class="textTitle">是否双录</div>
+                <div class="selectText" @click="chooseShow(ifSLList,'ifSL')">
+                    {{detail.ifSL?ifSLObj[detail.ifSL]:'请选择'}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-else>
+        <div class="topTitle">
+            基本信息
+        </div>
+        <div class="contentPart">
+            
+            <div class="contentLine">
+                <div class="textTitle">申请人姓名</div>
+                <div :class="[filltData('AplNm','CustChinNam')?'textInfoColor':'','inputLine']">
+                    {{detail.AplNm}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">申请人证件号</div>
+                <div :class="[filltData('ApltIdentNum','IdentId')?'textInfoColor':'','inputLine']">
+                    {{detail.ApltIdentNum}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">证件有效期</div>
+                <div :class="[filltData('IdentVldDt','IdentValTrm')?'textInfoColor':'','inputLine']">
+                    {{detail.IdentVldDt}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">性别</div>
+                <div :class="[filltData('Sex','Sex')?'textInfoColor':'','inputLine']">
+                    {{sexObj[detail.Sex]}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">发证机关</div>
+                <div :class="[filltData('DstrInst','IdentDstrInst')?'textInfoColor':'','inputLine']">
+                    {{detail.DstrInst}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">民族</div>
+                <div :class="[filltData('Ntn','Nation')?'textInfoColor':'','inputLine']">
+                    {{NtnObj[detail.Ntn]}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">住址</div>
+                <div :class="[filltData('Adrs','HomeAdr')?'textInfoColor':'','inputLine']">
+                    {{detail.Adrs}}
+                </div>
+            </div>
+            
+            
+            <div class="parterImg" style="margin-bottom: 0">
+    
+                <div>身份证照片</div>
+                <div>
+                    <div class="flexparterImg">
+                        <div class="parterPic">
+                            <img :src="imageLocal1" @click.stop="bigImg(imageLocal1)">
+                        </div>
+                        <div class="imgText">
+                            身份证正面
+                        </div>
+                    </div>
+                    <div class="flexparterImg">
+                        <div class="parterPic">
+                            <img :src="imageLocal2" @click.stop="bigImg(imageLocal2)">
+    
+                        </div>
+                        <div class="imgText">
+                            身份证反面
+                        </div>
+                    </div>
+    
+                </div>
+    
+            </div>
+    
+    
+        </div>
+        <div class="topTitle">
+            申请信息
+        </div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div class="textTitle">贷款类型</div>
+                <div class="inputLine">
+                    {{TpOpt[detail.Tp]}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">联系电话</div>
+                <div class="inputLine">
+                    {{detail.CtcTel}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">婚姻状况</div>
+                <div class="inputLine">
+                    {{detail.MrgCcst?MrgCcstObj[detail.MrgCcst]:''}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">籍贯</div>
+                <div class="inputLine">
+                   {{detail.NaPlc}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">本市居住情况</div>
+                <div class="inputLine">
+                    {{detail.CtyRsdnCcst?CtyRsdnCcstObj[detail.CtyRsdnCcst]:''}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">家庭结构</div>
+                <div class="inputLine">
+                    {{detail.FamStc?FamStcObj[detail.FamStc]:''}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">健康状况</div>
+                <div class="inputLine">
+                    {{detail.HltCcst?HltCcstObj[detail.HltCcst]:''}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">申请人住所地址</div>
+                <div class="inputLine">
+                    {{detail.ApltPlcAdr}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">种植经验</div>
+                <div class="inputLine">
+                    {{detail.PltErc?PltErcObj[detail.PltErc]:''}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">合同种植面积(亩)</div>
+                <div class="inputLine">
+                    {{detail.CtrPltAra}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">近两年每一亩产量（斤）</div>
+                <div class="inputLine">
+                    {{detail.NarTwoYrPerMuOtpt}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">近两年平均销售单价(元/斤)</div>
+                <div class="inputLine">
+                    {{formatCurrency(detail.NarTwoYrAvSaleUtPrc)}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">近两年投入亩均成本（元）</div>
+                <div class="inputLine">
+                    {{formatCurrency(detail.NarTwoYrPutInMuAvCost)}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">本年度预计亩均成本（元）</div>
+                <div class="inputLine">
+                    {{formatCurrency(detail.CurYrExpcMuAvCost)}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">烤烟设备</div>
+                <div class="inputLine">
+                    {{detail.CurTobEqmt?CurTobEqmtObj[detail.CurTobEqmt]:''}}
+                </div>
+            </div>
+            <!-- <div class="contentLine">
+                <div class="textTitle">资产</div>
+                <div class="inputLine">
+                    {{detail.Ast?AstObj[detail.Ast]:''}}
+                </div>
+            </div> -->
+            <div class="contentChoose ">
+                <div class="chooseTitle">资产</div>
+                <div class="choosePart">
+                    <div class="chooseOne" v-for="item in AstList" >
+                        <img :src="detail.Ast && detail.Ast.indexOf(item.value)!==-1?'images/aggre.png':'images/refuse.png'">
+                        <div>{{item.text}}</div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">总资产金额（元）</div>
+                <div class="inputLine">
+                    {{formatCurrency(detail.TotAstAmt)}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">借款期限（月）</div>
+                <div class="inputLine">
+                    {{detail.DbTrm}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">营销人员编号</div>
+                <div class="inputLine">
+                    {{detail.CmpnrCd}}
+                </div>
+            </div>
+            
+            <div class="contentLine">
+                <div class="textTitle">种植地址</div>
+                <div class="inputLine">
+                    {{detail.PltAdrText}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">利率(%)</div>
+                <div class="inputLine">
+                    {{detail.IntRt}}
+                </div>
+            </div>
+            <div class="contentLine">
+                <div class="textTitle">申请额度（元）</div>
+                <div class="inputLine">
+                    {{formatCurrency(detail.ApplyAmt)}}
+                </div>
+            </div>
+            <div class="contentLine" v-if="detail.Tp=='0'">
+                <div class="textTitle">是否双录</div>
+                <div class="inputLine">
+                    {{detail.ifSL?ifSLObj[detail.ifSL]:''}}
+                </div>
+            </div>
+
+        </div>
+
+        
+
+       
+    </div>
+    <div class="recordList" v-if="recodeList.length>0">
+        <div class="stepPart">
+            <div class="stepOne" v-for="item in recodeList">
+                <div class="stepText">
+                    <div>
+                        <div>{{item.name}}</div>
+                        <div :class="'stepStatus'+item.status">{{statusOpt[item.status]}}</div>
+                    </div>
+                    <div v-if="item.remark">拒绝原因：{{item.remark}}</div>
+                </div>
+                <div class="stepCircle"></div>
+                <div class="stepLine"></div>
+            </div>
+
+        </div>
+
+    </div>
+    <div style="height: 10px;"></div>
+    <div v-if="detail.ifCheck==0">
+        <div class="contentPart">
+
+            <div class="aggrementPart">
+                <div class="dealChoose">
+                    <div>审批意见</div>
+                    <div>
+                        <div class="chooseBtn" @click="ifAgree('1')"><img
+                                :src="ifAgreeFlag=='1'?'images/aggre.png':'images/refuse.png'">同意
+                        </div>
+                        <div class="chooseBtn" @click="ifAgree('2')" v-if="detail.role=='manager'"><img
+                                :src="ifAgreeFlag=='2'?'images/aggre.png':'images/refuse.png'">拒绝
+                        </div>
+                        <div class="chooseBtn" @click="ifAgree('3')" v-else><img
+                            :src="ifAgreeFlag=='3'?'images/aggre.png':'images/refuse.png'">驳回
+                    </div>
+                    </div>
+                </div>
+                <div v-if="ifAgreeFlag!='1'" style="border-bottom: 0.5px solid #ddd;">
+                    <div class="textAreaPart">
+                        <div class="yuyun-box" @click="showRecorddiv">
+                            <img src="./images/yuyin.png "/>可尝试语音输入
+                        </div>
+                        <div class="yuyinTextArea">
+                            <van-field type="textarea" v-model="approveRemark" rows="3" autosize placeholder="请输入"
+                                       maxlength="100"></van-field>
+                        </div>
+                    </div>
+                    <div style="position: relative;">
+                        <div class="recodeblock" @click="startRecord()">
+                            <img src="images/luyin.gif">
+                            <div start="no" class="luyinbtn">开始说话</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contentLine selectChoose" style="border-bottom: 0.5px solid #fff;"
+                     v-if="detail.role=='manager'">
+                    <div class="textTitle">选择协办</div>
+                    <div class="inputLine" @click="nextPersonshow=true">{{nextPersonText?nextPersonText:"请选择"}}
+                    </div>
+                </div>
+
+
+                <div>
+                    <van-popup v-model="nextPersonshow" position="bottom">
+                        <van-picker
+                                show-toolbar
+                                :columns="nextPersonList"
+                                @confirm="onnextPersonConfirm"
+                                @cancel="nextPersonshow=false"
+                        >
+                        </van-picker>
+                    </van-popup>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <!-- v-if="detail.role=='manager' && detail.ifManger=='1' && detail.ifUpdate=='0'" -->
+        <!-- <div class="toSubmit" >
+            <div @click="updates">修改</div>
+            <div @click="submits">提交</div>
+        </div> -->
+
+        <div class="applyButton" @click="submits" >
+            <div>提交</div>
+        </div>
+    </div>
+
+    <div style="height: 20px;"></div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js"></script>
+<script type="text/javascript" src="js/dataJson.js"></script>
+<script type="text/javascript" src="js/index.js?v=4"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+
+    function getUserFinish() {
+        initJSSDK(['hideAllNonBaseMenuItem',"stopRecord","startRecord","translateVoice",'invoke','closeWindow']);
+        //ios页面回退不刷新
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) {
+                location.reload();
+            }
+        });
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+            WeixinJSBridge.on('menu:setfont', function () {
+                WeixinJSBridge.invoke('setFontSizeCallback', {'fontSize': '0'});
+            });
+
+        });
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+
+    // initFun()
+
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

@@ -1,0 +1,296 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f5f6f7;
+    overflow: hidden;
+}
+#app{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+/* ------------------------------ 标题 -------------------------- */
+.title{
+    width: 100%;
+    padding: 22px 12px 15px;
+    box-sizing: border-box;
+    font-size: 19px;
+    line-height: 26px;
+    color: #000000;
+    font-weight: 600;
+    background-color: #fff;
+}
+/* ------------------------------ 汇报 -------------------------- */
+.report{
+    width: 100%;
+    padding: 0px 16px 12px;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+.report .reportTime{
+    width: 100%;
+    font-size: 14px;
+    line-height: 20px;
+    color: #9DA0A3;
+    text-align: justify;
+    margin-bottom: 5px;
+}
+/* ---------------------------- 考核填写 ----------------------- */
+/* .van-swipe-item{
+    min-height: 200px !important;
+    max-height: 300px !important;
+    overflow-y: auto !important;
+} */
+.examine{
+    width: 100%;
+    flex: 1;
+    margin-top: 10px;
+}
+.examine .tabs{
+    width: 100%;
+    background: #fff;
+}
+.van-tab{
+    font-size: 16px !important;
+}
+.van-tabs--line .van-tabs__wrap{
+    height: 56px !important;
+}
+.van-tab--active{
+    color: #4675C9 !important;
+}
+.examine .examineCt{
+    width: 100%;
+    position: relative;
+    background-color: #fff;
+}
+.examine .examineCt:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: -1px;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.examine .examineCt .examineCtList{
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+}
+.examine .examineCt .examineCtList1{
+    min-height: 100px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 20px 0;
+    padding: 0 16px !important;
+    box-sizing: border-box;
+}
+.examine .examineCt .examineCtList span{
+    font-size: 15px;
+    color: #333;
+    line-height: 24px;
+    word-break: break-all;
+}
+/* ---------------------------- 底部提交 ----------------------- */
+.btn{
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+.btn .bigBtn{
+    width: 100%;
+    font-size: 15px;
+    line-height: 20px;
+    padding: 12px 0;
+    box-sizing: border-box;
+    text-align: center;
+    background: #267EF0;
+    border-radius: 6px;
+    color: #fff;
+}
+/* ---------------------------------- 流转信息 ------------------------------- */
+.flowInfo{
+    width: 100%;
+}
+.flowInfo .flowList{
+    width: 100%;
+    margin-top: 10px;
+    background-color: #fff;
+}
+.flowInfo .flowList .flowLis{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+}
+.flowInfo .flowList .flowLis::before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.flowInfo .flowList .flowLis:first-child::before{
+    display: none;
+}
+.flowInfo .flowList .flowLis span{
+    display: block;
+    width: 50%;
+    font-size: 15px;
+    line-height: 20px;
+}
+.flowInfo .flowList .flowLis span:nth-child(1){
+    color: #666;
+}
+.flowInfo .flowList .flowLis span:nth-child(2){
+    color: #000;
+    text-align: right;
+}
+.flowInfo .flowList .flowLis1{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.flowInfo .flowList .flowLis1::before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.flowInfo .flowList .flowLis1 span:nth-child(1){
+    display: block;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+    color: #666;
+}
+.flowInfo .flowList .flowLis1 span:nth-child(2){
+    display: block;
+    padding: 0px 12px 15px;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+    color: #000;
+    word-break: break-all;
+}
+
+
+/* ------------------------------------- 上传图片 -------------------------------------------- */
+.workPic{
+    width: 100%;
+    margin-top: 10px;
+}
+.workPic .title{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 4px 4px 0 0;
+    display: flex;
+    align-items: center;
+}
+.workPic .title .left{
+    width: 2px;
+    height: 14px;
+    margin-top: 3px;
+    background-color: #3975C6;
+}
+.workPic .title .right{
+    flex: 1;
+    margin-left: 9px;
+}
+.workPic .title .right span{
+    font-size: 15px;
+    color: #000;
+    line-height: 20px;
+}
+.workPic .addPic{
+    width: 100%;
+    background-color: #fff;
+    padding: 10px 15px 25px;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.workPic .addPic::before{
+    content: '';
+    width: 100%;
+    height: 1px;
+    background: #DDD;
+    -ms-transform: scaleY(.5);
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+    position: absolute;
+    top:-3px;
+    left: 0px;
+    z-index: 10;
+}
+.workPic .addPic .pic{
+    width: calc((100% - 50px)/3);
+    height: 0;
+    padding-top: calc((100% - 50px)/3);
+    background-color: #F5F6F7;
+    border-radius: 4px;
+    margin-top: 15px;
+    position: relative;
+}
+.workPic .addPic .pic:nth-child(3n+2){
+    margin: 15px 25px 0;
+}
+.workPic .addPic .pic .picter{
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    position: absolute;
+    top:0;
+}
+.workPic .addPic .pic .loadding{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top:0;
+    left:0;
+}
+.workPic .addPic .pic .loadding img{
+    display: block;
+    width: 25px;
+    height: 25px;
+}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
+        name="viewport" />
+    <mata http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    <title>西安银行</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../css/style.css?v=1.1.8">
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <!-- 问诊预约 -->
+        <div v-if='flag=="doctor"'>
+            <div class='admin_banner'>
+                <img src="../images/list_banner.jpg" alt="">
+                <div class="list_t">
+                    <div class="displayStart">
+                        <span style="font-size: 22px;font-weight: bold;">{{userInfo.userName}}</span>
+                        <span class="list_tips">
+                            <img :src="userInfo.gender==1?'../images/male.png':'../images/female.png'" alt="">
+                            <span>员工号：{{userInfo.userId}}</span>
+                        </span>
+                    </div>
+                    <div style="font-size: 12px;padding-top:4px;">{{userInfo.ssbm}}</div>
+                </div>
+            </div>
+            <!-- 有数据 -->
+            <div v-if='doctorList.length>0'>
+                <div class="list_con">
+                    <div class="list_info">
+                        <div v-for='(item,index) in doctorList' :key='index' :class="doctorList.length-1==index?'':'lineBottom'">
+                            <div class="doctorListInfo" style="background: transparent;padding: 10px 0;">
+                                <div class="displayFlex">
+                                    <div class="displayStart">
+                                        <span class="doctor_name">{{item.docName}}</span>
+                                        <span class="doctor_postion">{{item.docRank}}</span>
+                                    </div>
+                                    <div class="list_book_btn" @click='toDetailTap(item)'>
+                                        <span>预约</span>
+                                        <img src="../images/white_more.png" alt="">
+                                    </div>
+                                </div>
+                                <!-- <div style="padding: 6px 0;box-sizing: border-box;">
+                                    中国人民解放军火箭军总医院｜皮肤科
+                                </div> -->
+                                <div class="doctorListIntr doctorListIntr1 line2">
+                                    {{item.introduction}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 无数据 -->
+            <div v-else class="noData">
+                暂无数据
+            </div>
+        </div>
+        <!-- 设备预约 -->
+        <div v-if='flag=="device"'>
+            <div class='admin_banner'>
+                <img src="../images/list_banner1.jpg" alt="">
+                <div class="list_t">
+                    <div class="displayStart">
+                        <span style="font-size: 22px;font-weight: bold;">{{userInfo.userName}}</span>
+                        <span class="list_tips">
+                            <img :src="userInfo.gender==1?'../images/male.png':'../images/female.png'" alt="">
+                            <span>员工号：{{userInfo.userId}}</span>
+                        </span>
+                    </div>
+                    <div style="font-size: 12px;padding-top:4px;">{{userInfo.ssbm}}</div>
+                </div>
+            </div>
+            <!-- 有数据 -->
+            <div v-if='deviceList.length>0'>
+                <div class="list_con">
+                    <div class="list_info">
+                        <div v-for='(item,index) in deviceList' :key='index' :class="deviceList.length-1==index?'':'lineBottom'">
+                            <div class="doctorListInfo" style="background: transparent;padding: 10px 0;">
+                                <div class="displayFlex">
+                                    <div class="displayStart">
+                                        <span class="doctor_name">{{item.deviceName}}</span>
+                                    </div>
+                                    <div class="list_book_btn" @click='toDetailTap(item)'>
+                                        <span>预约</span>
+                                        <img src="../images/white_more.png" alt="">
+                                    </div>
+                                </div>
+                                <div class="list_device_intr">
+                                   {{item.introduction}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 无数据 -->
+            <div v-else class="noData">
+                暂无数据
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<!-- 引入 Vue 的 JS 文件 -->
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../../common/js/server.js"></script>
+<script type="text/javascript" src="./js/list.js?v=1.0.7"></script>
+<script type="text/javascript" src="../../common/js/watermark.js?v=1.2"></script>
+<script>
+    //初始化微信社区
+    $(function () {
+            initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'closeWindow']);
+            wx.ready(function () {
+                wx.hideAllNonBaseMenuItem();
+            });
+        });
+        function getUserFinish() {
+            // 调用水印
+            var username = $.parseJSON($.cookie("user")).name;
+            __canvasWM({
+                content: username
+            });
+            initFun();
+        }
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>

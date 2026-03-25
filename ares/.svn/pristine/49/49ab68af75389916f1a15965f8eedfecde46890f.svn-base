@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+  [v-cloak] {
+    display: none;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #f5f7fa;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 1000px;
+    background-color: transparent;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+  }
+
+  .container.rotated {
+    transform: rotate(90deg)
+  }
+
+  header {
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  h1 {
+    color: #1e293b;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    background-color: #f1f5f9;
+    border-radius: 8px;
+  }
+
+  .orientation-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #475569;
+    font-size: 0.9rem;
+  }
+
+  .orientation-icon {
+    color: #3b82f6;
+  }
+
+  /* 签名区域样式 */
+  .signature-wrapper {
+    position: relative;
+    width: 100%;
+    border: 2px dashed #cbd5e1;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: white !important;
+    transition: height 0.3s ease;
+    flex: 1;
+  }
+
+  /* 根据屏幕方向调整高度 */
+  .signature-wrapper.portrait {
+    min-height: 220px;
+    max-height: 70vh;
+  }
+
+  .signature-wrapper.landscape {
+    min-height: 180px;
+    max-height: 60vh;
+  }
+
+  /* 画布样式 - 确保白色背景 */
+  #signatureCanvas {
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    touch-action: none;
+    background-color: white !important;
+  }
+
+  .canvas-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    pointer-events: none;
+  }
+
+  .placeholder-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+  }
+
+  .scale-info {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 0.8rem;
+    color: #64748b;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.2rem;
+    flex-wrap: wrap;
+  }
+
+  .control-btn {
+    padding: 0.3rem 0.6rem;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    text-align: center
+  }
+
+  /* .control-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  } */
+
+  .clear-btn {
+    background-color: #ef4444;
+  }
+
+  .save-btn {
+    background-color: #10b981;
+  }
+
+  .undo-btn {
+    background-color: #f59e0b;
+  }
+
+  .submit-btn {
+    background-color: #3b82f6;
+  }
+
+  .signTips {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+
+  }
+
+  .signTips img {
+    height: 14px;
+    width: 14px;
+    margin: auto 0.3rem;
+  }
+
+  .signTips P {
+    color: #999999;
+    font-size: 12px;
+  }
+
+  .notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.8rem 1.5rem;
+    background-color: rgba(30, 41, 59, 0.9);
+    color: white;
+    border-radius: 6px;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .validation-error {
+    color: #ef4444;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    text-align: center;
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 0.5rem 1rem;
+      max-height: 90vh;
+    }
+
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .signature-wrapper.portrait {
+      height: 35vh;
+      min-height: 200px;
+    }
+
+    .signature-wrapper.landscape {
+      height: 25vh;
+      min-height: 150px;
+    }
+
+    .controls {
+      margin-top: 1rem;
+    }
+
+    .style-controls {
+      margin-top: 0.8rem;
+      gap: 1rem;
+    }
+  }
+
+  @media (max-height: 700px) {
+    .signature-wrapper.portrait {
+      height: 35vh;
+    }
+
+    .signature-wrapper.landscape {
+      height: 25vh;
+    }
+  }
+</style>
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover,orientation=landscape"
+    name="viewport" />
+  <link rel="stylesheet" href="../common/css/weui.min.css">
+  <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+  <link rel="stylesheet" href="../common/css/vant-2.12.css">
+
+  <title>签名</title>
+</head>
+
+<body>
+  <div class="container" v-clack>
+    <div class="signature-wrapper" id="signatureWrapper">
+      <canvas id="signatureCanvas"></canvas>
+      <div class="canvas-placeholder" id="canvasPlaceholder">
+        <div class="placeholder-icon">
+          <i class="fas fa-pen"></i>
+        </div>
+        <p>在此区域签名</p>
+      </div>
+      <div class="scale-info" id="scaleInfo" style="display: none;">缩放比例: 100%</div>
+    </div>
+    <div class="signTips">
+      <img src="./images/signTips.png" alt="">
+      <p>请使用正楷签字，字迹潦草将无法识别导致确认失败</p>
+    </div>
+    <div class="controls">
+      <button class="control-btn clear-btn" id="clearBtn">
+        清空
+      </button>
+      <button class="control-btn submit-btn" id="submitBtn">
+        提交签名
+      </button>
+    </div>
+
+    <div id="validationError" class="validation-error">
+      请确保签名至少包含两个字符
+    </div>
+
+
+  </div>
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="../common/js/vConsole.min.js"></script>
+
+<script>
+  //var vConsole = new VConsole();
+  initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+  wx.ready(function () {
+    wx.hideAllNonBaseMenuItem();
+  });
+  function getUserFinish() {
+    var username = $.parseJSON($.cookie("user")).name;
+    __canvasWM({
+      content: username
+    });
+    initFun()
+  }
+  // 默认配置变量
+  const DEFAULT_SETTINGS = {
+    lineWidth: 2,
+    lineColor: '#000000',
+    minStrokes: 2, // 至少需要两个笔画（模拟至少两个字）
+    enableOrientationDetection: true
+  };
+
+  // DOM元素获取
+  const canvas = document.getElementById('signatureCanvas');
+  const ctx = canvas.getContext('2d');
+  const signatureWrapper = document.getElementById('signatureWrapper');
+  const canvasPlaceholder = document.getElementById('canvasPlaceholder');
+  const scaleInfo = document.getElementById('scaleInfo');
+  const clearBtn = document.getElementById('clearBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  const validationError = document.getElementById('validationError');
+
+
+  // 核心状态变量
+  let isDrawing = false;
+  let lastPoint = {
+    x: 0,
+    y: 0
+  };
+  let signatureData = {
+    points: [],
+    originalSize: {
+      width: 0,
+      height: 0
+    }
+  };
+  let currentCanvasSize = {
+    width: 0,
+    height: 0
+  };
+  let currentScale = 1;
+  let strokeCount = 0; // 笔画计数
+
+  // 初始化
+  function initFun() {
+    // 确保画布初始为白色
+    updateCanvasSize();
+    checkOrientation();
+    setupEventListeners();
+  }
+
+  // 更新Canvas尺寸
+  function updateCanvasSize() {
+    const wrapperRect = signatureWrapper.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+
+    currentCanvasSize = {
+      width: wrapperRect.width,
+      height: wrapperRect.height
+    };
+
+    // 设置Canvas尺寸并确保白色背景
+    canvas.width = wrapperRect.width * dpr;
+    canvas.height = wrapperRect.height * dpr;
+    // 调整绘图上下文
+    ctx.scale(dpr, dpr);
+    // 显式填充白色背景
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+  }
+
+  // 检查屏幕方向并调整签名
+  function checkOrientation() {
+    if (!DEFAULT_SETTINGS.enableOrientationDetection) return;
+
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const isLandscape = windowWidth > windowHeight;
+
+    // 仅设置签名容器的样式类
+    if (isLandscape) {
+      signatureWrapper.className = 'signature-wrapper landscape';
+    } else {
+      signatureWrapper.className = 'signature-wrapper portrait';
+    }
+
+    // 更新画布并适配签名
+    updateCanvasSize();
+
+    if (signatureData.points.length > 0) {
+      adaptSignatureToCurrentSize();
+    } else {
+      scaleInfo.style.display = 'none';
+    }
+  }
+
+  // 按比例适配签名到当前画布尺寸
+  function adaptSignatureToCurrentSize() {
+    // 计算宽高比
+    const originalAspectRatio = signatureData.originalSize.width / signatureData.originalSize.height;
+    const currentAspectRatio = currentCanvasSize.width / currentCanvasSize.height;
+
+    // 计算缩放比例
+    let scale;
+    if (originalAspectRatio > currentAspectRatio) {
+      scale = currentCanvasSize.width / signatureData.originalSize.width;
+    } else {
+      scale = currentCanvasSize.height / signatureData.originalSize.height;
+    }
+
+    // 计算居中偏移量
+    const offsetX = (currentCanvasSize.width - signatureData.originalSize.width * scale) / 2;
+    const offsetY = (currentCanvasSize.height - signatureData.originalSize.height * scale) / 2;
+
+    // 清空画布（先填充白色背景）
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, currentCanvasSize.width, currentCanvasSize.height);
+
+    // 重新绘制签名轨迹
+    if (signatureData.points.length > 0) {
+      ctx.beginPath();
+      ctx.lineWidth = signatureData.lineWidth * scale;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = signatureData.lineColor;
+
+      let firstPoint = signatureData.points[0];
+      ctx.moveTo(
+        firstPoint.x * scale + offsetX,
+        firstPoint.y * scale + offsetY
+      );
+
+      for (let i = 1; i < signatureData.points.length; i++) {
+        let point = signatureData.points[i];
+        if (point.type === 'start') {
+          ctx.beginPath();
+          ctx.moveTo(
+            point.x * scale + offsetX,
+            point.y * scale + offsetY
+          );
+        } else {
+          ctx.lineTo(
+            point.x * scale + offsetX,
+            point.y * scale + offsetY
+          );
+          ctx.stroke();
+        }
+      }
+
+      currentScale = scale;
+      scaleInfo.textContent = `缩放比例: ${Math.round(scale * 100)}%`;
+      scaleInfo.style.display = 'block';
+    }
+  }
+
+  // 设置事件监听器
+  function setupEventListeners() {
+    // 窗口大小变化事件
+    window.addEventListener('resize', checkOrientation);
+
+    // 签名相关事件 - 鼠标
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', endDrawing);
+    canvas.addEventListener('mouseleave', endDrawing);
+
+    // 签名相关事件 - 触摸
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      startDrawing(e);
+    });
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      draw(e);
+    });
+    canvas.addEventListener('touchend', endDrawing);
+    canvas.addEventListener('touchcancel', endDrawing);
+
+    // 控制按钮事件
+    clearBtn.addEventListener('click', () => clearCanvas(true));
+    submitBtn.addEventListener('click', submitSignature);
+  }
+
+  // 开始绘制
+  function startDrawing(e) {
+    isDrawing = true;
+    const point = getCanvasPoint(e);
+    lastPoint = point;
+
+    // 首次绘制时记录原始尺寸
+    if (signatureData.points.length === 0) {
+      signatureData.originalSize = {
+        ...currentCanvasSize
+      };
+    }
+
+    // 记录起始点
+    signatureData.points.push({
+      ...point,
+      type: 'start'
+    });
+
+    // 增加笔画计数
+    strokeCount++;
+
+    // 隐藏占位提示
+    canvasPlaceholder.style.display = 'none';
+    validationError.style.display = 'none';
+
+
+  }
+
+  // 绘制
+  function draw(e) {
+    if (!isDrawing) return;
+
+    const currentPoint = getCanvasPoint(e);
+
+    // 记录轨迹点
+    signatureData.points.push({
+      ...currentPoint,
+      type: 'draw'
+    });
+
+    // 实时绘制 - 使用固定的黑色线条和2px宽度
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#000000';
+    ctx.moveTo(lastPoint.x, lastPoint.y);
+    ctx.lineTo(currentPoint.x, currentPoint.y);
+    ctx.stroke();
+
+    lastPoint = currentPoint;
+  }
+
+  // 结束绘制
+  function endDrawing() {
+    isDrawing = false;
+  }
+
+  // 获取相对于Canvas的坐标
+  function getCanvasPoint(e) {
+    const rect = canvas.getBoundingClientRect();
+    let x, y;
+
+    if (e.type.includes('touch')) {
+      x = e.touches[0].clientX - rect.left;
+      y = e.touches[0].clientY - rect.top;
+    } else {
+      x = e.clientX - rect.left;
+      y = e.clientY - rect.top;
+    }
+
+    return {
+      x,
+      y
+    };
+  }
+
+  // 清空画布
+  function clearCanvas(shouldShowNotification = false) {
+    if (signatureData.points.length === 0) return;
+
+    // 清空并填充白色背景
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, currentCanvasSize.width, currentCanvasSize.height);
+
+    signatureData.points = [];
+    signatureData.originalSize = {
+      width: 0,
+      height: 0
+    };
+    strokeCount = 0;
+    canvasPlaceholder.style.display = 'flex';
+    scaleInfo.style.display = 'none';
+
+    if (shouldShowNotification) {
+      showNotification('签名已清空');
+    }
+  }
+
+  // 提交签名
+  function submitSignature() {
+    // 验证签名是否为空
+    if (signatureData.points.length === 0) {
+      showNotification('请先完成签名再提交');
+      return;
+    }
+
+    // 验证签名是否至少有两个笔画（模拟至少两个字）
+    if (strokeCount < DEFAULT_SETTINGS.minStrokes) {
+      showNotification(`签名至少需要${DEFAULT_SETTINGS.minStrokes}个字`);
+      // validationError.textContent = `签名至少需要${DEFAULT_SETTINGS.minStrokes}个字`;
+      // validationError.style.display = 'block';
+      return;
+    }
+
+    validationError.style.display = 'none';
+
+    // 生成签名图片
+    const imgUrl = generateSignatureImage();
+
+    // 获取屏幕方向状态
+    const isLandscape = window.innerWidth > window.innerHeight;
+    const orientationFlag = isLandscape ? '0' : '1';
+    signCommitment(imgUrl, orientationFlag)
+  }
+  function signCommitment(imgUrl, orientationFlag) {
+    var token = localStorage.getItem("X-Token");
+    var hisUserInfo = JSON.parse(localStorage.getItem("hisUserInfo"))
+    var userId = localStorage.getItem("userId")
+
+    let params = {};
+    params.imgbase64 = imgUrl
+    if (hisUserInfo) {
+      params.id = hisUserInfo.BA.id;
+    } else {
+      params.id = userId;
+    }
+
+    params.direction = orientationFlag;// 0-横屏签名 1-竖屏签名，两者图片尺寸不一（横 > 竖）
+    $.ajax({
+      url: base.context + "insurancePractice/signCommitment.xa",
+      type: 'POST',
+      beforeSend: function (XMLHttpRequest) {
+        XMLHttpRequest.setRequestHeader('X-Token', token);
+        $.showLoading();
+      },
+      contentType: 'application/json',
+      data: JSON.stringify({
+        "imgbase64": params.imgbase64,
+        "id": params.id,
+        "direction": params.direction
+      }),
+      success: function (res) {
+        if (typeof (res) == 'string') {
+          res = JSON.parse(res);
+        }
+        if (res.retcode == 'success') {
+          window.location.href = "submitResult.html"
+        } else {
+
+          vant.Dialog.alert({
+            message: res.retmsg
+          }).then(() => {
+            wx.closeWindow();
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        vant.Dialog.alert({
+          message: '网络错误，请稍后再试'
+        }).then(() => {
+        });
+      },
+      complete: function (xhr) {
+        $.hideLoading();
+      }
+    });
+  }
+  // 生成签名图片
+  // function generateSignatureImage() {
+  //   // 生成原始比例的签名图片
+  //   const tempCanvas = document.createElement('canvas');
+  //   tempCanvas.width = signatureData.originalSize.width;
+  //   tempCanvas.height = signatureData.originalSize.height;
+  //   const tempCtx = tempCanvas.getContext('2d');
+
+  //   // 填充白色背景
+  //   // tempCtx.fillStyle = 'white';
+  //   tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+  //   // 绘制原始尺寸的签名 - 使用固定的黑色线条和2px宽度
+  //   if (signatureData.points.length > 0) {
+  //     tempCtx.beginPath();
+  //     tempCtx.lineWidth = 2;
+  //     tempCtx.lineCap = 'round';
+  //     tempCtx.lineJoin = 'round';
+  //     tempCtx.strokeStyle = '#000000';
+
+  //     let firstPoint = signatureData.points[0];
+  //     tempCtx.moveTo(firstPoint.x, firstPoint.y);
+
+  //     for (let i = 1; i < signatureData.points.length; i++) {
+  //       let point = signatureData.points[i];
+  //       if (point.type === 'start') {
+  //         tempCtx.beginPath();
+  //         tempCtx.moveTo(point.x, point.y);
+  //       } else {
+  //         tempCtx.lineTo(point.x, point.y);
+  //         tempCtx.stroke();
+  //       }
+  //     }
+  //   }
+  //   let canvasBase64 = tempCanvas.toDataURL('image/png');
+  //   canvasBase64Index =  canvasBase64.indexOf(',')
+  //   if(canvasBase64Index > -1){
+  //     return canvasBase64.substring(canvasBase64Index + 1)
+  //   }
+  //   return canvasBase64
+  // }
+  // 生成签名图片：裁剪签名区域 + 固定输出大小
+  function generateSignatureImage(fixedWidth = 380, fixedHeight = 150) { // 固定输出大小，默认200x100（可自定义）
+    // 第一步：先计算签名的实际边界（找到所有签名点的最小/最大X、Y，排除空白）
+    if (signatureData.points.length === 0) {
+      // 无签名时，返回空白的固定大小透明图片
+      const emptyCanvas = document.createElement('canvas');
+      emptyCanvas.width = fixedWidth;
+      emptyCanvas.height = fixedHeight;
+      return emptyCanvas.toDataURL('image/png');
+    }
+
+    // 遍历所有签名点，计算边界
+    let minX = Infinity,
+      maxX = -Infinity;
+    let minY = Infinity,
+      maxY = -Infinity;
+
+    signatureData.points.forEach(point => {
+      // 只处理有坐标的点（排除异常点）
+      if (point.x != null && point.y != null) {
+        minX = Math.min(minX, point.x);
+        maxX = Math.max(maxX, point.x);
+        minY = Math.min(minY, point.y);
+        maxY = Math.max(maxY, point.y);
+      }
+    });
+
+    // 处理边界异常（避免宽高为0）
+    const signatureWidth = Math.max(1, maxX - minX); // 签名实际宽度（最小1px）
+    const signatureHeight = Math.max(1, maxY - minY); // 签名实际高度（最小1px）
+
+
+    // 第二步：绘制原始签名到临时画布，再裁剪出仅包含签名的区域
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = signatureData.originalSize.width;
+    tempCanvas.height = signatureData.originalSize.height;
+    const tempCtx = tempCanvas.getContext('2d');
+
+    // 注意：要透明背景，删除原白色填充代码！
+    // tempCtx.fillStyle = 'white'; // 移除白色背景
+    // tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height); // 移除白色填充
+
+    // 绘制原始尺寸的签名（和原逻辑一致）
+    tempCtx.beginPath();
+    tempCtx.lineWidth = signatureData.lineWidth;
+    tempCtx.lineCap = 'round';
+    tempCtx.lineJoin = 'round';
+    tempCtx.strokeStyle = signatureData.lineColor;
+
+    let firstPoint = signatureData.points.find(p => p.x != null && p.y != null); // 找到第一个有效点
+    tempCtx.moveTo(firstPoint.x, firstPoint.y);
+
+    for (let i = 1; i < signatureData.points.length; i++) {
+      let point = signatureData.points[i];
+      if (point.x == null || point.y == null) continue; // 跳过无效点
+
+      if (point.type === 'start') {
+        tempCtx.beginPath();
+        tempCtx.moveTo(point.x, point.y);
+      } else {
+        tempCtx.lineTo(point.x, point.y);
+        tempCtx.stroke();
+      }
+    }
+
+
+    // 第三步：创建固定大小的目标画布，将裁剪后的签名缩放到固定尺寸（保持比例）
+    const targetCanvas = document.createElement('canvas');
+    targetCanvas.width = fixedWidth;
+    targetCanvas.height = fixedHeight;
+    const targetCtx = targetCanvas.getContext('2d');
+
+    // 关键：计算缩放比例，确保签名在固定画布内完全显示（不拉伸）
+    const scaleX = fixedWidth / signatureWidth; // 按宽度的缩放比例
+    const scaleY = fixedHeight / signatureHeight; // 按高度的缩放比例
+    const scale = Math.min(scaleX, scaleY); // 取较小的比例，避免签名超出画布
+
+    // 计算签名在固定画布中的居中位置（避免偏移）
+    const offsetX = (fixedWidth - signatureWidth * scale) / 2; // X轴居中偏移
+    const offsetY = (fixedHeight - signatureHeight * scale) / 2; // Y轴居中偏移
+
+    // 清除目标画布（确保透明背景）
+    targetCtx.clearRect(0, 0, fixedWidth, fixedHeight);
+
+    // 将裁剪后的签名绘制到固定画布上（缩放+居中）
+    targetCtx.drawImage(
+      tempCanvas, // 原临时画布（含完整签名）
+      minX, minY, signatureWidth, signatureHeight, // 裁剪签名的实际区域
+      offsetX, offsetY, signatureWidth * scale, signatureHeight * scale // 缩放到固定画布的位置和大小
+    );
+
+
+    // 返回固定大小、仅含签名的透明背景图片（PNG格式）
+    // return targetCanvas.toDataURL('image/png');
+    let canvasBase64 = targetCanvas.toDataURL('image/png');
+    canvasBase64Index = canvasBase64.indexOf(',')
+    if (canvasBase64Index > -1) {
+      return canvasBase64.substring(canvasBase64Index + 1)
+    
+    }
+    return canvasBase64
+
+  }
+  // 显示通知
+  function showNotification(message) {
+    const existing = document.querySelector('.notification');
+    if (existing) existing.remove();
+
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.style.opacity = '0';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

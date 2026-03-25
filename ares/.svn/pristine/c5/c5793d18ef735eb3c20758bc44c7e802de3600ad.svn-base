@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>学习视频</title>
+    <link rel="stylesheet" href="../common/css/weui.min.new.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.new.css">
+    <link rel="stylesheet" href="css/index.css?v=3.7">
+</head>
+<style>
+	html,body {
+	    padding: 0;
+	    margin: 0;
+	    list-style-type: none;
+	    -webkit-overflow-scrolling:touch;
+	    -webkit-tap-highlight-color: rgba(0,0,0,0);
+	    width: 100%;
+	    min-height: 100vh;
+	    background-color: #f2f2f2;
+	}
+	.page1{
+		height:auto;
+		min-height: 100vh;
+	}
+	.weui-search-bar__box{
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+	.weui-icon-search{
+		left:0 !important;
+	}
+	.weui-icon-clear{
+		padding:0 !important;
+	}
+	.topFixed{
+		position: fixed;
+		width:100%;
+		left:0;
+		top:0;
+		z-index:99;
+	}
+</style>
+<body>
+<!-- 视频列表 -->
+<div class="page1" id="videoPage">
+	<div class="topFixed">
+		<!--tab切换-->
+		<div class="qiehuan" id="qiehuan" style="display: none">
+			<span tabid='1' id="qiehuan1" class="active">公司业务</span>
+			<span tabid='2' id="qiehuan2">投行业务</span>
+			<span tabid='3' id="qiehuan3">国际业务</span>
+		</div>
+	
+		<div class="weui-search-bar" id="searchBar"
+			style="background-color: #FFFFFF; margin-bottom: 5px;border-top: 1px solid #f2f2f2;">
+			<form class="weui-search-bar__form" style="padding: 4px;" action="" onsubmit="return false;">
+				<div class="weui-search-bar__box">
+					<i class="weui-icon-search"></i>
+					<input type="search" class="weui-search-bar__input" id="searchInput" placeholder="请输入关键字搜索"
+						onkeypress="search()">
+					<a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+				</div>
+				<label class="weui-search-bar__label" id="searchText"
+					style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);padding: 4px;">
+					<i class="weui-icon-search"></i>
+					<span>请输入关键字搜索</span>
+				</label>
+			</form>
+			<a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel"
+				style="color:#467af9;padding: 4px;">取消</a>
+		</div>
+	</div>
+	<div class="holdPlace"></div>
+	<div class="videoWrap">
+	</div>
+	<div class="zwsj" style="width: 100%; margin-top: 20%; text-align: center">
+		<img src="image/zwsp.png" style="width: 50%; margin: 0px auto" />
+	</div>
+	<div class="notips">
+	</div>
+	<div class="hiddenroot"></div>
+</div>
+<div class="page2" style="display: none" >
+	<div class="videoWrappage2">
+	</div>
+	<div class="notips" style="margin-top:50px;"></div>
+	<div class="hiddenroot"></div>
+</div>
+<div class="root">
+		<div class="step_root input_border_bottom">
+			<div class="step_item video_page">
+				<div class="flow_img">
+				    <img src="image/video_act.png" />
+				</div>
+				<div class="step_intro curr_step">学习视频</div>
+			</div>
+			<div class="step_item fee_page">
+				<div class="flow_img">
+				    <img src="image/fee.png" />
+				</div>
+				<div class="step_intro nosel_step">我的积分</div>
+			</div>
+			<!-- <div class="step_item apply_page">
+				<div class="flow_img">
+				    <img src="image/count.png" />
+				</div>
+				<div class="step_intro nosel_step">学习记录</div>
+			</div> -->
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript " src="../common/js/jssdk.js "></script>
+<script type="text/javascript">
+function getUserFinish(){
+	var username = $.parseJSON($.cookie("user")).name;
+	__canvasWM({
+		content: username
+	});
+	$.getScript("js/datalist.js?v=1.3.9")
+}
+</script>
+<script type="text/html" id="videoBoxTemp">
+	<div class="videoBox">
+		<div class="videoBox-div" onclick="play({id})" >
+			<div style="position: absolute; top:20px; left: 25px;">
+				<img id="{imgid}" src="{imgsrc}"  style="width:30px;height:30px;" >
+			</div>
+			<video id="{id}"
+						 fluid="true"
+						 poster="{cover}"
+						 preload="auto"
+						 width="78px"
+						 height="63px"
+			>
+				<source src="{url}" type="video/mp4">
+			</video>
+		</div>
+		<div style='width:80%;padding-bottom:5px'>
+			<div class="v-video">
+				<div class="videoTitle" style="display: inline-grid;" onclick="play({id})">
+					<div class="viewName" style="{ifSeeClass}" id="viewName{id}">{releaseInfo}</div>
+					<div style="display: flex; margin-top: 5px;">
+						<div style="margin-right: 20px; width: 30% " class="viewNum" id="viewNum{id}">{allDemandVolume}</div>
+						<div class="currentTime"  id="myCurrentTime{id}"></div>
+					</div>
+				</div>
+				<div>
+					<div class="toShare" onclick="toShare({id})"><img src="./image/toShare.png" alt=""></div>
+				</div>
+			</div>
+			<div style="{ifSeeKebao}">
+				<div class='kebao'>
+				
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+<!-- 课包 -->
+<script type="text/html" id="kebaoTemp">
+	<span>{kebaoName}</span>
+</script>
+<script type="text/html" id="typeTemp">
+	<a  class="gridsLine" data_id="{id}" data_recommend="{recommend}" data_secondVideoTypelisy="{secondVideoType}" >
+		        <div class="grid__icon">
+		          <img src="{photos}" style="width:100%;border-top-left-radius: 6px;border-top-right-radius: 6px;">
+		        </div>
+		        <div class="content">
+		        	<p class="grid__label">
+			          	{chinesename}
+			        </p>
+			        <p class="content_ft">
+			          	{englishname}
+			        </p>
+		        </div>
+		<div style="display: none" class="videoTitel">{chinesename}</div>
+	</a>
+</script>
+<script type="text/html" id="videoBoxTempage2">
+	<div class="videoBox" style="position:relative; display: inherit">
+		<video id="{id}"
+					 autoplay="autoplay"
+					 muted="muted"
+					 controls="controls"
+					 playsinline="true"
+					 x5-video-player-fullscreen="ture"
+					 x5-playsinline="true"
+					 x-webkit-airplay="true"
+					 webkit-playsinline="true"
+					 poster="{cover}"
+					 width="100%">
+			<source src="{url}" type="video/mp4">
+		</video>
+		<!--        preload="auto"-->
+		<!--        <img id="{imgid}" src="{imgsrc}" onclick="{imgclick}" style="position:absolute;bottom:60px;left:20px;width:45px;height:45px;"></img>-->
+		<div class="videoTitle">
+			<div class="viewName" style="{ifSeeClass}" id="viewName2{id}">{releaseInfo}<div class="currentTime" style="margin-left: 18px;"  id="myCurrentTime2{id}"></div></div>
+			<div class="viewNum lookNums" id="viewNum2{id}" onclick="lookpepers({id})">0</div>
+			<!--            <div class="toShare" onclick="toShare()"><img src="./image/toShare.png" alt=""></div>-->
+		</div>
+	</div>
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+<script src="../common/js/watermark.js"></script>
+</html>

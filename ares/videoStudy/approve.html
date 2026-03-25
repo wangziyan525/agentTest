@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>需求处理</title>
+    <link rel="stylesheet" href="../css/weui.min.new.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.new.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body style="background: #f7f7f7;">
+<!--我的申请 -->
+<div class="page4">
+    		<div class="list_info">
+    			<div class="list-cell">
+		            <div class="list-cell__bd" style="width:60%;color:#121212;">
+		              <p id="createtime"></p>
+		            </div>
+		            <div class="list-cell__ft" style="width:40%;color:#f59224;" id="auditstatus"></div>
+		         </div>
+		          <div class="list-cell">
+		            <div class="list-cell__bd">
+		              <p>申请人</p>
+		            </div>
+		            <div class="list-cell__ft" id="name"></div>
+		         </div>
+		         <div class="list-cell">
+		            <div class="list-cell__bd">
+		              <p>部门</p>
+		            </div>
+		            <div class="list-cell__ft" id="depName"></div>
+		         </div>
+		          <div class="list-cell">
+		            <div class="list-cell__bd">
+		              <p>电话</p>
+		            </div>
+		            <div class="list-cell__ft" id="telephone"></div>
+		         </div>
+		         <div class="list-cell">
+		            <div class="list-cell__bd">
+		              <p>标题</p>
+		            </div>
+		            <div class="list-cell__ft" id="title"></div>
+		         </div>
+	    		<div class="list-cell">
+		            <div class="list-cell__bd">
+		              <p>视频类型</p>
+		            </div>
+		            <div class="list-cell__ft" id="chinesename"></div>
+		         </div>
+	    		<div class="list-cell">
+		            <div class="list-cell__bd">
+		              <p>可见范围</p>
+		            </div>
+		            <div class="list-cell__ft" id="scope"></div>
+		         </div>
+	    		<div class="list-cell">
+		            <div class="list-cell__bd">
+		              <p>视频描述</p>
+		            </div>
+		            <div class="list-cell__ft" id="describe"></div>
+		         </div>
+	    		<!-- <div class="list-cell">
+		            <div class="list-cell__bd">
+		              <p>备注</p>
+		            </div>
+		            <div class="list-cell__ft" id="remark">{remark}</div>
+		         </div> -->
+	    	</div>
+	    	
+	    	<!-- <div class="disbtn">
+	    		<div onclick="submitForm('1')">
+	    			<div class="refuse">拒绝</div>
+	    		</div>
+	    		<div style="width:10%"></div>
+	    		<div onclick="refuseForm()">
+	    			<div class="agree">同意</div>
+	    		</div>
+	    	</div> -->
+	    	<div class="text_input" style="width: 86%;margin:10px auto;display:none" id="refusePart">
+    				<!-- <textarea class="textarea_info" placeholder="请输入拒绝理由" rows="3" maxlength="500"  id="describe1"></textarea> -->
+    				<div class="submit" >处理完成</div>
+    		</div>	
+    	
+	
+</div>
+
+</body>
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../js/jquery-weui.min.new.js"></script>
+<script type="text/javascript" src="../js/base.js"></script>
+<script type="text/javascript" src="../js/jssdk.js"></script>
+<script type="text/javascript">
+function getUserFinish(){
+	var username = $.parseJSON($.cookie("user")).name;
+	__canvasWM({
+		content: username
+	});
+	$.getScript("js/approve.js?v=1.0")
+}
+</script>
+<script type="text/javascript" src="../js/getbase_new.js"></script>
+
+<script src="../js/watermark.js?v=1.2"></script>
+</html>

@@ -1,0 +1,65 @@
+[v-cloak]{
+    display: none;
+}
+
+html, body {
+    min-height: 100vh;
+    background-color: #f3f4f6;
+}
+.topArea{
+  margin: 15px;
+    background: #FFFFFF;
+border-radius: 12px;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.topImg{
+    margin: 43px 0px 17px 0px; 
+    width: 66px;
+    height: 66px;
+
+}
+.topArea>div:last-child{
+    font-family: PingFangSC-Medium;
+    font-size: 20px;
+    color: #000000;
+    text-align: center;
+    font-weight: 600;
+    padding-bottom: 45px;
+}
+.midArea{
+    margin: 15px;
+    background-image: linear-gradient(180deg, #DEE1FF 0%, #FFFFFF 26%);
+border: 1px solid rgba(255,255,255,1);
+border-radius: 12px;
+}
+.midtext{
+   
+    padding: 0px 16px 16px 16px;
+    font-family: PingFangSC-Regular;
+font-size: 14px;
+color: #36383B;
+text-align: justify;
+line-height: 21px;
+font-weight: 400;
+}
+.midArea>div:first-child{
+   color:  #267EF0;
+   font-size: 18px;
+   font-weight: 600;
+   text-align: center;
+   padding: 15px;
+
+}
+.btmBtn{
+    background: #267EF0;
+border-radius: 6px;
+font-family: PingFangSC-Regular;
+font-size: 17px;
+color: #FFFFFF;
+text-align: center;
+font-weight: 400;
+padding: 11px 0px;
+margin: 30px 15px;
+}

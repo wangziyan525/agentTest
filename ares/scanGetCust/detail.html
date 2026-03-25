@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <script src="../common/js/vue.min.js"></script>
+    <script src="../common/js/vant-2.12.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/detail.css?v=1.0.1">
+</head>
+<body>
+<!--经营支行、一级机构自查情况登记审批-->
+<div id="app" v-cloak style="height: 100%;overflow-y: auto">
+    <div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div>状态</div>
+                <div style="color: #FF9430;" v-if="detail.datastage=='0'">待对接</div>
+                <div style="color: #267EF0;" v-if="detail.datastage=='1'">已对接</div>
+                <div style="color: #F64A4A;" v-if="detail.datastage=='7'">不予准入</div>
+                <div style="color: #44C966;" v-if="detail.datastage=='2'">资料收集中</div>
+                <div style="color: #44C966;" v-if="detail.datastage=='3'">审查审批中</div>
+                <div style="color: #44C966;" v-if="detail.datastage=='4'">签约中</div>
+                <div style="color: #44C966;" v-if="detail.datastage=='5'">放款</div>
+                <div style="color: #44C966;" v-if="detail.datastage=='6'">终止</div>
+            </div>
+        </div>
+        <div  class="contentLine" style="display: block;padding-top: 0;border-bottom: 0;padding-bottom: 10px">
+            <div style="color: #999;font-size: 14px;padding-left: 12px;">客户信息</div>
+        </div>
+        <div class="contentPart" style="margin-bottom: 0">
+            <div class="contentLine">
+                <div>客户类型</div>
+                <div v-if="detail.custtype=='1'">小微企业</div>
+                <div v-if="detail.custtype=='2'">个体工商户</div>
+                <div v-if="detail.custtype=='3'">农户</div>
+            </div>
+            <!--<div class="contentLine"  v-if="detail.custtype=='3'">
+                <div style="width: 40%"> 是否个体户（农户）</div>
+                <div v-if="detail.isindiviual=='1'">是</div>
+                <div v-if="detail.isindiviual=='2'">否</div>
+            </div>-->
+            <div class="contentLine">
+                <div>营销员工号</div>
+                <div>{{detail.markethumancode ? detail.markethumancode : '--'}}</div>
+            </div>
+            <div class="contentLine"  v-if="detail.custtype=='1'">
+                <div>企业全称</div>
+                <div>{{detail.entpname ? detail.entpname : '--'}}</div>
+            </div>
+            <div class="contentLine"  v-if="detail.custtype=='2'">
+                <div>个体户名称</div>
+                <div>{{detail.entpname ? detail.entpname : '--'}}</div>
+            </div>
+            <div class="contentLine"  v-if="detail.custtype=='2'">
+                <div>自然人姓名</div>
+                <div>{{detail.natuname ? detail.natuname : '--'}}</div>
+            </div>
+            <div class="contentLine"  v-if="detail.custtype=='3' && detail.isindiviual=='1'">
+                <div>个体户名称</div>
+                <div>{{detail.entpname ? detail.entpname : '--'}}</div>
+            </div>
+            <div class="contentLine"  v-if="detail.custtype=='3' && detail.isindiviual=='1'">
+                <div>自然人姓名</div>
+                <div>{{detail.natuname ? detail.natuname : '--'}}</div>
+            </div>
+            <div class="contentLine"  v-if="detail.custtype=='3' && detail.isindiviual=='2'">
+                <div>自然人姓名</div>
+                <div>{{detail.natuname ? detail.natuname : '--'}}</div>
+            </div>
+            <div class="contentLine">
+                <div>客户地址</div>
+                <div>{{detail.address ? detail.address : '--'}}</div>
+            </div>
+            <div class="contentLine">
+                <div>联系电话</div>
+                <div style="color: #267EF0;text-decoration: underline;display: flex;justify-content: flex-end;align-items: center" @click="callTap(detail.phone)">{{detail.phone ? desensitizeIdNo(detail.phone,3,7) : '--'}}<img src="image/phone.png" style="width: 16px;margin-left: 10px"></div>
+            </div>
+            <div class="contentLine" v-if="detail.custtype=='1' || detail.custtype=='2'">
+                <div>所属行业</div>
+                <div v-if="detail.industry=='1'">批发零售</div>
+                <div v-if="detail.industry=='2'">餐饮住宿</div>
+                <div v-if="detail.industry=='3'">制造加工</div>
+                <div v-if="detail.industry=='4'">农林牧渔</div>
+                <div v-if="detail.industry=='5'">物流运输</div>
+                <div v-if="detail.industry=='6'">其他</div>
+            </div>
+            <div class="contentLine" v-if="detail.custtype=='3'">
+                <div>所属行业</div>
+                <div v-if="detail.industry=='1'">粮食种植</div>
+                <div v-if="detail.industry=='2'">果蔬种植</div>
+                <div v-if="detail.industry=='3'">苗木种植</div>
+                <div v-if="detail.industry=='4'">畜禽养殖</div>
+                <div v-if="detail.industry=='5'">农机维护</div>
+                <div v-if="detail.industry=='6'">种子化肥</div>
+                <div v-if="detail.industry=='7'">物流运输</div>
+                <div v-if="detail.industry=='8'">农事中介</div>
+                <div v-if="detail.industry=='9'">电商销售</div>
+                <div v-if="detail.industry=='10'">其他</div>
+                <div v-if="detail.industry=='11'">烟草种植</div>
+            </div>
+            <div class="contentLine">
+                <div>经营年限</div>
+                <div v-if="detail.operatingyears=='1'">1年以内</div>
+                <div v-if="detail.operatingyears=='2'">1—3年</div>
+                <div v-if="detail.operatingyears=='3'">3—5年</div>
+                <div v-if="detail.operatingyears=='4'">5年以上</div>
+            </div>
+            <div class="contentLine" v-if="detail.custtype=='1'">
+                <div>资金需求</div>
+                <div v-if="detail.fundingrequ=='1'">50万以内</div>
+                <div v-if="detail.fundingrequ=='2'">50—100万</div>
+                <div v-if="detail.fundingrequ=='3'">100—200万</div>
+                <div v-if="detail.fundingrequ=='4'">200—500万</div>
+                <div v-if="detail.fundingrequ=='5'">500万以上</div>
+            </div>
+            <div class="contentLine" v-if="detail.custtype=='2'">
+                <div>资金需求</div>
+                <div v-if="detail.fundingrequ=='1'">10万以内</div>
+                <div v-if="detail.fundingrequ=='2'">10—20万</div>
+                <div v-if="detail.fundingrequ=='3'">20—50万</div>
+                <div v-if="detail.fundingrequ=='4'">50—100万</div>
+                <div v-if="detail.fundingrequ=='5'">100万以上</div>
+            </div>
+            <div class="contentLine" v-if="detail.custtype=='3'">
+                <div>资金需求</div>
+                <div v-if="detail.fundingrequ=='1'">5万以内</div>
+                <div v-if="detail.fundingrequ=='2'">5—10万</div>
+                <div v-if="detail.fundingrequ=='3'">10—20万</div>
+                <div v-if="detail.fundingrequ=='4'">20—50万</div>
+                <div v-if="detail.fundingrequ=='5'">50万以上</div>
+            </div>
+            <div class="contentLine" v-if="detail.custtype=='1'">
+                <div>用途</div>
+                <div v-if="detail.purpose=='1'">原材料或货品采购</div>
+                <div v-if="detail.purpose=='2'">设备更新</div>
+                <div v-if="detail.purpose=='3'">厂房建设</div>
+                <div v-if="detail.purpose=='4'">工资发放</div>
+                <div v-if="detail.purpose=='5'">短期周转</div>
+                <div v-if="detail.purpose=='6'">其他</div>
+            </div>
+            <div class="contentLine" v-if="detail.custtype=='2'">
+                <div>用途</div>
+                <div v-if="detail.purpose=='1'">原材料或货品采购</div>
+                <div v-if="detail.purpose=='2'">支付房租水电</div>
+                <div v-if="detail.purpose=='3'">经营场所装修</div>
+                <div v-if="detail.purpose=='4'">设备更新</div>
+                <div v-if="detail.purpose=='5'">短期周转</div>
+                <div v-if="detail.purpose=='6'">其他</div>
+            </div>
+            <div class="contentLine" v-if="detail.custtype=='3'">
+                <div>用途</div>
+                <div v-if="detail.purpose=='1'">购买种子化肥</div>
+                <div v-if="detail.purpose=='2'">购买包装用品</div>
+                <div v-if="detail.purpose=='3'">支付农机服务</div>
+                <div v-if="detail.purpose=='4'">支付物流运输</div>
+                <div v-if="detail.purpose=='5'">支付采摘款项</div>
+                <div v-if="detail.purpose=='6'">家庭装修</div>
+                <div v-if="detail.purpose=='7'">购置家电</div>
+                <div v-if="detail.purpose=='8'">购置农机</div>
+                <div v-if="detail.purpose=='9'">购置汽车</div>
+                <div v-if="detail.purpose=='10'">其他</div>
+            </div>
+        </div>
+        <div  class="contentLine" style="display: block;border-bottom: 0">
+            <div style="color: #999;font-size: 14px;padding-left:12px">预约信息</div>
+        </div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div>银行联络时间</div>
+                <div v-if="detail.contacttime=='1'">随时联系</div>
+                <div v-if="detail.contacttime=='2'">周一至周五工作时间联系</div>
+            </div>
+            <div class="contentLine">
+                <div>二维码获取渠道</div>
+                <div v-if="detail.channal=='1'">银行海报</div>
+                <div v-if="detail.channal=='2'">纸杯</div>
+                <div v-if="detail.channal=='3'">抽纸盒</div>
+                <div v-if="detail.channal=='4'">便民服务袋</div>
+                <div v-if="detail.channal=='5'">微信朋友圈</div>
+                <div v-if="detail.channal=='6'">银行工作人员</div>
+            </div>
+            <div class="contentLine">
+                <div>申请时间</div>
+                <div>{{detail.createtime ? detail.createtime : '--'}}</div>
+            </div>
+        </div>
+        <div v-if="detail.datastage!='6' && detail.datastage!='7'">
+            <div class="bottomButton"   v-if="detail.datastage == '0'">
+                <div class="submitButton" @click="submitBindtap('ylx')">已联系</div>
+            </div>
+        </div>
+
+        <div  class="contentLine" style="display: block;padding: 0 12px;border-bottom: 0" v-if="detail.datastage!='0'">
+            <div style="color: #999;font-size: 14px">对接信息</div>
+        </div>
+        <div v-if="detail.datastage!='6' && detail.datastage!='7'">
+            <div class="contentPart" style="margin-top: 10px" v-if="detail.datastage == '1' || detail.datastage == '2' || detail.datastage == '3' || detail.datastage == '4' || detail.datastage == '5'">
+                <div  style="display: block;">
+                    <div style="display: flex;align-items: center;justify-content: space-between;padding: 12px 0">
+                        <div style="color: #666">是否准入</div>
+                        <div style="display: flex">
+                            <div @click="selectSubmitInfo('1')" style="display: flex;align-items: center;margin-right: 15px">
+                                <img v-if="status=='1'" class="pass" src="image/ckend.png">
+                                <img v-if="status=='2'" class="pass" src="image/unselect.png">
+                                <img v-if="status==''" class="pass" src="image/unselect.png"><p>可以准入</p>
+                            </div>
+                            <div @click="selectSubmitInfo('2')" style="display: flex;align-items: center">
+                                <img v-if="status=='2'" class="refuse" src="image/ckend.png">
+                                <img v-if="status=='1'" class="refuse" src="image/unselect.png">
+                                <img v-if="status==''" class="refuse" src="image/unselect.png"><p>不予准入</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contentLine" style="border-top: 1px solid #e1e1e1;border-bottom: 0" v-if="opinionflag=='1'">
+                        <div>当前阶段</div>
+                        <div class="selectState display" style="position: relative">
+                            <input class="v-test" placeholder="请选择" v-model='datastageTxt' readonly style="width: 100%" @click="showTap(1)">
+                            <img src="image/arrow.png" class="icon">
+                        </div>
+                    </div>
+                    <div style=" background:rgba(255,255,255,1); border-radius:4px; padding: 0px 0px;" v-if="opinionflag=='1' && datastage=='6'">
+                        <textarea style="width:96%; height:70px; padding: 10px 2%; background:rgba(243,244,248,1); border-radius:4px; font-size:16px; font-family:PingFangSC-Regular,PingFang SC;
+                        border:none; " rows="5" v-model='refusereason' maxlength='100' placeholder="请输入终止原因(最多100字)"></textarea>
+                    </div>
+                    <div style=" background:rgba(255,255,255,1); border-radius:4px; padding: 0px 0px;" v-if="opinionflag=='2'">
+                        <textarea style="width:96%; height:70px; padding: 10px 2%; background:rgba(243,244,248,1); border-radius:4px; font-size:16px; font-family:PingFangSC-Regular,PingFang SC;
+                        border:none; " rows="5" v-model='refusereason' maxlength='100' placeholder="请输入不予准入原因(最多100字)"></textarea>
+                    </div>
+                </div>
+
+            </div>
+            <div v-if="detail.datastage!='6' && detail.datastage!='7'">
+                <div class="bottomButton"   v-if="detail.datastage == '1' || detail.datastage == '2' || detail.datastage == '3' || detail.datastage == '4' || detail.datastage == '5'">
+                    <div class="submitButton" @click="submitBindtap('qd')">确 定</div>
+                </div>
+            </div>
+
+        </div>
+        <div class="contentPart" style="margin-top: 10px"  v-if="detail.datastage=='6' || detail.datastage=='7'">
+            <div class="contentLine">
+                <div>对接时间</div>
+                <div>{{detail.updatetime ? detail.updatetime : '--'}}</div>
+            </div>
+            <div class="contentLine">
+                <div>是否准入</div>
+                <div v-if="detail.datastage=='7'">不予准入</div>
+                <div v-if="detail.datastage=='6'">不予准入</div>
+            </div>
+            <div class="contentLine" style="border-bottom: 0;padding-bottom: 5px">
+                <div>对接阶段</div>
+                <div style="color: #FF9430;" v-if="detail.datastage=='0'">待对接</div>
+                <div style="color: #267EF0;" v-if="detail.datastage=='1'">已对接</div>
+                <div style="color: #F64A4A;" v-if="detail.datastage=='7'">不予准入</div>
+                <div style="color: #44C966;" v-if="detail.datastage=='2'">资料收集中</div>
+                <div style="color: #44C966;" v-if="detail.datastage=='3'">审查审批中</div>
+                <div style="color: #44C966;" v-if="detail.datastage=='4'">签约中</div>
+                <div style="color: #44C966;" v-if="detail.datastage=='5'">放款</div>
+                <div style="color: #44C966;" v-if="detail.datastage=='6'">终止</div>
+            </div>
+            <div  class="contentLine" style="display: block;padding-top: 0" v-if="detail.refusereason">
+                <div style="color: #666"></div>
+                <div style=" background:#F6F7F9; border-radius:4px; padding: 10px;text-align: left;width: 100%;margin-top: 5px;box-sizing: border-box">
+                    {{detail.refusereason}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <van-popup v-model="popupBottomShow1" @click-overlay="closeOverlayBindtap" :close-on-click-overlay="false"
+               position="bottom">
+        <van-picker show-toolbar item-height="50px" visible-item-count="5" :title="popupObject1.title"
+                    :columns="popupObject1.columns" @cancel="closeOverlayBindtap" @confirm="onConfirm">
+        </van-picker>
+    </van-popup>
+</div>
+</body>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/server.js?v=20211022"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="js/detail.js?v=2.2.7"></script>
+<script src="../common/js/vConsole.min.js"></script>
+<script>
+    //var vConsole = new VConsole();
+    //初始化微信社区
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem','chooseImage','uploadImage','downloadImage', 'startRecord', 'stopRecord', 'translateVoice','closeWindow']);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+    function getUserFinish(){
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

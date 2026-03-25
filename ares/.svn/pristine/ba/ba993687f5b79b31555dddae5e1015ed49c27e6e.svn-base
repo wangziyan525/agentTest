@@ -1,0 +1,31 @@
+
+.main_container {
+    padding: 0 12px;
+}
+
+.main_item {
+    background-color: #fff;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.main_item:first-child {
+    margin-top: 0;
+}
+
+.header_container {
+    height: 45px;
+    display: flex;
+    padding: 0 12px;
+    align-items: center;
+    background-color: #fff;
+}
+
+.header_container >div {
+    /* padding: 5px 10px;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 100px;
+    min-height: 30px; */
+}

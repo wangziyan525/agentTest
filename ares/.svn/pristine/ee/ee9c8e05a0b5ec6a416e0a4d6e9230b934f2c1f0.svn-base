@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <script src="../common/js/vue.min.js"></script>
+    <script src="../common/js/vant-2.12.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/detail.css?v=1.0.1">
+</head>
+<body>
+<div id="app" v-cloak>
+    <div>
+        <div class="tab">
+            <div @click="chooseTab('0')"><span :class="tab=='0'?'activeTab':''">上午</span></div>
+            <div @click="chooseTab('1')"><span :class="tab=='1'?'activeTab':''">下午</span></div>
+            <p></p>
+        </div>
+        <div class="contentPart" v-if="dfFlag=='1' && userName!=''" style="margin-top: 10px">
+            <div class="contentLine" style="padding: 12px 15px">
+                <p>检查人</p>
+                <p>{{userName}}</p>
+            </div>
+        </div>
+        <div class="title">安全检查项目({{titleTip}})</div>
+        <div v-if="dataInfoShow" class="contentPart">
+            <div class="contentLine border-bottom">
+                <p>门窗</p>
+                <p v-if="windowInfo.status=='1'" @click="showMore('windowInfo')">
+                    <span style="color:#2EB34B">正常</span>
+                    <img v-if="windowInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="windowInfo.showFlag=='1'" src="image/up.png">
+                </p>
+                <p v-if="windowInfo.status=='0'" @click="showMore('windowInfo')">
+                    <span style="color:#FF573F">异常</span>
+                    <img v-if="windowInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="windowInfo.showFlag=='1'" src="image/up.png">
+                </p>
+            </div>
+            <div v-if="windowInfo.showFlag=='1'">
+                <div v-if="windowInfo.describe" class="border-bottom">
+                    <div class="titles">问题描述</div>
+                    <div class="ListLine"><div style="font-size: 16px;color: #666">{{windowInfo.describe}}</div></div>
+                </div>
+                <div class="border-bottom">
+                    <div class="titles">上传资料</div>
+                    <div class="ListLine">
+                        <div>门窗防护装置是否正常，营业期间、营业终了是否按规定锁闭。拍照1-3张</div>
+                    </div>
+                    <div style="display: flex;align-items: center;flex-wrap: wrap;padding: 0 5px 5px 5px">
+                        <div class="imgOne" v-for="(item,index) in windowInfo.imgList">
+                            <!--<div class="uploadIMg" @click="bigImg(imgBase+item)">
+                                <img :src="imgBase+item">
+                            </div>-->
+                            <div class="uploadIMg" @click="bigImg(item)">
+                                <img :src="item">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="dataInfoShow" class="contentPart">
+            <div class="contentLine border-bottom">
+                <p>自卫器具</p>
+                <p v-if="defendInfo.status=='1'" @click="showMore('defendInfo')">
+                    <span style="color:#2EB34B">正常</span>
+                    <img v-if="defendInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="defendInfo.showFlag=='1'" src="image/up.png">
+                </p>
+                <p v-if="defendInfo.status=='0'" @click="showMore('defendInfo')">
+                    <span style="color:#FF573F">异常</span>
+                    <img v-if="defendInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="defendInfo.showFlag=='1'" src="image/up.png">
+                </p>
+            </div>
+            <div v-if="defendInfo.showFlag=='1'">
+                <div v-if="defendInfo.describe" class="border-bottom">
+                    <div class="titles">问题描述</div>
+                    <div class="ListLine"><div style="font-size: 16px;color: #666">{{defendInfo.describe}}</div></div>
+                </div>
+                <div class="border-bottom">
+                    <div class="titles">上传资料</div>
+                    <div class="ListLine">
+                        <div>自卫器具是否按规定配备齐全，有无损坏，是否置于规定位置。拍照2-3张：头盔、盾牌、钢叉集中放置处1-2张、柜台及橡胶棍1张</div>
+                    </div>
+                    <div style="display: flex;align-items: center;flex-wrap: wrap;padding: 0 5px 5px 5px">
+                        <div class="imgOne" v-for="(item,index) in defendInfo.imgList">
+                            <!--<div class="uploadIMg" @click="bigImg(imgBase+item)">
+                                <img :src="imgBase+item">
+                            </div>-->
+                            <div class="uploadIMg" @click="bigImg(item)">
+                                <img :src="item">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="dataInfoShow" class="contentPart">
+            <div class="contentLine border-bottom">
+                <p>防弹玻璃/护栏</p>
+                <p v-if="railingInfo.status=='1'" @click="showMore('railingInfo')">
+                    <span style="color:#2EB34B">正常</span>
+                    <img v-if="railingInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="railingInfo.showFlag=='1'" src="image/up.png">
+                </p>
+                <p v-if="railingInfo.status=='0'" @click="showMore('railingInfo')">
+                    <span style="color:#FF573F">异常</span>
+                    <img v-if="railingInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="railingInfo.showFlag=='1'" src="image/up.png">
+                </p>
+            </div>
+            <div v-if="railingInfo.showFlag=='1'">
+                <div v-if="railingInfo.describe" class="border-bottom">
+                    <div class="titles">问题描述</div>
+                    <div class="ListLine"><div style="font-size: 16px;color: #666">{{railingInfo.describe}}</div></div>
+                </div>
+                <div class="border-bottom">
+                    <div class="titles">上传资料</div>
+                    <div class="ListLine">
+                        <div>防弹玻璃/护栏有无损坏、老化。拍照1-3张：营业柜台上方防弹玻璃/护栏整体外观1-3张</div>
+                    </div>
+                    <div style="display: flex;align-items: center;flex-wrap: wrap;padding: 0 5px 5px 5px">
+                        <div class="imgOne" v-for="(item,index) in railingInfo.imgList">
+                            <!--<div class="uploadIMg" @click="bigImg(imgBase+item)">
+                                <img :src="imgBase+item">
+                            </div>-->
+                            <div class="uploadIMg" @click="bigImg(item)">
+                                <img :src="item">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="dataInfoShow" class="contentPart">
+            <div class="contentLine border-bottom">
+                <p>电源</p>
+                <p v-if="powerInfo.status=='1'" @click="showMore('powerInfo')">
+                    <span style="color:#2EB34B">正常</span>
+                    <img v-if="powerInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="powerInfo.showFlag=='1'" src="image/up.png">
+                </p>
+                <p v-if="powerInfo.status=='0'" @click="showMore('powerInfo')">
+                    <span style="color:#FF573F">异常</span>
+                    <img v-if="powerInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="powerInfo.showFlag=='1'" src="image/up.png">
+                </p>
+            </div>
+            <div v-if="powerInfo.showFlag=='1'">
+                <div v-if="powerInfo.describe" class="border-bottom">
+                    <div class="titles">问题描述</div>
+                    <div class="ListLine"><div style="font-size: 16px;color: #666">{{powerInfo.describe}}</div></div>
+                </div>
+                <div class="border-bottom">
+                    <div class="titles">上传资料</div>
+                    <div class="ListLine">
+                        <div>电源是否损坏，或线缆上是否有其他不明附属物。拍照1-3张：电源配电箱1-3张</div>
+                    </div>
+                    <div style="display: flex;align-items: center;flex-wrap: wrap;padding: 0 5px 5px 5px">
+                        <div class="imgOne" v-for="(item,index) in powerInfo.imgList">
+                            <!--<div class="uploadIMg" @click="bigImg(imgBase+item)">
+                                <img :src="imgBase+item">
+                            </div>-->
+                            <div class="uploadIMg" @click="bigImg(item)">
+                                <img :src="item">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="dataInfoShow" class="contentPart">
+            <div class="contentLine border-bottom">
+                <p>自助设备</p>
+                <p v-if="selfEqInfo.status=='1'" @click="showMore('selfEqInfo')">
+                    <span style="color:#2EB34B">正常</span>
+                    <img v-if="selfEqInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="selfEqInfo.showFlag=='1'" src="image/up.png">
+                </p>
+                <p v-if="selfEqInfo.status=='0'" @click="showMore('selfEqInfo')">
+                    <span style="color:#FF573F">异常</span>
+                    <img v-if="selfEqInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="selfEqInfo.showFlag=='1'" src="image/up.png">
+                </p>
+            </div>
+            <div v-if="selfEqInfo.showFlag=='1'">
+                <div v-if="selfEqInfo.describe" class="border-bottom">
+                    <div class="titles">问题描述</div>
+                    <div class="ListLine"><div style="font-size: 16px;color: #666">{{selfEqInfo.describe}}</div></div>
+                </div>
+                <div class="border-bottom">
+                    <div class="titles">上传资料</div>
+                    <div class="ListLine">
+                        <div>自助设备运行是否正常及有无其他不明附着物。拍照1-3张：ATM机正面1-2张、防护舱外观1张(有则拍照)</div>
+                    </div>
+                    <div style="display: flex;align-items: center;flex-wrap: wrap;padding: 0 5px 5px 5px">
+                        <div class="imgOne" v-for="(item,index) in selfEqInfo.imgList">
+                            <!--<div class="uploadIMg" @click="bigImg(imgBase+item)">
+                                <img :src="imgBase+item">
+                            </div>-->
+                            <div class="uploadIMg" @click="bigImg(item)">
+                                <img :src="item">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="dataInfoShow" class="contentPart">
+            <div class="contentLine border-bottom">
+                <p>监控设备</p>
+                <p v-if="monitorInfo.status=='1'" @click="showMore('monitorInfo')">
+                    <span style="color:#2EB34B">正常</span>
+                    <img v-if="monitorInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="monitorInfo.showFlag=='1'" src="image/up.png">
+                </p>
+                <p v-if="monitorInfo.status=='0'" @click="showMore('monitorInfo')">
+                    <span style="color:#FF573F">异常</span>
+                    <img v-if="monitorInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="monitorInfo.showFlag=='1'" src="image/up.png">
+                </p>
+            </div>
+            <div v-if="monitorInfo.showFlag=='1'">
+                <div v-if="monitorInfo.describe" class="border-bottom">
+                    <div class="titles">问题描述</div>
+                    <div class="ListLine"><div style="font-size: 16px;color: #666">{{monitorInfo.describe}}</div></div>
+                </div>
+                <div class="border-bottom">
+                    <div class="titles">上传资料</div>
+                    <div class="ListLine">
+                        <div>监控设备运转是否正常，图像是否清晰，回放是否正常。拍照2-3张</div>
+                    </div>
+                    <div style="display: flex;align-items: center;flex-wrap: wrap;padding: 0 5px 5px 5px">
+                        <div class="imgOne" v-for="(item,index) in monitorInfo.imgList">
+                            <!--<div class="uploadIMg" @click="bigImg(imgBase+item)">
+                                <img :src="imgBase+item">
+                            </div>-->
+                            <div class="uploadIMg" @click="bigImg(item)">
+                                <img :src="item">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="dataInfoShow" class="contentPart">
+            <div class="contentLine border-bottom">
+                <p>消防设备</p>
+                <p v-if="fireInfo.status=='1'" @click="showMore('fireInfo')">
+                    <span style="color:#2EB34B">正常</span>
+                    <img v-if="fireInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="fireInfo.showFlag=='1'" src="image/up.png">
+                </p>
+                <p v-if="fireInfo.status=='0'" @click="showMore('fireInfo')">
+                    <span style="color:#FF573F">异常</span>
+                    <img v-if="fireInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="fireInfo.showFlag=='1'" src="image/up.png">
+                </p>
+            </div>
+            <div v-if="fireInfo.showFlag=='1'">
+                <div v-if="fireInfo.describe" class="border-bottom">
+                    <div class="titles">问题描述</div>
+                    <div class="ListLine"><div style="font-size: 16px;color: #666">{{fireInfo.describe}}</div></div>
+                </div>
+                <div class="border-bottom">
+                    <div class="titles">上传资料</div>
+                    <div class="ListLine">
+                        <div>消防设备是否足量，是否在有效期内。拍照1-3张：灭火器瓶体压力表1张、消火栓箱体外观1-2张(有则拍照)</div>
+                    </div>
+                    <div style="display: flex;align-items: center;flex-wrap: wrap;padding: 0 5px 5px 5px">
+                        <div class="imgOne" v-for="(item,index) in fireInfo.imgList">
+                            <!--<div class="uploadIMg" @click="bigImg(imgBase+item)">
+                                <img :src="imgBase+item">
+                            </div>-->
+                            <div class="uploadIMg" @click="bigImg(item)">
+                                <img :src="item">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="dataInfoShow" class="contentPart">
+            <div class="contentLine border-bottom">
+                <p>接送库</p>
+                <p v-if="pickUpInfo.status=='1'" @click="showMore('pickUpInfo')">
+                    <span style="color:#2EB34B">正常</span>
+                    <img v-if="pickUpInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="pickUpInfo.showFlag=='1'" src="image/up.png">
+                </p>
+                <p v-if="pickUpInfo.status=='0'" @click="showMore('pickUpInfo')">
+                    <span style="color:#FF573F">异常</span>
+                    <img v-if="pickUpInfo.showFlag=='0'" src="image/down.png">
+                    <img v-if="pickUpInfo.showFlag=='1'" src="image/up.png">
+                </p>
+            </div>
+            <div v-if="pickUpInfo.showFlag=='1'">
+                <div class="contentLine border-bottom">
+                    <div>网点监控范围</div>
+                    <div style="display: flex">
+                        <div v-if="pickUpInfo.arrive=='1'" style="display: flex;align-items: center;margin-right: 15px;justify-content: flex-end">
+                            到达
+                        </div>
+                        <div v-if="pickUpInfo.arrive=='0'" style="display: flex;align-items: center;justify-content: flex-end">
+                            未到达
+                        </div>
+                    </div>
+                </div>
+                <div v-if="pickUpInfo.describe" class="border-bottom">
+                    <div class="titles">问题描述</div>
+                    <div class="ListLine"><div style="font-size: 16px;color: #666">{{pickUpInfo.describe}}</div></div>
+                </div>
+                <div class="border-bottom">
+                    <div class="titles" v-if="pickUpInfo.arriveVideo">接送库视频</div>
+                   <!-- <div class="titles">上传资料</div>
+                    <div class="ListLine">
+                        <div>消防设备是否足量，是否在有效期内。拍照2张</div>
+                    </div>
+                    <div style="display: flex;align-items: center;flex-wrap: wrap;padding: 0 5px 5px 5px">
+                        <div class="imgOne" v-for="(item,index) in pickUpInfo.imgList">
+                            &lt;!&ndash;<div class="uploadIMg" @click="bigImg(imgBase+item)">
+                                <img :src="imgBase+item">
+                            </div>&ndash;&gt;
+                            <div class="uploadIMg" @click="bigImg(item)">
+                                <img :src="item">
+                            </div>
+                        </div>
+                    </div>-->
+                    <div v-if="pickUpInfo.arriveVideo">
+                        <div  v-if="!videoShow" style="display: flex;align-items: center;flex-wrap: wrap;padding: 0 5px 5px 5px">
+                            <div class="imgOne">
+                                <div class="uploadIMg">
+                                    <img src="image/loading-icon.gif">
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="videoShow" style="display: flex;align-items: center;flex-wrap: wrap;padding: 0 5px 5px 5px">
+                            <video class="myvideo"
+                                   playsinline="true"
+                                   x5-video-player-fullscreen="ture"
+                                   x5-playsinline="true"
+                                   x-webkit-airplay="true"
+                                   webkit-playsinline="true"
+                                   controls
+                                   preload="auto"
+                                   width="50%"
+                                   height="150px">
+                                <source :src="path">
+                            </video>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div v-if="!dataInfoShow" style="width: 100%;font-size: 18px;text-align: center;margin-top: 150px">暂无数据</div>
+    </div>
+
+
+
+
+</div>
+</body>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js?v=20211022"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="js/detail.js?v=2.2.2"></script>
+<script src="../common/js/vConsole.min.js"></script>
+<script>
+    //var vConsole = new VConsole();
+    //初始化微信社区
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem','chooseImage','uploadImage','downloadImage', 'startRecord', 'stopRecord', 'translateVoice',]);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+    function getUserFinish(){
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

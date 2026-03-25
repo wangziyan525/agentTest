@@ -1,0 +1,59 @@
+body{
+	margin: 0;
+    padding: 0;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    width:100vw;
+    height:100vh;
+}
+.content{
+	position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+	background: url(../images/sysError.jpg) no-repeat;
+	background-size: 100% 100%;
+}
+div{
+	margin: 0;
+    padding: 0;
+}
+a {
+    text-decoration: blink;
+}
+h2 {
+    position: fixed;
+    color: white;
+    /* margin: 58vw auto 12vw auto; */
+    text-align: center;
+    font-size: 5vw;
+    width: 100vw;
+    top: 37%;
+}
+.text {
+    position: fixed;
+    width: 30vw;
+    height: 10vw;
+    margin-left: 35vw;
+    bottom: 6vw;
+    background-color: #39B2FF;
+    color: white;
+    /* margin: 0 auto; */
+    line-height: 10vw;
+    text-align: center;
+    border-radius: 2vw;
+    font-size: 4.2vw;
+}
+.back{
+    position: fixed;
+    display: inline-block;
+    height: 35px;
+    width: 38%;
+    top: 37%;
+    left: 32%;
+    text-align: center;
+    background: #ED7E9E;
+    color: #fff;
+    line-height: 35px;
+}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>建档立卡</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=4.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none">
+        
+        <div class="listTopPart" style="padding: 10px 10px 10px;">
+            <div class="listOneLine">
+                <img src="images/search.png">
+                <div class="keyInput">                    
+                    <van-field type="text" v-model="searchWord" :placeholder="placetext" maxlength="50" ></van-field>
+                </div>
+                <div class="keySearchBtn" @click="queryLists()">搜索</div>
+            </div>
+        </div>
+        <div class="searchChoose">
+            <div class="searchOne" @click="chooseType('EstbDocTp')">{{EstbDocTpOpt[EstbDocTp]}}<img src="images/dropDown.png"></div>
+        </div>
+        <div>
+            <van-popup v-model="typeshow" position="bottom">
+                <van-picker
+                        show-toolbar
+                        :columns="typeList"
+                        @confirm="onTypeConfirm"
+                        @cancel="typeshow=false"
+                >
+                </van-picker>
+            </van-popup>
+        </div>
+        <div v-if="list.length>0">
+
+            <div v-if="EstbDocTp=='10'">
+                <div class="listContent" v-for="(item,index) in list" @click="goDetail(item.iD,item.deleted)">
+                    <div>{{item.EntpNm?item.EntpNm:item.EntpCtcManNm}}</div>
+                    <div class="listTime">作废时间：{{item.zfcreatetime}}</div>
+                    <div class="listTime">作废原因：{{item.reason}}</div>
+                </div>
+            </div>
+
+            <div v-else>
+                <div class="listContent" v-for="item in list" @click="goDetail(item.iD,item.deleted)">
+                
+                    <div>{{item.EntpNm?item.EntpNm:item.EntpCtcManNm}}</div>
+                    <div class="listStatus">
+                        <div :class="'listStatus'+item.status">{{listStatusOpt[item.status]}}</div>
+                    </div>
+                    <div class="listTime">首次建档时间：{{item.cREATETIME}}</div>
+                </div>
+            </div>
+        </div>
+        <div  class="nodate" v-else>
+            <div class="noMessage">
+                <img src="images/noMessage.png">
+            </div>
+            暂无数据
+        </div>
+        <div style="height: 80px;"></div>
+        <div class="footApply" >
+            <div @click="appltBtn">
+                <img src="images/applyEdit.png" class="applyEdit">
+                <span>我要建档</span>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="js/list.js?v=4"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+            //ios页面回退不刷新
+            window.addEventListener('pageshow',function (e) {
+                if(e.persisted){
+                    location.reload();
+                }
+            });
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <script src="../../common/js/vue.min.js"></script>
+    <script src="../../common/js/vant-2.12.min.js"></script>
+    <script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/common.css?v=1.0.1">
+    <link rel="stylesheet" href="../css/specialSend/taskSend.css?v=1.0.1">
+</head>
+<body>
+<div id="app" v-cloak style="height: 100%;overflow-y: auto">
+    <div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div>专项检查名称</div>
+                <div><input class="weui-input" type="text" placeholder="请输入" v-model='submitInfo.specialCheckName'></div>
+            </div>
+            <div  style="display: block;margin: 5px 0;border-bottom: 1px solid #e1e1e1">
+                <div style="color: #666">检查时间范围</div>
+                <div class="listsecondLine" style="margin-bottom: 15px">
+                    <div class="dateDown" @click="pickerdate('startTime')">{{submitInfo.startTime?submitInfo.startTime:"开始时间"}}</div>
+                    <div>—</div>
+                    <div class="dateDown" @click="pickerdate('endTime')">{{submitInfo.endTime?submitInfo.endTime:"结束时间"}}</div>
+                </div>
+            </div>
+            <div  style="display: block;margin: 5px 0;border-bottom: 1px solid #e1e1e1">
+                <div style="color: #666">检查内容</div>
+                <div style="margin-bottom: 10px; background:rgba(255,255,255,1); border-radius:4px; padding: 5px 0px;">
+                        <textarea style="width:96%; height:150px; padding: 10px 2%; background:rgba(243,244,248,1); border-radius:4px; font-size:16px; font-family:PingFangSC-Regular,PingFang SC;
+                        border:none; " rows="10" v-model='submitInfo.checkContent' placeholder="请输入检查内容"></textarea>
+                </div>
+            </div>
+            <div class="contentLine">
+                <div>检查完成时间节点</div>
+                <div class="selectState display" style="position: relative">
+                    <input class="weui-input" type="text" placeholder="请选择" v-model='submitInfo.checkFinishedDate' readonly @click="pickerdate('checkFinishedDate')">
+                    <img src="../image/down.png" class="icon">
+                </div>
+            </div>
+            <div class="contentLine">
+                <div>任务执行范围</div>
+                <div class="selectState display" style="position: relative">
+                    <input class="weui-input" type="text" placeholder="请选择" @click="showTap('1')" v-model='submitInfo.scopeTaskExecutionTxt' readonly>
+                    <img src="../image/down.png" class="icon">
+                </div>
+            </div>
+            <div class="contentLine">
+                <div>一级机构</div>
+                <div class="selectState display" style="position: relative">
+                    <input class="weui-input" type="text" placeholder="请选择" @click="showTap('2')" v-model='firstOrgChoose' readonly>
+                    <img src="../image/down.png" class="icon">
+                </div>
+            </div>
+            <div class="contentLine" v-if="secondFlag=='2'">
+                <div>经营支行</div>
+                <div class="selectState display" style="position: relative">
+                    <input class="weui-input" type="text" placeholder="请选择" @click="showTap1('3')" v-model='secondOrgChoose' readonly>
+                    <img src="../image/down.png" class="icon">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="bottomButton">
+        <div class="submitButton" @click="submitBindtap()">提 交</div>
+    </div>
+    <van-popup
+            v-model="popupDataShow"
+            position="bottom"
+            :close-on-click-overlay="false">
+        <van-datetime-picker
+                v-model="currentDate"
+                type="date"
+                title="选择日期"
+                @confirm="getTime"
+                @cancel="closeTime"
+        >
+        </van-datetime-picker>
+    </van-popup>
+    <van-popup v-model="popupBottomShow1" @click-overlay="closeOverlayBindtap" :close-on-click-overlay="false"
+               position="bottom">
+        <van-picker show-toolbar item-height="50px" visible-item-count="5" :title="popupObject1.title"
+                    :columns="popupObject1.columns" @cancel="closeOverlayBindtap" @confirm="onConfirm">
+        </van-picker>
+    </van-popup>
+    <!--<van-popup v-model="popupBottomShow2" @click-overlay="closeOverlayBindtap" :close-on-click-overlay="false"
+               position="bottom">
+        <van-picker show-toolbar item-height="50px" visible-item-count="5" :title="popupObject2.title"
+                    :columns="popupObject2.columns" @cancel="closeOverlayBindtap" @confirm="onConfirm">
+        </van-picker>
+    </van-popup>-->
+    <!--<van-popup v-model="popupBottomShow3" @click-overlay="closeOverlayBindtap" :close-on-click-overlay="false"
+               position="bottom">
+        <van-picker show-toolbar item-height="50px" visible-item-count="5" :title="popupObject3.title"
+                    :columns="popupObject3.columns" @cancel="closeOverlayBindtap" @confirm="onConfirm">
+        </van-picker>
+    </van-popup>-->
+
+
+    <van-popup v-model="popupBottomShow2" :close-on-click-overlay="false"
+               position="bottom" :style="{height:'500px',width:'100%',background:'f6f6f6'}">
+        <section class="main-section-container listScroll" >
+            <div class="mains" style="overflow-y: auto;height: 420px">
+                <template v-if="firstOrgList.length > 0">
+                    <div style="">
+                        <template v-for="(item,index) in firstOrgList">
+                            <div class="lis2" @click="xuanzManager(index)" style="font-size: 15px;">
+                                <div class="left">{{item.orgname}}</div>
+                                <template v-if="item.check">
+                                    <i><img src="../image/select.png" style="width: 18px"></i>
+                                </template>
+                                <template v-else>
+                                    <i></i>
+                                </template>
+                            </div>
+                        </template>
+
+                    </div>
+                </template>
+                <template v-if="firstOrgList.length == 0">
+                    <div class="nodata">暂无数据</div>
+                </template>
+
+            </div>
+            <div class="addBtn"><p class="closeSel" @click="closeSel2()">关闭</p><p class="chooseSel" @click="chooseSel2()">确定</p></div>
+        </section>
+
+    </van-popup>
+
+
+    <van-popup v-model="popupBottomShow3" :close-on-click-overlay="false"
+               position="bottom" :style="{height:'500px',width:'100%',background:'f6f6f6'}">
+        <section class="main-section-container listScroll" >
+            <div class="mains" style="overflow-y: auto;height: 420px">
+                <template v-if="secondOrgList.length > 0">
+                    <div style="">
+                        <template v-for="(item,index) in secondOrgList">
+                            <div class="lis2" @click="xuanzManagerSec(index)" style="font-size: 15px;">
+                                <div class="left">{{item.orgname}}</div>
+                                <template v-if="item.check">
+                                    <i><img src="../image/select.png" style="width: 18px"></i>
+                                </template>
+                                <template v-else>
+                                    <i></i>
+                                </template>
+                            </div>
+                        </template>
+
+                    </div>
+                </template>
+                <template v-if="secondOrgList.length == 0">
+                    <div class="nodata">暂无数据</div>
+                </template>
+
+            </div>
+            <div class="addBtn"><p class="closeSel" @click="closeSel3()">关闭</p><p class="chooseSel" @click="chooseSel3()">确定</p></div>
+        </section>
+
+    </van-popup>
+</div>
+</body>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/server.js?v=20211022"></script>
+<script src="../../common/js/watermark.js"></script>
+<script type="text/javascript" src="../js/specialSend/taskSend.js?v=2.2.5"></script>
+<script src="../../common/js/vConsole.min.js"></script>
+<script>
+    //var vConsole = new VConsole();
+    //初始化微信社区
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem','chooseImage','uploadImage','downloadImage', 'startRecord', 'stopRecord', 'translateVoice','closeWindow']);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+    function getUserFinish(){
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport" />
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <!-- 会议详情 -->
+</head>
+<body>
+    <div class="container" v-cloak>
+        <section class="section_main">
+            <div class="display view_content">
+                <div class="view_left color666666 min_width80">会议主题</div>
+                <div
+                    class="view_right display color333333 flex justify_content_right">
+                    {{ dataInfo.theme || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top">
+                <div class="view_left color666666 min_width80">位置</div>
+                <div
+                    class="view_right display color333333 flex justify_content_right">
+                    {{ dataInfo.location || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top">
+                <div class="view_left color666666 min_width80">楼层</div>
+                <div
+                    class="view_right display flex color333333 justify_content_right">
+                    {{ formatFloor(dataInfo.floor) || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top">
+                <div class="view_left color666666 min_width80">会议室</div>
+                <div
+                    class="view_right display flex color333333 justify_content_right">
+                    {{ dataInfo.departmentName || '' }}
+                </div>
+            </div>
+            <!-- <div class="display view_content border_top">
+                <div class="view_left color666666  min_width80">预约日期</div>
+                <div
+                    class="view_right display flex color333333 justify_content_right">
+                    {{ dataInfo.currentDate || '' }}
+                </div>
+            </div> -->
+            <div class="display view_content border_top">
+                <div class="view_left color666666 min_width80">开始时间</div>
+                <div
+                    class="view_right display flex color333333 justify_content_right">
+                    {{ dataInfo.startTime || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top">
+                <div class="view_left color666666 min_width80">结束时间</div>
+                <div
+                    class="view_right display flex color333333 justify_content_right">
+                    {{ dataInfo.endTime || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top">
+                <div class="view_left color666666 min_width80">通知时间</div>
+                <div
+                    class="view_right display flex color333333 justify_content_right">
+                    {{ formatNoticeTimeType(dataInfo.noticeTimeType) || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top" v-if="dataInfo.sustainType != '0'">
+                <div class="view_left color666666 min_width80">持续时间</div>
+                <div
+                    class="view_right display flex color333333 justify_content_right">
+                    {{ formatSustainType(dataInfo.sustainType) || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top" v-if="dataInfo.meetingType != ''">
+                <div class="view_left color666666 min_width80">会议类型</div>
+                <div
+                    class="view_right display flex color333333 justify_content_right">
+                    {{ formatMeetingType(dataInfo.meetingType) || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top" v-if="dataInfo.needEquipment && dataInfo.needEquipment != ''">
+                <div class="view_left color666666 min_width80">所需设备</div>
+                <div
+                    class="view_right display flex color333333 justify_content_right">
+                    {{ dataInfo.needEquipment || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top">
+                <div class="view_left color666666 min_width80">会议参与人</div>
+                <div
+                    class="view_right display flex justify_content_right color333333">
+                    {{ dataInfo.attendLoginName || '' }}
+                </div>
+            </div>
+
+
+            <div class="display view_content border_top" v-if="dataInfo.isImportantUser && dataInfo.isImportantUser !=''&&dataInfo.isImportantUser!=null">
+                <div class="view_left color666666 min_width80">是否有重要参会人员</div>
+                <div
+                        class="view_right display flex color333333 justify_content_right">
+                    {{ formatWhetherType(dataInfo.isImportantUser) || '' }}
+                </div>
+            </div>
+
+            <div class="display view_content border_top" v-if="dataInfo.isImportantUser == 1">
+                <div class="view_left color666666 min_width80">重要人的姓名</div>
+                <div
+                        class="view_right display flex color333333 justify_content_right">
+                    {{  dataInfo.importantLeader  || '' }}
+                </div>
+            </div>
+
+            <div class="display view_content border_top" v-if="dataInfo.meetingUserCount && dataInfo.meetingUserCount !='' ">
+                <div class="view_left color666666 min_width80">参会人数</div>
+                <div
+                        class="view_right display flex color333333 justify_content_right">
+                    {{  dataInfo.meetingUserCount || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top" v-if="dataInfo.meetingUserPhone && dataInfo.meetingUserPhone !='' ">
+                <div class="view_left color666666 min_width80">预约人联系电话</div>
+                <div
+                        class="view_right display flex color333333 justify_content_right">
+                    {{  dataInfo.meetingUserPhone || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top" v-if="dataInfo.startUserName && dataInfo.startUserName !='' ">
+                <div class="view_left color666666 min_width80">会议发起人姓名</div>
+                <div
+                        class="view_right display flex color333333 justify_content_right">
+                    {{  dataInfo.startUserName || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top" v-if="dataInfo.appointmentDept && dataInfo.appointmentDept !='' ">
+                <div class="view_left color666666 min_width80">预约部门</div>
+                <div
+                        class="view_right display flex color333333 justify_content_right">
+                    {{  dataInfo.appointmentDept || '' }}
+                </div>
+            </div>
+
+            <div class="display view_content border_top" v-if="dataInfo.serviceLoginId">
+                <div class="view_left color666666 min_width80">服务人员</div>
+                <div
+                    class="view_right display flex justify_content_right color333333">
+                    {{ dataInfo.serviceUserName || '' }}
+                </div>
+            </div>
+            <div class="display view_content border_top" v-else>
+                <div class="view_left color666666 min_width80">服务人员</div>
+                <div
+                    class="view_right display flex justify_content_right session_item_container_right_link"
+                    :class="serviceLoginIds ? 'color333333' : 'color999999'"
+                    @click="popupHandle('popupServiceLogin')">
+                    {{ serviceLoginId || '请选择' }}
+                </div>
+            </div>
+
+        </section>
+        <footer class="footer_container display" v-if="!dataInfo.serviceLoginId">
+            <div
+                class="button_container display flex align_item_center justify_content_center"
+                @click="submitHandle">
+                提交
+            </div>
+        </footer>
+        <!-- <van-popup
+            v-model="popupServiceLogin.show"
+            position="bottom">
+            <van-picker
+                :title="popupServiceLogin.title"
+                show-toolbar
+                :columns="popupServiceLogin.list"
+                @cancel="popupServiceLogin.show = false"
+                @confirm="popupServiceLoginConfirm">
+            </van-picker>
+        </van-popup> -->
+        <van-popup
+            v-model="popupServiceLogin.show"
+            position="right"
+            overlay-class="popup--nodes--overlay"
+            :style="{ height: '100%', width: '100%' }">
+            <div class="popup__container">
+                <section class="popup__main__container">
+                    <div
+                        class="session__item__container display border_top border_top_bofore"
+                        v-for="(item, index) in popupServiceLogin.list"
+                        :key="index"
+                        @click="handleChecked(index)">
+                        <div
+                            class="flex  display align_item_center color333333">
+                            {{ item.text }}
+                        </div>
+                        <div
+                            class="display align_item_center justify_content_right popup-main-item-img"
+                            >
+                            <div>
+                                <img :src="item.status ? '../images/checked.png' : '../images/quxiao.png'" alt="">
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <div class="popup__footer__container display">
+                    <div class="button__cancel flex" @click="popupServiceLogin.show = false">取消</div>
+                    <div class="button__container flex" @click="handleApproveUserChecked">确&nbsp;&nbsp;&nbsp;定</div>
+                </div>
+            </div>
+        </van-popup>
+    </div>
+</body>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/clipboard.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script src="../../common/js/server.js"></script>
+<script src="../js/filter.js"></script>
+<script src="../js/detailsHw.js?v=20250320"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem', 'closeWindow'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+</html>

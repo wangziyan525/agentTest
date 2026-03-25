@@ -1,0 +1,56 @@
+
+function formatNoticeTimeType (key) {
+    if (key == '') return '请选择';
+    if (key == 1) return '提前10分钟';
+    if (key == 2) return '提前30分钟';
+    if (key == 3) return '提前1小时';
+    if (key == 4) return '提前2小时';
+    return ''
+}
+
+// 持续时间
+
+function formatSustainType (key) {
+    if (key == '') return '请选择';
+    if (key == 1) return '一小时';
+    if (key == 2) return '两小时';
+    if (key == 3) return '三小时';
+    if (key == 4) return '四小时';
+    if (key == 5) return '五小时';
+    return ''
+}
+
+// 会议类型
+
+
+function formatMeetingType (key) {
+    console.log(key)
+    if (key == '0') return '普通会议';
+    if (key == '1') return '视频会议';
+    if (key == '2') return '接待会议';
+    if (key == '') return '请选择';
+    return ''
+}
+
+function formatFloor (key) {
+    if (key) return `${key}楼`;
+    return '';
+}
+
+// 格式化年月日
+
+function formatDate (param) {
+    let year, month, date;
+    year = param.getFullYear();
+    if (param.getMonth() + 1 > 9) {
+        month = param.getMonth() + 1;
+    } else {
+        month = '0' + (param.getMonth() + 1);
+    }
+    if (param.getDate() > 9) {
+        date = param.getDate()
+    } else {
+        date = '0' + param.getDate()
+    }
+    return `${year}-${month}-${date}`;
+}

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登记详情</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/statement.css?v=2.1">
+
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div  style="overflow-y: auto">
+            <div style="position: relative;background: #F6F7F9;border-radius: 5px;box-sizing: border-box">
+                <div class="listScroll">
+                    <div>
+                        <div class="listParts">
+                            <div>
+                                <div class="containList">
+                                    <div class="listLine">
+                                        <div>姓名</div>
+                                        <div>{{formData.registrationName}}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="listParts">
+                            <div>
+                                <div class="containList">
+                                    <div class="listLine">
+                                        <div>性别</div>
+                                        <div>{{formData.registrationSex == '0' ? '女':'男'}}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="listParts" style="margin-bottom:8px">
+                            <div>
+                                <div class="containList">
+                                    <div class="listLine">
+                                        <div>联系电话</div>
+                                        <div>{{formData.registrationPhoneNumber}}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="listParts" style="border-top: none">
+                            <div>
+                                <div class="containList">
+                                    <div class="listLine">
+                                        <div>所在单位</div>
+                                        <div>{{formData.registrationDept}}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="listParts">
+                            <div>
+                                <div class="containList">
+                                    <div class="listLine">
+                                        <div>职务</div>
+                                        <div>{{formData.registrationPost}}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="listParts" style="margin-bottom:8px;">
+                            <div>
+                                <div class="containList">
+                                    <div class="listLine">
+                                        <div>预约访谈时间</div>
+                                        <div>{{formData.registrationMeetingTime}}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="inputContentStatementArea">
+                        <div class="inputTitle" style="margin-bottom: 0px!important;border-top: none;height: auto;">
+                                <p>预约访谈事项</p>
+                            </div>
+                            <div class="inputContentStatement">
+                                {{formData.registrationInterview}}
+                            </div>
+                </div>
+                
+                <div>
+                    <div class="listParts" style="margin:8px 0px;border-top: none">
+                        <div>
+                            <div class="containList">
+                                <div class="listLine">
+                                    <div>提交时间</div>
+                                    <div>{{formData.updateTime}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="listParts" style="border-top: none">
+                        <div>
+                            <div class="containList">
+                                <div class="listLine">
+                                    <div>预约状态</div>
+                                    <div style="color:#44C966;">
+                                        {{formData.registrationStatus == '1' ? '预约成功' : '预约失败' }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+
+
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="js/statement.js?v=1.0"></script>
+<script type="text/javascript">
+    //初始化微信社区
+    $(function () {
+        initJSSDK(['hideAllNonBaseMenuItem', 'chooseImage', 'uploadImage', 'downloadImage', 'startRecord', 'stopRecord', 'translateVoice', 'closeWindow']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+    function getUserFinish() {
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+
+
+    }
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js?v=202110229"></script>
+
+</html>

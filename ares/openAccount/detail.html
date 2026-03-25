@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>企业开户</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/detail.css?v=0.0.8">
+</head>
+<body>
+
+    <div id="app" v-cloak>
+
+        <!-- 审批-->
+        <template v-if="isApproved">
+            <div class="baseInfo">
+                <div class="title">审批信息</div>
+                <div class="content">
+                    <div class="infoRow" >
+                        <span>审批状态</span>
+                        <span v-if="infos.approvalStatus == 1" class="status1">通过</span>
+                        <span v-if="infos.approvalStatus == 0" class="status2">拒绝</span>
+                    </div>
+                    <div v-if="infos.refuseContent && infos.refuseContent != ''" class="infoRow">
+                        <span>拒绝原因</span><span v-html="infos.refuseContent"></span>
+                    </div>
+                    <div class="infoRow">
+                        <span>审批时间</span><span>{{infos.approvalTime}}</span>
+                    </div>
+                </div>
+            </div>
+        </template>
+       
+
+        <!-- 基础信息 -->
+        <div class="baseInfo">
+            <div class="title">企业信息</div>
+            <div class="content">
+                <!-- <div class="infoRow">
+                    <span>申请号</span><span>{{infos.appNo}}</span>
+                </div>
+                <div class="infoRow">
+                    <span>集中作业中心流水号</span><span>{{infos.taskId}}</span>
+                </div> -->
+                <div class="infoRow">
+                    <span>企业名称</span><span>{{infos.orgName}}</span>
+                </div>
+                
+                <div class="infoRow">
+                    <span>企业统一社会信用代码</span><span>{{infos.creditNo}}</span>
+                </div>
+                <div class="infoRow">
+                    <span>企业地址</span><span>{{infos.registerAddress}}</span>
+                </div>
+                <div class="infoRow">
+                    <span style="width: 300px;">经营地址与注册地址是否相同</span><span>{{infos.addressIdentical=='0'?'否':'是'}}</span>
+                </div>
+                <div class="infoRow">
+                    <span>邮政编码</span><span>{{infos.postCode}}</span>
+                </div>
+                <div class="infoRow" v-if="infos.addressIdentical != 1">
+                    <span>经营地址</span><span>{{infos.orgAddress}}</span>
+                </div>
+            </div>
+        </div>
+
+         <!-- 申请人姓名 -->
+         <div class="baseInfo">
+            <div class="title">申请信息</div>
+            <div class="content">
+                <div class="infoRow">
+                    <span>申请人姓名</span><span>{{infos.appName}}</span>
+                </div>
+                <div class="infoRow">
+                    <span>手机号</span>
+                    <span>
+                        <img src="./image/tel.png" alt="" style="width: 12px;margin-right: 2px;">
+                        <a href="tel:${infos.appMobile}" style="color: #1482FF;">{{infos.appMobile}}</a></span>
+                    </span>
+                </div>
+
+                <div class="infoRow">
+                    <span>申请人职位</span><span>{{infos.appPosition==1?'法人':infos.appPosition==2?'财务':'其他'}}</span>
+                </div>
+                <div class="infoRow">
+                    <span>开设账户类型</span><span>{{readLegalMobile(infos.accountType)}}</span>
+                </div>
+                <div class="infoRow">
+                    <span>预约开户网点号</span><span>{{infos.handleDeptNo}}</span>
+                </div>
+                <div class="infoRow">
+                    <span>开户网点名称</span><span>{{infos.handleDeptName}}</span>
+                </div>
+                <div class="infoRow">
+                    <span>开户网点地址</span><span>{{infos.handleDeptAddress}}</span>
+                </div>
+                <!-- <div class="infoRow">
+                    <span>影响平台上传批次号</span><span>{{infos.yxptBatchNo}}</span>
+                </div> -->
+            </div>
+        </div>
+
+         <!-- 法人信息 -->
+         <div class="baseInfo">
+            <div class="title">法人信息</div>
+            <div class="content">
+                <div class="infoRow">
+                    <span>法人姓名</span><span>{{infos.legalName}}</span>
+                </div>
+                <div class="infoRow">
+                    <span>法人手机号</span>
+                    <span>
+                        <img src="./image/tel.png" alt="" style="width: 12px;margin-right: 2px;">
+                        <a href="tel:${infos.legalMobile}" style="color: #1482FF;">{{infos.legalMobile}}</a></span>
+                    </span>
+                </div>
+                <div class="infoRow">
+                    <span>法人证件类型</span><span>身份证</span>
+                </div>
+                <div class="infoRow">
+                    <span>法人证件号</span><span>{{infos.legalIdno}}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自动审核信息 -->
+        <div class="baseInfo">
+            <div class="title">自动审核信息</div>
+            <div class="content">
+                <div class="infoRow">
+                    <span>人工审核结果</span><span>{{infos.manualResults}}</span>
+                </div>
+                <div class="infoRow1">
+                    <div class="tit">自动审核结果</div>
+                    <div class="ct">
+                        <template v-for="(it,i) in flowList">
+                            <div class="flow">
+                                <img src="./image/flow.png" alt="">
+                                <span>{{it.auto_name}}：{{it.auto_reason}}</span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 提交返回 -->
+        <template v-if="!isApproved">
+            <div class="btn">
+                <span class="smallBtn" @click="toRefuse">拒绝</span>
+                    <span class="smallBtn" @click="toApproval(1)">同意</span>
+            </div>
+        </template>
+        <template v-else>
+            <div class="btn">
+                <span class="bigBtn" @click="back">返回</span>
+            </div>
+        </template>
+
+        <!-- 拒绝弹框 -->
+        <van-popup v-model="refusePopup">
+            <div class="refuseModel">
+                <div class="title">审批拒绝</div>
+                <div class="refuseCt">
+                    <div class="refuseTip"><em>*</em>请输⼊您要拒绝的原因！（必填）</div>
+                    <textarea cols="30" rows="4" placeholder="请输⼊拒绝原因" v-model.trim="reason" maxlength="30"></textarea>
+                    <div class="refuseBtn">
+                        <span @click="refusePopup=false">取消</span>
+                        <span @click="toApproval(0)">确定</span>
+                    </div>
+                </div>
+            </div>
+        </van-popup>
+
+    </div>
+
+</body>
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/jwxwork.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js?v=1.2"></script>
+<script type="text/javascript" src="../common/js/vConsole.min.js"></script>
+<script type="text/javascript" src="../common/js/server.js"></script>
+<script type="text/javascript" src="./js/detail.js?v=20250814024803"></script>
+<script>
+
+    // var vConsole = new VConsole();
+
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem','invoke','chooseImage','uploadImage','previewImage']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+
+    function getUserFinish() {
+        action();
+    }
+
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

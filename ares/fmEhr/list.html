@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>建档立卡</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=5.0">
+</head>
+<body style="overflow: hidden">
+<div id="app" style="overflow-y: scroll;height: 100%;display:none">
+    <div style="background: #fff;margin-bottom: 10px;">
+        <div class="tabList" style="margin-top: 0;padding: 12px 0;border-bottom: 1px solid #e1e1e1;">
+            <div @click="goIndex">我要建档</div>
+            <div class="activeTab">我的建档</div>
+        </div>
+        <div class="listTopPart">
+            <div class="listOneLine">
+                <img src="images/search.png">
+                <div class="keyInput">
+                    <van-field type="text" v-model="searchWord" placeholder="请输入企业名称/法人姓名/商户名称"
+                               maxlength="50"></van-field>
+                </div>
+                <div class="keySearchBtn" @click="queryLists()">搜索</div>
+            </div>
+        </div>
+        <div class="flexChoose flexChooseNew">
+            <div class="searchOneNew" @click="chooseType('estbdocmnby')">{{estbdocmnbyOpt[estbdocmnby]}}<img
+                src="images/dropDown.png"></div>
+            <div class="searchOneNew" @click="chooseType('status')">{{statusOpt[status]}}<img
+                    src="images/dropDown.png"></div>
+            <div class="searchOneNew" @click="chooseType('tag')" v-if="datatype=='1'">{{tagOpt[tag]}}<img
+                    src="images/dropDown.png"></div>
+        </div>
+    </div>
+    <div>
+        <van-popup v-model="typeshow" position="bottom">
+            <van-picker
+                    show-toolbar
+                    :columns="typeList"
+                    @confirm="onTypeConfirm"
+                    @cancel="typeshow=false"
+            >
+            </van-picker>
+        </van-popup>
+    </div>
+    <div v-if="list.length>0">
+
+
+        <div class="listContentNew" v-for="item in list" >
+            <div v-if="item.deleted=='Y'" >
+                <div class="listTopOneNew" >
+                    <div class="listOneNew" @click="goDetail(item.id,item.estbdocmnby,'0')">
+                        <div>{{item.entpnm}}</div>
+                        <div class="listStatusNew">
+                            <div class="listStatus10">已作废</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="listTextNew">
+                    <div class="listTime">法人：{{item.entpctcmannm}}</div>
+                    <div class="listTime">作废时间：{{item.invaliddate}}</div>
+                    <div class="listTime listReason">
+                        <div>作废原因：</div>
+                        <div>{{item.invalidreason}}</div>
+                    </div>
+                </div>
+            </div>
+            <div  v-else>
+                <div class="listTopOneNew" >
+                    <div class="listOneNew" @click="goDetail(item.id,item.estbdocmnby,'1')">
+                        <div>{{item.entpnm}}</div>
+                        <div class="listStatusNew">
+                            <div :class="'listStatus'+item.status">{{listStatusOpt[item.status]}}</div>
+                        </div>
+                    </div>
+                    <div class="listTag">
+                        <div  :class="'phjdzt'+item.estbdocmnby">{{estbdocmnbyListOpt[item.estbdocmnby]}}</div>
+                        <div  v-if="item.isopencard" :class="'isopencard'+item.isopencard">{{listopencardOpt[item.isopencard]}}</div>
+                        <div  v-if="item.isopenacct" :class="'isopencard'+item.isopenacct">{{listopenacctOpt[item.isopenacct]}}</div>
+                    </div>
+                </div>
+                <div class="listTextNew">
+                    <div class="listTime">法人：{{item.entpctcmannm}}</div>
+                    <div class="listTime" v-if="item.status=='1'">有效认定时间：{{item.updateyxdate}}</div>
+                    <div class="listTime" v-else>首次建档时间：{{item.create_time}}</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="nodate" v-else>
+        <div class="noMessage">
+            <img src="images/noMessage.png">
+        </div>
+        暂无数据
+    </div>
+
+    <div style="height: 88px;"></div>
+    <div class="footTab">
+        <div class="footOne">
+            <img :src="page=='page1'?'images/indexChoose.png':'images/index.png'">
+            <div :class="page=='page1'?'choosetab':''">我的建档</div>
+        </div>
+        <div class="footOne" @click="toDeclarePage()" v-if="datatype=='1'">
+            <img :src="page=='page3'?'images/jdsbChoose.png':'images/jdsb.png'">
+            <div :class="page=='page3'?'choosetab':''">建档申报</div>
+        </div>
+        <div class="footOne" @click="toPage()">
+            <img :src="page=='page2'?'images/listChoose.png':'images/list.png'">
+            <div :class="page=='page2'?'choosetab':''">建档数据</div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="js/list.js?v=5"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+
+    function getUserFinish() {
+        initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'closeWindow']);
+        //ios页面回退不刷新
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) {
+                location.reload();
+            }
+        });
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+            WeixinJSBridge.on('menu:setfont', function () {
+                WeixinJSBridge.invoke('setFontSizeCallback', {'fontSize': '0'});
+            });
+
+        });
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+    // initFun()
+
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

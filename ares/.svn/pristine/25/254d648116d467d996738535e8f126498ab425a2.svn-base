@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>拜访人信息录入</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/foreignApply.css?v=0.0.5">
+</head>
+<body>
+
+    <div id="app" v-cloak>
+
+        <!-- 提交页 -->
+        <!-- 访客信息 -->
+        <div class="visitInfo">
+            <div class="info">
+                <span>被拜访人姓名</span>
+                <span>{{visitedName}}</span>
+            </div>
+        </div>
+        <!-- 访客信息 -->
+        <div class="visitInfo">
+            <div class="info">
+                <span>拜访人姓名</span>
+                <input type="text" placeholder="请输入" v-model.trim="name" @blur="canSBubTest">
+            </div>
+            <div class="info">
+                <span>拜访人性别</span>
+                <div class="answer">
+                    <van-radio-group v-model="gender" direction="horizontal">
+                        <van-radio name='1' icon-size="15">男</van-radio>
+                        <van-radio name='2' icon-size="15">女</van-radio>
+                    </van-radio-group>
+                </div>
+            </div>
+            <div class="info">
+                <span>联系电话</span>
+                <input type="number" placeholder="请输入" v-model.trim="tel" @blur="canSBubTest">
+            </div>
+            <div class="info">
+                <span>拜访时间</span>
+                <input type="text" placeholder="请选择" v-model.trim="time" readonly @click="choosedTime" >
+                <b><img src="./image/to.png" alt=""></b>
+            </div>
+        </div>
+        <!-- 访客信息 -->
+        <div class="visitInfo">
+            <div class="info1">
+                <span class="title">拜访事由</span>
+                <template v-if="isweixin">
+                    <div class="speech"  @click="toRecord()"><img src="./image/speech.png" alt=""><span>请说出拜访事由</span></div>
+                </template>
+                <textarea rows="3" v-model.trim='reason' maxlength='100' placeholder="请输入拜访事由" @blur="canSBubTest"></textarea>
+            </div>
+
+        </div>
+        <!-- 访客信息 -->
+        <div class="visitInfo">
+            <div class="info2">
+                <div class="title">人脸照片<span>（上传系统后可通过门禁出入总行大楼）</span></div>
+                <!-- 上传前 -->
+                <template v-if="identityPicPath == ''">
+                    <div class="uploadImg">
+                        <div class="uploadding"></div>
+                        <input name="file" type="file" id="file1" accept="image/*" @change="upload($event)">
+                    </div>
+                </template>
+                <!-- 上传后 -->
+                <template v-else>
+                    <div class="uploadImg">
+                        <div class="uploaded">
+                            <img class="myFaceImg" :src="identityPicPath" alt="" @click="watchFaceImg">
+                            <img class="colseFaceImg" src="./image/close.png" alt="" @click="colseFaceImg">
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+        <!-- 按钮 -->
+        <template>
+            <div class="btn">
+                <template v-if="isCanSub">
+                    <span @click="subInfo">提交</span>
+                </template>
+                <template v-else>
+                    <span style="opacity: .5;">提交</span>
+                </template>
+                <div style="width: 100%;height: 30px;"></div>
+            </div>
+        </template>
+        
+
+        <!-- 结果页 -->
+        <van-popup v-model="resultPage" position="left" :style="{width:'100%',height:'100%'}">
+            <div class="main">
+                <div class="ct">
+                    <div class="resultIcon"><img :src="resultImg"></div>
+                    <div class="resultText">{{resultText}}</div>
+                    <div class="resultText1">{{resultText1}}</div>
+                </div>
+                <!-- <div class="resultBtn" @click="resultBtn">
+                    <span>确认</span>
+                </div> -->
+                <div style="width: 100%;height: 100px;"></div>
+            </div>
+        </van-popup>
+
+
+        <!-- 时间选择器 -->
+        <van-popup v-model="isShowChooseTime" position="bottom" style="border-radius: 6px;">
+            <van-datetime-picker type="datetime"
+                title="按日筛选"
+                :min-date='minDate'
+                :max-date='maxDate'
+                @cancel="isShowChooseTime=false"
+                @confirm="chooseTime">
+            </van-datetime-picker>
+        </van-popup>
+
+
+         <!-- 录音界面-->
+         <template v-if="isShowRecord">
+            <div class="record">
+                <div class="content">
+                    <img src="./image/luyin.gif" alt="">
+                    <span @click="endRecord()">结束录音</span>
+                </div>
+            </div>
+        </template>
+      
+    </div>
+
+</body>
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../../common/js/jwxwork.js"></script>
+<script type="text/javascript" src="../../common/js/watermark.js?v=1.2"></script>
+<script type="text/javascript" src="../../common/js/vConsole.min.js"></script>
+<script type="text/javascript" src="../../common/js/compressPhoto.js"></script>
+<script type="text/javascript" src="../../common/js/server.js"></script>
+<script type="text/javascript" src="./js/foreignApply.js?v=0.0.46"></script>
+<script>
+
+    // var vConsole = new VConsole();
+
+
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem','invoke', 'startRecord', 'stopRecord', 'translateVoice', 'onVoiceRecordEnd']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    action();
+
+</script>

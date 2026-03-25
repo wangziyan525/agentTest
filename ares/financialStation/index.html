@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport">
+    <title>零售产品总览</title>
+    <link rel="stylesheet" href="css/index.css?v=0.0.1">
+</head>
+<body>
+    <div class="page" id="app">
+        <header class="top-bar">
+            <div class="status-bar">
+                <div class="status-time">9:41</div>
+                <div class="status-icons">
+                    <div class="signal-icon" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="wifi-icon" aria-hidden="true"></div>
+                    <div class="battery-icon" aria-hidden="true">
+                        <span class="battery-level"></span>
+                    </div>
+                </div>
+            </div>
+            <button class="back-button" type="button" aria-label="返回"></button>
+            <h1 class="page-title">零售产品总览</h1>
+        </header>
+
+        <main class="overview-page">
+            <section class="hero-section">
+                <div class="tab-list" id="tabList"></div>
+                <section class="featured-card" id="featuredCard"></section>
+            </section>
+
+            <section class="product-panel">
+                <div class="sort-bar" id="sortBar"></div>
+                <div class="product-list" id="productList"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/index.js?v=0.0.1"></script>
+</body>
+</html>

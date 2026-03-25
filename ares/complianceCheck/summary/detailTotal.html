@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/summary/detailTotal.css?v=2.0">
+</head>
+<body style="overflow: hidden">
+<div id="app" style="overflow-y: scroll;height: 100%;display:none">
+
+    <div class="listTopPart">
+        <div class="listOneLine" v-if="isShow">
+            <div class="keyInput" style="position: relative">
+                <input class="weui-input" type="text" placeholder="请选择层级" v-model='searchWord.searchLeveltxt' @click="showTap('1')" readonly>
+                <img src="../image/arrow.png" class="year" style="position: absolute;width: 8px;height: 12px;top: 5px;right: 1px">
+            </div>
+        </div>
+        <div class="listsecondLine">
+            <div class="dateDown" @click="pickerdate('startTime')">{{searchWord.startTime?searchWord.startTime:"开始时间"}}</div>
+            <div>—</div>
+            <div class="dateDown" @click="pickerdate('endTime')">{{searchWord.endTime?searchWord.endTime:"结束时间"}}</div>
+        </div>
+        <div class="searchBtn">
+            <div @click="reset()">重置</div>
+            <div @click="searchList()">查询</div>
+        </div>
+
+        <van-popup
+                v-model="popupDataShow"
+                position="bottom"
+                :close-on-click-overlay="false">
+            <van-datetime-picker
+                    v-model="currentDate"
+                    type="date"
+                    title="选择日期"
+                    @confirm="getTime"
+                    @cancel="closeTime"
+            >
+            </van-datetime-picker>
+        </van-popup>
+    </div>
+    <div class="download"><p>机构数据</p><p @click="detailInquiryExport()" v-if="downIsShow"><img src="../image/download.png">下载报表</p></div>
+    <div class="dataInfoDiv" style="overflow-y: auto">
+        <div class="title" v-if="searchLevel=='headoffice' || searchLevel=='firstBranch'" style="width: 1920px">
+            <p>一级机构</p>
+            <p>经营支行</p>
+            <p>机构号</p>
+            <p>检查时间</p>
+            <p>检查对象</p>
+            <p>是否专项检查</p>
+            <p>专项检查名称</p>
+            <p>业务发生时间</p>
+            <p>业务种类</p>
+            <p>业务流水号</p>
+            <p>是否存在问题</p>
+            <p>问题记录</p>
+            <p>整改措施</p>
+            <p>整改完成时间</p>
+            <p>是否完成整改</p>
+            <p>操作</p>
+        </div>
+        <div class="title" v-if="searchLevel=='operateBranch'" style="width: 1440px">
+            <p>检查时间</p>
+            <p>检查对象</p>
+            <p>是否专项检查</p>
+            <p>专项检查名称</p>
+            <p>业务发生时间</p>
+            <p>业务种类</p>
+            <p>业务流水号</p>
+            <p>是否存在问题</p>
+            <p>问题记录</p>
+            <p>整改措施</p>
+            <p>整改完成时间</p>
+            <p>是否完成整改</p>
+        </div>
+        <div v-if="list.length>0 && (searchLevel=='headoffice' || searchLevel=='firstBranch')">
+            <div class="listContent" v-for="item in list">
+                <div class="listCard" style="width: 1920px">
+                    <div>{{item.checkFirstOrgName ? item.checkFirstOrgName : '--'}}</div>
+                    <div>{{item.checkSecondOrgName ? item.checkSecondOrgName : '--'}}</div>
+                    <div>{{item.orgId ? item.orgId : '--'}}</div>
+                    <div>{{item.checkDate ? item.checkDate : '--'}}</div>
+                    <div>{{item.checkObject ? item.checkObject : '--'}}</div>
+                    <div v-if="item.specialCheck=='1'">是</div>
+                    <div v-if="item.specialCheck=='2'">否</div>
+                    <div>{{item.specialCheckName ? item.specialCheckName : '--'}}</div>
+                    <div>{{item.occurrenceDate ? item.occurrenceDate : '--'}}</div>
+                    <div v-if="item.businessType=='1'">基金</div>
+                    <div v-if="item.businessType=='2'">保险</div>
+                    <div v-if="item.businessType=='3'">贵金属</div>
+                    <div v-if="item.businessType=='4'">存款</div>
+                    <div v-if="item.businessType=='5'">理财</div>
+                    <div v-if="item.businessType=='7'">国债</div>
+                    <div v-if="item.businessType=='6'">其他</div>
+                    <div v-if="item.businessType==undefined || item.businessType==null">--</div>
+                    <div>{{item.businessNumber ? item.businessNumber : '--'}}</div>
+                    <div v-if="item.anyProblem=='1'">是</div>
+                    <div v-if="item.anyProblem=='2'">否</div>
+                    <div>{{item.problemRecord ? item.problemRecord : '--'}}</div>
+                    <div>{{item.rectificationMeasures ? item.rectificationMeasures : '--'}}</div>
+                    <div>{{item.rectificationFinishDate ? item.rectificationFinishDate : '--'}}</div>
+                    <div v-if="item.whetherRectificationFinish=='1'">是</div>
+                    <div v-if="item.whetherRectificationFinish=='2'">否</div>
+                    <div v-if="item.whetherRectificationFinish=='3'">关闭</div>
+                    <div @click="objectiveClose(item.problemId)" v-if="item.problemId!=undefined && item.whetherRectificationFinish=='2' && presidentFlag=='1'" style="color: #0B4EA7;text-decoration:underline ">下发整改关闭</div>
+                    <div v-if="item.problemId==undefined || item.whetherRectificationFinish=='1' || presidentFlag == '0'">--</div>
+                </div>
+            </div>
+        </div>
+        <div v-if="list.length>0 && searchLevel=='operateBranch'">
+            <div class="listContent" v-for="item in list">
+                <div class="listCard" style="width: 1440px">
+                    <div>{{item.checkDate ? item.checkDate : '--'}}</div>
+                    <div>{{item.checkObject ? item.checkObject : '--'}}</div>
+                    <div v-if="item.specialCheck=='1'">是</div>
+                    <div v-if="item.specialCheck=='2'">否</div>
+                    <div>{{item.specialCheckName ? item.specialCheckName : '--'}}</div>
+                    <div>{{item.occurrenceDate ? item.occurrenceDate : '--'}}</div>
+                    <div v-if="item.businessType=='1'">基金</div>
+                    <div v-if="item.businessType=='2'">保险</div>
+                    <div v-if="item.businessType=='3'">贵金属</div>
+                    <div v-if="item.businessType=='4'">存款</div>
+                    <div v-if="item.businessType=='5'">理财</div>
+                    <div v-if="item.businessType=='7'">国债</div>
+                    <div v-if="item.businessType=='6'">其他</div>
+                    <div v-if="item.businessType==undefined || item.businessType==null">--</div>
+                    <div>{{item.businessNumber ? item.businessNumber : '--'}}</div>
+                    <div v-if="item.anyProblem=='1'">是</div>
+                    <div v-if="item.anyProblem=='2'">否</div>
+                    <div>{{item.problemRecord ? item.problemRecord : '--'}}</div>
+                    <div>{{item.rectificationMeasures ? item.rectificationMeasures : '--'}}</div>
+                    <div>{{item.rectificationFinishDate ? item.rectificationFinishDate : '--'}}</div>
+                    <div v-if="item.whetherRectificationFinish=='1'">是</div>
+                    <div v-if="item.whetherRectificationFinish=='2'">否</div>
+                    <div v-if="item.whetherRectificationFinish=='3'">关闭</div>
+                </div>
+            </div>
+        </div>
+        <div  v-if="list.length==0" class="nodate">
+            暂无数据
+        </div>
+    </div>
+
+
+    <van-popup v-model="popupBottomShow1" @click-overlay="closeOverlayBindtap" :close-on-click-overlay="false"
+               position="bottom">
+        <van-picker show-toolbar item-height="50px" visible-item-count="5" :title="popupObject1.title"
+                    :columns="popupObject1.columns" @cancel="closeOverlayBindtap" @confirm="onConfirm">
+        </van-picker>
+    </van-popup>
+</div>
+</body>
+<script src="../../common/js/vue.min.js"></script>
+<script src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="../js/summary/detailTotal.js"></script>
+ <script src="../../common/js/vConsole.min.js"></script>
+<script type="text/javascript">
+    //var vConsole = new VConsole();
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+    function getUserFinish(){
+        initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+            WeixinJSBridge.on('menu:setfont', function() {
+                WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+            });
+
+        });
+
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+</html>

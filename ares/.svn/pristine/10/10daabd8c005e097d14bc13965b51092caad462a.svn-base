@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>个体建档</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=4.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none">
+        <div v-if="page=='page0'">
+            <div class="contentPart">
+                <div class="contentLine contentLineRight selectChoose" @click="toPage('page1')">
+                    <div>基本信息</div>
+                    <div v-if="ifView1=='全部待填写'" style="color: #4675C9;">{{ifView1}}</div>
+                    <div v-else>{{ifView1}}</div>
+                </div>
+                <div class="contentLine contentLineRight selectChoose" @click="toPage('page2')">
+                    <div>融资需求与负债</div>
+                    <div v-if="ifView2=='全部待填写'" style="color: #4675C9;">{{ifView2}}</div>
+                    <div v-else>{{ifView2}}</div>
+                </div>
+                <div class="contentLine contentLineRight selectChoose" @click="toPage('page3')">
+                    <div>经营情况</div>
+                    <div v-if="ifView3=='全部待填写'" style="color: #4675C9;">{{ifView3}}</div>
+                    <div v-else>{{ifView3}}</div>
+                </div>
+                <div class="contentLine contentLineRight selectChoose" @click="toPage('page4')">
+                    <div>家庭情况</div>
+                    <div v-if="ifView4=='全部待填写'" style="color: #4675C9;">{{ifView4}}</div>
+                    <div v-else>{{ifView4}}</div>
+                </div>
+                <div class="contentLine contentLineRight selectChoose" @click="toPage('page5')">
+                    <div>资产情况</div>
+                    <div v-if="ifView5=='全部待填写'" style="color: #4675C9;">{{ifView5}}</div>
+                    <div v-else>{{ifView5}}</div>
+                </div>
+            </div>
+            <div class="contentPart">
+                <div class="contentChoose">
+                    <div class="chooseTitle">客户需求<span class="warnSpan">*</span></div>
+                    <div class="choosePart">
+                        <div class="chooseOne" style="width: 50%;"  v-for="item in chooseList1" @click="multipleChoose('AcctMrk',item.value)">
+                            <img :src="detail.AcctMrk && detail.AcctMrk.indexOf(item.value)!==-1?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.AcctMrk && detail.AcctMrk.indexOf('4')!==-1">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.AcctMrkDsc" rows="2" autosize placeholder="如客户有工资代发、信用卡、贵金属等需求，不少于10个汉字才可申报有效" maxlength="100"></van-field>
+                    </div>
+                </div>
+            </div>
+            <div class="contentPart" v-if="datatype=='2'">
+                <div class="contentChoose">
+                    <div class="chooseTitle">客群标签<span  class="warnSpan">*</span></div>
+                    <div class="choosePart">
+                        <div class="chooseOne" style="width: 50%;" v-for="item in chooseList01" @click="multipleChoose('custtype',item.value)">
+                            <img :src="multipleShow('custtype',item.value)?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.custtype && detail.custtype.indexOf('11')!==-1">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.custdesc" rows="1" autosize placeholder="请输入" maxlength="100"></van-field>
+                    </div>
+                </div>
+            </div>
+            <div class="contentPart">
+                <div class="contentChoose">
+                    <div class="chooseTitle">备注</div>
+                    <div class="textAreaPart">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.Rak" rows="4" autosize placeholder="请输入其他情况，如征信情况、我行账户开立情况等" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div style="position: relative;">
+                    <div class="record">
+                        <div @click="showRecorddiv('Rak')">
+                            <img src="images/voice.png" class="voice">
+                        </div>
+                    </div>
+                    <div class="recodeblock" @click="startRecord()">
+                        <img src="images/luyin.gif"> <div start="no" class="luyinbtn">开始说话</div>
+                    </div>
+                </div>
+            </div>
+    
+            <div v-if="ifAdd=='1'">
+                <div class="applyButton"  @click="submits">
+                    <div >提交</div>
+                </div>
+                <div class="cancelButton"  @click="resetBut">
+                    <div >重新建档</div>
+                </div>
+            </div>
+            <div v-else-if="detail.deleted=='Y'">
+
+            </div>
+            <div class="toSubmit" v-else>
+                <div @click="cancelBtn" v-if="detail.status =='1'">作废</div>
+                <div @click="deletes" v-else>删除</div>
+                <div @click="submits">提交</div>
+            </div>
+            <van-popup v-model="showcancelPopup" closeable round position="bottom" :style="{height:'40%'}">
+                <div class="contentPart">
+                    <div class="contentChoose">
+                        <div class="chooseTitle">作废原因</div>
+                        <div class="textAreaPart">
+                            <van-field type="textarea"  v-model="refuseMessage" rows="4" autosize placeholder="请输入作废原因" maxlength="200"></van-field>
+                        </div>
+                    </div>
+                    <div style="position: relative;">
+                        <div class="record">
+                            <div @click="showRecorddiv('refuseMessage')">
+                                <img src="images/voice.png" class="voice">
+                            </div>
+                        </div>
+                        <div class="recodeblock" @click="startRecord()">
+                            <img src="images/luyin.gif"> <div start="no" class="luyinbtn">开始说话</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="applyButton"  @click="zuofei" style="width: 88%;margin: 10px auto;">
+                    <div >提交</div>
+                </div>
+            </van-popup>
+            <div class="warnText">
+                <div>1、建档提交后除了定位信息，其余仍可进行修改。</div>
+                <div>2、*号内容为建档阶段必须采集字段。</div>
+                <div>3、有效建档客户认定标准：</div>
+                <div>
+                    <div>（1）建档过程中“基本信息”及“经营情况”两部分收集字段不少于60%。</div>
+                    <div>（2）建档过程中“客户需求”必须勾选，若选择为“其他”，需输⼊客户对其他⾦融产品的需求，不少于10个汉字。</div>
+                    <div>（3）建档过程中必须收集到企业及个体的统⼀社会信⽤代码、经营地址、经营场所照⽚、联系⼈电话。
+                        上述三个要求均满⾜，才可进行有效建档申报。</div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="page=='page1'">
+            <div class="contentPart">
+                <div class="contentLine">
+                    <div class="textTitle">商户名称<span class="warnSpan">*</span></div>
+                    <div class="inputLine">                        
+                        <van-field  @blur="localStrongFun()" v-model="detail.EntpNm"  rows="1" placeholder="请输入" maxlength="20" center></van-field>
+                    </div>
+                </div>
+                <div class="contentLine">
+                    <div class="textTitle">统一社会信用代码</div>
+                    <div class="inputLine">                        
+                        <van-field @blur="checkInput('UnifyUvslCrCd')"  :readonly="detail.status =='1' && detail.UnifyUvslCrCd" v-model="detail.UnifyUvslCrCd" rows="1" placeholder="请输入" maxlength="18" center></van-field>
+                    </div>
+                </div>
+                <div class="contentChoose">
+                    <div class="chooseTitle regetAddress">
+                        <div>企业经营地址<span  class="warnSpan">*</span></div>
+                        <div class="getAddress" @click="getAdess" v-if="!ifreadonly">重新定位</div>
+                    </div>
+                    <div class="textAreaPart">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.EntpCorpAdr" readonly rows="2" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                
+            </div>
+            <!-- <div class="contentPart">
+                <div class="contentLine selectChoose">
+                    <div class="chooseTitle">省市区<span class="warnSpan">*</span></div>
+                    <div v-if="detail.Province"  style="color:#000">{{detail.Province}}-{{detail.City}}-{{detail.District}}</div>
+                </div>
+            </div>
+            <van-popup v-model="showAreaPicker" position="bottom">
+                <van-area
+                        title="选择省市区"
+                        :area-list="areaList"
+                        value="610100"
+                        @confirm="areaConfirm"
+                        @cancel="showAreaPicker=false"
+                >
+                </van-area>
+            </van-popup> -->
+            <div class="contentPart">
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle imgWarn">招牌照片<span class="warnSpan">*</span> <span class="imgWarnSpan">（正面拍摄招牌或门头，确保完整清晰、可识别）</span></div>
+                    <div class="imgUpload">
+                        <div class="hasImg" v-for="(itemImg,indexImg) in imageLocal1">
+                            <img :src="itemImg" class="uploadImg">
+                            <img src="images/close.png" class="closeImg" @click="deleteImg(indexImg,'1')">
+                        </div>
+                        <div class="hasImg" @click="afterRead('1')" v-if="imageLocal1.length<1">
+                            <img src="images/upload.png" class="uploadImg">
+                        </div>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle imgWarn">个体工商户经营场所照片<span class="warnSpan">*</span><span class="imgWarnSpan">（至少上传一张个体工商户门店内部经营照片，可上传最多三张）</span></div>
+                    <div class="imgUpload">
+                        <div class="hasImg" v-for="(itemImg,indexImg) in imageLocal3">
+                            <img :src="itemImg" class="uploadImg">
+                            <img src="images/close.png" class="closeImg" @click="deleteImg(indexImg,'3')">
+                        </div>
+                        <div class="hasImg" @click="afterRead('3')" v-if="imageLocal3.length<3">
+                            <img src="images/upload.png" class="uploadImg">
+                        </div>
+                    </div>
+                </div>
+                <div class="contentChoose">
+                    <div class="chooseTitle imgWarn">营业执照 <span class="imgWarnSpan">（正面拍摄营业执照，确保完整清晰、可识别）</span></div>
+                    <div class="imgUpload">
+                        <div class="hasImg" v-for="(itemImg,indexImg) in imageLocal2">
+                            <img :src="itemImg" class="uploadImg">
+                            <img src="images/close.png" class="closeImg" @click="deleteImg(indexImg,'2')">
+                        </div>
+                        <div class="hasImg" @click="afterRead('2')" v-if="imageLocal2.length<1">
+                            <img src="images/upload.png" class="uploadImg">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="contentPart">
+                
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">所属行业</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList2" @click="singChoose('AtchIndus',item.value)">
+                            <img :src="item.value==detail.AtchIndus?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.AtchIndus=='6'">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.AtchIndusDsc" rows="1" autosize placeholder="请输入所属行业描述" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">经营年限</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList3" @click="singChoose('CorpYr',item.value)">
+                            <img :src="item.value==detail.CorpYr?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <!-- <div class="contentChoose borderLine">
+                    <div class="chooseTitle">是否光伏户</div>
+                    <div class="choosePart">
+                        <div class="choosePart">
+                            <div class="chooseOne" v-for="item in chooseList19" @click="singChoose('MANAGERNO',item.value)">
+                                <img :src="item.value==detail.MANAGERNO?'images/choose.png':'images/unchoose.png'">
+                                <div>{{item.text}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="contentLine">
+                    <div class="textTitle">联系人姓名<span class="warnSpan">*</span></div>
+                    <div class="inputLine">                        
+                        <van-field  @blur="localStrongFun()" v-model="detail.EntpCtcManNm" rows="1" placeholder="请输入" maxlength="10" center></van-field>
+                    </div>
+                </div>
+                <div class="contentLine">
+                    <div class="textTitle">身份证号码 </div>
+                    <div class="inputLine">                        
+                        <van-field  @blur="checkInput('EstbDocManIdentNum')" :readonly="detail.status =='1' && detail.EstbDocManIdentNumOld !=''" v-model="detail.EstbDocManIdentNum" rows="1" placeholder="请输入" maxlength="18" center></van-field>
+                    </div>
+                </div>
+                <div class="contentLine">
+                    <div class="textTitle">联系人电话</div>
+                    <div class="inputLine">                        
+                        <van-field type="tel"  @blur="checkInput('EntpCtcManTelNum')" v-model="detail.EntpCtcManTelNum" rows="1" placeholder="请输入" maxlength="11" center></van-field>
+                    </div>
+                </div>
+               
+            </div>
+
+            
+            <div class="applyButton" @click="toPage('page0')">
+                <div>返回</div>
+            </div>
+        </div>
+
+        <div v-if="page=='page2'">
+            <div class="contentPart">
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle imgWarn">资金用途<span class="imgWarnSpan">（多选）</span></div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList4" @click="multipleChoose('TchPps',item.value)">
+                            <img :src="multipleShow('TchPps',item.value)?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.TchPps && detail.TchPps.indexOf('10')!==-1">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.TchPpsDsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">希望多久可以拿到贷款</div>
+                    <div class="choosePart">
+                        <div class="choosePart">
+                            <div class="chooseOne" v-for="item in chooseList5" @click="singChoose('ExpcTrm',item.value)">
+                                <img :src="item.value==detail.ExpcTrm?'images/choose.png':'images/unchoose.png'">
+                                <div>{{item.text}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">利率接受范围</div>
+                    <div class="choosePart">
+                        <div class="choosePart">
+                            <div class="chooseOne" v-for="item in chooseList6" @click="singChoose('IntRtAcptScop',item.value)">
+                                <img :src="item.value==detail.IntRtAcptScop?'images/choose.png':'images/unchoose.png'">
+                                <div>{{item.text}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contentChoose">
+                    <div class="chooseTitle">期望额度</div>
+                    <div class="choosePart">
+                        <div class="choosePart">
+                            <div class="chooseOne" v-for="item in chooseList72" @click="singChoose('ExptLmt',item.value)">
+                                <img :src="item.value==detail.ExptLmt?'images/choose.png':'images/unchoose.png'">
+                                <div>{{item.text}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+            <div class="contentPart">
+                
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">负债情况</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList102" @click="singChoose('LglRprsLbyCcst',item.value)">
+                            <img :src="item.value==detail.LglRprsLbyCcst?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="contentChoose ">
+                    <div class="chooseTitle imgWarn">负债类型<span class="imgWarnSpan">（多选）</span></div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList9" @click="multipleChoose('LglRprsLbyTp',item.value)">
+                            <img :src="detail.LglRprsLbyTp && detail.LglRprsLbyTp.indexOf(item.value)!==-1?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+
+            <div class="applyButton" @click="toPage('page0')">
+                <div>返回</div>
+            </div>
+        </div>
+
+        <div v-if="page=='page3'">
+            <div class="contentPart">
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">主营业务</div>
+                    <div class="textAreaPart">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.EntpMnByBsn" rows="3" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div style="position: relative;">
+                    <div class="record">
+                        <div @click="showRecorddiv('EntpMnByBsn')">
+                            <img src="images/voice.png" class="voice">
+                        </div>
+                    </div>
+                    <div class="recodeblock" @click="startRecord()">
+                        <img src="images/luyin.gif"> <div start="no" class="luyinbtn">开始说话</div>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">经营场所</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList112" @click="singChoose('CorpPce',item.value)">
+                            <img :src="item.value==detail.CorpPce?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">近3个月月均移动支付流水</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList122" @click="singChoose('PrxThreeMoMoyAvMovPytSeq',item.value)">
+                            <img :src="item.value==detail.PrxThreeMoMoyAvMovPytSeq?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="contentLine">
+                    <div class="textTitle">
+                        <div>家庭月均支出（元）</div>
+                        <div class="warnTitle">含房贷/车贷/子女教育/日常消费等</div>
+                    </div>
+                    <div class="inputLine">                        
+                        <van-field  type="number"  @blur="localStrongFun()" v-model="detail.FamMoyAvExpn" rows="1" placeholder="请输入" maxlength="20" center></van-field>
+                    </div>
+                </div>
+            </div>
+            <div class="applyButton" @click="toPage('page0')">
+                <div>返回</div>
+            </div>
+        </div>
+
+        <div v-if="page=='page4'">
+            <div class="contentPart">
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">法人年龄范围</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList20" @click="singChoose('frnlfw',item.value)">
+                            <img :src="item.value==detail.frnlfw?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.frnlfw=='6'">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.frnlfwotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">法人婚姻子女情况</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList21" @click="singChoose('frhyznqk',item.value)">
+                            <img :src="item.value==detail.frhyznqk?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.frhyznqk=='5'">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.frhyznqkotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">法人子女学龄</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" style="width: 50%;" v-for="item in chooseList22" @click="singChoose('frznxl',item.value)">
+                            <img :src="item.value==detail.frznxl?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.frznxl=='5'">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.frznxlotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">赡养老人情况</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList23" @click="singChoose('sylrqk',item.value)">
+                            <img :src="item.value==detail.sylrqk?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.sylrqk=='4'">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.sylrqkotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">家庭月均支出情况</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList26" @click="singChoose('jtyjzc',item.value)">
+                            <img :src="item.value==detail.jtyjzc?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">家庭情况主观评价<span class="imgWarnSpan">（多选）</span></div>
+                    <div class="choosePart">
+                        <div class="chooseOne" style="width: 50%;" v-for="item in chooseList27" @click="multipleChoose('jtqkzgpj',item.value)">
+                            <img :src="multipleShow('jtqkzgpj',item.value)?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.jtqkzgpj && detail.jtqkzgpj.indexOf('5')!==-1">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.jtqkzgpjotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div class="contentChoose">
+                    <div class="chooseTitle">信息来源<span class="imgWarnSpan">（多选）</span></div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList28" @click="multipleChoose('datasourcesjtqk',item.value)">
+                            <img :src="multipleShow('datasourcesjtqk',item.value)?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.datasourcesjtqk && detail.datasourcesjtqk.indexOf('5')!==-1">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.datasourcesjtqkotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+               
+            </div>
+
+            <div class="applyButton" @click="toPage('page0')" >
+                <div>返回</div>
+            </div>
+
+        </div>
+
+        <div v-if="page=='page5'">
+            <div class="contentPart">
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">房产情况</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList29" @click="singChoose('fcqk',item.value)">
+                            <img :src="item.value==detail.fcqk?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.fcqk=='5'">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.fcqkotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">房产评价</div>
+                    <div class="choosePart">
+                        <div class="chooseOne"  style="width: 50%;" v-for="item in chooseList30" @click="singChoose('fcpj',item.value)">
+                            <img :src="item.value==detail.fcpj?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.fcpj=='4'">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.fcpjotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">车产情况</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList31" @click="singChoose('ccqk',item.value)">
+                            <img :src="item.value==detail.ccqk?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.ccqk=='3'">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.ccqkotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">车产评价</div>
+                    <div class="choosePart">
+                        <div class="chooseOne" style="width: 50%;" v-for="item in chooseList32" @click="singChoose('ccpj',item.value)">
+                            <img :src="item.value==detail.ccpj?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.ccpj=='3'">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.ccpjotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">金融资产偏好<span class="imgWarnSpan">（多选）</span></div>
+                    <div class="choosePart">
+                        <div class="chooseOne" style="width: 50%;"  v-for="item in chooseList33" @click="multipleChoose('jrzcph',item.value)">
+                            <img :src="multipleShow('jrzcph',item.value)?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <!-- <div class="textAreaPart" v-if="detail.jrzcph && detail.jrzcph.indexOf('5')!==-1">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.jrzcphotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div> -->
+                </div>
+                
+                <div class="contentChoose borderLine">
+                    <div class="chooseTitle">金融资产主观评价<span class="imgWarnSpan">（多选）</span></div>
+                    <div class="choosePart">
+                        <div class="chooseOne" style="width: 50%;" v-for="item in chooseList34" @click="multipleChoose('jrzczgpj',item.value)">
+                            <img :src="multipleShow('jrzczgpj',item.value)?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.jrzczgpj && detail.jrzczgpj.indexOf('5')!==-1">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.jrzczgpjotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+                <div class="contentChoose">
+                    <div class="chooseTitle">信息来源<span class="imgWarnSpan">（多选）</span></div>
+                    <div class="choosePart">
+                        <div class="chooseOne" v-for="item in chooseList35" @click="multipleChoose('datasourcesjtzcqk',item.value)">
+                            <img :src="multipleShow('datasourcesjtzcqk',item.value)?'images/choose.png':'images/unchoose.png'">
+                            <div>{{item.text}}</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" v-if="detail.datasourcesjtzcqk && detail.datasourcesjtzcqk.indexOf('5')!==-1">
+                        <van-field type="textarea" @blur="localStrongFun()" v-model="detail.datasourcesjtzcqkotherdsc" rows="1" autosize placeholder="请输入" maxlength="150"></van-field>
+                    </div>
+                </div>
+               
+            </div>
+
+            <div class="applyButton" @click="toPage('page0')" >
+                <div>返回</div>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js"></script>
+<script type="text/javascript" src="js/dataJson.js?v=2"></script>
+<script type="text/javascript" src="js/idCardCheck.js"></script>
+<script type="text/javascript" src="js/city.js"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.1&key=39943d0dc65e4472c2f4430a0e281682"></script>
+<script type="text/javascript" src="js/personDetail.js?v=10.1"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    
+    function getUserFinish(){
+        initJSSDK(['hideAllNonBaseMenuItem','chooseImage','uploadImage',"stopRecord","startRecord","translateVoice",'invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

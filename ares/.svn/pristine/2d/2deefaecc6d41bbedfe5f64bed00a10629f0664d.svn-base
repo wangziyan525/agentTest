@@ -1,0 +1,525 @@
+body{
+    background: #F5F6F7;
+    width:100%;
+    min-height:100vh;
+}
+*{
+    margin:0;
+    padding:0;
+    -webkit-overflow-scrolling: touch !important;
+    -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+    -webkit-tap-highlight-color: transparent !important;
+    font-family: 'Microsoft YaHei', Tahoma, Arial, sans-serif;
+}
+input{
+    border: none;
+    outline: none;
+    appearance: none;
+}
+textarea{
+    border: none;
+    outline: none;
+    border-style: none;
+    text-shadow: none;
+    -webkit-appearance: none;
+    -webkit-user-select: text;
+    outline-color: transparent;
+    resize: none;
+}
+[v-cloak]{
+    display: none;
+}
+.weui-dialog{
+    border-radius: 8px !important;
+    font-size: 17px;
+}
+.weui-dialog .weui-dialog__hd{
+    padding: 20px;
+}
+.weui-dialog__ft,.weui-dialog__btn{
+    font-size: 17px;
+    color: #267EF0;
+}
+.van-picker-column__item--selected{
+    color: #4675C9;
+}
+.van-picker__cancel, .van-picker__confirm{
+    font-size: 16px;
+}
+::-webkit-input-placeholder {
+    color:  #999999 !important;
+}
+
+::-moz-placeholder {
+    color:  #999999 !important;
+}
+
+::-moz-placeholder {
+    color:  #999999 !important;
+}
+
+:-ms-input-placeholder {
+    color:  #999999 !important;
+}
+::placeholder {
+    color: #999999 !important;
+}
+
+.lineBottom{
+    position: relative;
+}
+.lineBottom:after{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #e5e5e5;
+    color: #e5e5e5;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index:22;
+}
+.displayFlex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.displayAround{
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+}
+.displayStart{
+    display: flex;
+    justify-content:flex-start;
+    align-items: center;
+}
+.displayEnd{
+    display: flex;
+    justify-content:flex-end;
+    align-items: center;
+}
+.displayTop{
+    display: flex;
+    justify-content: space-between;
+    align-items:flex-start; 
+}
+.color999{
+    color: #999999;
+}
+.color666{
+    color: #666666;
+}
+.color333{
+    color: #333333;
+}
+.footer_btn{
+    position: fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background: #4675C9;
+    font-size: 15px;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 13px 0;
+    box-sizing: border-box;
+}
+.more_img{
+    width:7px;
+    height:11px;
+    margin-left:4px;
+}
+/* 管理员维护首页 */
+.admin_banner{
+    position: relative;
+}
+.admin_banner img{
+    width:100%;
+    vertical-align: middle;
+}
+.admin_banner_title{
+    font-size: 22px;
+    color: #FFFFFF;
+    font-weight: 600;
+    position: absolute;
+    top:38px;
+    left:15px;
+}
+.admin_m{
+    background: #FFFFFF;
+    border-radius: 8px 8px 0px 0px;
+    padding: 10px;
+    box-sizing: border-box;
+    position: absolute;
+    top:106px;
+    left:15px;
+    width:calc(100% - 30px);
+    height:calc(100vh - 106px);
+}
+.admin_m img{
+    margin-bottom:10px;
+}
+/* 问诊预约管理 新增  编辑页面 */
+.edit_t{
+    background:#fff;
+    font-size:15px;
+    color: #333;
+}
+.edit_t>div{
+    padding:12px 15px;
+    box-sizing: border-box;
+}
+.edit_t input{
+   color:#666;
+}
+.edit_t input{
+    text-align: right;
+}
+.timeClass{
+    background: #F2F2F2;
+    border-radius: 16px;
+    width:46%;
+    padding:4px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+.edit_m_t{
+    background:#fff;
+    font-size:15px;
+    color: #333;
+    padding: 12px 15px;
+    box-sizing: border-box;
+}
+.edit_m_b{
+    font-size: 12px;
+    color: #FB9A0E;
+    padding: 10px 15px;
+    box-sizing: border-box;
+}
+.doctorIntr{
+    background: #fff;
+    color: #333;
+}
+.doctorIntr_t{
+    padding: 14px 15px;
+    box-sizing: border-box;
+}
+.doctorIntr_b{
+    padding:12px 15px;
+    box-sizing: border-box;
+}
+.doctorIntr textarea{
+    background: #F7F7F7;
+    border-radius: 4px;
+    width:100%;
+    height:190px;
+    padding:10px;
+    box-sizing: border-box;
+}
+.doctorIntr textarea::placeholder{
+    font-size: 12px;
+    color: #999999;
+}
+.doctorIntr textarea::-webkit-input-placeholder{
+    font-size: 12px;
+    color: #999999;
+}
+.doctorIntr textarea::-moz-placeholder{
+    font-size: 12px;
+    color: #999999;
+}
+.mark_text textarea::-ms-input-placeholder{
+    font-size: 12px;
+    color: #999999;
+}
+
+/* 问诊管理 */
+.noData{
+    text-align: center;
+    padding-top:80px;
+    box-sizing: border-box;
+    font-size: 13px;
+    color: #999999;
+}
+.noData img{
+    width:30%;
+}
+.doctorListInfo{
+    background: #fff;
+    font-size: 13px;
+    color: #666666;
+    line-height: 16px;
+    padding:10px 15px;
+    box-sizing: border-box;
+}
+.doctor_name{
+    font-size: 18px;
+    color: #333333;
+    line-height: 24px;
+    font-weight: 600;
+    margin-right:8px;
+}
+.doctor_postion{
+    background: #EDF4FF;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #1C86FF;
+    line-height: 16px;
+    font-weight:bold;
+    padding:4px 8px;
+    box-sizing: border-box;
+}
+
+.line2{
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp:2;
+    overflow: hidden;
+    line-clamp:2;
+}
+.doctorListIntr{
+    background: #EDF4FF;
+    border-radius: 4px;
+    padding:3px 6px;
+    box-sizing: border-box;
+    line-height:21px;
+    font-size:13px;
+}
+.doctorList_b img{
+    width:14px;
+    height:14px;
+    margin-right:4px;
+}
+.lineAll {
+    position: relative;
+}
+
+.lineAll:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200%;
+    height: 200%;
+    box-sizing: border-box;
+    border: 1px solid rgba(198,198,198,1);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scale(.5, .5);
+    transform: scale(.5, .5);
+    border-radius:26px;
+}
+.doctorList_b>div{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    padding:5px 14px;
+    box-sizing: border-box;
+    margin:10px 0 0 10px;
+}
+/* 已预约列表 */
+.tab_con{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background: #fff;
+    font-size:16px;
+    display: flex;
+    justify-content:space-around;
+    color: #999999;
+}
+.tab_con span{
+    padding:10px 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;  
+}
+.active{
+    color: #1C86FF;
+    text-align: center;
+    font-weight: 600;
+    position: relative;
+ }
+ .active:after{
+    color: #1C86FF;
+    border-radius:1px;
+    content: " ";
+    position: absolute;
+    left:0;
+    bottom:0;
+    width:100%;
+    border-bottom:2px solid #1C86FF;
+ }
+ .appointmentList_info{
+     color: #666666;
+     background: #fff;
+     padding:10px 12px;
+     box-sizing: border-box;
+ }
+ .appointmentList_info_m{
+     padding: 6px 0;
+     box-sizing: border-box;
+     font-size: 14px;
+ }
+ .appointmentList_info_b{
+    background: #EDF4FF;
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-top:6px;
+ }
+ .appointmentList_info_b img{
+     width:14px;
+     height:14px;
+     margin-right:4px;
+ }
+ .list_status{
+    font-size: 15px;
+ }
+ .gender_img{
+     width:15px;
+     height:15px;
+ }
+
+ /* 预约详情 */
+ .detail_info .detail_item{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 14px 15px;
+    box-sizing: border-box;
+ }
+ .detail_item{
+     color: #333;
+     font-size: 15px;
+ }
+ .detail_item span:last-child{
+    color: #666666;
+ }
+
+
+ /* 问诊、理疗预约首页 */
+ .client_m{
+     width: 100%;
+     padding: 0 15px;
+     box-sizing: border-box;
+     position: absolute;
+     top:150px;
+     left:0;
+ }
+ .client_m img{
+     margin-bottom:10px;
+ }
+ /* 可预约列表 */
+ .list_tips img{
+     width:18px;
+     height:18px;
+     vertical-align: middle;
+     margin-top:-2px;
+ }
+ .list_tips{
+    background: #EEFAFF;
+    box-shadow: inset 0px 0px 3px 1px rgba(186,222,255,0.6);box-shadow: 0px 6px 12px 0px rgba(20,130,255,0.2);
+    border-radius: 12px;
+    font-size: 12px;
+    color: #333333;
+    padding:2px 8px;
+    box-sizing: border-box;
+    margin-left:6px;
+ }
+ .list_t{
+     color: #fff;
+     position: absolute;
+     top:30px;
+     left:15px;
+ }
+ .list_con{
+     padding: 0 15px;
+     box-sizing: border-box;
+     margin-top: -23vw;
+     position: relative;
+ }
+.list_info{
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+.list_book_btn{
+    background: #1482FF;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: start;
+    padding:3px 3px 3px 7px;
+    box-sizing: border-box;
+}
+.list_book_btn img{
+    width:16px;
+    height:16px;
+}
+.doctorListIntr1{
+    margin:13px 0 3px 0;
+}
+.list_device_intr{
+    padding:5px 0 3px 0;
+    box-sizing: border-box;
+    line-height:18px;
+    width:80%;
+}
+.doctorIntr_b1{
+    font-size: 12px;
+    color: #666666;
+    padding:12px 15px;
+    box-sizing: border-box;
+}
+.client_book_date{
+    background: #FFFFFF;
+    border-radius: 0px 0px 8px 8px;
+}
+.client_book_date_t{
+    font-size: 15px;
+    color: #333333;
+    font-weight: 600;
+    padding:10px 15px;
+    box-sizing: border-box;
+}
+.client_book_date_m{
+    display: flex;
+    justify-content:flex-start;
+    align-items: center;
+    padding: 10px 15px 0 15px;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+}
+.book_date{
+    background: #FFFFFF;
+    border: 1px solid rgba(28,134,255,1);
+    border-radius: 4px;
+    font-size: 15px;
+    color: #1C86FF;
+    line-height: 22px;
+    padding: 8px 18px;
+    box-sizing: border-box;
+    margin-right:10px;
+    margin-bottom:10px;
+}
+.book_date_active{
+    background: #1C86FF;
+    color: #fff;
+}

@@ -1,0 +1,294 @@
+
+[v-cloak]{
+  display: none!important;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f5f5f5;
+    height: 100vh;
+    /* overflow: hidden; */
+    overflow-y: auto;
+  }
+
+  #app {
+    height: 100vh;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    /* overflow: hidden; */
+   
+  }
+
+  /* 顶部导航栏 */
+  .nav-bar {
+    background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+    padding: 44px 16px 12px;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .nav-back {
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    position: absolute;
+    left: 16px;
+  }
+
+  .nav-title {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    flex: 1;
+  }
+
+  /* 时间筛选标签 */
+  .time-tabs {
+    background: #fff;
+    padding: 12px 16px;
+    display: flex;
+    gap: 12px;
+  }
+
+  .time-tab {
+    padding: 2px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    color: #666;
+    background: #f5f5f5;
+    border: 1px solid #e5e5e5;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .time-tab.active {
+    background: #4A90E2;
+    color: #fff;
+    border-color: #4A90E2;
+  }
+
+  /* 日期筛选行 */
+  .date-filter {
+    background: #fff;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .date-filter-label {
+    font-size: 14px;
+    color: #666;
+  }
+
+  .date-filter-value {
+    font-size: 14px;
+    color: #999;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .date-filter-value .arrow {
+    margin-left: 4px;
+    color: #ccc;
+  }
+
+  /* 支行名称区域 */
+  .branch-name-section {
+    background: #fff;
+    padding: 12px 16px 0;
+    margin-top: 10px;
+  }
+
+  .branch-name {
+    font-size: 16px;
+    color: #4A90E2;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  /* 区块标题 */
+  .section-title {
+    background: #fff;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: #999;
+  }
+
+  .section-title-gray {
+    background: #f5f5f5;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: #999;
+  }
+
+  /* 汇总数据区域 */
+  .summary-section {
+    background: #fff;
+  }
+
+  .summary-row {
+    display: flex;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .summary-row:last-child {
+    border-bottom: none;
+  }
+
+  .summary-item {
+    flex: 1;
+    padding: 10px 16px;
+    
+  }
+
+
+  .summary-label {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+  }
+
+  .summary-value {
+    font-size: 24px;
+    font-weight: 500;
+    color: #333;
+    line-height: 1;
+    text-align: center;
+  }
+
+  /* 数据明细表格 */
+  .data-table {
+    background: #fff;
+    flex: 1;
+    /* overflow: hidden; */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .table-scroll-wrapper {
+    flex: 1;
+    overflow-x: auto;
+    /* overflow-y: auto; */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-wrapper {
+    /* min-width: 600px; */
+  }
+
+  .table-header {
+    display: flex;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .table-header-cell {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    flex-shrink: 0;
+    padding: 0 8px;
+  }
+
+  .table-header-cell:first-child {
+    text-align: left;
+    padding-left: 16px;
+  }
+
+  .table-row {
+    display: flex;
+    padding: 16px 0;
+    border-bottom: 1px solid #f0f0f0;
+    align-items: center;
+  }
+
+  .table-row:last-child {
+    border-bottom: none;
+  }
+
+  .table-cell {
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+    flex-shrink: 0;
+    padding: 0 8px;
+  }
+
+  .table-cell:first-child {
+    text-align: left;
+    padding-left: 16px;
+  }
+
+  .table-cell.link {
+    color: #4A90E2;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  /* 列宽设置 */
+  .col-name {
+    width: 116px;
+    min-width: 116px;
+    position: sticky;
+    left: 0;
+    background: #fff;
+    z-index: 5;
+    box-sizing: border-box;
+  }
+
+  .table-header .col-name {
+    z-index: 15;
+  }
+
+  .col-data {
+    min-width: 80px;
+  }
+
+  /* 底部安全区域 */
+  .safe-area-bottom {
+    height: 10px;
+    background: #fff;
+    flex-shrink: 0;
+  }
+
+  /* 空状态样式 */
+  .empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: 60px 20px;
+  }
+
+  .empty-icon {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 20px;
+  }
+
+  .empty-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .empty-text {
+    font-size: 16px;
+    color: #999;
+  }

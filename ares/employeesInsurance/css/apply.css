@@ -1,0 +1,138 @@
+[v-cloak]{
+    display: none;
+}
+
+html, body {
+    min-height: 100vh;
+    background-color: #f3f4f6;
+}
+.topArea{
+    background: #FFFFFF;
+    margin: 8px 0px;
+}
+.listline{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px 16px;
+    padding: 13px 0px;
+    border-bottom: 1px solid rgba(155, 155, 155, 0.5)
+}
+.listline>div:nth-child(1){
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #666666;
+    font-weight: 400;
+
+}
+.listline>div:nth-child(2){
+    font-family: PingFangSC-Regular;
+font-size: 17px;
+color: #000000;
+text-align: right;
+font-weight: 400;
+
+}
+.topArea .listline:last-child{
+    border-bottom:none
+
+}
+.midArea{
+    background: #FFFFFF;
+    margin-bottom: 9px;
+}
+.midArea .listline:last-child{
+    border-bottom:none
+}
+.btmArea{
+    background: #FFFFFF
+}
+
+.btmImg{
+    width: 79px;
+    height: 79px;
+    
+}
+.btmArea .listline{
+    border-bottom:none
+}
+.upload{
+    margin: 0px 16px;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #A4A4A4;
+    letter-spacing: 0;
+    line-height: 24px;
+    font-weight: 400;
+}
+
+.testBtn{
+    background: #267EF0;
+border-radius: 6px;
+font-family: PingFangSC-Regular;
+font-size: 17px;
+color: #FFFFFF;
+text-align: center;
+font-weight: 400;
+padding: 11px 0px;
+margin: 25px auto;
+width: 90%;
+}
+.info{
+    font-family: PingFangSC-Regular;
+font-size: 17px;
+color: #267EF0;
+text-align: center;
+font-weight: 400;
+margin: 8px auto;
+text-decoration: underline;
+text-decoration-color: #267EF0;
+}
+
+
+/* 弹出框 */
+.tips{
+    background: #FFFFFF;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    width: 310px;
+    align-items: center
+}
+.tipsTitle{
+    width: 100%;
+    font-family: PingFangSC-Medium;
+    font-size: 17px;
+    color: #000000;
+    text-align: center;
+    font-weight: 600;
+    margin-top: 21px;
+}
+.tipsText{
+    width: 100%;
+    font-family: PingFangSC-Regular;
+    font-size: 16px;
+    color: #000000;
+    text-align: center;
+    line-height: 23px;
+    font-weight: 400;
+    margin: 32px 0px;
+    padding: 2px 0px;
+}
+.tipsBtn{
+    width: 100%;
+    font-family: PingFangSC-Medium;
+    font-size: 17px;
+    color: #267EF0;
+    text-align: center;
+    font-weight: 500;
+    padding: 13px 0px;
+    border-top: 1px solid rgba(155,155,155, 0.2)
+}
+.detImg{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 20px;
+    height: 20px;
+}

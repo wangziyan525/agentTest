@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport" />
+    <title>会议签到</title>
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <!-- 会议详情 -->
+</head>
+<body>
+    <div id="app" v-cloak>
+        <!-- 会议签到成功 -->
+        <div v-if='successFlag&&viewFlag' class="signIn_box">
+            <div class="signIn_title">
+                <i class="weui-icon-success weui-icon_msg"></i>
+                <div>您是第<span style="color: #0085dd;margin: 0 5px;font-size:20px;">{{signInNum}}</span>位签到</div>
+                <div><span>截止目前尚未签到人员：</span></div>
+            </div>
+        </div>
+        <!-- 会议签到失败 -->
+        <div v-if='!successFlag&&viewFlag' class="signIn_box">
+            <div class="signIn_title">
+                <i class="weui-icon-warn weui-icon_msg"></i>
+                <div v-if='signInTitleFlag'>{{signIn_title}}</div>
+                <div v-if='signInTextFlag'><span>{{signIn_text}}</span><span>截止目前尚未签到人员：</span></div>
+            </div>
+        </div>
+        <div class="personList">
+            <div v-if='personList.length>0'>
+                <div v-for="(item,index) in personList" :key='index'>
+                    <img :src="item.avatar" alt="">
+                    <p>{{item.name}}</p>
+                </div>
+            </div>
+            <div v-else style="width: 100%;text-align: center;">暂无未签到人员</div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script src="../../common/js/server.js"></script>
+<script src="../js/signIn.js?v=20251023"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem', 'closeWindow','getLocation'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    };
+    // initFun()
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+</html>

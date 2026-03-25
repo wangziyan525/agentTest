@@ -1,0 +1,33 @@
+[v-cloak]{
+    display: none;
+}
+body{
+    background: #F9FAFB
+     /* height: 200vh; */
+}
+.weui-dialog{
+    border-radius: 8px !important;
+    font-size: 17px;
+}
+.weui-dialog .weui-dialog__hd{
+    padding: 20px;
+}
+.weui-dialog__ft,.weui-dialog__btn{
+    font-size: 17px;
+    color: #267EF0;
+}
+
+.zwsj-div {
+    text-align: center;
+    margin-top: 40px;
+}
+.zwsj-test{
+    font-size:13px;
+    font-family:PingFangSC-Regular,PingFang SC;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+    width:104px;
+}
+.zwsj-img{
+    height: 120px;
+}

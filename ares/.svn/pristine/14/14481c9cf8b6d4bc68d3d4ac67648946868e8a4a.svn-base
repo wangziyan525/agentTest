@@ -1,0 +1,216 @@
+var baseUrl = {
+    queryListUrl: 'phjdData/queryListData.xa',//查询
+    
+}
+var vm
+function initFun () {
+    vm = new Vue({
+        el:"#app",
+        data:{
+            type:"0",
+            searchWord:"",
+            EstbDocTp:"1",
+            flag:"",
+            placetext:"",
+
+            list:[],
+
+            pagenum:1,
+            pagesize:30,
+            ifEnd:true,//分页下拉标志
+
+            datatype:"",
+        },
+        created(){
+            var that=this;
+            var flag=GetQueryString("flag");//建档主体
+            that.flag=flag;//1-企业;2-个体;3-农户
+            var datatype=GetQueryString("datatype");//datatype   1 普惠  2  服务站 
+            that.datatype=datatype;
+            if(flag=="1"){
+                that.placetext="输入企业名称搜索";
+                document.title="企业建档";
+            }else if(flag=="2"){
+                that.placetext="输入商户名称搜索";
+                document.title="个体建档";
+            }else if(flag=="3"){
+                that.placetext="输入农户姓名/所属村镇搜索";
+                document.title="农户建档";
+            }else{
+                that.placetext="请输入"
+            }
+
+            that.queryList();
+            
+            $("#app").show();
+            
+        },
+        mounted(){
+            
+    
+        },
+        methods:{
+            /**
+             * 切换tab
+             * @param {*} type 
+             */
+            chooseType(type){
+                this.type=type;
+                this.pagenum=1;
+                this.queryList();
+            },
+            /**
+             * 切换tab
+             * @param {*} EstbDocTp 
+             */
+            chooseTab(EstbDocTp){
+                this.EstbDocTp=EstbDocTp;
+                this.pagenum=1;
+                this.queryList();
+            },
+            queryLists(){
+                this.pagenum=1;
+                this.queryList();
+            },
+            /**
+             * 查询列表
+             */
+            async queryList(){
+
+                var that=this;
+
+                var param={};
+                param.EstbDocMnBy=that.flag;
+                param.EstbDocTp=that.EstbDocTp;
+                param.datatype=that.datatype;
+                if( that.flag=="1" ||  that.flag=="2"){
+                    param.EntpNm =that.searchWord;
+                }else if(that.flag=="3"){
+                    param.EntpCtcManNm=that.searchWord;
+                    param.AtchRural=that.searchWord;
+                }
+                param.pagenum=that.pagenum+"";
+                param.pagesize=that.pagesize+"";
+                if(that.pagenum=="1"){
+                    that.list=[];
+                }
+               
+                const res = await $http(baseUrl.queryListUrl, true,param, true);
+
+                if (res.retcode === 'success'){
+                    
+
+                    var datalist=res.data;
+                    //一页的数据
+                    if (!datalist) {
+                        datalist = [];
+                    }
+                    if (that.pagenum == 1) {
+                        that.list = datalist;
+                    } else {
+                        that.list = that.list.concat(datalist);
+                    }
+                    if (that.pagesize > datalist.length) {//多页页的数据
+                        that.ifEnd = true;
+                    } else {
+                        that.pagenum++;
+                        that.ifEnd = false;
+                    }
+                    $("#app").show();
+
+                }
+                else{
+                    vant.Dialog.alert({
+                        message: res.retmsg
+                    }).then(() => { 
+                    }); 
+                }
+
+            },
+            /**
+             * 查看详情
+             * @param {} id 
+             */
+            goDetail(id){
+                var that=this;
+                var flag=that.flag;
+                if(flag=="1"){
+                    window.location.href="companyDetail.html?flag="+that.flag+"&datatype="+this.datatype+"&id="+id;
+                }else if(flag=="2"){
+                    window.location.href="personDetail.html?flag="+that.flag+"&datatype="+this.datatype+"&id="+id;
+                }else if(flag=="3"){
+                    window.location.href="farmerDetail.html?flag="+that.flag+"&datatype="+this.datatype+"&id="+id;
+                }
+                
+            },
+            /**
+             * 新增
+             */
+            appltBtn(){
+                var that=this;
+                var flag=that.flag;
+                if(flag=="1"){
+                    window.location.href="companyDetail.html?flag="+that.flag+"&datatype="+this.datatype+"&ifAdd=1";
+                }else if(flag=="2"){
+                    window.location.href="personDetail.html?flag="+that.flag+"&datatype="+this.datatype+"&ifAdd=1";
+                }else if(flag=="3"){
+                    window.location.href="farmerDetail.html?flag="+that.flag+"&datatype="+this.datatype+"&ifAdd=1";
+                }
+            },
+            
+           
+                
+
+            }
+            
+           
+           
+           
+            
+            
+    
+    })
+}
+
+
+
+//浏览器滚动部分高度
+function getScrollTop() {
+    var scrollTop = 0;
+    if (document.documentElement && document.documentElement.scrollTop) {
+        scrollTop = document.documentElement.scrollTop;
+    } else if (document.body) {
+        scrollTop = document.body.scrollTop;
+    }
+    return scrollTop;
+};
+
+//浏览器可视部分高度
+function getCilentHeight() {
+    var clientHeight = 0;
+
+    if (document.body.clientHeight && document.documentElement.clientHeight) {
+        clientHeight = Math.min(document.body.clientHeight, document.documentElement.clientHeight)
+    } else {
+        clientHeight = Math.max(document.body.clientHeight, document.documentElement.clientHeight)
+    }
+    return clientHeight;
+};
+
+//浏览器内容高度
+function getScrollHeight() {
+    return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+}
+
+
+window.onscroll = function () {
+    if ((getScrollHeight() - (Math.ceil(getScrollTop() + getCilentHeight()))) < 10) {
+        
+        if (!vm.ifEnd) {
+            vm.ifEnd = true;
+            vm.queryList();
+        }
+    }
+
+};
+

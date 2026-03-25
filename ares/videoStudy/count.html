@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>学习记录</title>
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/count.css?v=20251229">
+</head>
+<body>
+    <div class="container" v-cloak>
+        <section class="section_container">
+            <div class="section_item">
+                <div class="section_title">
+                    <div class="display">
+                        <div class="left">
+                            {{ dataDetails.videoName || '--' }}
+                        </div>
+                        <div class="right flex display">
+                            <span v-if="dataDetails.status == '完成'" style="color: #44c966;">已完成</span>
+                            <span v-if="dataDetails.status == '未完成'" style="color: #f91717;">未完成</span>
+                        </div>
+                    </div>
+                    <!-- <div class="sum_timer">课程时长：{{ dataDetails.videoNum + '分钟' }}</div> -->
+                </div>
+                <!-- <div class="section_main">
+                    <div class="display">
+                        <div class="flex">累计学习时长：{{ dataDetails.ljTime }}</div>
+                    </div>
+                    <div class="display">
+                        <div class="flex">有效学习时长：{{ dataDetails.yxTime }}</div>
+                    </div>
+                </div>
+                <div class="section_main border_top" v-if="dataDetails.status == '完成'">
+                    <div class="display">
+                        <div class="flex">完成学习时间：{{ dataDetails.finTime }}</div>
+                    </div>
+                </div> -->
+            </div>
+        </section>
+    </div>
+</body>
+
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/clipboard.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/count.js?v=20251229"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

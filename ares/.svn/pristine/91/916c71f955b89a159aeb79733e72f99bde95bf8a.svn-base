@@ -1,0 +1,387 @@
+/* --------------------------------- tab切换 ---------------------- */
+.active{
+   color: #4675C9;
+   position: relative;
+}
+.active:after{
+    color: #4675C9;
+   border-radius: 1.5px;
+   content: " ";
+   position: absolute;
+   left:50%;
+   bottom:0;
+   width: 28px;
+    border-bottom:3px solid #4675C9;
+   transform: translateX(-50%);
+}
+
+.displayFlex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.fixed_top{
+    background: #FFF;
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+}
+.tab_con{
+    background: #fff;
+    font-size:15px;
+    display: flex;
+    justify-content:space-around;
+}
+.tab_con span{
+    padding:15px 0;
+    box-sizing: border-box;
+}
+/* --------------------------------- 搜索 ---------------------- */
+.searchTnput{
+    width:100%;
+    padding:15px;
+    box-sizing: border-box;
+    position: relative;
+}
+.searchTnput input{
+    background:#fff;
+    border-radius:20px;
+    width: 100%;
+    padding-right:10px;
+    padding-left: 34px;
+    padding-bottom:1px;
+    height: 35px;
+    font-size:15px;
+    color: #333;
+    box-sizing: border-box;
+}
+.searchTnput input::-webkit-input-placeholder,.searchTnput input::-moz-placeholder,.searchTnput input::-ms-placeholder{
+    color: #999;
+}
+.searchIcon{
+    position: absolute;
+    left:25px;
+    width:14px;
+    height:14px;
+    top:50%;
+    transform:translateY(-50%);
+}
+/* --------------------------------- 筛选------------------------ */
+.filter{
+    width: 100%;
+    padding: 10px 20px;
+    background: #fff;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+}
+.filter .filterTime{
+    width:58%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.filter .filterStatus{
+    width:40%;
+    display: flex;
+    align-items: center;
+}
+.filter .filterTime img,
+.filter .filterStatus img{
+    display: block;
+    width: 12px;
+    margin-left: 5px;
+}
+.filter .filterTime .filterText{
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+}
+.filter .filterTime .filterText span{
+    font-size: 14px;
+    line-height: 20px;
+    color: #666;
+}
+.filter .filterStatus .filterText{
+    font-size: 14px;
+    line-height: 20px;
+    color: #666;
+}
+/*----------------------------------------- 列表 ---------------------------------------*/
+.mainList{
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 12px;
+    box-sizing: border-box;
+}
+.mainList .list{
+    width: 100%;
+    background: #fff;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+.mainList .list .title{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    position: relative;
+}
+.mainList .list .title:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.mainList .list .title span{
+    font-size: 15px;
+    line-height: 25px;
+    color: #333;
+    font-weight: bold;
+}
+.mainList .list .title em{
+    font-size: 12px;
+    line-height: 12px;
+    padding: 1px 2px;
+    box-sizing: border-box;
+    margin-left: 5px;
+    border-radius: 4px;
+}
+.mainList .list .title .em1{
+    border: 1px solid #32AF25;
+    color: #32AF25;
+}
+.mainList .list .title .em2{
+    border: 1px solid #FF5F0D;
+    color: #FF5F0D;
+}
+.mainList .list .listDetail{
+    width: 100%;
+    padding: 15px 12px 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+.mainList .list .listDetail .detail{
+    width: 100%;
+    display: flex;
+    margin-bottom: 10px;
+}
+.mainList .list .listDetail .detail span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+}
+.mainList .list .listDetail .detail span:nth-child(1){
+    color: #999;
+    width: 120px;
+}
+.mainList .list .listDetail .detail span:nth-child(2){
+    flex: 1;
+    color: #333;
+    text-align: right;
+}
+.mainList .list .toDetail{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    position: relative;
+    text-align: center;
+    font-size: 15px;
+    line-height: 20px;
+    color: #0F71FF;
+}
+.mainList .list .toDetail:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.noData{
+    padding-top:40px;
+    text-align: center;
+    font-size:15px;
+    line-height:40px;
+    color: #9b9b9b;
+}
+.noData img{
+    width:50%;
+}
+/* ---------------------------------遮罩层(时间选择)------------------------ */
+.popupContent{
+    width: 100%;
+    height: 100%;
+}
+.popupContent .title{
+    width: 100%;
+    font-size: 14px;
+    color: #333333;
+    line-height: 20px;
+    padding: 5px 0;
+    box-sizing: border-box;
+    font-weight: 500;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+/*时间段*/
+.popupContent .daiTime{
+    width: 100%;
+    display: flex;
+    margin: 20px 0;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+.popupContent .daiTime span{
+    display: flex;
+    width: calc((100% - 30px)/4);
+    padding: 6px 0;
+    box-sizing: border-box;
+    background: #F2F2F2;
+    border-radius: 5px;
+    font-size: 12px;
+    line-height: 20px;
+    color: #333333;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.popupContent .daiTime span:nth-child(4n+2){
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.popupContent .daiTime span:nth-child(4n+3){
+    margin-right: 10px;
+}
+.popupContent .daiTime .diyTimeActive{
+    background: #4675C9;
+    color: #fff;
+}
+/*自定义时间*/
+.popupContent .diyTime{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+.popupContent .diyTime .startTime,
+.popupContent .diyTime .endTime{
+    width: calc((100% - 40px)/2);
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    background: #F2F2F2;
+    border-radius: 50px;
+}
+.popupContent .diyTime .startTime i,
+.popupContent .diyTime .endTime i{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+}
+.popupContent .diyTime .startTime i img,
+.popupContent .diyTime .endTime i img{
+    display: block;
+    width: 12px;
+}
+.popupContent .diyTime .startTime input,
+.popupContent .diyTime .endTime input{
+    width: 100%;
+    background: #F2F2F2;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    font-size: 14px;
+    color: #333;
+    line-height: 14px;
+    text-align: center;
+}
+.popupContent .diyTime span{
+    width: 40px;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: center;
+    color: #999;
+}
+/*状态筛选*/
+.popupContent .diyStatus{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 20px 0;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+.popupContent .diyStatus span{
+    display: flex;
+    width: calc((100% - 20px)/3);
+    padding: 6px 0;
+    box-sizing: border-box;
+    background: #F2F2F2;
+    border-radius: 16px;
+    font-size: 12px;
+    line-height: 20px;
+    color: #333333;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.popupContent .diyStatus span:nth-child(3n+2){
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.popupContent .diyStatus span:nth-child(4){
+    margin-top: 15px;
+}
+.popupContent .diyStatus .diyTimeActive{
+    background: #4675C9;
+    color: #fff;
+}
+/* ----------------------------- 按钮 ------------------------------- */
+.searchBtn{
+    width: 100%;
+    display: flex;
+    border-top: 0.5px solid rgba(238,238,238,1);
+    margin-top: 30px;
+}
+.searchBtn span{
+    display: block;
+    width: 50%;
+    font-size: 15px;
+    line-height: 50px;
+    letter-spacing: 0;
+    text-align: center;
+}
+.searchBtn span:nth-child(1){
+    background: #fff;
+}
+.searchBtn span:nth-child(2){
+    background: #4675C9;
+    color: #fff;
+}
+.searchModel .choosed{
+    background: #077BFF !important;
+    color: #fff !important;
+}

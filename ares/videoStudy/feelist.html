@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的积分</title>
+    <link rel="stylesheet" href="../common/css/weui.min.new.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.new.css">
+    <link rel="stylesheet" href="css/index.css?v=0.0.0">
+		<link rel="stylesheet" href="css/feelist.css?v=0.0.0">
+</head>
+<body style="background: #ffffff;">
+<!--我的积分 -->
+<div class="page2" >
+	<div class="topbanner">
+		<div class="v-biaoti" >
+			<div class="biaoti-beijng">
+				<div>
+					<div class="allPointNum biaoti-jifen">-</div>
+					<div class="bioati-test">当前积分</div>
+				</div>
+				<div style="display: flex">
+					<div style="width: 1px;height: 20px;background: #fff; margin-top: 20px"></div>
+					<div style="width: 1px;height: 20px;background: #3975C6 100%; margin-top: 20px"></div>
+				</div>
+
+				<div>
+
+					<div class="biaoti-jifen" ><span style="margin-right: -10px;"> + </span> <span id="feeToday"></span>  </div>
+					<div class="bioati-test">今日累计</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tishi"><span class="tishi-ruleImg"></span>完成学习视频任务，每个可积1分</div>
+	<div class="pointcon">
+				<div class="jifen">积分明细</div>
+        <div class="pointdet_con">
+        </div>
+    </div>
+	<div class="zwsj" style="width: 100%; margin-top: 20%; text-align: center">
+		<img src="image/zwjf.png" style="width: 50%; margin: 0px auto" />
+	</div>
+    <div class="notips">暂无积分</div>
+    
+	<div class="hiddenroot"></div>
+	<div class="root">
+		<div class="step_root input_border_bottom">
+			<div class="step_item video_page">
+				<div class="flow_img">
+				    <img src="image/video.png" />
+				</div>
+				<div class="step_intro nosel_step">学习视频</div>
+			</div>
+			<div class="step_item fee_page">
+				<div class="flow_img">
+				    <img src="image/fee_act.png" />
+				</div>
+				<div class="step_intro curr_step">我的积分</div>
+			</div>
+			<!-- <div class="step_item apply_page">
+				<div class="flow_img">
+				    <img src="image/count.png" />
+				</div>
+				<div class="step_intro nosel_step">学习记录</div>
+			</div> -->
+		</div>
+	</div>
+	
+</div>
+
+</body>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript">
+function getUserFinish(){
+	var username = $.parseJSON($.cookie("user")).name;
+	__canvasWM({
+		content: username
+	});
+	$.getScript("js/feelist.js?v=1.0")
+
+}
+</script>
+<script type="text/html" id="feeTemp">
+<div class="jifen-list">
+	<div class="pointLeft">
+		<div class="pointName">{name}</div>
+		<div class="pointTime">{updatetime}</div>
+	</div>
+	<div class="pointRight">+{fee}</div>
+</div>
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+<script src="../common/js/watermark.js"></script>
+</html>

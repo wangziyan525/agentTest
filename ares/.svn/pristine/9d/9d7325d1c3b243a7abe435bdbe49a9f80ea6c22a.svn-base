@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>建档数据排名</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=5.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none">
+       
+       <div v-if="page=='page1'">
+           
+            <div class="seachData">
+                <div class="searchLine">
+                    <div class="seachDataForm" >
+                        <div :class="cdate=='1'?'chooseItem':''" @click="choosecdate('1')">昨日</div>
+                        <div :class="cdate=='2'?'chooseItem':''" @click="choosecdate('2')">本月</div>
+                        <div :class="cdate=='3'?'chooseItem':''" @click="choosecdate('3')">自定义</div>
+                        <div :class="cdate=='4'?'chooseItem':''" @click="choosecdate('4')">累计</div>
+                    </div>
+                    <van-popup 
+                            v-model="DateRangeshow"
+                            position="bottom"
+                            :close-on-click-overlay="false">
+                            <van-calendar v-model='DateRangeshow' :min-date="minRangeDate" :max-date="maxRangeDate"  allow-same-day color='#0465FF' type="range" 
+                            class="calendar" @confirm='onDateRangeConfirm' @close="DateRangeshow=false"></van-calendar>
+    
+                    </van-popup>
+                    <div class="seachDataForm" >
+                        <div :class="estbdocmnby=='0'?'chooseItem':''" @click="chooseestbdocmnby('0')">全部</div>
+                        <div :class="estbdocmnby=='1'?'chooseItem':''" @click="chooseestbdocmnby('1')">企业</div>
+                        <div :class="estbdocmnby=='2'?'chooseItem':''" @click="chooseestbdocmnby('2')">个体</div>
+                        <div :class="estbdocmnby=='3'?'chooseItem':''" @click="chooseestbdocmnby('3')">农户</div>
+                    </div>
+                </div>
+                <div class="jdData">
+                    <div >
+                        <div class="dataTitle1">共建档</div>
+                        <div class="datatotalNum">{{total}}</div>
+                    </div>
+                    <div >
+                        <div class="dataTitle1">有效建档</div>
+                        <div class="datatotalNum">{{validtotal}}</div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="scrollPart">
+                <!-- <div style="height: 191px;"></div> -->
+                <div class="tabList">
+                    <div :class="tabFlag=='3'?'chooseRole':''" @click="chooseTab('3')">一级机构</div>
+                    <div :class="tabFlag=='4'?'chooseRole':''" @click="chooseTab('4')">经营支行</div>
+                    <div :class="tabFlag=='1'?'chooseRole':''" @click="chooseTab('1')">服务站排名</div>
+                    <div :class="tabFlag=='2'?'chooseRole':''" @click="chooseTab('2')">员工排名</div>
+                </div>
+                <div class="seachSsbm" style="border:0" v-if="tabFlag=='3'">
+                    <div :class="orgtype=='区域支行'?'chooseSsbm':''" @click="chooseTyle('区域支行')" >区行组</div>
+                    <div :class="orgtype=='分行'?'chooseSsbm':''"  @click="chooseTyle('分行')">分行组</div>
+                    <div :class="orgtype=='支行'?'chooseSsbm':''" @click="chooseTyle('支行')">直属行组</div>
+                </div>
+        
+                
+        
+                <div class="rankList">
+                    <div>
+                        <div class="rankPart rankTitle">
+                            <div class="rankIndex">排名</div>
+                            <div class="ssabmName" v-if="tabFlag=='1'">
+                                服务站名称
+                            </div>
+                            <div class="ssabmName" v-if="tabFlag=='2'">
+                                员工排名
+                            </div>
+                            <div v-if="tabFlag=='3'">
+                                <div v-if="orgtype=='区域支行'" class="ssabmName">区行名称</div>
+                                <div v-if="orgtype=='分行'" class="ssabmName">分行名称</div>
+                                <div v-if="orgtype=='支行'" class="ssabmName">直属行名称</div>
+                            </div>
+                            <div v-if="tabFlag=='4'">
+                                <div  class="ssabmName">经营支行名称</div>
+                            </div>
+                            <div class="jdTotal">建档数</div>
+                            <div class="validNum">有效建档数</div>
+                            <div class="validRate">有效占比（%）</div>
+                        </div>
+                        <div class="rankContent" v-if="list.length>0">
+                            <div class="rankPart " v-for="item in list">
+                                <div class="rankIndex">{{item.num}}</div>
+                                <div class="ssabmName rank2decoration" v-if="tabFlag=='1'" @click="goemployeename(item.stationid,item.stationname)">
+                                    {{item.stationname}}
+                                </div>
+                                <div  v-if="tabFlag=='2'" >
+                                    <div class="ssabmName rank2decoration" v-if="item.isview=='1'" @click="goCustomer('',item.stationid,item.employeename,item.humancode)">
+                                        {{item.employeename}}
+                                    </div>
+                                    
+                                    <div class="ssabmName" v-else>
+                                        {{item.employeename}}
+                                    </div>
+                                </div>
+                                <div v-if="tabFlag=='4'">
+                                    <div  class="ssabmName">
+                                        <div>{{item.bu_descr}}</div>
+                                        <div>{{item.ssbm}}</div>
+                                    </div>
+                                </div>
+                                <div v-if="tabFlag=='3'">
+                                    <div  class="ssabmName">{{item.bu_descr}}</div>
+                                </div>
+                                <div class="jdTotal numberText">{{item.total}}</div>
+                                <div class="validNum numberText">{{item.validtotal}}</div>
+                                <div class="validRate numberText">{{item.validpercent}}</div>
+                            </div>
+                            
+                        </div>
+                        <div class="moreText" @click="queryList" v-if="!ifEnd">
+                            <div>查看更多</div>
+                        </div>
+                        <div v-if="list.length==0" class="nodate">
+                            暂无排名
+                        </div>
+                        
+                    </div>
+        
+                </div>
+                <div style="height: 200px;"></div>
+            </div>
+            <div class="footTab">
+                <div class="footOne" @click="toPage()">
+                    <img src="images/index.png">
+                    <div >我的建档</div>
+                </div>
+                <div class="footOne">
+                    <img src="images/listChoose.png">
+                    <div class="choosetab">建档数据</div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="page=='page2'">
+            <div class="ssabmTitle rank2decoration" @click="backStation">{{stationname}}</div>
+            <div >
+                <div class="rankList">
+                    <div>
+                        <div class="rankPart rankTitle">
+                            <div class="rankIndex">排名</div>
+                            <div class="ssabmName">
+                                客户经理名称
+                            </div>
+                            
+                            <div class="jdTotal">建档数</div>
+                            <div class="validNum">有效建档数</div>
+                            <div class="validRate">有效占比（%）</div>
+                        </div>
+                        <div class="rankContent" v-if="list2.length>0">
+                            <div class="rankPart " v-for="item in list2">
+                                <div class="rankIndex">{{item.num}}</div>
+                                <div class="ssabmName rank2decoration" v-if="item.isview=='1'" @click="goCustomer(item.stationname,item.stationid,item.employeename,item.humancode)">
+                                    {{item.employeename}}
+                                </div>
+                                
+                                <div class="ssabmName" v-else>
+                                    {{item.employeename}}
+                                </div>
+                                <div class="jdTotal numberText">{{item.total}}</div>
+                                <div class="validNum numberText">{{item.validtotal}}</div>
+                                <div class="validRate numberText">{{item.validpercent}}</div>
+                            </div>
+                            
+                        </div>
+                        <div class="moreText" @click="queryList2" v-if="!ifEnd2">
+                            <div>查看更多</div>
+                        </div>
+                        <div v-if="list2.length==0" class="nodate">
+                            暂无排名
+                        </div>
+                        
+                    </div>
+        
+                </div>
+                <div style="height: 100px;"></div>
+            </div>
+            <div class="footApply" >
+                <div @click="backStation">
+                    <span>返回</span>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="page=='page3'">
+            <div class="ssabmTitle rank2decoration" style="display: flex;">
+                
+                <div @click="backStation" v-if="stationname">{{stationname}}/</div>
+                <div @click="backEmployeename">{{employeename}}</div>
+            </div>
+            <div >
+        
+                <div class="rankList">
+                    <div>
+                        <div class="rankPart rankTitle">
+                            <div class="ssabmName" style="width: 120px;">
+                                客户名称
+                            </div>
+                            
+                            <div class="jdTotal" >客户类型</div>
+                            <div class="validNum">客户经理</div>
+                            <div class="validRate" style="width: 150px;">建档时间</div>
+                        </div>
+                        <div class="rankContent" v-if="list3.length>0">
+                            <div class="rankPart " v-for="item in list3">
+                                <div class="ssabmName" style="width: 120px;">
+                                    {{item.customername}}
+                                </div>
+                                <div class="jdTotal">{{estbdocmnbyObj[item.estbdocmnby]}}</div>
+                                <div class="validNum">{{item.employeename}}</div>
+                                <div class="validRate" style="width: 150px;">{{item.createtime}}</div>
+                            </div>
+                            
+                        </div>
+                        <div class="moreText" @click="queryList3" v-if="!ifEnd3">
+                            <div>查看更多</div>
+                        </div>
+                        <div v-if="list3.length==0" class="nodate">
+                            暂无客户
+                        </div>
+                        
+                    </div>
+        
+                </div>
+                <div style="height: 100px;"></div>
+            </div>
+            <div class="footApply" >
+                <div @click="backEmployeename">
+                    <span>返回</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js"></script>
+<script type="text/javascript" src="js/rank2.js?v=5"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

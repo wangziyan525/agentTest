@@ -1,0 +1,147 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+    name="viewport" />
+  <link rel="stylesheet" href="../common/css/weui.min.css">
+  <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+  <link rel="stylesheet" href="../common/css/vant-2.12.css">
+  <link rel="stylesheet" href="css/queryList.css">
+  <title>临时提额预约</title>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <!-- 顶部蓝色区域 -->
+    <div class="header-wrap">
+      <!-- 搜索框 -->
+      <div class="search-wrap">
+        <img class="search-icon" src="images/search.png" alt="">
+        <input class="search-input" type="text" v-model="keyword" placeholder="输入姓名/证件号码/手机号码/机构名称进行搜索"
+          @keyup.enter="handleSearch">
+      </div>
+    </div>
+
+    <!-- 筛选按钮 -->
+    <div class="filter-wrap">
+      <div class="filter-btn" @click="showFilterPopup = true">
+        <img class="filter-icon" src="images/filter.png" alt="">
+        <span>筛选</span>
+      </div>
+    </div>
+
+    <!-- 列表容器 -->
+    <div class="list-container">
+      <van-list v-model="loading" :finished="finished" @load="loadData" :immediate-check="false">
+         <!-- 无数据状态 -->
+      <div class="empty-wrap" v-if="list.length == 0">
+          <img src="https://img.yzcdn.cn/vant/empty-image-default.png" alt="无数据">
+          <span>暂无数据</span>
+        </div>
+      <!-- 列表数据 -->
+      <template v-else>
+        <div class="list-card" v-for="(item, index) in list" :key="index" @click="handleItemClick(item)">
+          <div class="card-header">
+            <span class="card-name">{{ item.clientNm }}({{ item.identNum }})</span>
+            <img class="card-arrow" src="images/rightArrow.png" alt="">
+          </div>
+          <div class="card-body">
+            <div class="card-row">
+              <span class="card-label">银行卡</span>
+              <span class="card-value">西安银行借记卡({{ item.crdNum }})</span>
+            </div>
+            <div class="card-row">
+              <span class="card-label">申请时间</span>
+              <span class="card-value">{{ item.aplyTm }}</span>
+            </div>
+          </div>
+        </div>
+        <!-- 底部提示 -->
+        <div class="list-finished" v-if="finished">已到最底部了</div>
+      </template>
+    </van-list>
+    </div>
+
+    <!-- 筛选弹窗 -->
+    <van-popup v-model="showFilterPopup" position="bottom" round :style="{ maxHeight: '70%' }">
+      <div class="filter-popup">
+        <!-- 弹窗头部 -->
+        <div class="popup-header">
+          <span class="popup-title">选择筛选条件</span>
+          <img class="popup-close" src="images/close.png" alt="" @click="showFilterPopup = false">
+        </div>
+
+        <!-- 弹窗内容 -->
+        <div class="popup-content">
+          <!-- 起止日期 -->
+          <div class="filter-section">
+            <div class="section-label">起止日期</div>
+            <div class="date-range">
+              <div class="date-item" @click="openDatePicker('start')">
+                <span :class="{ 'date-placeholder': !startDate }">{{ startDate || '起始日期' }}</span>
+                <img class="date-arrow" src="images/downArrow.png" alt="">
+              </div>
+              <span class="date-separator">—</span>
+              <div class="date-item" @click="openDatePicker('end')">
+                <span :class="{ 'date-placeholder': !endDate }">{{ endDate || '终止日期' }}</span>
+                <img class="date-arrow" src="images/downArrow.png" alt="">
+              </div>
+            </div>
+          </div>
+
+          <!-- 状态选择 -->
+          <div class="filter-section">
+            <div class="section-label">状态</div>
+            <div class="status-list">
+              <div class="status-item" :class="{ active: selectedStatus == item.value }"
+                v-for="(item, index) in statusList" :key="index" @click="toggleStatus(item.value)">
+                {{ item.name }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 弹窗底部按钮 -->
+        <div class="popup-footer">
+          <button class="btn-reset" @click="handleReset">重置</button>
+          <button class="btn-confirm" @click="handleConfirm">确认</button>
+        </div>
+      </div>
+    </van-popup>
+
+    <!-- 日期选择器 -->
+    <van-popup v-model="showDatePicker" position="bottom">
+      <van-datetime-picker v-model="currentDate" type="date" title="选择日期" :min-date="minDate" :max-date="maxDate"
+        @confirm="onDateConfirm" @cancel="showDatePicker = false" />
+    </van-popup>
+  </div>
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+
+<script type="text/javascript" src="../common/js/watermark.js"></script>
+<script src="./../common/js/server.js"></script>
+<script src="js/queryList.js"></script>
+<script src="../common/js/axiosRequest.js"></script>
+<script src="../common/js/vConsole.min.js"></script>
+<script>
+  //  var vConsole = new VConsole();
+  initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+  wx.ready(function () {
+    wx.hideAllNonBaseMenuItem();
+  });
+  function getUserFinish() {
+    var username = $.parseJSON($.cookie("user")).name;
+    __canvasWM({
+      content: username
+    });
+    initFun()
+  }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

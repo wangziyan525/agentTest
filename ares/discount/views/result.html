@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport" />
+    <title>结果</title>
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.new.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../common/css/vant-1.2.3.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/result.css">
+</head>
+<body>
+    <div class="container" v-cloak>
+        <div class="icon_contaniner display align_item_center justify_content_center">
+            <div class="icon_result fs0">
+                <img src="../images/result@2x.png" alt="">
+            </div>
+        </div>
+        <section class="main_section fs15">
+            <div class="main_section_item">
+                <div class="__item_list display color333333">
+                    <div class="__item_list_left display align_item_center">
+                        交易状态
+                    </div>
+                    <div class="__item_list_right flex display align_item_center justify_content_right">
+                        审批完成
+                    </div>
+                </div>
+                <div class="__item_list display color333333">
+                    <div class="__item_list_left display align_item_center">
+                        交易流水号
+                    </div>
+                    <div class="__item_list_right flex display align_item_center justify_content_right">
+                        {{ DtlRcrdId }}
+                    </div>
+                </div>
+                <div class="__item_list display color333333">
+                    <div class="__item_list_left display align_item_center">
+                        交易时间
+                    </div>
+                    <div class="__item_list_right flex display align_item_center justify_content_right">
+                        {{ TxnTm }}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="footer_fiexd_container">
+            <div class="footer_container display">
+                
+                <div
+                    class="footer_view_right fs16 flex display align_item_center justify_content_center"
+                    @click="closeHandle">返回</div>
+            </div>
+        </footer>
+    </div>
+</body>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script src="../../common/js/server.js"></script>
+<script src="../js/filter.js"></script>
+<script src="../js/result.js"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+</html>

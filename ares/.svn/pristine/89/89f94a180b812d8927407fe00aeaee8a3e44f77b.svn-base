@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/index.css?v=20250620">
+    <title>发起会议</title>
+</head>
+
+<body>
+    <div class="container" v-cloak>
+        <div class="" v-if="!isMeetingRoom">
+            <div class="tips" v-if='tipsFlag'>
+                <div>温馨提示：</div>
+                <div><span v-if='weekFlag'>（周末时间需要提前5小时预定），</span><span>晚上21点以后不允许预定会议。若存在紧急会议需要预定会议室，请联系物业管理员。</span></div>
+            </div>
+            <section class="section_main">
+                <div class="view_content_A">
+                    <div class="view_left color666666 min_width80">会议主题</div>
+
+                    <div class="view_down_textarea color333333">
+                        <van-field v-model="formData.theme" rows="3" autosize center type="textarea" maxlength="300"
+                            placeholder="请输入">
+                        </van-field>
+                    </div>
+                </div>
+                <div class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">位置</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.location ? 'color333333' : 'color999999'"
+                        @click="popupHandle('popupLocation')">
+                        {{ formData.location || '请选择' }}
+                    </div>
+                </div>
+                <div class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">楼层</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.floor ? 'color333333' : 'color999999'" @click="popupHandle('popupFloor')">
+                        {{ formatFloor(formData.floor) || '请选择' }}
+                    </div>
+                </div>
+                <div class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">会议室</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.roomName ? 'color333333' : 'color999999'" @click="meetingRoomHandle">
+                        {{ formData.roomName || '请选择' }}
+                    </div>
+                </div>
+                <!-- 预约类型 -->
+                <div v-if="formData.meetingInfoId==''" class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">预约类型</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        class="color333333"
+                        @click="popupHandle('popupAppointmentType')">
+                        {{appointmentTypeText}}
+                    </div>
+                </div>
+                <!-- 预约开始日期 -->
+                <div v-if='formData.appointmentType==2' class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">预约开始日期</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.currentDateStart ? 'color333333' : 'color999999'"
+                        @click="popupHandle('popupStartDate')">
+                        {{ formData.currentDateStart || '请选择' }}
+                    </div>
+                </div>
+                <!-- 预约结束日期 -->
+                <div v-if='formData.appointmentType==2' class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">预约结束日期</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.currentDateEnd ? 'color333333' : 'color999999'"
+                        @click="popupHandle('popupEndDate')">
+                        {{ formData.currentDateEnd || '请选择' }}
+                    </div>
+                </div>
+
+                <div v-if='formData.appointmentType==1' class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">预约日期</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.currentDate ? 'color333333' : 'color999999'"
+                        @click="popupHandle('popupCurrentDate')">
+                        {{ formData.currentDate || '请选择' }}
+                    </div>
+                </div>
+                <div class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">开始时间</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.startTime ? 'color333333' : 'color999999'"
+                        @click="popupHandle('popupStartTime')">
+                        {{ formData.startTime || '请选择' }}
+                    </div>
+                </div>
+                <div class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">结束时间</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.endTime ? 'color333333' : 'color999999'" @click="popupHandle('popupEndTime')">
+                        {{ formData.endTime || '请选择' }}
+                    </div>
+                </div>
+                <div class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">通知时间</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.noticeTimeType ? 'color333333' : 'color999999'"
+                        @click="popupHandle('popupNoticeTimeType')">
+                        {{ formatNoticeTimeType(formData.noticeTimeType) || '请选择' }}
+                    </div>
+                </div>
+                <div class="display view_content border_top" v-if="userType == '管理人员'">
+                    <div class="view_left color666666 min_width80">持续时间</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.sustainType ? 'color333333' : 'color999999'"
+                        @click="popupHandle('popupSustainType')">
+                        {{ formatSustainType(formData.sustainType) || '请选择' }}
+                    </div>
+                </div>
+                <div class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">会议类型</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.meetingType!==''? 'color333333' : 'color999999'"
+                        @click="popupHandle('popupMeetingType')">
+                        {{ formatMeetingType(formData.meetingType) || '请选择' }}
+                    </div>
+                </div>
+                <div class="view_content_A border_top display" v-if="needEquipmentList.length > 0">
+                    <div class="view_left color666666 min_width80">所需设备</div>
+
+                    <div class="view_down_textarea color333333 display flex"
+                        style="flex-wrap: wrap; justify-content: flex-end;">
+                        <div class="equipment_container" v-for="(item, index) in needEquipmentList"
+                            :class="item.status ? 'equipment_container_hover' : ''"
+                            @click="equipmentHandle(item, index)">
+                            {{ item.lable }}
+                        </div>
+                        <!-- <van-field
+                            v-model="formData.needEquipment"
+                            rows="3"
+                            autosize
+                            center
+                            type="textarea"
+                            maxlength="300"
+                            placeholder="如：小米投影仪,索尼音响">
+                        </van-field> -->
+                    </div>
+                </div>
+                <div class="display view_content border_top" v-if="userType == '行内员工'">
+                    <div class="view_left color666666 min_width80">会议参与人</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.attendLoginName ? 'color333333' : 'color999999'" @click="personHandle">
+                        {{ formData.attendLoginName || '请选择' }}
+                    </div>
+                </div>
+                <div class="display view_content border_top" v-if="userType == '管理人员'">
+                    <div class="view_left color666666 min_width80">会议参与人</div>
+                    <div class="view_right display flex justify_content_right"
+                        :class="formData.attendLoginName ? 'color333333' : 'color999999'">
+                        <div class="view_right flex display justify_content_right color333333">
+                            <van-field v-model="formData.attendLoginName" rows="1" autosize input-align="right"
+                                @input="inputHandle" type="textarea" placeholder="请输入">
+                            </van-field>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="display view_content border_top" v-if="formData.isServiceStaff == 1 && userType == '管理人员'">
+                    <div class="view_left color666666 min_width80">服务人员</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.serviceLoginIds ? 'color333333' : 'color999999'"
+                        @click="popupHandle('popupServiceLogin')">
+                        {{ formData.serviceLoginId || '请选择' }}
+                    </div>
+                </div>
+                <div class="display view_content border_top" v-if="formData.location == '总行'">
+                    <div class="view_left color666666 min_width80">是否有重要参会人员</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.isImportantUser ? 'color333333' : 'color999999'"
+                        @click="popupHandle('popupWhetherType')">
+                        {{ formatWhetherType(formData.isImportantUser) || '请选择' }}
+                    </div>
+                </div>
+
+                <div class="view_content_A border_top" v-if="formData.isImportantUser == 1">
+                    <div class="view_left color666666 min_width80">重要人的姓名</div>
+
+                    <div class="view_down_textarea color333333">
+                        <van-field v-model="formData.importantLeader" rows="3" autosize center type="textarea" maxlength="300"
+                            placeholder="请输入重要人员姓名以逗号隔开">
+                        </van-field>
+                    </div>
+                </div>
+
+                <div class="display view_content border_top" v-if="formData.location == '总行'">
+                    <div class="view_left color666666 min_width80">参会人数</div>
+                    <input class="enterInfo" type="number" v-model.trim="formData.meetingUserCount" placeholder="请输入"
+                        pattern="[0-9]*">
+                </div>
+                <div v-if='formData.meetingInfoId' class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">预约人联系电话</div>
+                    <input class="enterInfo" type="tel" v-model.trim="formData.meetingUserPhone" maxlength="11"
+                        readonly>
+                </div>
+                <div v-else class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">预约人联系电话</div>
+                    <input class="enterInfo" type="tel" v-model.trim="formData.meetingUserPhone" maxlength="11"
+                        placeholder="请输入">
+                </div>
+                <div v-if="userType == '行内员工'" class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">会议发起人姓名</div>
+                    <input class="enterInfo" type="text" v-model="formData.startUserName" readonly>
+                </div>
+                <div v-else class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">会议发起人姓名</div>
+                    <!-- <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.startUserName ? 'color333333' : 'color999999'" @click="startUserNameHandle">
+                        {{ formData.startUserName || '请选择' }}
+                    </div> -->
+                    <div class="view_right display flex justify_content_right"
+                        :class="formData.startUserName ? 'color333333' : 'color999999'">
+                        <div class="view_right flex display justify_content_right color333333">
+                            <van-field v-model="formData.startUserName" rows="1" autosize input-align="right"
+                                @input="inputStartUserHandle" type="textarea" placeholder="请输入">
+                            </van-field>
+
+                        </div>
+                    </div>
+                </div>
+                <div v-if="userType == '行内员工'" class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">预约部门</div>
+                    <input class="enterInfo" type="text" v-model="formData.appointmentDept" readonly placeholder="请输入">
+                </div>
+                <div v-else class="display view_content border_top">
+                    <div class="view_left color666666 min_width80">预约部门</div>
+                    <div class="view_right display flex justify_content_right session_item_container_right_link"
+                        :class="formData.appointmentDept ? 'color333333' : 'color999999'" @click="appointmentDeptHandle">
+                        {{ formData.appointmentDept || '请选择' }}
+                    </div>
+                </div>
+            </section>
+            <footer class="footer_container display">
+                <div class="button_container_left display flex align_item_center justify_content_center"
+                    @click="temporaryHandle">
+                    临时保存
+                </div>
+                <div class="button_container display flex align_item_center justify_content_center"
+                    @click="submitHandle">
+                    提交
+                </div>
+            </footer>
+        </div>
+        <div class="main_container" v-else>
+            <van-list v-model="loading" :finished="finished" finished-text="">
+                <div class="main_item" v-for="(item, index) in meetingRoomList" :key="index">
+                    <div
+                        class="session_item_container_list_right_link height50 display align_item_center padding10 fs14">
+                        <div class="flex">{{ item.roomName || '' }}</div>
+                        <div class="view_right display flex justify_content_right color4675c9"
+                            @click="meetingCheckedHandle(item, index)">
+                            选择
+                            <!-- <img v-if="item.isChecked" src="images/checked.png" alt="" class="checked_icon">
+                            <img v-else src="images/quxiao.png" alt="" class="checked_icon"> -->
+
+                        </div>
+                    </div>
+                    <div class="border_top padding10">
+                        <div class="display padding_bottom5">
+                            <div class="min_width80 color666666 fs14">位置</div>
+                            <div class="flex display align_item_center justify_content_right fs14">
+                                {{ item.location }}{{ item.floor + '楼' }}
+                            </div>
+                        </div>
+
+                        <div class="display padding_bottom5">
+                            <div class="min_width80 color666666 fs14">地址</div>
+                            <div class="flex display align_item_center justify_content_right fs14">
+                                {{ item.departmentName || '' }}
+                            </div>
+                        </div>
+                        <div class="display padding_bottom5">
+                            <div class="min_width80 color666666 fs14">规模</div>
+                            <div class="flex display align_item_center justify_content_right fs14">
+                                {{ item.dimension || '' }}
+                            </div>
+                        </div>
+                        <div class="display padding_bottom5">
+                            <div class="min_width80 color666666 fs14">相关功能</div>
+                            <div class="flex display align_item_center justify_content_right fs14">
+                                {{ item.containFunc || '' }}
+                            </div>
+                        </div>
+                        <div class="" v-if="item.picture.length != 0">
+                            <div class="display color666666 fs14">
+                                <div class="min_width80 color666666 fs14">会议室图片</div>
+                                <div class="flex display align_item_center justify_content_right fs14"
+                                    v-if="item.pictures.length == 0" @click="lookPictures(item, index)">
+                                    点击查看
+                                </div>
+                            </div>
+                            <div class="display identity_content meeting_img_icon" v-if="item.pictures.length != 0">
+                                <div class="meeting_img_icon_item fs0" @click="previewHandle(item.pictures)">
+                                    <img :src="item.pictures" alt="">
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </van-list>
+        </div>
+        <!-- 是否有重要人员参与 -->
+        <van-popup v-model="popupWhetherType.show" position="bottom">
+            <van-picker :title="popupWhetherType.title" show-toolbar :columns="popupWhetherType.list"
+                @cancel="popupWhetherType.show = false" @confirm="popupWhetherTypeConfirm">
+            </van-picker>
+        </van-popup>
+        <!-- 位置 -->
+        <van-popup v-model="popupLocation.show" position="bottom">
+            <van-picker :title="popupLocation.title" show-toolbar :columns="popupLocation.list"
+                @cancel="popupLocation.show = false" @confirm="popupLocationConfirm">
+            </van-picker>
+        </van-popup>
+        <!-- 楼层 -->
+        <van-popup v-model="popupFloor.show" position="bottom">
+            <van-picker :title="popupFloor.title" show-toolbar :columns="popupFloor.list"
+                @cancel="popupFloor.show = false" @confirm="popupFloorConfirm">
+            </van-picker>
+        </van-popup>
+        <!-- 预约类型 -->
+        <van-popup v-model="popupAppointmentType.show" position="bottom">
+            <van-picker :title="popupAppointmentType.title" show-toolbar :columns="popupAppointmentType.list"
+                @cancel="popupAppointmentType.show = false" @confirm="popupAppointmentTypeConfirm">
+            </van-picker>
+        </van-popup>
+        <!-- 预约日期 -->
+        <van-popup v-model="popupCurrentDate.show" position="bottom">
+            <van-datetime-picker show-toolbar :title="popupCurrentDate.title" type="date"
+                v-model="popupCurrentDate.currentDate" :min-date="popupCurrentDate.minDate"
+                @cancel="popupCurrentDate.show = false" @confirm="popupCurrentDateConfirm">
+            </van-datetime-picker>
+        </van-popup>
+        <!-- 预约开始日期 -->
+        <van-popup v-model="popupStartDate.show" position="bottom">
+            <van-datetime-picker show-toolbar :title="popupStartDate.title" type="date"
+                v-model="popupStartDate.currentDate" :min-date="popupStartDate.minDate"
+                @cancel="popupStartDate.show = false" @confirm="popupStartDateConfirm">
+            </van-datetime-picker>
+        </van-popup>
+        <!-- 预约结束日期 -->
+        <van-popup v-model="popupEndDate.show" position="bottom">
+            <van-datetime-picker show-toolbar :title="popupEndDate.title" type="date"
+                v-model="popupEndDate.currentDate" :min-date="popupEndDate.minDate"
+                @cancel="popupEndDate.show = false" @confirm="popupEndDateConfirm">
+            </van-datetime-picker>
+        </van-popup>
+        <!-- 开会时间 -->
+        <van-popup v-model="popupStartTime.show" position="bottom">
+            <van-datetime-picker show-toolbar :title="popupStartTime.title" type="time" :min-hour="popupStartTime.minTime" :min-minute="popupStartTime.minMinute"
+                v-model="popupStartTime.currentDate" @cancel="popupStartTime.show = false"
+                @confirm="popupStartTimeConfirm">
+            </van-datetime-picker>
+        </van-popup>
+        <!-- 结束时间 -->
+        <van-popup v-model="popupEndTime.show" position="bottom">
+            <van-datetime-picker show-toolbar :title="popupEndTime.title" type="time" :min-hour="popupEndTime.minTime"
+                :min-minute="popupEndTime.minMinute" v-model="popupEndTime.currentDate"
+                @cancel="popupEndTime.show = false" @confirm="popupEndTimeConfirm">
+            </van-datetime-picker>
+        </van-popup>
+        <van-popup v-model="popupNoticeTimeType.show" position="bottom">
+            <van-picker :title="popupNoticeTimeType.title" show-toolbar :columns="popupNoticeTimeType.list"
+                @cancel="popupNoticeTimeType.show = false" @confirm="popupNoticeTimeTypeConfirm">
+            </van-picker>
+        </van-popup>
+        <van-popup v-model="popupMeetingPerson.show" position="bottom">
+            <van-picker :title="popupMeetingPerson.title" show-toolbar :columns="popupMeetingPerson.list"
+                @cancel="popupMeetingPerson.show = false" @confirm="popupMeetingPersonConfirm">
+            </van-picker>
+        </van-popup>
+        <!-- 行外人员选择会议发起人 -->
+        <van-popup v-model="popupStartPerson.show" position="bottom">
+            <van-picker title="请选择" show-toolbar :columns="popupStartPerson.list"
+                @cancel="popupStartPerson.show = false" @confirm="popupStartPersonConfirm">
+            </van-picker>
+        </van-popup>
+        <!-- 行外人员选择会议发起部门 -->
+        <van-popup v-model="popupDept.show" position="bottom">
+            <van-picker title="请选择" show-toolbar :columns="popupDept.list"
+                @cancel="popupDept.show = false" @confirm="popupDeptConfirm">
+            </van-picker>
+        </van-popup>
+        <!-- <van-popup
+            v-model="popupServiceLogin.show"
+            position="bottom">
+            <van-picker
+                :title="popupServiceLogin.title"
+                show-toolbar
+                :columns="popupServiceLogin.list"
+                @cancel="popupServiceLogin.show = false"
+                @confirm="popupServiceLoginConfirm">
+            </van-picker>
+        </van-popup> -->
+        <!-- 持续时间 -->
+        <van-popup v-model="popupSustainType.show" position="bottom">
+            <van-picker :title="popupSustainType.title" show-toolbar :columns="popupSustainType.list"
+                @cancel="popupSustainType.show = false" @confirm="popupSustainTypeConfirm">
+            </van-picker>
+        </van-popup>
+        <van-popup v-model="popupMeetingType.show" position="bottom">
+            <van-picker :title="popupMeetingType.title" show-toolbar :columns="popupMeetingType.list"
+                @cancel="popupMeetingType.show = false" @confirm="popupMeetingTypeConfirm">
+            </van-picker>
+        </van-popup>
+        <van-popup v-model="popupServiceLogin.show" position="right" overlay-class="popup--nodes--overlay"
+            :style="{ height: '100%', width: '100%' }">
+            <div class="popup__container">
+                <section class="popup__main__container">
+                    <div class="session__item__container display border_top border_top_bofore"
+                        v-for="(item, index) in popupServiceLogin.list" :key="index" @click="handleChecked(index)">
+                        <div class="flex  display align_item_center color333333">
+                            {{ item.text }}
+                        </div>
+                        <div class="display align_item_center justify_content_right popup-main-item-img">
+                            <div>
+                                <img :src="item.status ? 'images/checked.png' : 'images/quxiao.png'" alt="">
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <div class="popup__footer__container display">
+                    <div class="button__cancel flex" @click="popupServiceLogin.show = false">取消</div>
+                    <div class="button__container flex" @click="handleApproveUserChecked">确&nbsp;&nbsp;&nbsp;定</div>
+                </div>
+            </div>
+        </van-popup>
+    </div>
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/clipboard.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/filter.js?v=1.0.0"></script>
+<script src="js/index.js?v=20251104"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem', 'invoke','selectEnterpriseContact'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

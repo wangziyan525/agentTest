@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <script src="../common/js/vue.min.js"></script>
+    <script src="../common/js/vant-2.12.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/common.css?v=1.0.1">
+    <link rel="stylesheet" href="css/selectPerson.css?v=1.0.1">
+</head>
+<body>
+<div id="app" v-cloak>
+    <div>
+        <div class="contentPart" style="background: #fff;margin-top: 10px">
+            <div class="session-item-container display" style="padding: 12px">
+                <div class="session-item-title display align-item-center color333333">员工号</div>
+                <div class="session-item-text flex display color333333 justify-content-right">
+                    <input class="v-test" type="number" placeholder="请输入被授权同事员工号" v-model='userid' style="width: 100%" maxlength='200'>
+                </div>
+            </div>
+            <div class="contentLine border-top" style="padding: 12px">
+                <div class="session-item-title display align-item-center color333333">授权起止日期</div>
+                <div class="selectState" style="position: relative;display: flex;align-items: center">
+                    <input style="text-align: right" class="weui-input" type="text" placeholder="请选择时间" @click='showTap(1)' v-model='xuanzTime' readonly>
+                    <img src="image/right.png" class="icon">
+                </div>
+            </div>
+
+            <div class="contentLine border-top" style="padding: 12px">
+                <div class="session-item-title display align-item-center color333333">授权开始时间</div>
+                <div class="selectState" style="position: relative;display: flex;align-items: center">
+                    <input style="text-align: right" class="weui-input" type="text" placeholder="请选择开始时间" @click='showTap(2)' v-model='popupStartTime.startTime' readonly>
+                    <img src="image/right.png" class="icon">
+                </div>
+            </div>
+            <div class="contentLine border-top" style="padding: 12px">
+                <div class="session-item-title display align-item-center color333333">授权结束时间</div>
+                <div class="selectState" style="position: relative;display: flex;align-items: center">
+                    <input style="text-align: right" class="weui-input" type="text" placeholder="请选择结束时间" @click='showTap(3)' v-model='popupEndTime.endTime' readonly>
+                    <img src="image/right.png" class="icon">
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+     <div class="bottomButton">
+        <div class="submitButton" @click="submitBindtap()">提 交</div>
+    </div>
+
+    <van-calendar v-model='show' color='#4675C9' type="range"  :min-date='maxDate'
+                  class="calendar" @confirm='onConfirm' :allow-same-day="true"></van-calendar>
+    <van-popup
+            v-model="popupStartTime.show"
+            position="bottom">
+        <van-datetime-picker
+                show-toolbar
+                :title="popupStartTime.title"
+                type="time"
+                :min-hour="6"
+                :max-hour="22"
+                v-model="popupStartTime.currentDate"
+                @cancel="popupStartTime.show = false"
+                @confirm="popupStartTimeConfirm">
+        </van-datetime-picker>
+    </van-popup>
+    <!-- 结束时间 -->
+    <van-popup
+            v-model="popupEndTime.show"
+            position="bottom">
+        <van-datetime-picker
+                show-toolbar
+                :title="popupEndTime.title"
+                type="time"
+                :min-hour="popupEndTime.minTime"
+                :min-minute="popupEndTime.minMinute"
+                v-model="popupEndTime.currentDate"
+                @cancel="popupEndTime.show = false"
+                @confirm="popupEndTimeConfirm">
+        </van-datetime-picker>
+    </van-popup>
+</div>
+</body>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js?v=20211022"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="js/selectPerson.js?v=2.2.0"></script>
+<script src="../common/js/vConsole.min.js"></script>
+<script>
+    //var vConsole = new VConsole();
+    //初始化微信社区
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem','chooseImage','uploadImage','downloadImage', 'startRecord', 'stopRecord', 'translateVoice','closeWindow']);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+    function getUserFinish(){
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

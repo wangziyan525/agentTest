@@ -1,0 +1,106 @@
+.loan-result-query-page .header_fiexd_container {
+    background-color: #ffffff;
+    z-index: 10;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .04);
+}
+
+.loan-result-query-page .tabs_container_item {
+    position: relative;
+}
+
+.loan-result-query-page .slide_container {
+    margin: 0;
+    background-color: #fff;
+    border-top: 10px solid #f5f6f7;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.loan-result-query-page .slide_container_item {
+    height: 50px;
+    color: #666666;
+}
+
+.loan-result-query-page .main_container {
+    padding: 10px 0 18px;
+}
+
+.loan-result-query-page .main_content_item_result {
+    position: relative;
+    border-radius: 0;
+    margin-bottom: 8px;
+}
+
+.loan-result-query-page .main_content_item_header_result {
+    padding: 14px 28px 12px 12px;
+    color: #5a5a5a;
+    font-size: 16px;
+    line-height: 22px;
+}
+
+.loan-result-query-page .main_content_item_header_result::after {
+    content: "";
+    position: absolute;
+    right: 14px;
+    top: 19px;
+    width: 7px;
+    height: 7px;
+    border-width: 1px 1px 0 0;
+    border-style: solid;
+    border-color: #c1c1c1;
+    transform: rotate(45deg);
+}
+
+.loan-result-query-page .__main_content_item_result {
+    padding: 7px 12px 10px;
+    border-top: 1px solid #f2f2f2;
+    border-bottom: none;
+}
+
+.loan-result-query-page .__main_content_item_result .item_views {
+    padding: 2px 0;
+    min-height: 26px;
+}
+
+.loan-result-query-page .main_content_item_result .__main_content_view_left {
+    color: #b2b2b2 !important;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.loan-result-query-page .main_content_item_result .__main_content_view_right {
+    word-break: break-all;
+    color: #666666 !important;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.loan-result-query-page .list_finished_text {
+    height: 36px;
+    line-height: 36px;
+    letter-spacing: .5px;
+}
+
+.loan-result-query-page .header_1482FF {
+    color: #1482ff;
+    background: #f6fcfe;
+    border-radius: 2px;
+    padding: 1px 6px;
+    border: 0.5px solid #c1e3fc;
+    line-height: 14px;
+}
+
+.loan-result-query-page .header_D09F4C {
+    color: #d09f4c;
+    background: #fef8ee;
+    border-radius: 2px;
+    padding: 1px 6px;
+    border: 0.5px solid #ffe0ac;
+    line-height: 14px;
+}
+
+.loan-result-query-page .main_content_item_result .colorF5A623,
+.loan-result-query-page .main_content_item_result .color66C102,
+.loan-result-query-page .main_content_item_result .colorFF0000 {
+    font-size: 16px;
+    line-height: 22px;
+}

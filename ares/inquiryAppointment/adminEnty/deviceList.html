@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
+        name="viewport" />
+    <mata http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    <title>理疗设备管理</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../css/style.css?v=1.1.2">
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <!-- 有数据 -->
+        <div v-if='deviceList.length>0'>
+            <div v-for='(item,index) in deviceList' :key="index">
+                <!-- 占位 -->
+                <div style="height:10px;"></div>
+                <div class="doctorListInfo">
+                    <div class="displayStart">
+                        <span class="doctor_name">{{item.deviceName}}</span>
+                    </div>
+                    <div style="padding:10px 0;box-sizing: border-box;">
+                        设备可预约时间段：{{item.startTime1}}-{{item.endTime1}}
+                    </div>
+                    <div class="doctorListIntr line2">
+                        {{item.introduction}}
+                    </div>
+                    <div class="displayEnd doctorList_b">
+                        <div class="lineAll" @click='editTap(item)'>
+                            <img src="../images/edit.png" alt="">
+                            <span>编辑</span>
+                        </div>
+                        <div class="lineAll" @click='deleteTap(item.id,index)'>
+                            <img src="../images/delete.png" alt="">
+                            <span>删除</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 无数据 -->
+        <div v-else class="noData">
+            <img src="../images/no_device.png" alt="">
+            <div>还没有理疗设备请先添加理疗设备</div>
+        </div>
+        <!-- 占位 -->
+        <div style="height:100px"></div>
+        <div class="footer_btn" @click='addTap'>添加理疗设备</div>
+    </div>
+</body>
+
+</html>
+<!-- 引入 Vue 的 JS 文件 -->
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../../common/js/server.js"></script>
+<script type="text/javascript" src="./js/deviceList.js?v=1.0.4"></script>
+<script type="text/javascript" src="../../common/js/watermark.js?v=1.2"></script>
+<script>
+    //初始化微信社区
+    $(function () {
+        initJSSDK(['hideAllNonBaseMenuItem']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+    function getUserFinish() {
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun();
+    }
+
+
+
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>

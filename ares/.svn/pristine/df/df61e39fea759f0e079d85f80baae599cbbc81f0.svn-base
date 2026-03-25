@@ -1,0 +1,318 @@
+
+
+[v-cloak]{
+    display: none;
+}
+
+html, body {
+    min-height: 100vh;
+    background-color: #f3f4f6;
+}
+
+div, p, span {
+    font-family: PingFangSC-Regular, PingFang SC;
+    box-sizing: border-box;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+
+.fs0 {
+    font-size: 0;
+}
+
+.fs12 {
+    font-size: 12px !important;
+}
+
+.fs10 {
+    font-size: 10px !important;
+}
+
+.fs11 {
+    font-size: 11px !important;
+}
+
+.fs13 {
+    font-size: 13px !important;
+}
+
+.fs15 {
+    font-size: 15px !important;
+}
+
+.fs14 {
+    font-size: 14px !important;
+}
+
+.fs18 {
+    font-size: 18px !important;
+}
+
+.fs17 {
+    font-size: 17px !important;
+}
+
+.fs20 {
+    font-size: 20px !important;
+}
+
+.fs25 {
+    font-size: 25px !important;
+}
+
+.fw600 {
+    font-weight: 600;
+}
+
+.color000000 {
+    color: #000000;
+}
+
+.color9DA0A3 {
+    color: #9DA0A3 !important;
+}
+
+.color1EB444 {
+    color: #1EB444 !important;
+}
+
+.colorF96060 {
+    color: #F96060 !important;
+}
+
+.colorFF8B01 {
+    color: #FF8B01 !important;
+}
+
+.colorFF353B {
+    color: #FF353B !important;
+}
+
+.color9DA0A3 {
+    color: #9DA0A3 !important;
+}
+
+.color1482FF {
+    color: #1482FF !important;
+}
+
+.color267EF0 {
+    color: #267EF0 !important;
+}
+
+.color888888 {
+    color:  #888888 !important;
+}
+
+.color272727 {
+    color:  #272727 !important;
+}
+
+.border_top {
+    border-top: 1px solid #f3f4f6;
+}
+
+.display {
+    display: flex;
+}
+
+.flex {
+    flex: 1;
+}
+
+.align_item_center {
+    align-items: center;
+}
+
+.justify_content_center {
+    justify-content: center;
+}
+
+.justify_content_right {
+    text-align: justify;
+    justify-content: flex-end;
+}
+
+.align_right {
+    text-align: right;
+}
+
+.text_justify {
+    display: inline-block;
+    text-align: justify;
+}
+
+.margin_right10 {
+    margin-right: 10px;
+}
+
+.margin_top10 {
+    margin-top: 10px;
+}
+
+.margin_top0 {
+    margin-top: 0 !important;
+}
+
+.padding_bottom10 {
+    padding-bottom: 10px !important;
+}
+
+.view_left {
+    margin-right: 10px;
+}
+
+.view_left {
+    width: 43%;
+}
+
+.view_left_100 {
+    width: 100px !important;
+}
+
+/* 右箭头 */
+
+._right_link {
+    position: relative;
+    padding-right: 10px;
+}
+
+._right_link::before {
+    content: " ";
+    display: inline-block;
+    height: 8px;
+    width: 8px;
+    border-width: 1px 1px 0 0;
+    border-color: #999;
+    border-style: solid;
+    transform: matrix(.71,.71,-.71,.71,0,0);
+    top: 50%;
+    position: absolute;
+    margin-top: -5px;
+    right: 0px;
+}
+
+/* 下箭头 */
+
+._bottom_link {
+    position: relative;
+    padding-right: 18px;
+}
+
+._bottom_link::before {
+    content: " ";
+    display: inline-block;
+    height: 5px;
+    width: 5px;
+    border-width: 1px 1px 0 0;
+    border-color: #333;
+    border-style: solid;
+    /* -webkit-transform: matrix(.71,.71,-.71,.71,0,0); */
+    transform: matrix(.71,.71,.71,-.71,0,0);
+    position: relative;
+    top: 12px;
+    position: absolute;
+    margin-top: -6px;
+    right: 3px;
+}
+
+/* 实心下箭头 */
+
+.triangle {
+    position: relative;
+    padding-right: 25px !important;
+}
+
+.triangle::before {
+    content: '';
+    position: absolute;
+    border-width: 0 6px 6px 0;
+    border-style: solid;
+    border-color: transparent transparent #A8A8A8 transparent;
+    transform: rotate(-45deg);
+    top: calc(50% - 5px);
+    right: 10px;
+}
+
+
+.footer_fiexd {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    background-color: #fff;
+}
+
+
+.now_container85 {
+    height: 85px;
+}
+
+.now_container120 {
+    height: 120px;
+}
+
+.now_container35 {
+    height: 35px !important;
+}
+
+
+.footer_fiexd_container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+    z-index: 99;
+}
+
+.footer_container {
+    padding: 10px 15px 0;
+}
+
+.footer_container >div {
+    border-radius: 6px;
+    height: 44px;
+}
+
+.footer_view_left {
+    border: 1px solid #267EF0;
+    color: #267EF0;
+    margin-right: 10px;
+}
+
+.footer_view_right {
+    background: #267EF0;
+    color: #fff;
+}
+
+.sub_header_container {
+    padding: 10px;
+    background-color: #fff;
+}
+
+/* vant */
+
+.van-tabs__line {
+    background-color: #267EF0 !important;
+}
+
+.van-tab {
+    color: #272727 !important;
+}
+
+.van-tab--active {
+    color: #267EF0 !important;
+    font-weight: 600;
+}
+
+.van-dialog {
+    border-radius: 6px !important;
+}
+
+.van-dialog__confirm, .van-dialog__confirm:active {
+    color: #267EF0 !important;
+}

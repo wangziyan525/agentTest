@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport" />
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/list.css">
+    <!-- 本周预约会议列表 -->
+</head>
+<body>
+    <div class="container" v-cloak>
+        <header class="header_fiexd">
+            <van-search
+                v-model="searchList.theme"
+                show-action
+                placeholder="请输入会议主题">
+                <div slot="action" @click="searchHander" class="color4675c9">
+                    搜索
+                </div>
+            </van-search>
+        </header>
+        <div style="height: 65px;"></div>
+        <section class="main_container">
+            <van-pull-refresh
+                v-model="refreshing"
+                @refresh="onRefresh">
+                <van-list
+                    v-model="listLoading"
+                    :finished="listFinished"
+                    @load="onLoad">
+                    <div
+                        class="main_item"
+                        v-for="(item, index) in dataList"
+                        :key="index"
+                        @click="goPage(item)">
+                        <div
+                            class="session_item_container_list_right_link height50 display align_item_center padding10 fs14"
+                            @click="goPage(item)">
+                            <div class="flex">{{ item.theme || '' }}</div>
+                            <div class="">
+                                <!-- <div
+                                    class="fs11 display justify_content_center align_item_center stauts_content"
+                                    :class="[ item.clueStatus == '1' || item.clueStatus == '2' || item.clueStatus == '3' || item.clueStatus == '4' || item.clueStatus == '5' ? 'status4675c9' : '',  item.clueStatus == '99' ? 'statusff8b01' : '', item.clueStatus == '33' || item.clueStatus == '6' ? 'statusff0000' : '', item.clueStatus == '7' ? 'status3ac719' : '' ]">
+                                    {{ formatterToStatus(item.clueStatus) }}
+                                </div> -->
+                            </div>
+                        </div>
+                        
+                        <div class="border_top padding10">
+                            <div class="display padding_bottom5">
+                                <div class="min_width80 color666666 fs14">会议室</div>
+                                <div class="flex display align_item_center justify_content_right fs14">
+                                    {{ item.place || '' }}
+                                </div>
+                            </div>
+                            <div class="display padding_bottom5">
+                                <div class="min_width80 color666666 fs14">开始时间</div>
+                                <div class="flex display align_item_center justify_content_right fs14">
+                                    {{ item.startTime || '' }}
+                                </div>
+                            </div>
+                            <div class="display">
+                                <div class="min_width80 color666666 fs14">结束时间</div>
+                                <div class="flex display align_item_center justify_content_right fs14">
+                                    {{ item.endTime || '' }}
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </van-list>
+            </van-pull-refresh>
+        </section>
+        <div class="noList" v-if="noList">
+            <img src="../images/noList.png" alt="">
+            <span>暂无数据</span>
+        </div>
+        <!-- <div style="height: 50px;"></div>
+        <footer class="footer_fiexd">
+            <div class="display footer_fiexd_container">
+                <div class="flex display justify_content_center align_item_center border_right_before">我的</div>
+                <div class="flex display justify_content_center align_item_center">本周</div>
+            </div>
+        </footer> -->
+    </div>
+</body>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/clipboard.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script src="../../common/js/server.js"></script>
+<script src="../js/weeklist.js?v=20250221"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+</html>

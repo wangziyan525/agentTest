@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport" />
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/list.css">
+    <!-- 安全员列表 -->
+</head>
+<body>
+    <div class="container" v-cloak>
+        <header class="header_fiexd">
+            <van-search
+                v-model="searchList.string"
+                show-action
+                placeholder="机构号/名称/姓名/编号">
+                <div slot="action" @click="searchHander" class="color4675c9">
+                    搜索
+                </div>
+            </van-search>
+        </header>
+        <div style="height: 65px;"></div>
+        <section class="main_container">
+            <!-- <van-pull-refresh
+                v-model="refreshing"
+                @refresh="onRefresh">
+                <van-list
+                    v-model="listLoading"
+                    :finished="listFinished"
+                    @load="onLoad"> -->
+                    <div
+                        class="main_item"
+                        v-for="(item, index) in dataList"
+                        :key="index"
+                        @click="">
+                        <div
+                            class="session_item_container_right_link height50 display align_item_center padding10 fs14"
+                            @click="goPage(item)">
+                            <div class="flex">{{ item.orgName || '' }}</div>
+                            <div class="">
+
+                            </div>
+                        </div>
+                        
+                        <div class="border_top padding10">
+                            <div class="display padding_bottom5">
+                                <div class="min_width80 color666666 fs14">姓名</div>
+                                <div class="flex display align_item_center justify_content_right fs14">
+                                    {{ item.name || '' }}
+                                </div>
+                            </div>
+                            <div class="display padding_bottom5">
+                                <div class="min_width80 color666666 fs14">员工编号</div>
+                                <div class="flex display align_item_center justify_content_right fs14">
+                                    {{ item.humanCode || '' }}
+                                </div>
+                            </div>
+                            <div class="display padding_bottom5">
+                                <div class="min_width80 color666666 fs14">角色名称</div>
+                                <div class="flex display align_item_center justify_content_right fs14">
+                                    {{ item.rolename || '' }}
+                                </div>
+                            </div>
+                            <div class="display">
+                                <div class="min_width80 color666666 fs14">机构号</div>
+                                <div class="flex display align_item_center justify_content_right fs14">
+                                    {{ item.orgID || '' }}
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                <!-- </van-list>
+            </van-pull-refresh> -->
+        </section>
+        <div class="noList" v-if="noList">
+            <img src="../images/noList.png" alt="">
+            <span>暂无数据</span>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/clipboard.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script src="../../common/js/server.js"></script>
+<script src="../js/list.js"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+</html>

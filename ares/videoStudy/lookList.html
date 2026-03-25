@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>学习视频</title>
+    <link rel="stylesheet" href="../common/css/weui.min.new.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.new.css">
+    <link rel="stylesheet" href="css/index.css?v=1.2.2">
+</head>
+<style>
+    html,body {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        -webkit-overflow-scrolling:touch;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        width: 100%;
+        height: 100%;
+        background-color: #f2f2f2;
+    }
+</style>
+<body>
+
+<!-- 观看列表 -->
+<div class="page2">
+    <div class="title">
+        <span>部门</span>
+        <span>姓名</span>
+        <span>分享者</span>
+    </div>
+    <div class="main">
+    </div>
+    <div class="upLoad" onclick="upload()">
+        <span>数据导出</span>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=1.0"></script>
+<script type="text/javascript " src="../common/js/jssdk.js "></script>
+<!--<script type="text/javascript" src="./js/vConsole.min.js"></script>-->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    function getUserFinish(){
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        $.getScript("js/lookList.js?v=1.9.9")
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+<script src="../common/js/watermark.js"></script>
+</html>

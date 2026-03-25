@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport" />
+    <title>转贴现卖出查询</title>
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.new.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../common/css/vant-1.2.3.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+<body>
+    <div class="container" v-cloak>
+        <div>
+            <div class="header_fiexd_container">
+                <header  class="tabs_container display">
+                    <div
+                        class="fs16 tabs_container_item flex display align_item_center justify_content_center color999999"
+                        :class="searchList.DalSt == '00' ? ' tabs_container_item_active fw600' : ''"
+                        @click="handleTabs('00')">
+                        转贴现卖出申请
+                    </div>
+                    <div
+                        class="fs16 tabs_container_item flex display align_item_center justify_content_center color999999"
+                        :class="searchList.DalSt == '01' ? ' tabs_container_item_active fw600' : ''"
+                        @click="handleTabs('01')">
+                        卖出结果查询
+                    </div>
+                </header>
+                <header class="slide_container display" v-if="searchList.DalSt == '01'">
+                    <div
+                        class="slide_container_item flex display align_item_center justify_content_center"
+                        @click="popupMask.show = true">
+                        <div class="triangle" v-if="popupMask.checked == '1'">{{ popupMask.checked == '1' ? '当日' : '' }}</div>
+                        <div class="triangle" v-if="popupMask.checked == '2'">{{ popupMask.checked == '2' ? '近七天' : '' }}</div>
+                        <div class="triangle" v-if="popupMask.checked == '3'">{{ popupMask.checked == '3' ? '近一月' : '' }}</div>
+                        <div class="triangle" v-if="popupMask.checked == '4'">{{ popupMask.checked == '4' ? '近三月' : '' }}</div>
+                        <div class="triangle" v-if="popupMask.checked == ''">{{ popupMask.checked == '' ? '自定义' : '' }}</div>
+                    </div>
+                    <div
+                        class="slide_container_item slide_container_filter flex display align_item_center justify_content_center"
+                        @click="popupTranSt.show = true">
+                        <div class="triangle">
+                            {{ searchList.TranSt == '' ? '筛选' : formatTranSt(searchList.TranSt) }}
+                        </div>
+                    </div>
+                </header>
+            </div>
+            <div :class="searchList.DalSt == '00' ? 'now_height53' : 'now_height113'"></div>
+            <section class="main_container">
+                <van-list
+                    v-model="listLoading"
+                    :finished="listFinished"
+                    @load="onLoad">
+                    <div class="main_content">
+                        <div
+                            class="main_content_item"
+                            :class="searchList.DalSt == '01' ? 'main_content_item_result' : ''"
+                            v-for="(item, index) in dataList"
+                            :key="index"
+                            @click="searchList.DalSt == '01' ? detailsHandle(item) : null">
+                            <div class="main_content_item_header display" :class="searchList.DalSt == '01' ? 'main_content_item_header_result' : ''">
+                                <div class="flex">{{ item.QtnShdNur }}</div>
+                                <div
+                                    v-if="searchList.DalSt == '01'"
+                                    class="fs10"
+                                    :class="formatBillTagClass(item.BillCgy)">
+                                    {{ formatBillTag(item.BillCgy) }}
+                                </div>
+                            </div>
+                            <div class="__main_content_item fs13" :class="searchList.DalSt == '01' ? '__main_content_item_result' : ''">
+                                <template v-if="searchList.DalSt == '01'">
+                                    <div class="display item_views">
+                                        <div class="color999999 __main_content_view_left display  align_item_center">
+                                            报价单编号
+                                        </div>
+                                        <div class="color272727 __main_content_view_right flex display justify_content_right align_item_center">
+                                            {{ item.QuoteNo || item.QtnNur || item.QtnNo || item.QtnShdNur }}
+                                        </div>
+                                    </div>
+                                    <div class="display item_views">
+                                        <div class="color999999 __main_content_view_left display  align_item_center">
+                                            票据总数
+                                        </div>
+                                        <div class="color272727 __main_content_view_right flex display justify_content_right align_item_center">
+                                            {{ item.BillTotShet || item.BillCnt || item.BillTotNum || item.BillNumCnt || 0 }}
+                                        </div>
+                                    </div>
+                                    <div class="display item_views">
+                                        <div class="color999999 __main_content_view_left display  align_item_center">
+                                            票据总金额
+                                        </div>
+                                        <div class="color272727 __main_content_view_right flex display justify_content_right align_item_center">
+                                            {{ item.BillTot ? parseFloat(item.BillTot).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') : '' }}
+                                        </div>
+                                    </div>
+                                    <div class="display item_views">
+                                        <div class="color999999 __main_content_view_left display  align_item_center">
+                                            结算金额
+                                        </div>
+                                        <div class="color272727 __main_content_view_right flex display justify_content_right align_item_center">
+                                            {{ item.StlAmt ? parseFloat(item.StlAmt).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') : '' }}
+                                        </div>
+                                    </div>
+                                    <div class="display item_views">
+                                        <div class="color999999 __main_content_view_left display  align_item_center">
+                                            应付利息
+                                        </div>
+                                        <div class="color272727 __main_content_view_right flex display justify_content_right align_item_center">
+                                            {{ item.DueInt ? parseFloat(item.DueInt).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') : '' }}
+                                        </div>
+                                    </div>
+                                    <div class="display item_views">
+                                        <div class="color999999 __main_content_view_left display  align_item_center">
+                                            交易日期
+                                        </div>
+                                        <div class="color272727 __main_content_view_right flex display justify_content_right align_item_center">
+                                            {{ item.TxnTm ? item.TxnTm.slice(0, 10).replace(/-/g, '') : '' }}
+                                        </div>
+                                    </div>
+                                    <div class="display item_views">
+                                        <div class="color999999 __main_content_view_left display  align_item_center">
+                                            批次状态
+                                        </div>
+                                        <div
+                                            class="__main_content_view_right flex display justify_content_right align_item_center"
+                                            :class="formatTranStClass(item.TranSt)">
+                                            {{ formatResultTranSt(item.TranSt) }}
+                                        </div>
+                                    </div>
+                                </template>
+                                <template v-else>
+                                <div class="display item_views">
+                                    <div class="color999999 __main_content_view_left display  align_item_center">
+                                        票据类别
+                                    </div>
+                                    <div class="color272727 __main_content_view_right flex display justify_content_right align_item_center">
+                                        {{ item.BillCgy ? formatBillCgy(item.BillCgy) : '' }}
+                                    </div>
+                                </div>
+
+                                <div class="display item_views">
+                                    <div class="color999999 __main_content_view_left display  align_item_center">
+                                        {{ searchList.DalSt == '00' ? '票据（包）总额' : '票据总金额' }}
+                                    </div>
+                                    <div class="color272727 __main_content_view_right flex display justify_content_right align_item_center">
+                                        {{ item.BillTot ? parseFloat(item.BillTot).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') : '' }}
+                                    </div>
+                                </div>
+                                <div class="display item_views">
+                                    <div class="color999999 __main_content_view_left display  align_item_center">
+                                        贴现利率
+                                    </div>
+                                    <div class="color272727 __main_content_view_right flex display justify_content_right align_item_center">
+                                        {{ item.DcnInst }}
+                                    </div>
+                                </div>
+                                <div class="display item_views">
+                                    <div class="color999999 __main_content_view_left display  align_item_center">
+                                        提交时间
+                                    </div>
+                                    <div class="color272727 __main_content_view_right flex display justify_content_right align_item_center">
+                                        {{ item.TxnTm }}
+                                    </div>
+                                </div>
+
+                                <div class="display item_views" v-if="searchList.TranSt == '01' || searchList.TranSt == '03'">
+                                    <div class="color999999 __main_content_view_left display  align_item_center">
+                                        {{ searchList.TranSt == '01' ? '拒绝原因' : '失败原因' }}
+                                    </div>
+                                    <div class="color272727 __main_content_view_right flex display justify_content_right align_item_center">
+                                        {{ item.RfsRsn }}
+                                    </div>
+                                </div>
+                                </template>
+                            </div>
+                            <div
+                                v-if="searchList.DalSt == '00'"
+                                class="main_content_item_header color1482FF display justify_content_center align_item_center"
+                                @click="detailsHandle(item)">
+                                {{ searchList.DalSt == '00' ? '审批' : '详情' }}
+                            </div>
+                        </div>
+                    </div>
+                </van-list>
+            </section>
+            <div class="noList" v-if="noList">
+                <img src="../images/noList.png" alt="">
+                <span>暂无数据</span>
+            </div>
+        </div>
+        <van-popup v-model="popupMask.show" position="bottom">
+            <div class="popup_header">
+                <div class="">
+                    <div class="popup_header_title display align_item_center justify_content_center">请选择查询日期</div>
+                    <div class="popup_close_icon" @click="popupMask.show = false">
+                        <img src="../images/close_icon@2x.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="pupop_container">
+                <div class="popup_content">
+                    <div class="popup_sub_text color999999">自定义时间</div>
+                    <div class="display">
+                        <div
+                            class="display flex select_timer_container triangle1 display align_item_center justify_content_center"
+                            @click="popupSelectTimerHandle('QryStDt')">
+                            {{ searchList.QryStDt }}
+                        </div>
+                        <div class="display align_item_center  justify_content_center interval_container">—</div>
+                        <div
+                            class="display flex select_timer_container triangle1 display align_item_center justify_content_center"
+                            @click="popupSelectTimerHandle('QryEndDt')">
+                            {{ searchList.QryEndDt }}
+                        </div>
+                    </div>
+                </div>
+                <div class="popup_content">
+                    <div class="popup_sub_text color999999">时间段</div>
+                    <div class="display popup_checked_coantainer">
+                        <div
+                            class="flex display justify_content_center align_item_center"
+                            :class="popupMask.checked == 1 ? 'checked_active' : ''"
+                            @click="popupTimerHandle(1)">
+                            当日
+                        </div>
+                        <div
+                            class="flex display justify_content_center align_item_center"
+                            :class="popupMask.checked == 2 ? 'checked_active' : ''"
+                            @click="popupTimerHandle(2)">
+                            近七天
+                        </div>
+                        <div
+                            class="flex display justify_content_center align_item_center"
+                            :class="popupMask.checked == 3 ? 'checked_active' : ''"
+                            @click="popupTimerHandle(3)">
+                            近一月
+                        </div>
+                        <div
+                            class="flex display justify_content_center align_item_center"
+                            :class="popupMask.checked == 4 ? 'checked_active' : ''"
+                            @click="popupTimerHandle(4)">
+                            近三月
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="popup_footer">
+                <div class="popup_footer_container display">
+                    <div
+                        class="flex display justify_content_center align_item_center reset_btn"
+                        @click="popupResetHandle">
+                        重置
+                    </div>
+                    <div
+                        class="flex display justify_content_center align_item_center confirm_btn"
+                        @click="popupConfirmHandle">
+                        确认
+                    </div>
+                </div>
+            </div>
+        </van-popup>
+        <!-- 日期 -->
+        <van-popup
+            v-model="popupTime.show"
+            position="bottom">
+            <van-datetime-picker
+                show-toolbar
+                title="请选择"
+                type="date"
+                :max-date="popupTime.maxDate"
+                v-model="popupTime.currentDate"
+                @cancel="popupTime.show = false"
+                @confirm="popupTimeConfirm">
+            </van-datetime-picker>
+        </van-popup>
+
+        <van-popup
+            v-model="popupTranSt.show"
+            position="bottom">
+            <van-picker
+                title="请选择交易状态"
+                show-toolbar
+                :columns="popupTranSt.list"
+                @cancel="popupTranSt.show = false"
+                @confirm="popupTranStConfirm">
+            </van-picker>
+        </van-popup>
+    </div>
+</body>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script src="../../common/js/server.js"></script>
+<script src="../js/filter.js"></script>
+<script src="../js/loanList.js?v=202512120"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+</html>

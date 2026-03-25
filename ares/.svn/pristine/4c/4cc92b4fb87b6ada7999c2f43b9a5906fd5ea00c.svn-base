@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/main.css?v=2.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none;padding-bottom: 15px">
+        <div class="panel">
+            <div class="title">登记管理</div>
+            <div class="contentPart">
+                <div class="contentLine icon1" @click="jump('1')">自查登记</div>
+                <div class="contentLine icon2" @click="jump('2')" v-if="showFlag=='1'">机构抽查</div>
+                <div class="contentLine icon3" @click="jump('3')" v-if="showFlag=='0'">总行抽查</div>
+                <div class="contentLine icon4" @click="jump('4')">审批管理</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="title">整改管理</div>
+            <div class="contentPart">
+                <div class="contentLine icon5" @click="jump('5')">整改分配</div>
+                <div class="contentLine icon6" @click="jump('6')">整改提交</div>
+                <div class="contentLine icon7" @click="jump('7')">整改审批</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="title">专项检查</div>
+            <div class="contentPart">
+                <div class="contentLine icon8" @click="jump('8')">检查下发</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="title">统计管理</div>
+            <div class="contentPart">
+                <div class="contentLine icon9" @click="jump('9')">汇总统计</div>
+                <div class="contentLine icon10" @click="jump('10')">明细统计</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

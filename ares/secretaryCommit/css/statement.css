@@ -1,0 +1,391 @@
+
+.hrefPth{
+    text-decoration: underline !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color:#f6f6f6;
+}
+*{
+    -webkit-overflow-scrolling: touch !important;
+    -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+    -webkit-tap-highlight-color: transparent !important;
+    font-family: 'Microsoft YaHei', Tahoma, Arial, sans-serif;
+}
+.weui-dialog{
+    border-radius: 12px !important;
+}
+.weui-dialog .weui-dialog__hd{
+    padding: 2em 1.5em 1.5em;
+}
+.nodata{
+    font-size: 16px;
+    height: 200px;
+    line-height: 200px;
+    color: #999;
+    width: 100%;
+    text-align: center;
+}
+/*--------------------------------------------------------------------------- 基础信息 -----------------------------------------------*/
+/****************banner\页签开始****************/
+.banner{
+    width:100%;
+    vertical-align: bottom;
+    height: 170px;
+}
+.tab{
+    height: 50px;
+    display: flex;
+    justify-content: start;
+    font-size: 15px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+    padding: 0 15px;
+}
+.tab>div{
+    width: 17%;
+    height: 25px;
+    line-height: 25px;
+    background: #f0f1f2;
+    color: #666;
+    text-align: center;
+    border-radius: 15px;
+    margin-right: 15px;
+}
+.selectDate{
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background: url('../image/right.png') no-repeat right #fff;
+    background-size: 2%;
+    background-position-x: 97%;
+    background-position-y: 51%;
+    font-size: 15px;
+    padding: 0 15px;
+    margin-bottom: 8px;
+    border-top: 1px solid #eee
+    /* font-weight: 500; */
+}
+.inputTitle{
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-size: 2%;
+    background-position-x: 97%;
+    background-position-y: 51%;
+    font-size: 15px;
+    padding: 0 15px;
+    background: #fff;
+    border-top: 1px solid #eee;
+    margin-bottom: -15px;
+    /* font-weight: 500; */
+}
+.inputContent{
+    height: 100px;
+    display: flex;
+    width: 110%;
+    justify-content: center;
+    align-items: center;
+    background-size: 2%;
+    background-position-x: 97%;
+    background-position-y: 51%;
+    font-size: 15px;
+    /* padding: 0 15px; */
+    font-weight: 500;
+    background: #F6F7F9;
+    margin-bottom: 15px;
+
+}
+.activeTab{
+    background: rgba(70,117,201,.2) !important;
+    color: #4675C9 !important;
+    border-radius: 15px;
+}
+/****************banner\页签结束****************/
+
+/****************列表查询开始****************/
+.listParts{
+    background: #fff;
+    height: 50px;
+    line-height: 50px;
+    border-top: 1px solid #eee;
+}
+.listLine{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    padding: 0 13px 0 15px;
+}
+.listLine>div:nth-child(1){
+    width: 40%;
+
+}
+
+.containList img{
+    width: 11%;
+    vertical-align: middle;
+}
+.listLine>div:last-child{
+    width: 60%;
+    text-align: right;
+}
+.rule{
+    width: 92%;
+    margin-left: 4%;
+    background: #fff;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 10px;
+    line-height: 2;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+/****************列表查询结束****************/
+.listTitle{
+    display: flex;
+    align-items: center;
+    background: #DAE3F4;
+    margin-top: 10px;
+    padding: 10px 15px;
+    color: #666;
+}
+.listInfo{
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding: 10px 15px;
+}
+.listTitle>p:nth-child(1),.listInfo>p:nth-child(1){
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 15px;
+    box-sizing: border-box;
+}
+.listTitle>p:nth-child(2),.listInfo>p:nth-child(2){
+    width: 25%;
+}
+.listTitle>p:nth-child(3),.listInfo>p:nth-child(3){
+    width: 25%;
+}
+
+.submitButton{
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    width: 100%;
+}
+
+.textAreaPart .van-field__body>textarea{
+    background: #F3F4F8;
+    border-radius: 4px;
+    /* margin: 10px auto 0; */
+    text-align: left;
+    padding: 0px 10px;
+    border: 0;
+    width: 45vh;
+
+}
+.van-field__control {
+    color: #272727;
+}
+.info_content__ {
+    height: auto;
+    margin-top: 10px;
+    /* margin-bottom: 7px; */
+    padding-bottom: 5px;
+    background-color: #F5F6f7;
+    border-radius: 6px;
+}
+
+.van-field__word-limit {
+    background-color: #F5F6f7;
+    padding-right: 10px;
+    margin-top: 0;
+}
+
+.input_textarea textarea.van-field__control {
+    background-color: #F5F6f7;
+    /* padding: 10px; */
+    border-radius: 6px 6px 0 0;
+}
+/* ------------------------------- 按钮 --------------------- */
+.btn{
+    width: 100%;
+    margin-top: 50px;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+.btn span{
+    display: block;
+    width: 100%;
+    line-height: 45px;
+    background-color: #267EF0;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #fff;
+    text-align: center;
+}
+.resultPart{
+    margin: 60px auto;
+    text-align: center;
+    font-size: 20px;
+    color: #000000;
+    text-align: center;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+}
+.resultPart>img{
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    
+}
+.confirm{
+    background: #267EF0;
+    width: 200px;
+    padding: 10px;
+    font-size: 17px;
+    color: #FFFFFF;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 4px;
+    margin: 10px auto;
+    z-index: 3;
+    position: relative;
+}
+
+ .inputContentStatement{
+    width: 90%;
+    background:#F6F7F9;
+    border-radius:4px;
+    font-size: 16px;
+    color: #202020;
+    font-weight: 400;
+    min-height: 30px;
+    max-height: 800px;
+    padding: 7px;
+    margin: 8px auto;
+    word-break: break-all;
+    
+ }
+ .inputContentStatementArea{
+     background: #fff;
+     padding: 10px 0px;
+ }
+/****************语音输入开始****************/
+.textAreaPart{
+    position: relative;
+    box-sizing: border-box;
+}
+.yuyun-box {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    border-radius: 6px;
+    color: #3975C6;
+    border: 1px solid #3975C6;
+    text-align: center;
+    margin: 12px auto;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.yuyun-box img {
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+.yuyinTextArea{
+    margin: 10px auto;
+    background: #F6F7F9;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.yuyinTextArea .van-cell{
+    background:inherit;
+    border-radius: 4px;
+    padding: 0px!important;
+}
+.yuyinTextArea .van-field__control{
+    text-align: left;
+    /* padding:10px; */
+    border-radius: 4px;
+}
+.van-cell {
+    padding: 0!important;
+}
+
+.record{
+    position: absolute;
+    right: 24px;
+    top: -40px;
+    width: 20px;
+    height: 25px;
+}
+.record>div{
+    position: relative;
+    display: inline-block;
+}
+.voice{
+    width: 22px;
+    height: 22px;
+    vertical-align: sub;
+    margin-right: 10px;
+
+}
+.luyinbtn {
+    width: 100px;
+    background-color: #fff;
+    color: #333;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 8px;
+    margin: 6px auto 12px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.btnDiv{
+   display: flex;
+}
+.luyinline {
+   width: 40%;
+   height: 34px;
+   line-height: 34px;
+   border-radius: 50px;
+   color: #4273d8;
+   border: 1px solid #4273d8;
+   text-align: center;
+   margin: 10px auto;
+   font-size: 15px;
+}
+
+.luyinline img {
+   height: 20px;
+   vertical-align: middle;
+   margin-right: 6px;
+}
+
+.yuyin-input{
+   height: auto;
+   padding: 10px 3% 5px 3%;
+   border-bottom: 0px;
+   flex-direction: column
+}
+select:invalid{
+   color: #999999;
+}
+option{
+   color: #121212;
+}
+/****************语音输入结束****************/

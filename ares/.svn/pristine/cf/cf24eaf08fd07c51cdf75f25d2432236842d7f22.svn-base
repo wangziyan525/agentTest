@@ -1,0 +1,102 @@
+var baseUrl = {
+    queryListUrl: 'misconduct/getApprovalList.xa',//查询
+    
+}
+var vm
+function initFun () {
+    vm = new Vue({
+        el:"#app",
+        data:{
+            status:"",
+            list:[
+            ],
+            
+            statusOpt:{
+                "0":"驳回",
+                "1":"通过",
+                "2":"待确认",
+            }
+    
+        },
+        created(){
+            var that=this;
+            that.queryList();
+            $("#app").show();
+            
+        },
+        mounted(){
+            
+    
+        },
+        methods:{
+            /**
+             * 切换状态
+             * @param {*} param 
+             */
+
+            chooseTab(param){
+                var that=this;
+                that.status=param;
+                that.list=[];
+                that.queryList();
+
+            },
+
+            
+            /**
+             * 查询
+             */
+            async queryList(){
+                var that=this;
+
+                
+                
+                var param={};
+                param.status=that.status;
+                const res = await $http(baseUrl.queryListUrl, true,param, true);
+
+                if (res.retcode === 'success'){
+                    that.list=res.data;
+                }
+                else{
+                    vant.Dialog.alert({
+                        message: res.retmsg
+                    }).then(() => {
+                        wx.closeWindow();
+                    }); 
+                }
+                
+            },
+            
+            /**
+             * 审核详情页面
+             * @param {*} id 
+             */
+            goDetail(id){
+                window.location.href="detail.html?id="+id;
+            },
+            
+            
+            
+
+
+                
+                
+                
+                
+
+            }
+            
+           
+           
+           
+            
+            
+    
+    })
+}
+
+
+
+
+

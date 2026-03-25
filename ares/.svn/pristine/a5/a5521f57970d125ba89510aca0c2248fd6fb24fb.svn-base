@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>保险资格备案人员列表</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/scoreList.css">
+</head>
+<body >
+    <div id="app" style="overflow-y: scroll;height: 100%;" v-cloak>
+        <div  v-if = "list.length>0" class="listScroll" style="overflow-y: auto;margin-top: 10px" v-for="(item, index) in list">
+            <div class="listArea">
+                <div class="divider"></div>
+                <div style="display: flex;flex-direction: row;justify-content: space-between">
+                    <div class="leftArea">
+                        <div>{{item.name}}</div>
+                        <div>证件号码：{{item.idc}}</div>
+                    </div>
+                    <div class="rightArea" >
+                        <div>{{item.tesResults}}分</div>
+                    </div>
+                </div>
+            </div>      
+        </div>
+    <div class="btmArea">
+        <button class="btm" @click="getList('2')">导出考试成绩</button>
+    </div>
+
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js"></script>
+<script type="text/javascript" src="js/scoreList.js"></script>
+<script src="../common/js/vConsole.min.js"></script> 
+<script type="text/javascript">
+    //var vConsole = new VConsole();
+    
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+            //ios页面回退不刷新
+            window.addEventListener('pageshow',function (e) {
+                if(e.persisted){
+                    location.reload();
+                }
+            });
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

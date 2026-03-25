@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <script src="../common/js/vue.min.js"></script>
+    <script src="../common/js/vant-2.12.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/common.css?v=1.0.1">
+    <link rel="stylesheet" href="css/detail.css?v=1.0.1">
+</head>
+<body>
+<div id="app" v-cloak style="height: 100%;overflow-y: auto">
+    <div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div>商户全称</div>
+                <div>{{detail.all_title ? detail.all_title : '--'}}</div>
+            </div>
+            <div class="contentLine">
+                <div>商户简称</div>
+                <div>{{detail.title ? detail.title : '--'}}</div>
+            </div>
+            <div class="contentLine">
+                <div>商户号</div>
+                <div>{{detail.mch_code ? detail.mch_code : '--'}}</div>
+            </div>
+            <div class="contentLine" v-if="tab==0">
+                <div>优免状态:</div>
+                <div v-if="detail.is_exemption ==0">关闭</div>
+                <div v-if="detail.is_exemption ==1">开启</div>
+            </div>
+            <div class="contentLine" v-if="tab==1">
+                <div>优免状态:</div>
+                <div v-if="detail.is_exemption ==0">关闭</div>
+                <div v-if="detail.is_exemption ==1">开启</div>
+            </div>
+            <div class="contentLine" v-if="tab==3">
+                <div>优免状态:</div>
+                <div v-if="detail.is_exemption ==0">关闭</div>
+                <div v-if="detail.is_exemption ==1">开启</div>
+            </div>
+            <div class="contentLine" v-if="tab==2 || tab==4">
+                <div>优免状态:</div>
+                <div v-if="detail.type==''">未申请</div>
+                <div v-if="detail.type==1">开启</div>
+                <div v-if="detail.type==2">关闭</div>
+            </div>
+
+            <div class="contentLine">
+                <div>本次申请优免状态</div>
+                <div v-if="ymType=='1'">申请加入优免</div>
+                <div v-if="ymType=='2'">申请退出优免</div>
+            </div>
+            <div class="contentLine">
+                <div>申请状态</div>
+                <div v-if="detail.apply_status=='0'">未申请</div>
+                <div v-if="detail.apply_status=='1'">待审核</div>
+                <div v-if="detail.apply_status=='2'">审核通过</div>
+                <div v-if="detail.apply_status=='3'">审核拒绝</div>
+                <div v-if="detail.apply_status=='4'">待终审</div>
+            </div>
+            <div class="contentLine" v-if="detail.reason">
+                <div>拒绝原因</div>
+                <div>{{detail.reason ? detail.reason : '--'}}</div>
+            </div>
+            <div class="contentLine" v-if="detail.apply_time">
+                <div>申请时间</div>
+                <div>{{detail.apply_time ? detail.apply_time : '--'}}</div>
+            </div>
+            <div class="contentLine" v-if="detail.update_time">
+                <div>审核日期</div>
+                <div>{{detail.update_time ? detail.update_time : '--'}}</div>
+            </div>
+            <div class="contentLine" v-if="detail.audit_user_name">
+                <div>审核人</div>
+                <div>{{detail.audit_user_name ? detail.audit_user_name : '--'}}</div>
+            </div>
+            <div class="contentLine" v-if="detail.apply_name">
+                <div>申请人名称</div>
+                <div>{{detail.apply_name ? detail.apply_name : '--'}}</div>
+            </div>
+            <div class="contentLine" v-if="detail.apply_org_name">
+                <div>申请人所在支行</div>
+                <div>{{detail.apply_org_name ? detail.apply_org_name : '--'}}</div>
+            </div>
+        </div>
+        <div class="contentPart" style="border-top: 1px solid #e1e1e1" v-if='windowInfo.addImgListOld.length>0'>
+            <div style="padding-top: 10px;color: #666">历史影像资料</div>
+            <div class="upload_box" style="padding: 10px 0 0 0;display: block">
+                <div style="display: flex;align-items: center;flex-wrap: wrap;">
+                    <div class="imgOne" v-for="(item,index) in windowInfo.addImgListOld" style="position: relative;box-sizing: border-box;">
+                        <div class="uploadIMg" @click="bigImg(index)">
+                            <img :src="item">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="titleDesc"><span>影像资料</span></div>
+        <div class="ListLine">
+            <div style="background: #fff;font-size: 14px;padding: 10px;padding-bottom: 0">上传《西安银行收单服务费优免申请表》（图片）选择“申请优免”或上传《西安银行收单服务费优免终止申请表》（图片）选择“终止优免”</div>
+        </div>
+        <div class="contentPart" style="padding: 0">
+            <div class="upload_box">
+                <!--<div style="display: flex;align-items: center;flex-wrap: wrap;margin-bottom: 10px">
+                    <div class="imgOne" v-for="(item,index) in submitInfo.addImgListOld" style="position: relative;padding:0px 12px 0 0;box-sizing: border-box;">
+                        <div class="uploadIMg" @click="bigImg(item)">
+                            <img :src="item">
+                            <img class="deleteImg" src="image/delete.png" alt="" @click.stop="deleteImg1(index,'submitInfo')">
+                        </div>
+                    </div>
+                </div>-->
+                <div v-if='windowInfo.addImgList.length>0' v-for='(item,index) in windowInfo.addImgList' :key='index' style="position: relative;padding:0px 12px 0 0;box-sizing: border-box;">
+                    <div class="upload_list">
+                        <img :src="item" style="object-fit: contain;" @click="replaceImg(10,index,'windowInfo')">
+                        <img class="deleteImg" src="image/delete.png" alt="" @click="deleteImg(index,'windowInfo')">
+                    </div>
+                </div>
+                <div v-if='windowInfo.addImgList.length+windowInfo.addImgListOld.length<10' class="upload_info">
+                    <img class="add_img" src="image/uploadimg.png" alt="" @click="upload(10,'windowInfo')">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="bottomButton">
+            <div class="submitButton" @click="submitBindtap()">提 交</div>
+        </div>
+
+    </div>
+
+
+
+
+</div>
+</body>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js?v=20211022"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="js/apply.js?v=2.2.5"></script>
+<script src="../common/js/vConsole.min.js"></script>
+<script>
+    //var vConsole = new VConsole();
+    //初始化微信社区
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem','chooseImage','uploadImage','downloadImage', 'startRecord', 'stopRecord', 'translateVoice',]);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+    function getUserFinish(){
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

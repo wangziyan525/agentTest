@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <title>非融资性保函</title>
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.new.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../common/css/vant-1.2.3.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <div class="container" v-cloak>
+        <div>
+            <header class="tabs_container display">
+                <div class="fs16 tabs_container_item flex display align_item_center justify_content_center "
+                    :class="searchList.type == '0' ? ' tabs_container_item_active fw600' : ''"
+                    @click="handleTabs('0')">
+                    待处理
+                </div>
+                <div class="fs16 tabs_container_item flex display align_item_center justify_content_center "
+                    :class="searchList.type != '0' ? ' tabs_container_item_active fw600' : ''"
+                    @click="handleTabs('1')">
+                    已处理
+                </div>
+            </header>
+            <section class="main_container">
+                <van-list v-model="listLoading" :finished="listFinished" @load="onLoad">
+                    <div class="main_content">
+                        <div class="main_content_item" v-for="(item, index) in dataList" :key="index">
+                            <div class="main_content_item_header" >
+                                {{ item.COMP_NAME }}
+                                    <template v-if="searchList.type == '1'">
+                                        <em v-if="item.status == 1" class="em3">已转办</em>
+                                        <em v-if="item.status == 2" class="em1">审批通过</em>
+                                        <em v-if="item.status == 3" class="em2">审批拒绝</em>
+                                    </template>
+                            </div>
+                            <div class="__main_content_item fs13">
+                                <div class="display">
+                                    <div
+                                        class="color999999 __main_content_view_left display justify_content_center align_item_center">
+                                        帐号
+                                    </div>
+                                    <div
+                                        class=" __main_content_view_right flex display justify_content_flex_end align_item_center">
+                                        {{ item.ACCT_NO }}
+                                    </div>
+                                </div>
+
+                                <div class="display">
+                                    <div
+                                        class="color999999 __main_content_view_left display justify_content_center align_item_center">
+                                        保函类型
+                                    </div>
+                                    <div
+                                        class=" __main_content_view_right flex display justify_content_flex_end align_item_center">
+                                        {{item.BUSI_TYPE}}
+                                    </div>
+                                </div>
+                                <div class="display">
+                                    <div
+                                        class="color999999 __main_content_view_left display justify_content_center align_item_center">
+                                        申请金额
+                                    </div>
+                                    <div
+                                        class=" __main_content_view_right flex display justify_content_flex_end align_item_center">
+                                        ¥{{ item.TRAN_AMT }}
+                                    </div>
+                                </div>
+
+                                <div class="display">
+                                    <div
+                                        class="color999999 __main_content_view_left display justify_content_center align_item_center">
+                                        申请期限(天)
+                                    </div>
+                                    <div
+                                        class=" __main_content_view_right flex display justify_content_flex_end align_item_center">
+                                        {{ item.APPLY_MON }}
+                                    </div>
+                                </div>
+                                <div class="display">
+                                    <div
+                                        class="color999999 __main_content_view_left display justify_content_center align_item_center">
+                                        提交时间
+                                    </div>
+                                    <div
+                                        class=" __main_content_view_right flex display justify_content_flex_end align_item_center">
+                                        {{ item.createTime }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="main_content_item_header color1482FF display justify_content_center align_item_center" @click="toHandle('QCL',item.TRAN_SEQ)">
+                                {{operationText}}
+                            </div>
+                        </div>
+                    </div>
+                </van-list>
+            </section>
+            <div class="noList" v-if="noList">
+                    <img src="../images/noList.png" alt="">
+                    <span>暂无数据</span>
+                </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script src="../../common/js/server.js"></script>
+<script src="../js/signList.js"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem'])
+    wx.ready(function () {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+
+</html>

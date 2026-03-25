@@ -1,0 +1,420 @@
+function action() {
+    new Vue({
+        el: "#app",
+        data: {
+
+            getDetailUrl: 'headofficecheck/userGetDetail.xa',    //详情接口
+            getExaminePeopleUrl: 'headofficecheck/userGetCheckUserList.xa',   //获取考核列表
+            getSubInfoUrl: 'headofficecheck/userGetSubmit.xa',   //获取考核列表
+            getDetailUrl: 'headofficecheck/userGetDetail.xa',//详情接口
+            againFillinUrl: 'headofficecheck/countermand.xa',   //重新填写
+            
+
+            id:'',      //数据id
+            infos:{},
+            positionName:'', //职务名称
+            worklineName:'', //条线名称
+            isExexamined:false,  //是否已经填写
+            monthTitle:'个人月度情况',
+
+            titleText:'',   //标题文字
+            examineTime:'',  //汇报时间
+            examinePeople1Code:'',   //考核人1
+            examinePeople2Code:'',   //考核人2
+            examinePeople1Name:'',   //考核人1
+            examinePeople2Name:'',   //考核人2
+            examinedPeopels:'',  //回显审核人
+
+            active:0,     //tab索引
+            examineingList:[{reason:''},{reason:''},{reason:''},{reason:''}],      //填写考核内容
+
+            
+            exexaminedTimeType:0,  //考核情况 0-待提交 1-第一考核人第二考核人均未审核 2-第一考核人未考核 3-第二考核人未考核 4-已完成
+            flowList:[],
+
+            //手写的滑动（填写时）
+            tranformX:'transform:translateX(0%)',
+            
+
+        },
+        created: function () {
+
+            // 调用水印
+            var username = $.parseJSON($.cookie("user")).name;
+            __canvasWM({
+                content: username
+            });
+
+        },
+        mounted: function () {
+
+            //获取id,是否是填报
+            if(this.getQueryString('id')){
+                this.id = this.getQueryString('id');
+                //获取详情
+                this.getDetail();
+            }else{
+                this.isExexamined = false;
+                //获取考核人
+                this.examinePeople1Code = this.getQueryString("firstcheckHumancode");
+                this.examinePeople2Code = this.getQueryString("secondcheckHumancode");
+                this.getExaminePeople();
+                this.getNow();
+            }
+
+
+        },
+        watch: {
+            
+        },
+        methods: {
+
+            //tab切换
+            changeActive(i,v){
+                //swiper滑动
+                if(this.isExexamined){
+                    this.$refs.mySwipe.swipeTo(i);
+                }else{  //轮子滑动
+                    var width = -i*25;
+                    this.tranformX = `transform:translateX(${width}%)`;
+                }
+            },
+
+
+            //轮播图切换
+            monthChange(i,v){
+                this.active = i;
+            },
+
+            //页面回到原处
+            scrollBank(){
+                window.scrollTo(0,0);
+            },
+
+            //获取详情
+            getDetail(){
+                let _this = this;
+                let params = {};
+                params.id = _this.id;
+                $http(_this.getDetailUrl,true,params, true)
+                    .then(res => {
+                        if(res.retcode == 'success'){
+                            var infos = res.data;
+                            _this.infos = res.data;
+                            //保存的（加了个撤回的）
+                            if(infos.datastatus == 0){
+                                _this.isExexamined = false;
+                                //获取考核人列表
+                                if(_this.getQueryString("firstcheckHumancode") && _this.getQueryString("secondcheckHumancode")){
+                                    _this.examinePeople1Code = _this.getQueryString("firstcheckHumancode");
+                                    _this.examinePeople2Code = _this.getQueryString("secondcheckHumancode");
+                                }else{
+                                    _this.examinePeople1Code = infos.firstcheckHumancode;
+                                    _this.examinePeople2Code =  infos.secondcheckHumancode;
+                                }
+                                _this.getExaminePeople();
+                                _this.getNow();
+                            //详情回显    
+                            }else{
+                                _this.isExexamined = true; 
+                                _this.examinedPeopels = `${infos.firstcheckIdcardname}、${infos.secondcheckIdcardname}`;
+                                //提交时间回显
+                                var times = infos.submitdate?infos.submitdate:infos.createtime;
+                                _this.examineTime = _this.readTime1(times);
+                                times = _this.readTime(times);
+                                //处理填报时间
+                                _this.getFillInTime(times);
+                            };
+
+                            //职务名称
+                            // _this.positionName = infos.position?infos.position:'';
+                            //填写内容回显
+                            _this.examineingList[0].reason = infos.monthwork?infos.monthwork:'';//
+                            _this.examineingList[1].reason = infos.advantagesProgress?infos.advantagesProgress:'';//
+                            _this.examineingList[2].reason = infos.lessReasons?infos.lessReasons:'';//
+                            _this.examineingList[3].reason = infos.nextmonthPlan?infos.nextmonthPlan:'';//
+                           
+                            
+                        }else if(res.retcode == 'param.error'){
+                            $.alert('',res.retmsg);
+                        }else{
+                            $.alert('',res.retmsg,function(){
+                                WeixinJSBridge.call('closeWindow');
+                            });
+                        }
+                    });
+            },
+            
+            //时间戳转化
+            readTime(str){
+                var times = new Date(str);
+                var year = times.getFullYear();
+                var month = times.getMonth() + 1;
+                if(month < 10){
+                    month = '0' + month;
+                };
+                return year + '-' + month;
+            },
+
+            readTime1(str){
+                var myDate = new Date(str);
+                var yy = myDate.getFullYear();
+                var MM = myDate.getMonth() +1;
+                var dd = myDate.getDate();
+                var hh = myDate.getHours();
+                var mm = myDate.getMinutes();
+                var ss = myDate.getSeconds();
+                if(MM<10){
+                    MM = `0${MM}`
+                }
+                if(dd<10){
+                    dd = `0${dd}`
+                }
+                if(hh<10){
+                    hh = `0${hh}`
+                }
+                if(mm<10){
+                    mm = `0${mm}`
+                }
+                if(ss < 10){
+                    ss = `0${ss}`
+                };
+               
+                return yy + '-' + MM + '-' + dd + ' ' + hh + ':' + mm + ':' + ss;
+            },
+
+            //处理填报时间
+            getFillInTime(times){
+                //当前时间
+                var timesArr = times.split('-');
+                var nowYear = timesArr[0];
+                var nowMonth = timesArr[1];
+                var lastYear = '';
+                var lastMonth = '';
+                var days = '';
+                //上一个月时间
+                if(nowMonth == 1){
+                    lastYear = nowYear - 1;
+                    lastMonth = '12';
+                    days = '31';
+                }else{
+                    lastYear = nowYear;
+                    lastMonth = nowMonth - 1;
+                    days = new Date(lastYear,lastMonth,0).getDate();
+                };
+                if(lastMonth < 10){
+                    lastMonth = '0' + lastMonth;
+                };
+                if(lastMonth == 12){
+                    this.titleText = `${lastYear}年年度`;
+                    this.monthTitle = '个人年度工作情况';
+                }else if(lastMonth == 6){
+                    this.titleText = `${nowYear}年半年度`;
+                    this.monthTitle = '个人半年度工作情况';
+                }else{
+                    this.titleText = `${nowYear}年${lastMonth}月`;
+                    this.monthTitle = '个人月度工作情况';
+                }  this.monthTitle = '个人月度工作情况';
+            },
+
+            //---------------------------------------------------------------------- 填写
+
+            //获取考核人
+            getExaminePeople(){
+                let _this = this;
+                let params = {};
+                $http(_this.getExaminePeopleUrl,true,params, true)
+                    .then(res => {
+                        if(res.retcode == 'success'){
+                            var arr1 = res.data.first;
+                            var arr2 = res.data.second;
+                            var firstcheckName = '';
+                            var secondcheckName = '';
+                            for(var i=0;i<arr1.length;i++){
+                                if(_this.examinePeople1Code == arr1[i].humancode){
+                                    firstcheckName = arr1[i].idcardname;
+                                    break;
+                                }
+                            };
+                            for(var i=0;i<arr2.length;i++){
+                                if(_this.examinePeople2Code == arr2[i].humancode){
+                                    secondcheckName = arr2[i].idcardname;
+                                    break;
+                                }
+                            };
+                            _this.examinePeople1Name = firstcheckName;
+                            _this.examinePeople2Name = secondcheckName;
+                            _this.examinedPeopels = `${firstcheckName}、${secondcheckName}`;
+
+                        }else{
+                            $.alert('',res.retmsg,function(){
+                                WeixinJSBridge.call('closeWindow');
+                            });
+                        }
+                    });
+            },
+
+            //重写
+            againInput(i){
+                this.examineingList[i].reason = '';
+            },
+
+            //获取填报日期
+            getNow(){
+                let today = new Date();
+
+                //获取当前年月
+                let nowYear = today.getFullYear();
+                let nowMonth = today.getMonth() + 1;
+                if(nowMonth < 10){
+                    nowMonth = '0' + nowMonth;
+                };
+
+                //创建前一个月的日期对象
+                let prevMonthdate = new Date(today);
+                prevMonthdate.setMonth(today.getMonth() - 1);
+                //获取前一个月的年份和月份
+                let year = prevMonthdate.getFullYear();
+                let month = prevMonthdate.getMonth() + 1;
+                //天数
+                let days = new Date(year,month,0).getDate();
+                if(month < 10){
+                    month = '0' + month;
+                };
+                //赋值
+                if(month == 12){
+                    this.titleText = `${year}年年度`;
+                    this.examineTime = `${year}/01/01 - ${year}/12/31`;
+                    this.monthTitle = '个人年度工作情况';
+                }else if(month == 6){
+                    this.titleText = `${nowYear}年半年度`;
+                    this.examineTime = `${nowYear}/01/01 - ${nowYear}/06/30`;
+                    this.monthTitle = '个人半年度工作情况';
+                }else{
+                    this.titleText = `${year}年${month}月`;
+                    this.examineTime = `${year}/${month}/01 - ${year}/${month}/${days}`;
+                    this.monthTitle = '个人月度工作情况';
+                }
+            },
+
+            //提交
+            toSub(){
+                if(this.examineingList[0].reason == ''){
+                    vant.Toast('请输入' + this.monthTitle);
+                    return false
+                }
+                if(this.examineingList[1].reason == ''){
+                    vant.Toast('请输入优点与进步');
+                    return false
+                }
+                if(this.examineingList[2].reason == ''){
+                    vant.Toast('请输入不足之处和原因分析');
+                    return false
+                }
+                if(this.examineingList[3].reason == ''){
+                    vant.Toast('请输入下月工作计划');
+                    return false
+                }
+                this.toSubInfo();
+            },
+            toSubInfo(){
+                let _this = this;
+                let params = {};
+                params.id = _this.id;
+                params.datastatus = '1';
+                params.monthwork = _this.examineingList[0].reason;
+                params.advantagesProgress = _this.examineingList[1].reason;
+                params.lessReasons = _this.examineingList[2].reason;
+                params.nextmonthPlan = _this.examineingList[3].reason;
+                params.firstcheckIdcardname = _this.examinePeople1Name;
+                params.secondcheckIdcardname = _this.examinePeople2Name;
+                params.firstcheckHumancode = _this.examinePeople1Code;
+                params.secondcheckHumancode = _this.examinePeople2Code;
+                params.responseDeptName = '';
+                params.assessmentRole = '';
+                params.orgType = '1';
+                $http(_this.getSubInfoUrl,true,params, true)
+                    .then(res => {
+                        if(res.retcode == 'success'){
+                            $.alert('','提交成功',function(){
+                                window.location.href = './success.html';
+                            });
+                        }else if(res.retcode == 'param.error'){
+                            $.alert('',res.retmsg);
+                        }else{
+                            $.alert('',res.retmsg,function(){
+                                WeixinJSBridge.call('closeWindow');
+                            });
+                        }
+                    });
+            },
+
+            //保存
+            saveInput(){
+                let _this = this;
+                let params = {};
+                params.id = '';
+                params.datastatus = '0';
+                params.monthwork = _this.examineingList[0].reason;
+                params.advantagesProgress = _this.examineingList[1].reason;
+                params.lessReasons = _this.examineingList[2].reason;
+                params.nextmonthPlan = _this.examineingList[3].reason;
+                params.firstcheckIdcardname = _this.examinePeople1Name;
+                params.secondcheckIdcardname = _this.examinePeople2Name;
+                params.firstcheckHumancode = _this.examinePeople1Code;
+                params.secondcheckHumancode = _this.examinePeople2Code;
+                params.responseDeptName = '';
+                params.assessmentRole = '';
+                params.orgType = '1';
+                $http(_this.getSubInfoUrl,true,params, true)
+                    .then(res => {
+                        if(res.retcode == 'success'){
+                            $.alert('','保存成功',function(){
+                                // WeixinJSBridge.call('closeWindow');
+                            });
+                        }else if(res.retcode == 'param.error'){
+                            $.alert('',res.retmsg);
+                        }else{
+                            $.alert('',res.retmsg,function(){
+                                WeixinJSBridge.call('closeWindow');
+                            });
+                        }
+                    });
+            },
+
+            //重新填写修改
+            againFillin(){
+                let _this = this;
+                let params = {};
+                params.id = params.id = _this.id;;
+                $http(_this.againFillinUrl,true,params, true)
+                    .then(res => {
+                        if(res.retcode == 'success'){
+                            $.alert('','已撤回',function(){
+                                //获取详情
+                                _this.getDetail();
+                            });
+                        }else if(res.retcode == 'param.error'){
+                            $.alert('',res.retmsg);
+                        }else{
+                            $.alert('',res.retmsg,function(){
+                                WeixinJSBridge.call('closeWindow');
+                            });
+                        }
+                    });
+            },
+
+            //获取url参数
+            getQueryString(name) {
+                let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                let r = window.location.search.substr(1).match(reg);
+                if (r != null)
+                    return (r[2]);
+                return null;
+            },
+
+        }
+    });
+
+}
+

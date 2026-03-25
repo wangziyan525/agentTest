@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>党委书记接待日登记记录</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/registRecord.css?v=1.0">
+    <!-- <link rel="stylesheet" href="css/common.css"> -->
+</head>
+
+<body>
+    <div id="app" style="height: 100%" v-cloak>
+        <template>
+            <van-list>
+                <div class="listScroll" v-for="(item, index) in list">
+                    <div class="listArea">
+                        <div class="leftArea">
+                            <div><span>所在单位：</span>{{item.registrationDept}}</div>
+                            <div><span>预约访谈时间：</span>{{item.registrationMeetingTime}}</div>
+                            <div><span>提交时间：</span>{{item.updateTime}}</div>
+                        </div>
+                        <div class="rightArea" @click="toDetail(item)">
+                            <div>查看详情</div>
+                            <div class="indexOne"></div>
+                        </div>
+                    </div>
+                </div>
+            </van-list>
+            <div class="" v-if="moreStatus" @click="addMore()"
+                style="color:#377ae6;text-align: center;padding-bottom: 10px;box-sizing: border-box;font-size: 15px">
+                ----点击加载更多----</div>
+            <div class="" v-if="noMoreStatus"
+                style="color:#999;text-align: center;padding-bottom: 10px;box-sizing: border-box;font-size: 15px">
+                ----没有更多数据了----</div>
+        </template>
+        <template v-if="nodata">
+            <div class="noList">
+                <img src="./image/noList.png" alt="">
+                <span>暂无数据</span>
+            </div>
+        </template>
+
+
+    </div>
+
+
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="js/registRecord.js?v=1.0"></script>
+<script src="../common/js/vConsole.min.js"></script>
+<script>
+    //var vConsole = new VConsole();
+    //初始化微信社区
+    $(function () {
+        initJSSDK(['hideAllNonBaseMenuItem', 'chooseImage', 'uploadImage', 'downloadImage', 'startRecord', 'stopRecord', 'translateVoice',]);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+    function getUserFinish() {
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

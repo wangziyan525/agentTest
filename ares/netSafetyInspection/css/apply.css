@@ -1,0 +1,435 @@
+[v-cloak]{
+    display: none;
+}
+html,body{
+    width: 100%;
+    min-height: 100vh;
+    background-color:#f6f6f6;
+}
+*{
+    -webkit-overflow-scrolling: touch !important;
+    -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+    -webkit-tap-highlight-color: transparent !important;
+    font-family: 'Microsoft YaHei', Tahoma, Arial, sans-serif;
+}
+#app{
+    overflow-y: auto;
+    height: 100%;
+}
+.weui-dialog{
+    border-radius: 8px !important;
+    font-size: 17px;
+}
+.weui-dialog .weui-dialog__hd{
+    padding: 20px;
+}
+.weui-dialog__ft,.weui-dialog__btn{
+    font-size: 17px;
+    color: #377ae6;
+}
+.distribute{
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 15px 10px 10px;
+    font-size: 16px;
+    color: #377ae6;
+    background: #f6f6f6;
+}
+.contentPart{
+    background: #fff;
+    font-size: 16px;
+}
+.contentLine{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+}
+.contentLine>p:first-child{
+    font-weight: 500;
+}
+.contentLine>p:nth-child(2){
+    display: flex;
+    align-items: center;
+}
+.contentLine>p img{
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+}
+.border-bottom{
+    border-bottom: 1px solid #eee;
+}
+.titles{
+    font-size: 16px;
+    padding: 15px;
+}
+.ListLine{
+    display: flex;
+}
+.ListLine>div{
+    color: #999;
+    text-align: left;
+    font-size: 14px;
+    padding: 0 15px 15px 15px;
+}
+#app>div:first-child>div:last-child{
+    /*padding-bottom: 10px;*/
+}
+.van-dialog__confirm, .van-dialog__confirm:active{
+    color:#377ae6 !important;
+}
+.submitDiv img{
+    width: 20px;
+    margin-right: 4px;
+}
+.submitDiv>div:last-child{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.submitDiv>div:last-child>div{
+    display: flex;
+    align-items: center;
+}
+.submitDiv>div:last-child>div:first-child{
+    margin-right: 20px;
+}
+.title{
+    height: 50px;
+    line-height: 50px;
+    padding: 0 15px;
+    color: #999;
+}
+/* ---------------------------------------------------------------审批 ------------------------------------------------------*/
+.bottomButton{
+    display: flex;
+    justify-content: space-evenly;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+.submitButton{
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    width: 50%;
+}
+.refuse{
+    background: #fff;
+    color: #000;
+}
+.sure{
+    background: #4675C9;
+    color: #fff;
+}
+.uploadBox{
+    box-sizing: border-box;
+    font-size:16px;
+    color:#999;
+    padding-bottom: 10px;
+}
+.uploadImg-box {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.uploadImg-box .upload {
+    width:78px;
+    height:78px;
+    position: relative;
+    margin-right: 15px;
+    margin-top: 10px;
+}
+
+.uploadImg-box .upload img {
+    width: 100%;
+    height: 100%;
+}
+
+.uploadImg-box .upload .delete {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: -7px;
+    right: -7px;
+}
+
+.van-popup{
+    z-index: 999 !important;
+}
+.van-overlay{
+    z-index: 999 !important;
+}
+.van-popup--center{
+    top:34% !important;
+    width: 90%;
+    border-radius: 10px;
+}
+.refuseBtn{
+    display: flex;
+    border-top: 1px solid #eee;
+}
+.refuseBtn>div:first-child{
+    border-right: 1px solid #eee;
+    color: #999;
+}
+.refuseBtn>div{
+    width: 50%;
+    text-align: center;
+    padding: 12px 0;
+}
+
+
+
+.searchDiv{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 10px;
+    background: #f6f6f6;
+}
+
+.searchDiv input{
+    width: 100%;
+    height: 32px;
+    border-radius: 50px;
+    padding: 0 8%;
+    font-size: 15px;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+
+.searchDiv>p{
+    width: 20%;
+    text-align: center;
+    color: #377ae6;
+    font-size: 16px;
+}
+.searchDiv>img:first-child{
+    position: absolute;
+    width: 4%;
+    margin-left: 2%;
+
+}
+.searchDiv>img:last-child{
+    position: absolute;
+    width: 4%;
+    margin-right: 6%;
+    right: 0;
+    z-index: 100000;
+}
+.nodata{
+    height: 300px;
+    line-height: 300px;
+    text-align: center;
+    color: #999;
+}
+.lis2{
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+}
+.lis2>div{
+    padding: 5px 0;
+}
+.addBtn{
+    display: flex;
+    background: #f6f6f6;
+    height: 80px;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+.addBtn>p{
+    width: 40%;
+    padding: 10px 0 ;
+    text-align: center;
+    border-radius: 50px;
+}
+.chooseSel{
+    background: #377ae6;
+    color: #fff;
+}
+.closeSel{
+    border: 1px solid #377ae6;
+    color: #377ae6;
+}
+
+.van-dialog__confirm, .van-dialog__confirm:active{
+    color:#377ae6 !important;
+}
+.van-dialog__message--has-title{
+    font-size: 16px !important;
+}
+
+/* ----------------------------------------------------------查看图片预览-------------------------------------------- */
+.upImgs{
+    padding-bottom: 10px;
+}
+.pics{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 10px;
+}
+.pics .pic{
+    margin: 10px 10px 0 0;
+    width: 20%;
+}
+.pics .pic b{
+    display: block;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    font-weight: 200;
+    /* background: url('../image/photo.png')no-repeat center;
+    background-size: 90px auto; */
+    position: relative;
+}
+.pics .pic b img{
+    display: block;
+    width: 90px;
+    border-radius: 4px;
+}
+.pics .pic span{
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+    line-height: 40px;
+    color: #999;
+}
+.pics .pic b .click{
+    width: 90px;
+    line-height: 22px;
+    border-radius: 0 0 4px 4px;
+    opacity: 0.45;
+    background: #000;
+    text-align: center;
+    font-size: 12px;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+}
+.pics .pic b .loadding{
+    display: block;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    left: calc((100% - 25px)/2);;
+    top:30px;
+}
+
+.icon{
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    margin-top: 1px;
+    vertical-align: middle;
+}
+
+.upload_box{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding:0 15px 10px 15px;
+    box-sizing: border-box;
+}
+.upload_list,.load_list{
+    background: #fff;
+    width:60px;
+    height:60px;
+    margin-bottom:10px;
+    overflow: hidden;
+}
+.load_list{
+    position: relative;
+}
+.upload_list{
+    border:1px solid #e5e5e5;
+    border-radius:4px;
+}
+.load_list img{
+    width:50%;
+    height:50%;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+.upload_info{
+    background: #fff;
+    border-radius: 10px;
+    margin-bottom:10px;
+    padding:0px 10px 0 0;
+    box-sizing: border-box;
+}
+.upload_list img{
+    width:100%;
+    height:100%;
+}
+.upload_list .deleteImg,.imgOne .deleteImg{
+    width:15px;
+    height:15px;
+    position: absolute;
+    top: -5px;
+    right: 5px;
+}
+.deleteVideo{
+    width:15px;
+    height:15px;
+    position: absolute;
+    top: -5px;
+    right: 50%;
+}
+.add_img{
+    width:60px;
+    height:60px;
+    vertical-align: middle;
+}
+.imgOne img{
+    width: 60px;
+    height: 60px;
+    vertical-align: middle;
+}
+textarea{
+    display: block;
+    height: 120px;
+    resize: none;
+    border:none;
+    width: 100%;
+    padding: 10px 10px 30px 10px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #272727;
+    line-height: 20px;
+    outline: none;
+    resize: none;
+    background: #F5F5F5;
+    border-radius: 6px;
+}
+.yuNum{
+    width: 100%;
+    font-size: 14px;
+    color: #666;
+    text-align: right;
+    position: absolute;
+    top:74%;
+    right: 6%;
+}

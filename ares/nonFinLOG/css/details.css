@@ -1,0 +1,358 @@
+.main_section {
+    padding: 7px;
+}
+
+.main_section_item {
+    border-radius: 4px;
+    background-color: #fff;
+    margin-bottom: 10px;
+}
+
+.main_section_item_header {
+    background: #E6F5FF;
+    border-radius: 4px 4px 0 0;
+    padding: 10px;
+}
+
+.__item_list {
+    padding: 14px 10px;
+    border-top: 1px solid #f5f6f7;
+}
+
+.__item_list_left {
+    margin-right: 10px;
+    width: 120px;
+}
+
+.attachment_container {
+    padding: 10px;
+    flex-wrap: wrap;
+}
+
+.attachment_item {
+    width: 21%;
+    margin: 8px;
+}
+
+.icon_container {
+    width: 60%;
+    font-size: 0;
+}
+
+.icon_container img {
+    width: 100%;
+}
+
+.promt_container {
+    padding: 10px 0;
+    color: #FF573F;
+    font-size: 12px;
+}
+
+.footer_container {
+    background-color: #fff;
+}
+
+.footer_container >div {
+    border-radius: 6px;
+    height: 44px;
+}
+
+.footer_view_left {
+    border: 1px solid #1482FF;
+    color: #1482FF;
+    /* background: #F5F6F7; */
+    margin-right: 10px;
+}
+
+.footer_view_right {
+    background: #1482FF;
+    color: #fff;
+}
+
+
+.popup_center_title {
+    padding: 12px;
+    font-size: 15px;
+    text-align: center;
+}
+
+.popup_center_main {
+    padding: 0 20px;
+}
+
+.popup_center_main_text {
+    padding: 12px 0;
+    text-align: center;
+}
+
+.info_content__ {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(225,225,225,1);
+    /* margin-bottom: 10px; */
+}
+
+.popup_tooter_container {
+    padding: 15px 20px;
+    justify-content: space-between;
+}
+
+.popup_tooter_container >div:first-child {
+    margin-right: 12px;
+    color: rgba(20,130,255,1);
+}
+
+.popup_tooter_container >div {
+    border: 1px solid rgba(20,130,255,1);
+    border-radius: 5px;
+    padding: 9px;
+}
+
+.popup_tooter_container >div:last-child {
+    background-color: rgba(20,130,255,1);
+    color: #fff;
+}
+/* page2-------------------------------------------- */
+.searchHeader{
+    background: #3975C6;
+    display: flex;
+    align-items: center;
+}
+.closeSearch{
+    width: 16px;
+    height: 16px;
+    background-image: url('../images/close.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin:10px  0px 10px 15px;
+    
+}
+.inputSearch{
+    display: flex;
+    align-items: center;
+    width: 75%;
+    background: rgba(247,247,247,0.20);
+border-radius: 6px;
+margin:10px 12px
+}
+.inputSearchImg{
+    width: 14px;
+    height: 14px;
+    background-image: url('../images/search.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: 0px 10px;
+}
+.clickSearch{
+    font-size: 15px;
+color: #FFFFFF;
+font-weight: 400;
+}
+.keyInput{
+    flex: 1;
+    font-size: 15px;
+
+}
+
+.keyInput .van-field__control{
+    text-align: left;
+    overflow: hidden;
+    font-size: 15px;
+color: #FFFFFF;
+font-weight: 400;
+
+}
+.van-cell{
+    background-color:transparent!important;
+    padding: 7px 0px!important
+}
+.keyInput ::placeholder {
+    opacity: 0.6;
+font-family: PingFangSC-Regular;
+font-size: 15px;
+color: #FFFFFF;
+font-weight: 400;
+}
+.searchListArea{
+    margin: 0px  15px;
+
+}
+.searchList{
+    font-size: 14px;
+color: #3B3B3B;
+font-weight: 400;
+padding: 15px 0px;
+border-bottom: 1px solid rgba(153,153,153,0.15)
+
+}
+.searchList div:last-of-type{
+    margin-bottom: 20px
+}
+.nodate{
+    text-align: center;
+    margin: 20px auto;
+    font-size: 15px;
+    color: #999999;
+}
+.noMessage{
+    width:160px;
+    margin: 50px auto 10px;
+}
+.noMessage>img{
+    width:100%;
+}
+.btn{
+    /* position: fixed; */
+    bottom: 0;
+    width: 100%;
+}
+.btns{
+    display: flex;
+}
+
+.submit{
+    background: #377ae6;
+    color: #fff;
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    box-sizing: border-box;
+}
+.statusList{
+    background: #FFFFFF;
+    font-size: 16px;
+/* color: #3B3B3B; */
+
+font-weight: 400;
+padding: 15px 15px;
+border-bottom: 1px solid rgba(153, 153, 153, 0.25);
+    border-radius: 8px 8px 0px 0px;
+    width: 300px;
+    height: 100px;
+}
+.arrow{
+    width: 12px;
+    height:  12px;
+    margin-left: 3px
+}
+/* --------------------------------- 流转信息 ------------------------------------- */
+.flowModel{
+    width: 100%;
+    padding-bottom: 20px;
+    box-sizing: border-box;
+}
+.flowModel .title{
+    width: 100%;
+    padding: 15px 0;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 15px;
+    line-height: 20px;
+    color: #333;
+    position: relative;
+}
+.flowModel .title:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.flowModel .flowCt{
+    width: 100%;
+    padding: 15px 20px;
+    box-sizing: border-box;
+}
+.flowModel .flowCt .flow{
+    width: 100%;
+    display: flex;
+    padding-bottom: 17px;
+    position: relative;
+}
+.flowModel .flowCt .flow .left{
+    width: 5px;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+}
+.flowModel .flowCt .flow .left i{
+    display: block;
+    margin-top: 5px;
+}
+.flowModel .flowCt .flow i img{
+    display: block;
+    width: 11px;
+}
+.flowModel .flowCt .flow .left::after{
+    content: '';
+    width: 1px;
+    height:-webkit-calc(100% + 17px);
+    background: #4675c9;
+    position: absolute;
+    top: 10px;
+    left: 2px;
+    -ms-transform: scaleX(.5);
+    -webkit-transform: scaleX(.5);
+    transform: scaleX(.5);
+}
+.flowModel .flowCt .flow:last-child .left::after{
+    display: none;
+}
+.flowModel .flowCt .flow .right{
+    flex: 1;
+    padding-left: 16px;
+    box-sizing: border-box;
+}
+.flowModel .flowCt .flow .right .peopleType{
+    width: 100%;
+    font-size: 15px;
+    line-height: 20px;
+    color: #999;
+}
+.flowModel .flowCt .flow .right .nameTime{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0 0;
+}
+.flowModel .flowCt .flow .right .nameTime .name,
+.flowModel .flowCt .flow .right .nameTime .time{
+    width: 50%;
+    font-size: 14px;
+    line-height: 20px;
+}
+.flowModel .flowCt .flow .right .nameTime .name{
+    color: #333;
+} 
+.flowModel .flowCt .flow .right .nameTime .time{
+    color: #999;
+    text-align: right;
+} 
+.flowModel .flowCt .flow .right .reason{
+    width: 100%;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+    margin: 5px 0 0;
+} 
+ .em1{
+    border: 1px solid #32AF25;
+    color: #32AF25;
+}
+ .em2{
+    border: 1px solid #f90808;
+    color: #f90808;
+}
+.em3{
+    border: 1px solid #e0992d;
+    color: #e0992d;
+}

@@ -1,0 +1,284 @@
+var baseUrl = {
+    queryInfoUrl:'phjdData/queryFwzData.xa',//查询
+    submitUrl:'phjdData/stationMaten.xa',//提交
+    deleteUrl:'phjdData/deleteStation.xa',//删除
+    queryListUrl:'phjdData/queryUserByOrgid.xa',//查询
+    
+}
+var vm
+function initFun () {
+    vm = new Vue({
+        el:"#app",
+        data:{
+            page:"page1",
+            type:"0",//0新增 1 编辑
+            info:{},
+
+            searchWord:"",
+            list:[],
+            ifAllChoose:false,
+            id:"",
+            columnsList: [
+                { code: '1', text: '服务站' },
+                { code: '2', text: '县域支行' },
+                { code: '3', text: '其他支行' }
+            ],
+            showPicker: false
+           
+            
+        },
+        created(){
+            var that=this;
+            var type=GetQueryString("type");
+            that.type=type?type:"0";
+            var id=GetQueryString("id");
+            that.id=id?id:"";
+            if(type=="1"){//修改
+                that.queryInfo();
+            }else if(type=="2"){//查看
+                that.page="page3";
+                that.queryInfo();
+            }
+            
+            
+            $("#app").show();
+            
+        },
+        mounted(){
+            
+    
+        },
+        methods:{
+            async queryInfo(){
+                var that=this;
+                var param={};
+                param.id=that.id;
+                const res = await $http(baseUrl.queryInfoUrl, true,param, true);
+                if (res.retcode === 'success'){
+                    that.info=res.data;//基本信息
+                    if (that.info.datatype) {
+                        that.info.datatypes = that.changeType(that.info.datatype)
+                    }
+                    that.$forceUpdate();
+                }
+                else{
+                    vant.Dialog.alert({
+                        message: res.retmsg
+                    }).then(() => {
+                        wx.closeWindow();
+                    }); 
+                }
+            },
+            
+            /**
+             * 删除站点
+             */
+            async deletetBtn(){
+                var that=this;
+
+                vant.Dialog.confirm({
+                    title:"请确认是否删除",
+                    cancelButtonText:"取消",
+                    confirmButtonText:"确认",
+                    message:""
+                }).then(async()=>{
+                    var param={};
+                    param.id=that.info.id;
+                    const res = await $http(baseUrl.deleteUrl, true,param, true);
+                    if (res.retcode === 'success'){
+                        vant.Dialog.alert({
+                            message: "删除成功"
+                        }).then(() => {
+                            window.location.href="stationname.html";
+                        });
+                        
+                    }
+                    else{
+                        vant.Dialog.alert({
+                            message: res.retmsg
+                        }).then(() => {
+                        }); 
+                    }
+                    
+                }).catch(()=>{
+                    
+    
+                })
+
+               
+            },
+            /**
+             * 查询人员
+             */
+            async queryList(){
+                var that=this;
+                var param={};
+                var that=this;
+                if(!!!that.info.orgid){
+                    return vant.Toast('请输入所属机构号');
+                }
+
+                var param={};
+                param.orgid=that.info.orgid;
+                param.username=that.searchWord;
+                const res = await $http(baseUrl.queryListUrl, true,param, true);
+                if (res.retcode === 'success'){
+                    var list=res.data;//基本信息
+                    if(that.info.persons && that.info.persons.length>0){
+                        for(var i=0;i<list.length;i++){
+                            var humancode=list[i].humancode;
+                            var dots=that.info.persons.some(item => item.humancode==humancode);
+                            list[i].dots=dots;
+                        }
+                    }
+                    that.list=list;
+                    that.page="page2";
+                    that.ifAllChoose=false;
+                    
+                }
+                else{
+                    vant.Dialog.alert({
+                        message: res.retmsg
+                    }).then(() => {
+                    }); 
+                }
+            },
+            /**
+             * 站点信息查询
+             */
+            async addtBtn(){
+                var that=this;
+                var dataJson=that.info;
+                if(!!!dataJson.id){
+                    vant.Toast('请输入服务站ID');
+                    return; 
+                }
+                if(!!!dataJson.stationname){
+                    vant.Toast('请输入服务站名称');
+                    return; 
+                }
+                if(!!!dataJson.orgid){
+                    vant.Toast('请输入所属机构号');
+                    return; 
+                }
+                if(!!!dataJson.datatype){
+                    vant.Toast('请选择服务站类型');
+                    return; 
+                }
+                if(!dataJson.persons || dataJson.persons.length==0){
+                    vant.Toast('请添加人员');
+                    return; 
+                }
+                var param=that.info;
+                param.type=that.type;
+                const res = await $http(baseUrl.submitUrl, true,param, true);
+                if (res.retcode === 'success'){
+                    vant.Dialog.alert({
+                        message: "提交成功"
+                    }).then(() => {
+                        window.location.href="stationname.html";
+                    });
+                    
+                }
+                else{
+                    vant.Dialog.alert({
+                        message: res.retmsg
+                    }).then(() => {
+                    }); 
+                }
+            },
+             /**
+             * 人员选择
+             */
+            multipleChoose(index){
+                var that=this;
+                that.list[index].dots=!that.list[index].dots;
+                that.$forceUpdate();
+
+            },
+            /**
+             * 全选/取消全选
+             */
+            allChoose(){
+                var that=this;
+                var list=that.list;
+                if(!that.ifAllChoose){
+                    list=list.map(item =>{ return { ...item, dots: true } });
+                }else{
+                    list=list.map(item =>{ return { ...item, dots: false } });
+                }
+                that.ifAllChoose=!that.ifAllChoose;
+                that.list=list;
+                that.$forceUpdate();
+            },
+            /**
+             * 确认人员选择
+             */
+            chooseHum(){
+                var that=this;
+                var list=that.list;
+                var personsList=[];
+                for(var i=0;i<list.length;i++){
+                    if(list[i].dots){
+                        personsList.push(list[i]) 
+                    }
+                }
+                that.info.persons=personsList;
+                that.page="page1";
+                that.$forceUpdate();
+            },
+            /**
+             * 删除人员
+             * @param {} index 
+             */
+            deleteBtn(index){
+                var that=this;
+                var list=that.info.persons;
+                list.splice(index,1);
+                that.info.persons=list;
+                that.$forceUpdate();
+            },
+
+            backPage(){
+                var that=this;
+                that.page="page1";
+            },
+
+            onConfirm(val) {
+                var that=this;
+                that.info.datatypes = val.text
+                that.info.datatype = val.code
+                that.showPicker = false
+            },
+
+            changeType(val, type) {
+                console.log('val', val)
+                let data = '';
+                this.columnsList.forEach(ele => {
+                    if (type) {
+                        if (val === ele.text) return data = ele.code;
+                    } else {
+                        if (val === ele.code) return data = ele.text;
+                    }
+                });
+                console.log('dddd', data)
+                return data || '--'
+            }
+             
+                
+
+         }
+            
+           
+           
+           
+            
+            
+    
+    })
+}
+
+
+
+
+

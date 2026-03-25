@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <script src="../../common/js/vue.min.js"></script>
+    <script src="../../common/js/vant-2.12.min.js"></script>
+    <script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/common.css?v=1.0.1">
+    <link rel="stylesheet" href="../css/rectify/assignDetail.css?v=1.0.1">
+</head>
+<body>
+<div id="app" v-cloak style="height: 100%;overflow-y: auto">
+    <div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div>审核状态</div>
+                <div v-if="detail.currentStatus=='00'" style="color: #267EF0;width: 100%">待分配</div>
+                <div v-if="detail.currentStatus=='11'" style="color: #FF9430;width: 100%">待整改</div>
+                <div v-if="detail.currentStatus=='22'" style="color: #267EF0;width: 100%">整改中</div>
+                <div v-if="detail.currentStatus=='33'" style="color: #267EF0;width: 100%">审批中</div>
+                <div v-if="detail.currentStatus=='44'" style="color: #44C966;width: 100%">整改完毕</div>
+                <div v-if="detail.currentStatus=='55'" style="color: #F91717;width: 100%">已驳回</div>
+            </div>
+        </div>
+        <div class="contentPart" style="margin-bottom: 0">
+            <div class="contentLine" v-if="detail.spotCheckObject">
+                <div>抽查对象</div>
+                <div v-if="detail.spotCheckObject=='1'">一级机构</div>
+                <div v-if="detail.spotCheckObject=='2'">经营支行</div>
+            </div>
+            <div class="contentLine">
+                <div>一级机构</div>
+                <div>{{detail.checkFirstOrgName ? detail.checkFirstOrgName : '--'}}</div>
+            </div>
+            <div class="contentLine" v-if="detail.checkSecondOrgName">
+                <div>经营支行</div>
+                <div>{{detail.checkSecondOrgName ? detail.checkSecondOrgName : '--'}}</div>
+            </div>
+            <div class="contentLine" v-if="detail.checkCategory">
+                <div>检查类别</div>
+                <div v-if="detail.checkCategory=='1'">非现场检查</div>
+                <div v-if="detail.checkCategory=='2'">现场检查</div>
+            </div>
+            <div class="contentLine">
+                <div>检查时间</div>
+                <div>{{detail.checkDate ? detail.checkDate : '--'}}</div>
+            </div>
+            <div class="contentLine">
+                <div>检查对象</div>
+                <div v-if="detail.checkObject=='1'">厅堂</div>
+                <div v-if="detail.checkObject=='2'">双录</div>
+                <div v-if="detail.checkObject=='3'">监控</div>
+                <div v-if="detail.checkObject=='1,2'">厅堂,双录</div>
+                <div v-if="detail.checkObject=='1,3'">厅堂,监控</div>
+                <div v-if="detail.checkObject=='2,3'">双录,监控</div>
+                <div v-if="detail.checkObject=='1,2,3'">厅堂,双录,监控</div>
+            </div>
+        </div>
+        <div class="contentPart">
+            <div v-for="(item, index) in detail.businessRecordList">
+                <div style="padding: 12px 0px 12px 12px;color: #999;display: flex;align-items: center;justify-content: space-between;background: #f6f6f6"><p>业务信息{{index+1}}</p></div>
+                <div class="contentLine">
+                    <div>业务发生时间</div>
+                    <div>{{item.occurrenceDate ? item.occurrenceDate : '--'}}</div>
+                </div>
+                <div class="contentLine">
+                    <div>业务种类</div>
+                    <div v-if="item.businessType=='1'">基金</div>
+                    <div v-if="item.businessType=='2'">保险</div>
+                    <div v-if="item.businessType=='3'">贵金属</div>
+                    <div v-if="item.businessType=='4'">存款</div>
+                    <div v-if="item.businessType=='5'">理财</div>
+                    <div v-if="item.businessType=='6'">其他</div>
+                    <div v-if="item.businessType=='7'">国债</div>
+                    <div v-if="item.businessType==null || item.businessType==undefined">--</div>
+                </div>
+                <div class="contentLine" style="border-bottom: 0">
+                    <div>业务流水号</div>
+                    <div>{{item.businessNumber ? item.businessNumber : '--'}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div>是否为专项检查:</div>
+                <div v-if="detail.specialCheck == '1'">是</div>
+                <div v-if="detail.specialCheck == '2'">否</div>
+            </div>
+            <div class="contentLine" v-if="detail.specialCheckName">
+                <div>专项检查名称</div>
+                <div>{{detail.specialCheckName ? detail.specialCheckName : '--'}}</div>
+            </div>
+        </div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div>是否存在问题:</div>
+                <div v-if="detail.anyProblem == '1'">是</div>
+                <div v-if="detail.anyProblem == '2'">否</div>
+            </div>
+            <div  class="contentLine" style="display: block;" v-if="detail.problemRecord">
+                <div style="color: #666">问题记录</div>
+                <div style=" background:#F6F7F9; border-radius:4px; padding: 10px;text-align: left;width: 100%;margin-top: 5px;box-sizing: border-box">
+                    {{detail.problemRecord}}
+                </div>
+            </div>
+            <div  class="contentLine" style="display: block;" v-if="detail.rectificationMeasures">
+                <div style="color: #666">整改措施</div>
+                <div style=" background:#F6F7F9; border-radius:4px; padding: 10px;text-align: left;width: 100%;margin-top: 5px;box-sizing: border-box">
+                    {{detail.rectificationMeasures}}
+                </div>
+            </div>
+            <div class="contentLine" v-if="detail.rectificationFinishDate">
+                <div>整改完成时间</div>
+                <div>{{detail.rectificationFinishDate ? detail.rectificationFinishDate : '--'}}</div>
+            </div>
+            <div  class="contentLine" style="display: block;" v-if="detail.remark">
+                <div style="color: #666">备注</div>
+                <div style=" background:#F6F7F9; border-radius:4px; padding: 10px;text-align: left;width: 100%;margin-top: 5px;box-sizing: border-box">
+                    {{detail.remark}}
+                </div>
+            </div>
+        </div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div>检查人</div>
+                <div>{{detail.reportUserName ? detail.reportUserName : '--'}}</div>
+            </div>
+            <div class="contentLine">
+                <div>所属一级机构</div>
+                <div>{{detail.reportFirstOrgName ? detail.reportFirstOrgName : '--'}}</div>
+            </div>
+        </div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div>问题来源</div>
+                <div v-if="detail.problemSource=='1'">经营支行自查</div>
+                <div v-if="detail.problemSource=='2'">一级机构自查</div>
+                <div v-if="detail.problemSource=='3'">一级机构抽查</div>
+                <div v-if="detail.problemSource=='4'">总行抽查</div>
+            </div>
+        </div>
+        <div class="contentPart" v-if="detail.currentStatus=='11' || detail.currentStatus=='22'">
+            <div class="contentLine">
+                <div>经办人</div>
+                <div>{{detail.operatorName ? detail.operatorName : '--'}}</div>
+            </div>
+        </div>
+
+        <div class="contentPart" v-if="tab=='00'">
+            <div class="contentLine">
+                <div>经办人</div>
+                <div class="selectState display" style="position: relative">
+                    <input class="v-test" placeholder="请选择" v-model='operatorName' readonly style="width: 100%" @click="showTap(1)">
+                    <img src="../image/arrow.png" class="icon">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottomButton" v-if="tab=='00'">
+        <div class="submitButton" @click="submitBindtap()">分 配</div>
+    </div>
+
+    <van-popup v-model="popupBottomShow1" @click-overlay="closeOverlayBindtap" :close-on-click-overlay="false"
+               position="bottom">
+        <van-picker show-toolbar item-height="50px" visible-item-count="5" :title="popupObject1.title"
+                    :columns="popupObject1.columns" @cancel="closeOverlayBindtap" @confirm="onConfirm">
+        </van-picker>
+    </van-popup>
+</div>
+</body>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/server.js?v=20211022"></script>
+<script src="../../common/js/watermark.js"></script>
+<script type="text/javascript" src="../js/rectify/assignDetail.js?v=2.2.5"></script>
+<script src="../../common/js/vConsole.min.js"></script>
+<script>
+    //var vConsole = new VConsole();
+    //初始化微信社区
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem','chooseImage','uploadImage','downloadImage', 'startRecord', 'stopRecord', 'translateVoice','closeWindow']);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+    function getUserFinish(){
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+
+</html>

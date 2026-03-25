@@ -1,0 +1,335 @@
+
+
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color:#fff;  
+}
+
+*{
+    -webkit-overflow-scrolling: touch !important;
+    -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+    -webkit-tap-highlight-color: transparent !important;
+    font-family: 'Microsoft YaHei', Tahoma, Arial, sans-serif;
+}
+
+/*--------------------------------------------------------------------------- 基础信息 -----------------------------------------------*/
+/****************banner\页签开始****************/
+
+.selectDate{
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background: url('../image/right.png') no-repeat right #fff;
+    background-size: 2%;
+    background-position-x: 97%;
+    background-position-y: 51%;
+    font-size: 15px;
+    padding: 0 15px;
+    margin-bottom: 8px;
+    border-top: 1px solid #eee
+    /* font-weight: 500; */
+}
+.inputTitle{
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-size: 2%;
+    background-position-x: 97%;
+    background-position-y: 51%;
+    font-size: 15px;
+    padding: 0 15px;
+    background: #fff;
+    border-top: 1px solid #eee;
+    margin-bottom: -15px;
+    /* font-weight: 500; */
+}
+
+
+.listParts{
+    background: #fff;
+    height: 50px;
+    line-height: 50px;
+    border-top: 1px solid #eee;
+}
+.listLine{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    padding: 0 13px 0 15px;
+}
+.listLine>div:nth-child(1){
+    width: 40%;
+
+}
+
+.containList img{
+    width: 11%;
+    vertical-align: middle;
+}
+.listLine>div:last-child{
+    width: 60%;
+    text-align: right;
+}
+
+
+
+
+
+.textAreaPart .van-field__body>textarea{
+    background: #F3F4F8;
+    border-radius: 4px;
+    /* margin: 10px auto 0; */
+    text-align: left;
+    padding: 0px 10px;
+    border: 0;
+    width: 100%;
+    min-width: 45vh;
+
+}
+.van-field__control {
+    color: #272727;
+}
+.info_content__ {
+    height: auto;
+    margin-top: 10px;
+    /* margin-bottom: 7px; */
+    padding-bottom: 5px;
+    background-color: #F5F6f7;
+    border-radius: 6px;
+}
+
+.van-field__word-limit {
+    background-color: #F5F6f7;
+    padding-right: 10px;
+    margin-top: 0;
+}
+
+.input_textarea textarea.van-field__control {
+    background-color: #F5F6f7;
+    /* padding: 10px; */
+    border-radius: 6px 6px 0 0;
+}
+/* ------------------------------- 按钮 --------------------- */
+.btn{
+    width: 100%;
+    margin-top: 50px;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+.btn span{
+    display: block;
+    width: 100%;
+    line-height: 45px;
+    background-color: #267EF0;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #fff;
+    text-align: center;
+}
+.resultPart{
+    margin: 60px auto;
+    text-align: center;
+    font-size: 20px;
+    color: #000000;
+    text-align: center;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+}
+.resultPart>img{
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    
+}
+.confirm{
+    background: #267EF0;
+    width: 200px;
+    padding: 10px;
+    font-size: 17px;
+    color: #FFFFFF;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 4px;
+    margin: 10px auto;
+    z-index: 3;
+    position: relative;
+}
+.recodeblock {
+    position: fixed;
+    width: 140px;
+    max-width: 300px;
+    top: 45%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, .6);
+    text-align: center;
+    border-radius: 3px;
+    -webkit-transition-duration: .2s;
+    transition-duration: .2s;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    margin: 0;
+    border-radius: 12px;
+    visibility: hidden;
+    opacity: 0;
+ }
+ .inputContentStatement{
+     width: 90%;
+    background:#F6F7F9;
+    border-radius:4px;
+    font-size: 16px;
+    color: #202020;
+    font-weight: 400;
+    min-height: 30px;
+    max-height: 150px;
+    padding: 7px;
+    margin: 8px auto
+    
+ }
+ .inputContentStatementArea{
+     background: #fff;
+     padding: 10px 0px;
+ }
+/****************语音输入开始****************/
+.textAreaPart{
+    /* position: relative; */
+    box-sizing: border-box;
+    min-width: 45vh;
+}
+.yuyun-box {
+    width: 90%;
+    height: 44px;
+    line-height: 44px;
+    border-radius: 6px;
+    color: #3975C6;
+    border: 1px solid #3975C6;
+    text-align: center;
+    margin: 12px auto;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.yuyun-box img {
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+.yuyinTextArea{
+    width: 90%;
+    margin: 10px auto;
+    background: #F6F7F9;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.van-cell {
+    padding: 0!important;
+}
+
+.record{
+    position: absolute;
+    right: 24px;
+    top: -40px;
+    width: 20px;
+    height: 25px;
+}
+.record>div{
+    position: relative;
+    display: inline-block;
+}
+.voice{
+    width: 22px;
+    height: 22px;
+    vertical-align: sub;
+    margin-right: 10px;
+
+}
+.luyinbtn {
+    width: 100px;
+    background-color: #fff;
+    color: #333;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 8px;
+    margin: 6px auto 12px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.recodeblock {
+   position: fixed;
+   width: 140px;
+   max-width: 300px;
+   top: 45%;
+   left: 50%;
+   -webkit-transform: translate(-50%, -50%);
+   transform: translate(-50%, -50%);
+   background: rgba(0, 0, 0, .6);
+   text-align: center;
+   border-radius: 3px;
+   -webkit-transition-duration: .2s;
+   transition-duration: .2s;
+   -webkit-transform: translate(-50%, -50%);
+   transform: translate(-50%, -50%);
+   -webkit-transform-origin: 0 0;
+   transform-origin: 0 0;
+   margin: 0;
+   border-radius: 12px;
+   visibility: hidden;
+   opacity: 0;
+}
+
+.recodeblock.showluyin {
+   opacity: 1;
+   visibility: visible;
+   z-index: 99999;
+}
+
+.recodeblock img {
+   width: 68%;
+   margin: 15px auto 0;
+}
+.btnDiv{
+   display: flex;
+}
+.luyinline {
+   width: 40%;
+   height: 34px;
+   line-height: 34px;
+   border-radius: 50px;
+   color: #4273d8;
+   border: 1px solid #4273d8;
+   text-align: center;
+   margin: 10px auto;
+   font-size: 15px;
+}
+
+.luyinline img {
+   height: 20px;
+   vertical-align: middle;
+   margin-right: 6px;
+}
+
+.yuyin-input{
+   height: auto;
+   padding: 10px 3% 5px 3%;
+   border-bottom: 0px;
+   flex-direction: column
+}
+select:invalid{
+   color: #999999;
+}
+
+/****************语音输入结束****************/

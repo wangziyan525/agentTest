@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="css/commitment.css">
+
+    <title>签订个人承诺书</title>
+</head>
+
+<body>
+    <div class="container">
+            <div class="topTitle">保险备案资质承诺书</div>
+            <div class="midText" id="midText">
+                <p style="text-indent:2em">本人郑重承诺，作为一名保险从业人员，将严格遵守《中华人民共和国保险法》及相关法律法规、保险行业准则、公司制度和职业道德规范，恪守以下承诺:</p>
+                <p>（一）本人离职后或我行与合作保险公司终止合作后，不得有泄露客户信息、怂恿投保人退保等损害投保人合法权益的行为；</p>
+                <p>（二）不得假借所属机构名义私自推介、销售未经审批的产品，或者展示未经审批的产品销售文件和资料；</p>
+                <p>（三）不得将代销产品以自营产品的名义进行销售，或者采取虚假、夸大、片面等宣传方式误导客户购买产品；</p>
+                <p>（四）不得违背客户意愿将代销产品与其他产品或者服务进行捆绑销售；</p>          
+                <p>（五）不得违规代替客户签署代销业务相关文件，或者代替客户进行代销产品购买等操作、代替客户持有或者安排他人代替客户持有代销产品；</p>
+                <p>（六）不得为代销产品违规提供直接或者间接、显性或者隐性担保，包括承诺本金或者收益保障；</p>
+                <p>（七）不得诱导客户购买与其风险承受能力不匹配的产品；</p>
+                <p>（八）不得为谋取不当利益，诱导客户进行频繁购买、赎回、退保或者其他同类操作；</p>
+                <p>（九）不得利用代销保险业务向合作机构及其工作人员、客户及相关人员收取、索要或者提供协议约定以外的利益；</p>
+                <p>（十）不得让非本行人员在营业网点从事产品宣传推介、销售等活动；</p>
+                <p>（十一）不得欺骗保险人、投保人、被保险人或者受益人；不得在讲解保险产品中使用如“存”、“取”、”本金“、”利息”、“复利”等不规范保险销售用语；</p>
+                <p>（十二）不得隐瞒与保险合同有关的重要情况，如免责条款、健康告知、提前解除保险合同可能产生的损失、保单利益的不确定性等；</p>
+                <p>（十三）不得阻碍投保人履行如实告知义务，或者诱导其不履行如实告知义务；</p>
+                <p>（十四）不得给予或者承诺给予投保人、被保险人或者受益人保险合同约定以外的利益；（如买保险送礼品、返佣等）</p>
+                <p>（十五）不得利用行政权力、职务或者职业便利以及其他不正当手段强迫、引诱或者限制投保人订立保险合同；</p>
+                <p>（十六）不得伪造、擅自变更保险合同，或者为保险合同当事人提供虚假证明材料；</p>
+                <p>（十七）不得挪用、截留、侵占保险费或者保险金；</p>
+                <p>（十八）不得利用业务便利为其他机构或者个人牟取不正当利益；</p>
+                <p>（十九）不得串通投保人、被保险人或者受益人，骗取保险金；</p>
+                <p>（二十）不得泄露在业务活动中知悉的保险人、投保人、被保险人的商业秘密。</p>
+            </div>
+
+        <button class="btmBtn" id="btmBtn" onclick="nextStep()">签名</button>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<!-- <script src="js/commitment.js"></script> -->
+<script src="../common/js/vConsole.min.js"></script>
+
+<script>
+      //var vConsole = new VConsole();
+    initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+    wx.ready(function () {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+    }
+
+    //获取dom
+    const midText = document.getElementById('midText');
+    const btmBtn = document.getElementById('btmBtn');
+    btmBtn.disabled = true;
+    midText.addEventListener('scroll', checkPosition);
+    function checkPosition() {
+
+        const scrollHeight = midText.scrollHeight;
+        const scrollTop = midText.scrollTop;
+        const clientHeight = midText.clientHeight;
+
+        if (scrollTop + clientHeight + 1 >= scrollHeight) {
+            btmBtn.disabled = false;
+        } else {
+            btmBtn.disabled = true;;
+        }
+    }
+    function nextStep() {
+        window.location.href = "sign.html"
+    }
+  
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

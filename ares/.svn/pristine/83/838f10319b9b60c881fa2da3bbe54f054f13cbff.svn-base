@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>服务站管理</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=1.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none">
+       <div v-if="page=='page1'">
+           
+            <div class="contentPart">
+                <div class="contentLine">
+                    <div class="textTitle">服务站ID</div>
+                    <div class="inputLine">                        
+                        <van-field   type="digit" v-model="info.id" :readonly="type=='1'" rows="1" placeholder="请输入" maxlength="10" center></van-field>
+                    </div>
+                </div>
+                <div class="contentLine">
+                    <div class="textTitle">服务站名称</div>
+                    <div class="inputLine">                        
+                        <van-field   v-model="info.stationname" rows="1" placeholder="请输入" maxlength="30" center></van-field>
+                    </div>
+                </div>
+                <div class="contentLine">
+                    <div class="textTitle">所属机构号</div>
+                    <div class="inputLine">                        
+                        <van-field   type="digit" v-model="info.orgid" rows="1" placeholder="请输入" maxlength="6" center></van-field>
+                    </div>
+                </div>
+                <div class="contentLineAdd">
+                    <div class="textTitle addHumanPartLeft">人员</div>
+                    <div class="addHumanPart" @click="queryList">
+                        <img src="images/addHuman.png">
+                        <div>添加</div>
+                    </div>
+                </div>
+                <div v-if="info.persons && info.persons.length>0">
+                    <div class="chooseHumanList" >
+                        <div class="humanLists" v-for="(item,index) in info.persons">
+                            <div>{{item.username}}</div>
+                            <div @click="deleteBtn(index)"><img src="images/delete.png"></div>
+                        </div>
+                    </div>
+                    <div style="height: 10px;"></div>
+                </div>
+                
+            </div>
+            
+
+            <div style="height: 80px;"></div>
+            <div class="footApply" v-if="type=='0'">
+                <div @click="addtBtn">
+                    <span>提交</span>
+                </div>
+            </div>
+            <div class="footTabAdd" v-if="type=='1'">
+                <div @click="deletetBtn" class="deletetBtn">
+                    <span>删除</span>
+                </div>
+                <div @click="addtBtn" class="addHumanTab">
+                    <span>提交</span>
+                </div>
+            </div>
+            
+       </div>
+       <div v-if="page=='page3'">
+           
+                <div class="contentPart">
+                    <div class="contentLine">
+                        <div class="textTitle">服务站ID</div>
+                        <div class="inputLine">                        
+                            <!-- <van-field   type="digit" v-model="info.id" readonly rows="1" placeholder="请输入" maxlength="30" center></van-field> -->
+                            {{info.id}}
+                        </div>
+                    </div>
+                    <div class="contentLine">
+                        <div class="textTitle">服务站名称</div>
+                        <div class="inputLine">                        
+                            <!-- <van-field   v-model="info.stationname" readonly rows="1" placeholder="请输入" maxlength="30" center></van-field> -->
+                            {{info.stationname}}
+                        </div>
+                    </div>
+                    <div class="contentLine">
+                        <div class="textTitle">所属机构号</div>
+                        <div class="inputLine">                        
+                            <!-- <van-field   type="digit" readonly v-model="info.orgid" rows="1" placeholder="请输入" maxlength="30" center></van-field> -->
+                            {{info.orgid}}
+                        </div>
+                    </div>
+                    <div class="contentLineAdd">
+                        <div class="textTitle addHumanPartLeft">人员</div>
+                        <!-- <div class="addHumanPart" >
+                            <img src="images/addHuman.png">
+                            <div>添加</div>
+                        </div> -->
+                    </div>
+                    <div v-if="info.persons && info.persons.length>0">
+                        <div class="chooseHumanList" >
+                            <div class="humanLists" v-for="(item,index) in info.persons">
+                                <div>{{item.username}}</div>
+                            </div>
+                        </div>
+                        <div style="height: 10px;"></div>
+                    </div>
+                    
+                </div>
+                
+
+                <div style="height: 80px;"></div>
+               
+                
+        </div>
+       <div v-if="page=='page2'">
+            <div class="listTopPart" style="padding: 10px;">
+                <div class="listOneLine">
+                    <img src="images/search.png">
+                    <div class="keyInput">                    
+                        <van-field type="text" v-model="searchWord" placeholder="输入员工姓名搜索" maxlength="50" ></van-field>
+                    </div>
+                    <div class="keySearchBtn" @click="queryList()">搜索</div>
+                </div>
+            </div>
+            <div class="humanChooseList" v-if="list.length>0">
+                <div class="humanList" v-for="(item,index) in list">
+                    <div>{{item.username}}</div>
+                    <div @click="multipleChoose(index)"><img :src="item.dots?'images/choose.png':'images/unchoose.png'"></div>
+                </div>
+                
+            </div>
+            <div  class="nodate" v-else>
+                <div class="noMessage">
+                    <img src="images/noMessage.png">
+                </div>
+                暂无数据
+            </div>
+            <div style="height: 80px;"></div>
+            <div class="footTabAdd" >
+                <div class="allChoose" @click="allChoose"><img :src="ifAllChoose?'images/choose.png':'images/unchoose.png'">{{ifAllChoose?'取消全选':'全选'}}</div>
+                <div @click="backPage" class="deletetBtn">
+                    <span>返回</span>
+                </div>
+                <div @click="chooseHum" class="addHumanTab">
+                    <span>确认选择</span>
+                </div>
+            </div>
+       </div>
+
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js"></script>
+<script type="text/javascript" src="js/addStationname.js"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

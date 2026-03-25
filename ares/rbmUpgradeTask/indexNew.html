@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no,viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/indexNew.css?v=2.0">
+    <style>
+        .banner_title {
+            position: absolute;
+            top: 65px;
+            left: 25px;
+            font-size: 30px;
+            color: #fff;
+            font-weight: 600;
+
+        }
+
+        .banner_time {
+            position: absolute;
+            top: 50px;
+            left: 28px;
+            width: 83px;
+            height: 40px;
+            font-size: 0px;
+        }
+
+        .banner_time img {
+            width: 100%;
+        }
+        [v-cloak]{
+            display: none;
+        }
+
+
+        .unfineshed1{
+            background: rgba(255, 150, 20, 0.05);
+            border: 1px solid #ff9614;
+            padding: 0px 4px;
+            color:#ff9614;
+            margin-left: 10px;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .fineshed1{
+            background: rgba(197, 20, 255, 0.05);
+            border: 1px solid #c514ff;
+            padding: 0px 4px;
+            color:#c514ff;
+            margin-left: 10px;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+    </style>
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none" v-cloak>
+        <div v-if="tab=='1' || tab=='2' || tab=='3' || tab=='4'">
+            <!-- <van-notice-bar  color="#ffffff" background="#143bee26" scrollable left-icon="volume-o" :text="noticeContent"></van-notice-bar> -->
+            <div class="banner"><img src="images/reportBk.jpg"></div>
+            <div class="banner_time">
+                <img src="images/2025@2x.png" alt="">
+            </div>
+            <div class="banner_title">{{ bannerTitle }}</div>
+        </div>
+        
+
+        <!-- 首页图表 -->
+       <div v-if="tab=='1'">
+        <div class="bkBox">
+            <div class="menu-box">
+                <div :class="tab=='1'?'selected':''" @click="chooseTab('1')">总进度</div>
+                <div :class="tab=='2'?'selected':''" @click="chooseTab('2')">未完成</div>
+                <div :class="tab=='3'?'selected':''" @click="chooseTab('3')">已完成</div>
+                <div :class="tab=='4'?'selected':''" @click="chooseTab('4')">我的任务</div>
+            </div>
+            <div class="boxPart">
+                <div class="oneboxPart">
+                    <div>总任务数</div>
+                    <div>{{report.allTaskNum}}</div>
+                </div>
+            </div>
+            <div class="boxPartTwo">
+                <div class="oneboxPart">
+                    <div>已完成任务数</div>
+                    <div>{{report.finishTaskNum}}</div>
+                </div>
+                <div class="oneboxPart">
+                    <div>未完成任务数</div>
+                    <div>{{report.allTaskNum - report.finishTaskNum}}</div>
+                </div>
+            </div>
+            <!-- <div class="boxPartTwo">
+                <div class="oneboxPart">
+                    <div>当前支持人数</div>
+                    <div>{{report.supportNum}}</div>
+                </div>
+                <div class="oneboxPart">
+                    <div>保障人员总数</div>
+                    <div>{{report.supportSum}}</div>
+                </div>
+            </div> -->
+
+            <div class="reportBox">
+                <div class="processTitle">
+                    <div>本系统演练总进度</div>
+                    <div><span class="countdown">{{countdown}}s</span>后刷新</div>
+                    <div  @click="refeshqueryTaskName">手动刷新</div>
+                </div>
+                <div class="process-box">
+                    <div class="process-back">
+                        <div class="process" :style="report.process_bar"></div>
+                    </div>
+                    <div class="process-num">{{report.allProcess}}<label style="font-size: 14px;">%</label></div>
+                </div>
+                <div class="reportPart">
+                    <div class="reportOne" v-for="(item,index) in TaskreportList">
+                        <div class="bkSecCircle">
+                            <div  :id="item.id" style="height: 25vw;"></div>
+                        </div>
+                        <div class="reportName">{{item.taskGroup1}}</div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            
+        </div>
+       </div>
+
+       <!-- 未完成/已完成 -->
+       <div v-if="tab=='2' || tab=='3'" >
+            <div class="bkBox">
+                <div class="menu-box">
+                    <div :class="tab=='1'?'selected':''" @click="chooseTab('1')">总进度</div>
+                    <div :class="tab=='2'?'selected':''" @click="chooseTab('2')">未完成</div>
+                    <div :class="tab=='3'?'selected':''" @click="chooseTab('3')">已完成</div>
+                    <div :class="tab=='4'?'selected':''" @click="chooseTab('4')">我的任务</div>
+                </div>
+                <div v-if="taskList  &&  taskList.length >0">
+                    <div class="listContent" v-for="task in taskList" @click="getTaskById(task.taskId)">
+                        <div class="topRow">
+                            <div>{{task.taskName}}</div>
+                            <div v-if="tab=='3' && task.ifreviewer == 'false' && task.taskStatus == 1" class="fineshed">执行完成</div>
+                            <div v-if="tab=='3' && task.taskStatus == 1 && task.ifreviewer == 'true'" class="fineshed">已完成</div>
+                        </div>
+                        <!-- <div class="row">
+                            <div class="left">任务编号</div>
+                            <div class="right">{{task.taskId}}</div>
+                        </div> -->
+                        <div class="row">
+                            <div class="left">所属条线</div>
+                            <div class="right">
+                               <div> {{task.taskGroup1}} <span v-if="task.taskGroup2">- {{task.taskGroup2}}</span></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="left">计划时间</div>
+                            <div class="right">
+                                <div> {{task.startDate}} {{task.startTime}} - {{task.endDate}} {{task.endTime}} </div>
+                            </div>
+                        </div>
+                        <div v-if="task.taskStatus == 1" class="row">
+                            <div class="left">实际执行时间</div>
+                            <div class="right">
+                                <div>
+                                    <span v-if="task.sendtime">{{task.sendtime}}</span>
+                                    <span v-if="task.sendtime && task.finshTime"> - </span>
+                                    <span v-if="task.finshTime">{{task.finshTime}}</span>
+                                 </div>
+                                <!--<div> <span v-if="task.sendtime">{{task.sendtime}}-</span>  {{task.finshTime}} </div> -->
+								<!-- <div> {{task.finshTime}} </div> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="left">执行人</div>
+                            <div class="right">
+                                <div>{{task.userName}}</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="left">复核人</div>
+                            <div class="right">
+                                <div>{{task.reviewer || ''}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nodata" v-else>未查询到相关数据</div>
+            </div>
+
+           
+       </div>
+
+       <!-- 我的任务 -->
+       <div v-if="tab=='4'" >
+        <div class="bkBox">
+            <div class="menu-box">
+                <div :class="tab=='1'?'selected':''" @click="chooseTab('1')">总进度</div>
+                <div :class="tab=='2'?'selected':''" @click="chooseTab('2')">未完成</div>
+                <div :class="tab=='3'?'selected':''" @click="chooseTab('3')">已完成</div>
+                <div :class="tab=='4'?'selected':''" @click="chooseTab('4')">我的任务</div>
+            </div>
+            <div v-if="taskMyList &&  taskMyList.length >0">
+                <div class="listContent" v-for="task in taskMyList" @click="getTaskById(task.taskId)">
+                    <div class="topRow">
+                        <div>{{task.taskName}} </div>
+                        <div v-if="task.userId == humancode" class="unfineshed1">执行人</div>
+                        <div v-if="task.reviewerHumanCode == humancode" class="fineshed1">复核人</div>
+                        <div v-if="task.taskStatus == 0" class="unfineshed">未完成</div>
+                        <div v-if="task.ifreviewer == 'false' && task.taskStatus == 1 && task.reviewerHumanCode == humancode" class="fineshed">待复核</div>
+                        <div v-if="task.ifreviewer == 'false' && task.taskStatus == 1 && task.userId == humancode" class="fineshed">执行完成</div>
+                        <div v-if="task.taskStatus == 1 && task.ifreviewer == 'true'" class="fineshed">已完成</div>
+                    </div>
+                    <!-- <div class="row">
+                        <div class="left">任务编号</div>
+                        <div class="right">{{task.taskId}}</div>
+                    </div> -->
+                    <div class="row">
+                        <div class="left">所属条线</div>
+                        <div class="right">
+                            <div>{{task.taskGroup1}} <span v-if="task.taskGroup2">- {{task.taskGroup2}}</span></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="left">计划时间</div>
+                        <div class="right">
+                            <div>{{task.startDate}} {{task.startTime}} - {{task.endDate}} {{task.endTime}}</div> 
+                        </div>
+                    </div>
+                    <div v-if="task.taskStatus == 1" class="row">
+                        <div class="left">实际执行时间</div>
+                        <div class="right">
+                           <div>
+                               <span v-if="task.sendtime">{{task.sendtime}}</span>
+                               <span v-if="task.sendtime && task.finshTime"> - </span>
+                               <span v-if="task.finshTime">{{task.finshTime}}</span>
+                            </div>
+						   <!-- <div>{{task.finshTime}}</div> -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="left">执行人</div>
+                        <div class="right">
+                            <div>{{task.userName}}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="left">复核人</div>
+                        <div class="right">
+                            <div>{{task.reviewer || ''}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nodata" v-else>未查询到相关数据</div>
+        </div>
+        </div>
+       
+
+        <!--详情-->
+    <div v-if="tab=='5'">
+        <div v-if="beforeTaskDetail.length>0">
+            <div style="padding: 10px 0px 10px 15px;box-sizing: border-box;width: 100%;">前置任务信息</div>
+            <div v-for='(item,index) in beforeTaskDetail' :key="index" class="list-box lineBottom" style="margin-top: 0px;">
+                <div class="row">
+                    <div class="left">任务名称</div>
+                    <div class="right"><div>{{item.taskName}}</div></div>
+                </div>
+                <div class="row">
+                    <div class="left">任务编号</div>
+                    <div class="right"><div>{{item.taskId}}</div></div>
+                </div>
+                <div class="row">
+                    <div class="left">所属条线</div>
+                    <div class="right"><div>{{item.taskGroup1}} <span v-if="item.taskGroup2">- {{item.taskGroup2}}</span></div></div>
+                </div>
+                <div class="row">
+                    <div class="left">计划时间</div>
+                    <div class="right"><div>{{item.startDate}} {{item.startTime}} - {{item.endDate}} {{item.endTime}}</div></div>
+                </div>
+                <div v-if="item.taskStatus == 1" class="row">
+                    <div class="left">实际执行时间</div>
+                    <div class="right">
+                        <div>
+                            <span v-if="item.sendtime">{{item.sendtime}}</span>
+                            <span v-if="item.sendtime && item.finshTime"> - </span>
+                            <span v-if="item.finshTime">{{item.finshTime}}</span>
+                        </div>
+                    </div>
+					<!-- <div class="right"><div>{{item.finshTime}} </div></div> -->
+                </div>
+                <div class="row">
+                    <div class="left">执行人</div>
+                    <div class="right"><div>{{item.userName}}</div></div>
+                </div>
+                <div class="row">
+                    <div class="left">执行地点</div>
+                    <div class="right"><div>{{item.executionLocation}}</div></div>
+                </div>
+                <div class="row">
+                    <div class="left">执行方式</div>
+                    <div class="right"><div>{{item.executionMethod}}</div></div>
+                </div>
+                <div class="row">
+                    <div class="left">复核人</div>
+                    <div class="right"><div>{{item.reviewer || ''}}</div></div>
+                </div>
+                <div class="row" v-if="item.reviewerDate">
+                    <div class="left">复核时间</div>
+                    <div class="right"><div>{{item.reviewerDate || ''}}</div></div>
+                </div>
+                <div class="row">
+                    <div class="left">任务状态</div>
+                    <div class="right">{{item.taskStatus == 0 ? '未完成' : '已完成'}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="taskDetail!= null" style="padding: 10px 0px 10px 15px;box-sizing: border-box;width: 100%;">任务信息</div>
+        <div class="list-box" style="margin-top: 0px;padding-top: 0px;">
+            <div class="row">
+                <div class="left">任务名称</div>
+                <div class="right"><div>{{taskDetail.taskName}}</div></div>
+            </div>
+            <div class="row">
+                <div class="left">任务编号</div>
+                <div class="right"><div>{{taskDetail.taskId}}</div></div>
+            </div>
+            <div class="row">
+                <div class="left">所属条线</div>
+                <div class="right"><div>{{taskDetail.taskGroup1}} <span v-if="taskDetail.taskGroup2">- {{taskDetail.taskGroup2}}</span></div></div>
+            </div>
+            <div class="row" v-if="taskDetail.startDate != null && taskDetail.startDate != ''">
+                <div class="left">计划时间</div>
+                <div class="right"><div>{{taskDetail.startDate}} {{taskDetail.startTime}} - {{taskDetail.endDate}} {{taskDetail.endTime}}</div></div>
+            </div>
+            <div v-if="taskDetail.taskStatus == 1" class="row">
+                <div class="left">实际执行时间</div>
+                <!-- <div class="right"><div>{{taskDetail.finshTime}} </div></div> -->
+				<div class="right">
+                    <div>
+                        <span v-if="taskDetail.sendtime">{{taskDetail.sendtime}}</span>
+                        <span v-if="taskDetail.sendtime && taskDetail.finshTime"> - </span>
+                        <span v-if="taskDetail.finshTime">{{taskDetail.finshTime}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="left">执行人</div>
+                <div class="right"><div>{{taskDetail.userName}}</div></div>
+            </div>
+            
+            <div class="row">
+                <div class="left">执行地点</div>
+                <div class="right"><div>{{taskDetail.executionLocation}}</div></div>
+            </div>
+            <div class="row">
+                <div class="left">执行方式</div>
+                <div class="right"><div>{{taskDetail.executionMethod}}</div></div>
+            </div>
+            <div class="row">
+                <div class="left">复核人</div>
+                <div class="right"><div>{{taskDetail.reviewer || ''}}</div></div>
+            </div>
+            <div class="row" v-if="taskDetail.reviewerDate">
+                <div class="left">复核时间</div>
+                <div class="right"><div>{{taskDetail.reviewerDate || ''}}</div></div>
+            </div>
+        </div>
+
+        <div v-if="ReviewerUser != ''">
+            <div class="list-box" style="margin-top: -10px;padding-top: 0px;">
+                <div class="row" v-if="(taskDetail.remark != null && taskDetail.remark != '') || (taskDetailImgs != null && taskDetailImgs != '')" style="color: #999999;">备注</div>
+                <div v-if="taskDetail.remark != null && taskDetail.remark != ''" class="remark" >{{taskDetail.remark}}</div>
+                <div class="uploadImg-box" style="margin-top: 15px;">
+                    <div v-for="(img,index) in taskDetailImgs" class="upload" v-if="img != null && img != ''">
+                        <img :src="img" @click="previewImg(img)"/>
+                    </div>
+                </div>
+            </div>
+            <div v-if="ReviewerUserApprove && taskDetail.taskStatus =='1'" class="button-box">
+                <div class="button back" @click="back()">返回</div>
+                <div class="button" @click="reviewerApprove(taskDetail.taskId, 1)">复核</div>
+            </div>
+            <div v-else class="button-box" style="justify-content: center;">
+                <div class="button back" @click="back()" style="width: 80%">返回</div>
+            </div>
+        </div>
+        <div v-else>
+<!--        未完成-->
+		
+            <div v-if="taskDetail.taskStatus == 0">
+                <div v-if="taskDetail.ifDualRole &&beforeStatus==1" class="list-box">
+                    <div style="width: 100%;margin-bottom: 10px;">备注内容</div>
+                    <div class="yuyun-box" @click="showRecorddiv()">
+                        <img src="images/yuyin.png " />可尝试语音输入
+                    </div>
+                    <div class="input-box">
+                        <textarea v-model="remark" @input="textareaInput" placeholder="请输入备注" maxlength="600" rows="3" autosize></textarea>
+                        <div class="input-num">{{inputNum}}/{{allNum}}</div>
+                    </div>
+                    <div style="width: 100%;margin: 15px 0px;">备注图片（非必须上传，最多10张）</div>
+                    <div class="uploadImg-box">
+                        <div v-for="(localid,index) in uploadImgLocalIds" class="upload">
+                            <img :src="localid"/>
+                            <div class="delete" @click="deleteImg(index)"><img src="images/deleteimg.png"/> </div>
+                        </div>
+                        <div v-if="uploadImgLocalIds.length < 10" class="upload" @click="chooseImg" style="margin-right: 0px;">
+                            <img src="images/uploadimg.png"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="taskDetail.ifDualRole &&beforeStatus==1" class="button-box">
+                    <div class="button back" @click="back()">返回</div>
+                    <div class="button" @click="finishTask(taskDetail.taskId,0)">完成</div>
+                </div>
+                <div v-else class="button-box" style="justify-content: center;">
+                    <div class="button back" @click="back()" style="width: 80%">返回</div>
+                </div>
+            </div>
+            <!--已完成-->
+            <div v-else>
+                <div class="list-box" style="margin-top: -10px;padding-top: 0px;">
+                    <div class="row">
+                        <div class="left">完成时间</div>
+                        <div class="right">{{taskDetail.finshTime}}</div>
+                    </div>
+
+                    <div class="row" v-if="(taskDetail.remark != null && taskDetail.remark != '') || (taskDetailImgs != null && taskDetailImgs != '')" style="color: #999999;">备注</div>
+                    <div v-if="taskDetail.remark != null && taskDetail.remark != ''" class="remark" >{{taskDetail.remark}}</div>
+                    <div class="uploadImg-box" style="margin-top: 15px;">
+                        <div v-for="(img,index) in taskDetailImgs" class="upload" v-if="img != null && img != ''">
+                            <img :src="img" @click="previewImg(img)"/>
+                        </div>
+                        <!--补充图片-->
+                        <div v-for="(localid,index) in uploadImgLocalIds" class="upload">
+                            <img :src="localid"/>
+                            <div class="delete" @click="deleteImg(index)"><img src="images/deleteimg.png"/> </div>
+                        </div>
+                        <div v-if="taskDetail.ifDualRole && uploadImgLocalIds.length < 10" class="upload" @click="chooseImg" style="margin-right: 0px;">
+                            <img src="images/uploadimg.png"/>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="taskDetail.ifDualRole" class="button-box">
+                    <div class="button back" @click="back()">返回</div>
+                    <div class="button" @click="finishTask(taskDetail.taskId,1)">确定补充图片</div>
+                </div>
+                <div v-else class="button-box" style="justify-content: center;">
+                    <div class="button back" @click="back()" style="width: 80%">返回</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="recodeblock">
+            <img src="images/luyin.gif" />
+            <div class="luyinbtn" start="no" page="page3" v-on:click="startRecord()">开始说话</div>
+        </div>
+        <div style="height: 20px;"></div>
+    </div>
+        
+        
+        
+    </div>
+</body>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/chart/echarts.min.js"></script>
+<script type="text/javascript" src="../common/js/chart/macarons.js"></script>
+<script src="../common/js/jquery.cookie_jq.js"></script>
+<!-- <script type="text/javascript" src="../common/js/basepro.js?v=20211118"></script> -->
+<script type="text/javascript" src="../common/js/base.js"></script>
+<!-- <script type="text/javascript" src="../common/js/jssdkpro.js"></script> -->
+<script type="text/javascript" src="../common/js/jssdk.js"> </script>
+<script type="text/javascript" src="../common/js/jwxworkpro.js"></script>
+<!-- <script type="text/javascript" src="../common/js/jwxwork.js"></script> -->
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="js/indexNew.js?v=20250703"></script>
+<script type="text/javascript">
+    
+    function getUserFinish(){
+        
+           initJSSDK(['hideAllNonBaseMenuItem','chooseImage','uploadImage','invoke','selectEnterpriseContact','closeWindow',,"stopRecord","startRecord","translateVoice"]);
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun();
+        //    try{
+        //     var jsApiList = ['hideAllNonBaseMenuItem', 'startRecord', 'stopRecord', 'translateVoice', 'onVoiceRecordEnd','chooseImage', 'uploadImage', 'previewImage','getLocalImgData'];
+        //     // $.getScript("./js/index.js?v=20211170");
+
+        //     wx.checkJsApi({
+        //         jsApiList: [jsApiList],
+        //         success: function (res) {
+        //         }
+        //     });
+        //     initAgentConf("1000146",jsApiList);//initAgentConf("1000124",jsApiList);
+        //     wx.hideAllNonBaseMenuItem();
+        // }catch (e) {
+        //     $.alert("","微信端不支持上传和查看图片，请在企业微信中打开！");
+        // }
+    }
+    // initFun()
+</script>
+<script src="../common/js/getUserInfo.js"></script>
+</html>

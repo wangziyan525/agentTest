@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=1.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none">
+
+        <div >
+            <div class="baseInfoPart">
+                <div class="baseLine">
+                    <div>排查状态</div>
+                    <div :class="'status'+userInfo.status">{{statusOpt[userInfo.status]}}</div>
+                </div>
+            </div>
+            <div  class="title">基本信息</div>
+            <div class="baseInfoPart">
+                <div class="baseLine">
+                    <div>姓名</div>
+                    <div>{{userInfo.userName}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>性别</div>
+                    <div>{{userInfo.gender}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>员工ID</div>
+                    <div>{{userInfo.userId}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>出生年月</div>
+                    <div>{{userInfo.birthDay}}</div>
+                </div>
+                
+                <div class="baseLine">
+                    <div>入行时间</div>
+                    <div>{{userInfo.inTime}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>所在单位</div>
+                    <div>{{userInfo.bu_descr}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>所在部门（支行）</div>
+                    <div>{{userInfo.ssbm}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>所在岗位</div>
+                    <div>{{userInfo.position}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>文化程度</div>
+                    <div>{{userInfo.degreeOfEducation?userInfo.degreeOfEducation:""}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>参加工作时间</div>
+                    <div>{{userInfo.workTime?userInfo.workTime:""}}</div>
+                </div>
+                <div class="textPart">
+                    <div class="textTitle">家庭常驻详细住址（可接收信函）</div>
+                    <div class="textAreaPart" >
+                        <div class="yuyinTextArea">
+                            <van-field type="textarea" disabled v-model="userInfo.permanentAddress" rows="3" autosize ></van-field>
+                        </div>   
+                    </div>
+                </div>
+            </div>
+            <div  class="title">排查项目</div>
+            <div v-if="userInfo.investigationResultTreeVOs">
+                <div v-for="(item,index) in userInfo.investigationResultTreeVOs">
+                    <div class="checkPart">
+                        <div class="firstTitle">{{item.firstTitle}}</div>
+                        <div class="secondParts" v-for="(item1,index1) in item.secondQuestion">
+                            <div class="secondTitles">{{index1+1}}、{{item1.secondTitle}}</div>
+                            <div class="secondResults">
+                                排查结果：<span v-if="item1.result=='1'">{{item1.resultType=='0'?"是":"有"}}</span>
+                                <span v-if="item1.result=='0'">{{item1.resultType=='0'?"否":"无"}}</span>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+
+           <div class="otherQuestion" v-if="userInfo.otherDescription">
+                <div class="otherTitle">其他需要说明的情况</div>
+                <div class="textAreaPart" >
+                    <div class="yuyinTextArea">
+                        <van-field type="textarea" disabled v-model="userInfo.otherDescription" rows="3" autosize ></van-field>
+                    </div>   
+                </div>
+           </div>
+           <div class="baseInfoPart">
+                <div class="baseLine">
+                    <div>提交时间</div>
+                    <div>{{userInfo.createTime}}</div>
+                </div>
+           </div>
+
+           <div v-if="userInfo.approvalRecords">
+                <div class="baseInfoPart" v-for="(item,index) in userInfo.approvalRecords">
+                    <div class="baseLine">
+                        <div>{{roleOpt[item.role]}}</div>
+                        <div>{{item.handlerName}}</div>
+                    </div>
+                    <div class="baseLines">
+                        <div class="baseLine" style="border-bottom: 0;padding: 0;">
+                            <div>审批意见</div>
+                            <div :class="'status'+item.status">{{statusOpt[item.status]}}</div>
+                        </div>
+                        <div class="textAreaPart" v-if="item.status=='0'">
+                            <div class="yuyinTextArea">
+                                <van-field type="textarea" v-model="item.content" rows="3" autosize disabled></van-field>
+                            </div>   
+                        </div>
+                    </div>
+                    
+                    <div class="baseLine" v-if="item.updateTime">
+                        <div>审核时间</div>
+                        <div>{{item.updateTime}}</div>
+                    </div>
+                </div>
+           </div>
+
+            <div v-if="userInfo.checkStatus=='2' && ifEditFlag!='1'">
+                <div class="baseInfoPart">
+                    <div class="baseLine">
+                        <div>审批意见</div>
+                        <div class="secondResult">
+                            <div @click="approve('1')" style="margin: 0 10px;"><img :src="approveFlag=='1'?'images/choose.png':'images/unchoose.png'">同意</div>
+                            <div @click="approve('0')" style="margin: 0 10px;"><img :src="approveFlag=='0'?'images/choose.png':'images/unchoose.png'">驳回</div>
+                        </div>
+                    </div>
+                    <div class="textAreaPart" style="border-bottom: 1px solid #eee;" v-if="approveFlag=='0'">
+                        <div class="yuyun-box" @click="showRecorddiv">
+                            <img src="./images/yuyin.png " />可尝试语音输入
+                        </div>
+                        <div class="yuyinTextArea">
+                            <van-field type="textarea" v-model="refuseMessage" rows="3" autosize placeholder="请输入" maxlength="100"></van-field>
+                        </div>   
+                    </div>
+                    <div style="position: relative;">
+                        <div class="recodeblock" @click="startRecord()">
+                            <img src="images/luyin.gif"> <div start="no" class="luyinbtn">开始说话</div>
+                        </div>
+                    </div>
+                    <div class="baseLine selectChoose" @click="showPopup('unitLeaderUserId')" v-if="useridList.length>0 && approveFlag=='1'">
+                        <div>单位负责人</div>
+                        <div>{{unitLeaderUserName?unitLeaderUserName:"请选择"}}</div>
+                    </div>
+               </div>
+               <div>
+                    <van-popup v-model="popupShow" position="bottom">
+                        <van-picker
+                                show-toolbar
+                                :columns="popupList"
+                                @confirm="onConfirm"
+                                @cancel="cancelPopup"
+                        >
+                        </van-picker>
+                    </van-popup>
+                </div>
+                <div style="height: 10px;"></div>
+               <div class="applyButton" @click="submit">
+                    <div>提交</div>
+                </div>
+            </div>
+
+        </div>
+       
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="js/detail.js"></script>
+<script type="text/javascript" src="js/dataJson.js"></script>
+
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    
+    function getUserFinish(){
+           initJSSDK(['hideAllNonBaseMenuItem','startRecord', 'stopRecord','invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

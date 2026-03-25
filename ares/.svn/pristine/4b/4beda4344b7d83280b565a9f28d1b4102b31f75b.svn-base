@@ -1,0 +1,53 @@
+var vm;
+
+function initFun () {
+    vm = new Vue({
+        el: '.container',
+        data: {
+            baseUrl: {
+                getMeetingInfoByIdUrl: 'qywx/newMeet/getMeetingInfoById.xa', // 会议详情
+                cancleMeetingUrl: 'qywx/newMeet/cancleMeeting.xa' // 取消会议
+            },
+            dataInfo: {
+
+            }
+        },
+        created () {
+            this.getMeetingInfoById();
+        },
+        methods: {
+            getMeetingInfoById () {
+                $http(this.baseUrl.getMeetingInfoByIdUrl,true, {
+                    meetingInfoId: GetQueryString('meetingInfoId')
+                }, true)
+                .then(res => {
+                    if (res.retcode == 'success') {
+                        this.dataInfo = res.data;
+                    } else {
+                        $.alert("",res.retmsg, function () {
+                            if (res.retcode == '-1') {
+                                wx.closeWindow();
+                            }
+                            
+                        });
+                    }
+                });
+            },
+
+            cancleHandle () {
+                let that = this;
+                // let meetingInfoId = BigInt(that.dataInfo.meetingInfoId).toString()
+                $.confirm("", "确认取消", function () {
+                    $http(that.baseUrl.cancleMeetingUrl,true, {
+                        meetingInfoId: that.dataInfo.meetingInfoId
+                    }, false)
+                    .then(res => {
+                        $.alert("",res.retmsg, function () {
+                            wx.closeWindow();
+                        });
+                    });
+                })
+            }
+        }
+    })
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/summary/summaryTotal.css?v=2.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none">
+
+        <div class="listTopPart">
+            <div class="listOneLine" v-if="isShow">
+                <div class="keyInput" style="position: relative">
+                    <input class="weui-input" type="text" placeholder="请选择层级" v-model='searchWord.searchLeveltxt' @click="showTap('1')" readonly>
+                    <img src="../image/arrow.png" class="year" style="position: absolute;width: 10px;height: 15px;top: 4px;right: 1px">
+                </div>
+            </div>
+            <div class="listsecondLine">
+                <div class="dateDown" @click="pickerdate('startTime')">{{searchWord.startTime?searchWord.startTime:"开始时间"}}</div>
+                <div>—</div>
+                <div class="dateDown" @click="pickerdate('endTime')">{{searchWord.endTime?searchWord.endTime:"结束时间"}}</div>
+            </div>
+            <div class="searchBtn">
+                <div @click="reset()">重置</div>
+                <div @click="searchList()">查询</div>
+            </div>
+
+            <van-popup
+                        v-model="popupDataShow"
+                        position="bottom"
+                        :close-on-click-overlay="false">
+                    <van-datetime-picker
+                            v-model="currentDate"
+                            type="date"
+                            title="选择日期"
+                            @confirm="getTime"
+                            @cancel="closeTime"
+                    >
+                    </van-datetime-picker>
+                </van-popup>
+        </div>
+        <div class="dataSummary">
+            <div><p>{{totalNum ? totalNum : '--'}}</p><p v-if="searchWord.searchLevel=='headoffice'">抽查次数</p><p v-if="searchWord.searchLevel=='firstBranch'">抽查/自查次数</p><p v-if="searchWord.searchLevel=='operateBranch'">自查次数</p></div>
+            <div><p>{{problemNum ? problemNum : '--'}}</p><p>问题次数</p></div>
+            <div><p>{{rectificationsNum ? rectificationsNum : '--'}}</p><p>已整改次数</p></div>
+        </div>
+        <div class="download" v-if="list.length>0"><p>机构数据</p><p @click="summaryInquiryExport()" v-if="downIsShow"><img src="../image/download.png">下载报表</p></div>
+        <div class="dataInfoDiv" v-if="list.length>0">
+            <div class="title" v-if="searchWord.searchLevel=='headoffice'">
+                <p>机构名称</p><p>抽查次数</p><p>问题次数</p><p>已整改次数</p>
+            </div>
+            <div class="title" v-if="searchWord.searchLevel=='firstBranch'">
+                <p>支行名称</p><p>抽查/自查次数</p><p>问题次数</p><p>已整改次数</p>
+            </div>
+            <div class="title" v-if="searchWord.searchLevel=='operateBranch'">
+                <p>经营支行名称</p><p>自查次数</p><p>问题次数</p><p>已整改次数</p>
+            </div>
+            <div v-if="list.length>0">
+                <div class="listContent" v-for="item in list">
+                    <div class="listCard">
+                        <div v-if="firstShow==1">{{item.checkFirstOrgName ? item.checkFirstOrgName : '--'}}</div>
+                        <div v-if="firstShow==2">
+                            <p style="color:#999;font-size: 13px;text-align: center">{{item.checkFirstOrgName ? item.checkFirstOrgName : '--'}}</p>
+                            <p style="text-align: center">{{item.checkSecondOrgName ? item.checkSecondOrgName : '--'}}</p>
+                        </div>
+                        <div>{{item.totalNum ? item.totalNum : '--'}}</div>
+                        <div>{{item.problemNum ? item.problemNum : '--'}}</div>
+                        <div>{{item.rectificationsNum ? item.rectificationsNum : '--'}}</div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="list.length==0" class="nodate">
+                暂无数据
+            </div>
+        </div>
+
+
+        <van-popup v-model="popupBottomShow1" @click-overlay="closeOverlayBindtap" :close-on-click-overlay="false"
+                   position="bottom">
+            <van-picker show-toolbar item-height="50px" visible-item-count="5" :title="popupObject1.title"
+                        :columns="popupObject1.columns" @cancel="closeOverlayBindtap" @confirm="onConfirm">
+            </van-picker>
+        </van-popup>
+    </div>
+</body>
+<script src="../../common/js/vue.min.js"></script>
+<script src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="../js/summary/summaryTotal.js"></script>
+ <script src="../../common/js/vConsole.min.js"></script>
+<script type="text/javascript">
+    //var vConsole = new VConsole();
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+</html>

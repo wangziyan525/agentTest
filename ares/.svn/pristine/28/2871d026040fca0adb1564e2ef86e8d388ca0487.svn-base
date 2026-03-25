@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>自助设备耗材领取</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/apply.css?v=0.0.5">
+</head>
+<body>
+
+    <div id="app" v-cloak>
+
+         <!-- 录入 -->
+         <div class="main">
+
+             <template  v-if="signState == -1 || signState == 1">
+                 <div class="applyDetail">
+                     <div class="detail">
+                         <span>ATM机客户凭条数量（箱）：</span><input type="number" placeholder="请输入数量" v-model.trim="ATMNum" readonly>
+                     </div>
+                     <div class="detail">
+                         <span>叫号机凭条数量（箱）：</span><input type="number" placeholder="请输入数量" v-model.trim="callNum" readonly>
+                     </div>
+                     <div class="detail">
+                         <span>智能柜台凭条（箱）：</span><input type="number" placeholder="请输入数量" v-model.trim="counterNum"readonly>
+                     </div>
+                 </div>
+             </template>
+             <template v-else>
+                 <div class="applyDetail">
+                     <div class="detail">
+                         <span>ATM机客户凭条数量（箱）：</span>
+                         <input type="number" placeholder="请输入数量" v-model.trim="ATMNum" @input="changeFillIn">
+                     </div>
+                     <div class="detail">
+                         <span>叫号机凭条数量（箱）：</span>
+                         <input type="number" placeholder="请输入数量" v-model.trim="callNum" @input="changeFillIn">
+                     </div>
+                     <div class="detail">
+                         <span>智能柜台凭条（箱）：</span>
+                         <input type="number" placeholder="请输入数量" v-model.trim="counterNum" @input="changeFillIn">
+                     </div>
+                 </div>
+             </template>
+
+             <template v-if="signState == -1 || signState == 1"></template>
+             <template v-else>
+                 <div class="subBtn">
+                     <template v-if="isCanSub">
+                         <span @click="toSub">{{isSub?'提交':'修改'}}</span>
+                     </template>
+                     <template v-else>
+                         <span style="opacity: 0.5;">{{isSub?'提交':'修改'}}</span>
+                     </template>
+                 </div>
+             </template>
+
+         </div>
+
+
+        <!-- 结果 -->
+        <van-popup v-model="resultPage" position="left" :style="{width:'100%',height:'100%'}">
+            <div class="main1">
+                <div class="ct">
+                    <img src="./image/over.png" alt="">
+                    <span>{{isSub?'提交':'修改'}}成功</span>
+                </div>
+                <div class="resultBtn">
+                    <span @click="subSucces">确认</span>
+                </div>
+            </div>
+        </van-popup>
+
+
+    </div>
+
+</body>
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/jwxwork.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js?v=1.2"></script>
+<script type="text/javascript" src="../common/js/vConsole.min.js"></script>
+<script type="text/javascript" src="../common/js/server.js"></script>
+<script type="text/javascript" src="../common/js/compressPhoto.js"></script>
+<script type="text/javascript" src="./js/apply.js?v=0.0.25"></script>
+<script>
+
+    // var vConsole = new VConsole();
+
+
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+
+    function getUserFinish() {
+        action();
+    }
+
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

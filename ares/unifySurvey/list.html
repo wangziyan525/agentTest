@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>统一尽职调查</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/list.css?v=0.0.13">
+</head>
+<body>
+
+    <div id="app" v-cloak>
+
+        <!-- tab切换 -->
+        <div class="tabs">
+            <van-tabs v-model="active" @change="changeActive">
+                <van-tab title="待审批"></van-tab>
+                <van-tab title="已审批"></van-tab>
+                <van-tab title="已过期"></van-tab>
+            </van-tabs>
+        </div>
+     
+
+        <!-- 列表-->
+        <div class="mainList" ref="main">
+            <template v-if="isHaveList">
+                <template v-for="(it,i) in list">
+                    <div class="list">
+                        <div class="title">
+                            <span>尽调人姓名：{{it.jdrname}}</span>
+                            <template v-if="active == 0">
+                                <em class="em3">待审批</em>
+                            </template>
+                            <template v-if="active == 1">
+                                <em v-if="it.approvestatus == 1" class="em1">审批通过</em>
+                                <em v-if="it.approvestatus == 2" class="em2">审批拒绝</em>
+                            </template>
+                            <template v-if="active == 2">
+                                <em class="em3">过期</em>
+                            </template>
+                        </div>
+                        <div class="listDetail">
+                            <div class="detail">
+                                <span>客户姓名</span><span>{{it.username}}</span>
+                            </div>
+                            <div class="detail">
+                                <span>身份证号</span><span>{{it.idno}}</span>
+                            </div>
+                        </div>
+                        <div class="toDetail" @click="toDetail(it.id)">
+                            <template v-if="active == 0">审批 </template>
+                            <template v-if="active == 1 || active == 2">详情</template>
+                        </div>
+                    </div>
+                </template>
+            </template>
+            <template v-if="noList">
+                <div class="noList">
+                    <img src="./image/noList.png" alt="">
+                    <span>暂无数据</span>
+                </div>
+            </template>
+        </div>
+
+
+
+    </div>
+
+</body>
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/jwxwork.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js?v=1.2"></script>
+<script type="text/javascript" src="../common/js/vConsole.min.js"></script>
+<script type="text/javascript" src="../common/js/server.js"></script>
+<script type="text/javascript" src="./js/list.js?v=0.0.24"></script>
+<script>
+
+    // var vConsole = new VConsole();
+
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem','invoke','chooseImage','uploadImage','previewImage']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+
+    function getUserFinish() {
+        action();
+    }
+
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=1.0">
+</head>
+<body style="overflow: hidden">
+<div id="app" style="overflow-y: scroll;height: 100%;display:none">
+    <div style="position:relative;width:100%;">
+        <div>
+            <img alt="" src="images/suggestBanner2021.jpg" style="width:100%">
+        </div>
+        <div class="top_div">
+            <div class="top_div1">
+                <div style="text-indent: 2em;" >
+                    参加2025年度民主生活会征求意见建议的共
+                    <van-field  :readonly="readonly"  type="number" v-model="detail.totalnum" rows="1" placeholder="" maxlength="8">
+                    </van-field>人，其中：党员中层<van-field :readonly="readonly" type="number" v-model="detail.middleleader" rows="1" placeholder="" maxlength="8"
+                    ></van-field>人，非党员中层<van-field :readonly="readonly" type="number" v-model="detail.nomiddleleader" rows="1" placeholder="" maxlength="8"
+                    ></van-field>人，党员员工<van-field :readonly="readonly" type="number" v-model="detail.partymember" rows="1" placeholder="" maxlength="8"
+                    ></van-field>人，群众<van-field :readonly="readonly" type="number" v-model="detail.publicmember" rows="1" placeholder="" maxlength="8"
+                    ></van-field>人，民主党派（含中层及普通员工）<van-field :readonly="readonly" type="number" v-model="detail.democraticmember" rows="1" placeholder="" maxlength="8"
+                    ></van-field>人。
+                </div>
+
+                <div style="text-indent: 2em;color: red; margin-top: 10px;">注：双重身份的只统计到民主党派中。</div>
+            </div>
+            <div class="title1"><img alt="" src="images/suggestTitle1.jpg" style="width:100%"></div>
+            <div class="middle_div1">
+                <div style="text-indent: 2em;margin: 16px 0px;">带头强化政治忠诚、提高政治能力方面；带头固本培元、增强党性方面；带头敬畏人民、敬畏组织、敬畏法纪方面；带头干事创业、担当作为方面；带头坚决扛起管党治党责任方面的意见。</div>
+                <div class="yuyinTextArea">
+                    <van-field :readonly="readonly" type="textarea" v-model="detail.idea" rows="3" autosize placeholder="请输入意见"
+                               maxlength="300" show-word-limit></van-field>
+                </div>
+                <div class="yuyinTextArea">
+                    <van-field :readonly="readonly" type="textarea" v-model="detail.suggest" rows="3" autosize placeholder="请输入建议"
+                               maxlength="300" show-word-limit></van-field>
+                </div>
+            </div>
+            <div class="title1"><img alt="" src="images/suggestTitle2.jpg" style="width:100%"></div>
+            <div class="bottom_div1">
+                <div class="weui-cells weui-cells_form" v-for="item in list">
+                    <div class="weui-cell" >
+                        <div class="weui-cell__hd" ><label class="weui-label" style="width:80px;font-weight:600;">{{item.idcardname}}</label></div>
+                        <div class="weui-cell__bd" >
+                            <div class="yuyinTextArea">
+                                <van-field :readonly="readonly" type="textarea" @input="onChangeData" v-model="item.content" rows="3" autosize placeholder="请输入"
+                                           maxlength="300" show-word-limit></van-field>
+                            </div>                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+
+            <div style="position:relative;width:100%;margin: 20px 0 10px 0;" v-if="!readonly && type=='2'">
+                <div class="butOk payBtn" style="font-size:18px" @click="submits">审 核</div>
+            </div>
+            <div style="position:relative;width:100%;margin: 20px 0 10px 0;" v-if="!readonly && type=='1'">
+                <div class="butOk payBtn" style="font-size:18px" @click="submits">提交</div>
+            </div>
+            <div style="height:20px;"></div>
+
+        </div>
+
+        
+
+    </div>
+
+   
+    
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js"></script>
+<script type="text/javascript" src="js/index.js?v=1"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+
+    function getUserFinish() {
+        initJSSDK(['hideAllNonBaseMenuItem',"stopRecord","startRecord","translateVoice",'invoke','closeWindow']);
+        //ios页面回退不刷新
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted) {
+                location.reload();
+            }
+        });
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+            WeixinJSBridge.on('menu:setfont', function () {
+                WeixinJSBridge.invoke('setFontSizeCallback', {'fontSize': '0'});
+            });
+
+        });
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+
+    // initFun()
+
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

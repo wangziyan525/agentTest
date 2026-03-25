@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport" />
+    <title>建档抽查</title>
+    <!-- 建档抽查 -->
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/checkList.css?v=202509230">
+    
+</head>
+<body style="overflow-x: hidden;height: 100vh;">
+    <div class="container" v-cloak>
+        <div class="header_bg_banner">
+            <div class="fs0">
+                <img src="../images/details_bg_icon@2x.png" alt="">
+            </div>
+        </div>
+        <section class="section_container">
+           <div class="topData">
+                <div class="header_container">
+                    <div class="header_title fs18">{{ dataDetails.checkbatchname }}—{{ dataDetails.idcardname }}</div>
+                    <div class="display header_content">
+                        <div class="flex">
+                            <div class="fs25 display justify_content_center fw600">{{ dataDetails.total }}</div>
+                            <div class="fs13 color888888 display justify_content_center">建档申报总数</div>
+                        </div>
+                        <div class="flex">
+                            <div class="fs25 display justify_content_center fw600">{{ formatCheckedNum(dataDetails.checkedagree, dataDetails.checkedrefuse) }}</div>
+                            <div class="fs13 color888888 display justify_content_center">已抽查</div>
+                        </div>
+                        <div class="flex">
+                            <div
+                                class="fs25 display justify_content_center fw600"
+                                :class="dataDetails.checkpercent > 0 ? 'colorFF353B' : ''">{{ dataDetails.checkpercent }}%</div>
+                            <div class="fs13 color888888 display justify_content_center">抽查数占总体</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gradeChoose gradeChooseNew" style="border:0" >
+                    <div :class="searchData.checkstatus==''?'chooseItems':''" @click="chooseTab('')" style="border-radius: 10px;">全部</div>
+                    <div :class="searchData.checkstatus=='0'?'chooseItems':''" @click="chooseTab('0')" style="border-radius: 10px;">待抽查</div>
+                    <div :class="searchData.checkstatus=='1'?'chooseItems':''" @click="chooseTab('1')" style="border-radius: 10px;">抽查驳回</div>
+                    <div :class="searchData.checkstatus=='2'?'chooseItems':''" @click="chooseTab('2')" style="border-radius: 10px;">抽查通过</div>
+                </div>
+           </div>
+           <div class="bkGround"></div>
+           <div class="scrollPart">
+                    <div
+                    class="seciont_container_item1"
+                    v-for="(item, index) in dataList"
+                    :key="index">
+                    <div
+                        class="_right_link display" @click="goPage(item)">
+                        <div class="flex">
+                            <div class="item_views display">
+                                <div class="fs15 view_right display color000000">{{ item.custname }}</div>
+                            </div>
+                            <div class="item_views display color9DA0A3">
+                                <div class="view_right display fs13">本次申报时间： {{ item.jdtime }}</div>
+                            </div>
+                        </div>
+                        <div class="display align_item_center">
+                            <div
+                                v-if="item.checkstatus == 0"
+                                class="fs12 bgFFF7E3 check_bg">
+                                {{ dataDetails.batchstatus == 0 ? '待抽查' : '未抽查' }}
+                            </div>
+                            <div
+                                v-if="item.checkstatus == 1"
+                                class="fs12 bgFFEBED check_bg">
+                                抽查驳回
+                            </div>
+                            <div
+                                v-if="item.checkstatus == 2"
+                                class="fs12 bgEBFFEC check_bg">
+                                抽查通过
+                            </div>
+                            <div
+                                v-if="item.checkstatus == 4"
+                                class="fs12 bgFFEBED check_bg">
+                                {{ dataDetails.batchstatus == 0 ? '待' : '未' }}抽查（驳回过）
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="moreText" @click="getDataList" v-if="!ifEnd">
+                    <div>查看更多</div>
+                </div>
+                <div v-if="dataList.length==0" class="nodate">
+                    暂无数据
+                </div>
+            </div>
+        </section>
+        <div v-if="dataDetails.batchstatus == 0">
+            <div :class="dataDetails.button == '0' ? 'now_container120' : 'now_container85'"></div>
+            <footer
+                class="footer_fiexd_container"
+                :class="dataDetails.button == '0' ? 'now_container120' : 'now_container85'">
+                <div
+                    class="display justify_content_center fs15 align_item_center now_container35 colorFF353B header_banner"
+                    v-if="dataDetails.button == '0'">
+                    该批次需等到{{ headerString}}才可进⾏提交操作
+                </div>
+                <div class="footer_container display">
+                    <div
+                        class="footer_view_right fs16 footer_view_right_opcity4 flex display align_item_center justify_content_center"
+                        :class="dataDetails.button == '0' || dataDetails.button == '3' ? 'background167ef0' : ''"
+                        @click="submitHandle">
+                        <span v-if="dataDetails.button == '0' || dataDetails.button == '3'">提交</span>
+                        <span v-if="dataDetails.button == '1'">拒绝</span>
+                        <span v-if="dataDetails.button == '2'">提交</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/clipboard.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script src="../../common/js/server.js"></script>
+<script src="../js/samplingList.js?v=1.1"></script>
+<!-- <script>
+    initFun()
+</script> -->
+<script>
+    $(function () {
+        initJSSDK(['hideAllNonBaseMenuItem', 'closeWindow']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        })
+    });
+     function getUserFinish (){
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+</html>

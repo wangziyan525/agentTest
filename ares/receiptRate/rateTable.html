@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/common.css?v=1.0.0">
+    <link rel="stylesheet" href="css/table.css?v=1.0.1">
+    <title>西安银行</title>
+    <!-- 银承票据直贴指导利率预览 -->
+</head>
+
+<body>
+    <div class="container" v-cloak>
+        <div class="header_title fw600 fs15">银行承兑汇票直贴指导利率-{{today}}</div>
+        <section class="table_section">
+            <div class="table_container">
+                <header class="display tableHeader">
+                    <div class="table_item_first display justify_content_center align_item_center fs12">电⼦银⾏承兑汇票分档</div>
+                    <div v-for="(item,index) in tableData.date"
+                        class="flex display justify_content_center align_item_center fs12">{{item}}</div>
+                </header>
+                <section class="main_section">
+                    <div v-for='(item,index) in tableData.greaList' class="display table_section_item"
+                        style="border-top:1px solid #E8F2FC;">
+                        <div class="table_item_first display justify_content_center align_item_center fs12"
+                            style="padding:6px">{{item.subTitle}}</div>
+                        <div class="table_r fs12">
+                            <div class="table_r_t">
+                                <div v-for='(items,index) in item.rateList' class="flex">{{items.rate}}%</div>
+                            </div>
+                            <div v-if='item.bankList&&item.bankList!=""'
+                                style="padding:5px;border-top:1px solid #e1e1e1">{{item.bankList}}</div>
+                        </div>
+
+                    </div>
+                </section>
+
+            </div>
+            <div v-if='bpList.length>0' class="footer_info">
+                <div class="color666666">备注:</div>
+                <div class="color666666">1. 票面金额小于100万元指导利率上浮{{bpList[1].bpValue}}BP，小于50万指导利率上浮{{bpList[0].bpValue}}BP；
+                </div>
+                <div class="color666666">2. 每日至少发布一次，指导利率当日有效；</div>
+                <div class="color666666">3. 如遇优质客户可在指导价格基础上向交易银行部提出优惠申请。</div>
+            </div>
+        </section>
+    </div>
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/common.js?v=1.0.2"></script>
+<script src="js/rateTable.js?v=1.1.6"></script>
+<script src="../common/js/watermark.js"></script>
+<!-- <script src='../common/js/vConsole.min.js'></script> -->
+<script>
+    // var vConsole = new VConsole();
+    initJSSDK(['hideAllNonBaseMenuItem'])
+    wx.ready(function () {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

@@ -1,0 +1,114 @@
+
+
+[v-cloak]{
+    display: none;
+}
+
+html, body {
+    min-height: 100vh;
+}
+.listTopPart{
+    position: relative;
+    width: 100%;
+    background: #fff;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.listOneLine{
+    background: #F5F6F7;
+    border-radius: 20px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+.keyInput{
+    flex: 1;
+    margin: 0 10px;
+    font-size: 15px;
+
+}
+.keySearchBtn{
+    background: #3975C6;
+    border-radius: 24px;
+    font-size: 15px;
+    color: #FFFFFF;
+    text-align: center;
+    font-weight: 400;
+    padding: 2px 12px;
+}
+.keyInput .van-field__control{
+    text-align: left;
+    overflow: hidden;
+    background: #F5F6F7;
+    color: #B4B4B4;
+    font-size: 15px;
+
+}
+.keyInput ::placeholder {
+    color: #B4B4B4 !important;
+    font-size: 17px;
+}
+
+.totalDataTitle{
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #6F6F6F;
+    letter-spacing: 0;
+    font-weight: 400;
+}
+.totalDataValue{
+    font-family: PingFangSC-Medium;
+    font-size: 15px;
+    color: #3B3B3B;
+    letter-spacing: 0;
+    line-height: 20px;
+    font-weight: 500;
+    
+}
+.parsent{
+    margin: 0 12px;
+display: grid;
+grid-template-columns: repeat(3,1fr);
+width: 100%;
+height:100%; 
+border-bottom:  1px solid rgba(246,246,246,1);
+}
+.child{
+    padding: 10px 0px;
+box-sizing: border-box
+}
+.orgName{
+    font-family: PingFangSC-Regular;
+font-size: 13px;
+color: #4675C9;
+letter-spacing: 0;
+font-weight: 400;
+background:#F6F7F8;
+padding: 8px 12px;
+}
+.dataContainer{
+    padding: 0 12px;
+}
+.totalData{
+    font-family: PingFangSC-Regular;
+font-size: 13px;
+color: #999999;
+letter-spacing: 0;
+font-weight: 400;
+padding: 0px 12px 8px 12px;
+background:#F6F7F8;
+}
+.nodate{
+    text-align: center;
+    margin: 20px auto;
+    font-size: 15px;
+    color: #999999;
+}
+.noMessage{
+    width:160px;
+    margin: 50px auto 10px;
+}
+.noMessage>img{
+    width:100%;
+}

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>统一尽职调查</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/detail.css?v=0.0.7">
+</head>
+<body>
+
+    <div id="app" v-cloak>
+
+
+        <!-- 基础信息 -->
+        <div class="baseInfo">
+            <div class="infos">
+                <span>姓名</span><span>{{infos.username}}</span>
+            </div>
+            <div class="infos">
+                <span>身份证号</span><span>{{infos.idno}}</span>
+            </div>
+            <div class="infos">
+                <span>证件地址</span><span>{{infos.idaddress}}</span>
+            </div>
+            <div class="infos">
+                <span>常住地址</span><span>{{infos.homeadress}}</span>
+            </div>
+            <div class="infos">
+                <span>职业类别</span><span>{{infos.zytype}}</span>
+            </div>
+            <div class="infos">
+                <span>职业大类</span><span>{{infos.zydl}}</span>
+            </div>
+            <div class="infos">
+                <span>工作单位</span><span>{{infos.workdw}}</span>
+            </div>
+        </div>
+
+        <!-- 基础信息 -->
+        <div class="baseInfo">
+            <div class="infos">
+                <span style="width: 200px;">手机号码是否本人</span><span>{{infos.isbrtel}}</span>
+            </div>
+            <div class="infos">
+                <span style="width: 200px;">是否已做非本人情况说明</span><span>{{infos.isyzbrsm}}</span>
+            </div>
+            <div class="infos">
+                <span>说明时间</span><span>{{infos.smdate}}</span>
+            </div>
+            <div class="infos">
+                <span>尽调人姓名</span><span>{{infos.jdrname}}</span>
+            </div>
+            <div class="infos">
+                <span>尽调人员工号</span><span>{{infos.idrcode}}</span>
+            </div>
+            <div class="infos">
+                <span>尽调结论</span><span v-html="infos.tyjddata"></span>
+            </div>
+            <div class="infos">
+                <span>拒绝原因</span><span v-html="infos.refusedata"></span>
+            </div>
+        </div>
+
+         <!-- 基础信息 -->
+         <div class="baseInfo" v-if="picList.length > 0">
+            <div class="infos1">
+                <span>证明材料</span>
+                <div class="addPic">
+                    <template v-for="(it,i) in picList">
+                         <div class="pic">
+                             <img class="picter" :src="it.picPath" alt="" @click="watchImg(it.file,i)">
+                             <template v-if="it.isShowGif">
+                                 <div class="loadding"><img src="./image/loading-icon.gif" alt=""></div>
+                             </template>
+                         </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- 我的审批 -->
+        <div class="baseInfo">
+            <template v-if="!isApproved">
+                <div class="infos2">
+                    <div class="title">我的审批</div>
+                    <div class="applyModel">
+                        <div class="apply">
+                            <div class="left">审批意见</div>
+                            <div class="right">
+                                    <div class="applyItem" @click="toPass">
+                                        <img :src="isPass?'./image/choosed.png':'./image/noChosoe.png'" alt="">
+                                        <span>通过</span>
+                                    </div>
+                                    <div class="applyItem" @click="toPass">
+                                        <img :src="!isPass?'./image/choosed.png':'./image/noChosoe.png'" alt="">
+                                        <span>拒绝</span>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="toReason" v-if="!isPass">
+                        <textarea rows="8" v-model='reason' maxlength='100' placeholder="请输入意见"></textarea>
+                    </div>
+                </div>
+            </template>
+            <template v-else>
+                <div class="infos">
+                    <span>审批状态</span>
+                    <template v-if="infos.approvestatus == 1">
+                        <span style="color: #43af0d;">同意</span>
+                    </template>
+                    <template v-if="infos.approvestatus == 2">
+                        <span style="color: #f53e3e;">拒绝</span>
+                    </template>
+                    <template v-if="infos.approvestatus == 9">
+                        <span style="color: #ff5f0d;">审批超时</span>
+                    </template>
+                </div>
+                <div class="infos" v-if="infos.approvedata && infos.approvedata != '' ">
+                    <span>审批意见</span><span v-html="infos.approvedata"></span>
+                </div>
+                <div class="infos">
+                    <span>审批时间</span><span>{{readTime(infos.updatetime)}}</span>
+                </div>
+            </template>
+        </div>
+
+        <div style="width: 100%;height: 50px;"></div>
+
+
+        <!-- 按钮 -->
+        <div class="btn" v-if="!isApproved">
+            <div class="bigBtn" @click="toSub">提 交</div>
+        </div>
+        <div style="height: 70px;"></div>
+    </div>
+
+</body>
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/jwxwork.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js?v=1.2"></script>
+<script type="text/javascript" src="../common/js/vConsole.min.js"></script>
+<script type="text/javascript" src="../common/js/server.js"></script>
+<script type="text/javascript" src="./js/detail.js?v=20250814052"></script>
+<script>
+
+    // var vConsole = new VConsole();
+
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem','invoke','chooseImage','uploadImage','previewImage']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+
+    function getUserFinish() {
+        action();
+    }
+
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

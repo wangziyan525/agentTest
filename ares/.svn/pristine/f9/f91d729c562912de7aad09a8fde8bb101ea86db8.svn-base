@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/specialSend/taskDetail.css?v=2.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: hidden;height: 100%;display:none">
+        <div class="topDiv" style="margin-bottom: 10px">
+            <div class="tab">
+                <div :class="tab=='1'?'activeTab':''" @click="chooseTab('1')">基础信息</div>
+                <div :class="tab=='2'?'activeTab':''" @click="chooseTab('2')">完成情况</div>
+            </div>
+        </div>
+        <div v-if="isBaseFlag" class="taskDetailDiv">
+            <div class="contentPart" style="overflow-y: auto">
+                <div class="contentLine">
+                    <div>专项检查名称</div>
+                    <div>{{detail.specialCheckName ? detail.specialCheckName : '--'}}</div>
+                </div>
+                <div class="contentLine">
+                    <div>检查时间范围</div>
+                    <div>{{detail.checkTimeRange ? detail.checkTimeRange : '--'}}</div>
+                </div>
+                <div class="contentLine">
+                    <div>检查内容</div>
+                    <div>{{detail.checkContent ? detail.checkContent : '--'}}</div>
+                </div>
+                <div class="contentLine">
+                    <div>检查完成时间节点</div>
+                    <div>{{detail.checkFinishedDate ? detail.checkFinishedDate : '--'}}</div>
+                </div>
+                <div class="contentLine">
+                    <div>任务执行范围</div>
+                    <div v-if="detail.scopeTaskExecution=='1'">一级机构</div>
+                    <div v-if="detail.scopeTaskExecution=='2'">经营支行</div>
+                </div>
+                <div class="contentLine">
+                    <div>一级机构</div>
+                    <div>{{detail.checkFirstOrgName ? detail.checkFirstOrgName : '--'}}</div>
+                </div>
+                <div class="contentLine" v-if="detail.checkSecondOrgName">
+                    <div>经营支行</div>
+                    <div>{{detail.checkSecondOrgName ? detail.checkSecondOrgName : '--'}}</div>
+                </div>
+            </div>
+        </div>
+        <div v-if="!isBaseFlag">
+            <div class="dataInfoDiv">
+                <div class="title">
+                    <p>机构名称</p><p>完成情况</p>
+                </div>
+                <div style="overflow-y: auto" class="listScroll">
+                    <div v-if="list.length>0"  >
+                        <div class="listContent" v-for="item in list">
+                            <div class="listCard ">
+                                <div v-if="item.ssbm">{{item.budescr}}-{{item.ssbm}}</div>
+                                <div v-if="!item.ssbm">{{item.budescr}}</div>
+                                <div v-if="item.finishStatus=='0'" style="color:#F91717">未完成</div>
+                                <div v-if="item.finishStatus>'0'" style="color:#44C966">已完成</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="nodate">
+                        暂无数据
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+</body>
+<script src="../../common/js/vue.min.js"></script>
+<script src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="../js/specialSend/taskDetail.js"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+</html>

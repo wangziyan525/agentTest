@@ -1,0 +1,176 @@
+*{
+    padding:0;
+    margin:0;
+}
+/* 清除内外边距 */
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, /* structural elements 结构元素 */
+dl, dt, dd, ul, ol, li, /* list elements 列表元素 */
+pre, /* text formatting elements 文本格式元素 */
+fieldset, lengend, button, input, textarea, /* form elements 表单元素 */
+th, td { /* table elements 表格元素 */
+    margin: 0;
+    padding: 0;
+}
+
+/* 设置默认字体 */
+body,
+button, input, select, textarea { /* for ie */
+    /*font: 12px/1 Tahoma, Helvetica, Arial, "宋体", sans-serif;*/
+    font: 12px/1 Tahoma, Helvetica, Arial, "Microsoft YaHei", sans-serif; /* 用 ascii 字符表示，使得在任何编码下都无问题 */
+}
+
+h1 { font-size: 18px; /* 18px / 12px = 1.5 */ }
+h2 { font-size: 16px; }
+h3 { font-size: 14px; }
+h4, h5, h6 { font-size: 100%; }
+
+address, cite, dfn, em, var { font-style: normal; } /* 将斜体扶正 */
+code, kbd, pre, samp, tt { font-family: "Courier New", Courier, monospace; } /* 统一等宽字体 */
+small { font-size: 12px; } /* 小于 12px 的中文很难阅读，让 small 正常化 */
+
+/* 重置列表元素 */
+ul, ol { list-style: none; }
+
+/* 重置文本格式元素 */
+a { text-decoration: none; color: black;  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
+a:hover { text-decoration: none; }
+
+abbr[title], acronym[title] { /* 注：1.ie6 不支持 abbr; 2.这里用了属性选择符，ie6 下无效果 */
+    border-bottom: 1px dotted;
+    cursor: help;
+}
+
+q:before, q:after { content: ''; }
+
+/* 重置表单元素 */
+legend { color: #000; } /* for ie6 */
+fieldset, img { border: none; } /* img 搭车：让链接里的 img 无边框 */
+/* 注：optgroup 无法扶正 */
+button, input, select, textarea {
+    font-size: 100%; /* 使得表单元素在 ie 下能继承字体大小 */
+    outline: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* 重置表格元素 */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: none;
+    text-align: center;
+}
+tr,td{
+    padding: 3px;
+    box-sizing: border-box;
+}
+/* 重置 hr */
+hr {
+    border: none;
+    height: 1px;
+}
+
+/* 让非ie浏览器默认也显示垂直滚动条，防止因滚动条引起的闪烁 */
+html { overflow-y: scroll; }
+h2{font-weight: 500;}
+select{
+    appearance: none;
+    -webkit-appearance:none;
+    -moz-appearance: none;
+}
+
+
+
+/* 弹框样式 */
+.weui-dialog__hd{
+    padding: 30px 0px !important;
+}
+.weui-dialog__title{
+    font-size: 15px !important;
+}
+.weui-dialog__bd{
+    padding: 0 !important;
+    min-height: 0 !important;
+    line-height: 75px !important;
+    color: #000 !important;
+    font-family: PingFangSC-Regular, PingFang SC !important;
+    font-weight: 400 !important;
+}
+.weui-dialog__btn{
+    color: #4675C9 !important;
+    line-height: 53px !important;
+    font-size: 15px !important;
+}
+.weui-dialog{
+    border-radius: 6px !important;
+}
+.van-dialog{
+    border-radius: 6px !important;
+}
+.van-dialog__content--isolated{
+    min-height: 84px !important;
+}
+.van-dialog__message{
+    color: #000 !important;
+    font-family: PingFangSC-Regular, PingFang SC !important;
+    font-weight: 400 !important;
+    font-size: 15px !important;
+    padding: 32px 0px !important;
+}
+.van-dialog__cancel, .van-dialog__confirm{
+    height: 57px !important;
+    color: #999 !important;
+}
+.van-dialog__confirm, .van-dialog__confirm:active{
+    color: #4675C9 !important;
+}
+.diaMain{
+    width: 100%;
+    padding: 32px 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.diaMain img{
+    display: block;
+    width: 42px;
+    height: 42px;
+}
+.diaMain .msgText{
+    margin-top: 19px;
+    color: #000;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    font-size: 15px;
+}
+.van-button::after{
+    content: '' !important;
+    width: 100% !important;
+    height: 1px !important;
+    background: #E1E1E1 !important;
+    -ms-transform: scaleY(.5) !important;
+    -webkit-transform: scaleY(.5) !important;
+    transform: scaleY(.5) !important;
+    position: absolute !important;
+    top:0px !important;
+    left: 0px !important;
+    z-index: 10 !important;
+}
+.van-button__content::after{
+    content: '' !important;
+    width: 1px !important;
+    height: 42px !important;
+    background: #E1E1E1 !important;
+    -ms-transform: scaleY(.5) !important;
+    -webkit-transform: scaleY(.5) !important;
+    transform: scaleY(.5) !important;
+    position: absolute !important;
+    top: 8px !important;
+    right: 0px !important;
+    z-index: 10 !important;
+}
+/* .van-button--default{
+    color: #999 !important;
+} */

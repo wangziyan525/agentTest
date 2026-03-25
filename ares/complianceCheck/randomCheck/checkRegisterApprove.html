@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <script src="../../common/js/vue.min.js"></script>
+    <script src="../../common/js/vant-2.12.min.js"></script>
+    <script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+    <link rel="stylesheet" href="../../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/weui.min.css">
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/common.css?v=1.0.1">
+    <link rel="stylesheet" href="../css/randomCheck/checkRegisterApprove.css?v=1.0.1">
+</head>
+<body>
+<!--经营支行、一级机构自查情况登记审批-->
+<div id="app" v-cloak style="height: 100%;overflow-y: auto">
+    <div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div>审核状态</div>
+                <div v-if="detail.approveStatus=='01'" style="color: #FF9430">待审核</div>
+                <div v-if="detail.approveStatus=='02'" style="color: #44C966">已通过</div>
+                <div v-if="detail.approveStatus=='03'" style="color: #F91717">已驳回</div>
+            </div>
+        </div>
+        <div class="contentPart" style="margin-bottom: 0">
+            <div class="contentLine" v-if="detail.spotCheckObject">
+                <div>检查对象</div>
+                <div v-if="detail.spotCheckObject=='1'">一级机构</div>
+                <div v-if="detail.spotCheckObject=='2'">经营支行</div>
+            </div>
+            <div class="contentLine">
+                <div>一级机构</div>
+                <div>{{detail.checkFirstOrgName ? detail.checkFirstOrgName : '--'}}</div>
+            </div>
+            <div class="contentLine" v-if="detail.checkSecondOrgName">
+                <div>经营支行</div>
+                <div>{{detail.checkSecondOrgName ? detail.checkSecondOrgName : '--'}}</div>
+            </div>
+            <div class="contentLine" v-if="detail.checkCategory">
+                <div>检查类别</div>
+                <div v-if="detail.checkCategory=='1'">非现场检查</div>
+                <div v-if="detail.checkCategory=='2'">现场检查</div>
+            </div>
+
+            <div class="contentLine">
+                <div>检查时间</div>
+                <div>{{detail.checkDate ? detail.checkDate : '--'}}</div>
+            </div>
+            <div class="contentLine">
+                <div>检查对象</div>
+                <div v-if="detail.checkObject=='1'">厅堂</div>
+                <div v-if="detail.checkObject=='2'">双录</div>
+                <div v-if="detail.checkObject=='3'">监控</div>
+                <div v-if="detail.checkObject=='1,2'">厅堂,双录</div>
+                <div v-if="detail.checkObject=='1,3'">厅堂,监控</div>
+                <div v-if="detail.checkObject=='2,3'">双录,监控</div>
+                <div v-if="detail.checkObject=='1,2,3'">厅堂,双录,监控</div>
+            </div>
+        </div>
+        <div class="contentPart">
+            <div v-for="(item, index) in detail.businessRecordList">
+                <div style="padding: 12px 0px 12px 12px;color: #999;display: flex;align-items: center;justify-content: space-between;background: #f6f6f6"><p>业务信息{{index+1}}</p></div>
+                <div class="contentLine">
+                    <div>业务发生时间</div>
+                    <div>{{item.occurrenceDate ? item.occurrenceDate : '--'}}</div>
+                </div>
+                <div class="contentLine">
+                    <div>业务种类</div>
+                    <div v-if="item.businessType=='1'">基金</div>
+                    <div v-if="item.businessType=='2'">保险</div>
+                    <div v-if="item.businessType=='3'">贵金属</div>
+                    <div v-if="item.businessType=='4'">存款</div>
+                    <div v-if="item.businessType=='5'">理财</div>
+                    <div v-if="item.businessType=='6'">其他</div>
+                    <div v-if="item.businessType=='7'">国债</div>
+                    <div v-if="item.businessType==null || item.businessType==undefined">--</div>
+                </div>
+                <div class="contentLine" style="border-bottom: 0">
+                    <div>业务流水号</div>
+                    <div>{{item.businessNumber ? item.businessNumber : '--'}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div>是否为专项检查:</div>
+                <div v-if="detail.specialCheck == '1'">是</div>
+                <div v-if="detail.specialCheck == '2'">否</div>
+            </div>
+            <div class="contentLine" v-if="detail.specialCheckName">
+                <div>专项检查名称</div>
+                <div>{{detail.specialCheckName ? detail.specialCheckName : '--'}}</div>
+            </div>
+        </div>
+        <div class="contentPart">
+            <div class="contentLine">
+                <div>是否存在问题:</div>
+                <div v-if="detail.anyProblem == '1'">是</div>
+                <div v-if="detail.anyProblem == '2'">否</div>
+            </div>
+            <div  class="contentLine" style="display: block;" v-if="detail.problemRecord">
+                <div style="color: #666">问题记录</div>
+                <div style=" background:#F6F7F9; border-radius:4px; padding: 10px;text-align: left;width: 100%;margin-top: 5px;box-sizing: border-box">
+                    {{detail.problemRecord}}
+                </div>
+            </div>
+            <div  class="contentLine" style="display: block;" v-if="detail.rectificationMeasures">
+                <div style="color: #666">整改措施</div>
+                <div style=" background:#F6F7F9; border-radius:4px; padding: 10px;text-align: left;width: 100%;margin-top: 5px;box-sizing: border-box">
+                    {{detail.rectificationMeasures}}
+                </div>
+            </div>
+            <div class="contentLine" v-if="detail.rectificationFinishDate">
+                <div>整改完成时间</div>
+                <div>{{detail.rectificationFinishDate ? detail.rectificationFinishDate : '--'}}</div>
+            </div>
+            <div  class="contentLine" style="display: block;" v-if="detail.remark">
+                <div style="color: #666">备注</div>
+                <div style=" background:#F6F7F9; border-radius:4px; padding: 10px;text-align: left;width: 100%;margin-top: 5px;box-sizing: border-box">
+                    {{detail.remark ? detail.remark : '--'}}
+                </div>
+            </div>
+        </div>
+        <!--<div class="contentPart">
+            <div class="contentLine">
+                <div>检查人</div>
+                <div>{{detail.reportUserName ? detail.reportUserName : '&#45;&#45;'}}</div>
+            </div>
+            <div class="contentLine">
+                <div>检查机构</div>
+                <div>{{detail.reportFirstOrgName ? detail.reportFirstOrgName : '&#45;&#45;'}}</div>
+            </div>
+        </div>-->
+
+        <div v-if="detail.approveStatus=='01'">
+            <div  class="contentLine" style="display: block;padding-top: 0;border-bottom: 0">
+                <div style="color: #666">检查记录</div>
+            </div>
+            <div class="module flow">
+                <div class="flowLists">
+                    <template v-for='(it,i) in approveRecordList'>
+                        <div class="list">
+                            <div class="left"><i></i></div>
+                            <div class="right">
+                                <div class="states" v-if="it.stage=='0'" style="display: block">
+                                    <div style="display: flex;justify-content: space-around">
+                                        <span style="font-size: 16px;font-weight: bold">发起人({{ it.approveUserName }})</span>
+                                        <span v-if="it.status=='0'" style="color: #FF9430">待审核</span>
+                                        <span v-if="it.status=='1'" style="color: #44C966">通过</span>
+                                        <span v-if="it.status=='2'" style="color: #F91717">驳回</span>
+                                    </div>
+                                    <div>
+                                        <span style="color:#666;font-size: 16px;width: 100%;text-align: left;padding: 0 0 8px 0">{{ it.firstOrgName }}-{{ it.secondOrgName }}</span>
+                                    </div>
+                                </div>
+                                <div class="states" v-if="it.stage=='1'">
+                                    <span style="font-size: 16px;font-weight: bold">{{ it.firstOrgName }}({{ it.approveUserName }})</span>
+                                    <span v-if="it.status=='0'" style="color: #FF9430">待审核</span>
+                                    <span v-if="it.status=='1'" style="color: #44C966">通过</span>
+                                    <span v-if="it.status=='2'" style="color: #F91717">驳回</span>
+                                </div>
+                                <div class="states" v-if="it.stage=='2'">
+                                    <span style="font-size: 16px;font-weight: bold">{{ it.firstOrgName }}({{ it.approveUserName }})</span>
+                                    <span v-if="it.status=='0'" style="color: #FF9430">待审核</span>
+                                    <span v-if="it.status=='1'" style="color: #44C966">通过</span>
+                                    <span v-if="it.status=='2'" style="color: #F91717">驳回</span>
+                                </div>
+                                <div class="states" v-if="it.stage=='3'">
+                                    <span style="font-size: 16px;font-weight: bold">{{ it.firstOrgName }}({{ it.approveUserName }})</span>
+                                    <span v-if="it.status=='0'" style="color: #FF9430">待审核</span>
+                                    <span v-if="it.status=='1'" style="color: #44C966">通过</span>
+                                    <span v-if="it.status=='2'" style="color: #F91717">驳回</span>
+                                </div>
+                                <div class="states" v-if="it.stage=='4'">
+                                    <span style="font-size: 16px;font-weight: bold">总行零售业务部({{ it.approveUserName }})</span>
+                                    <span v-if="it.status=='0'" style="color: #FF9430">待审核</span>
+                                    <span v-if="it.status=='1'" style="color: #44C966">通过</span>
+                                    <span v-if="it.status=='2'" style="color: #F91717">驳回</span>
+                                </div>
+                                <div class="states" v-if="it.stage=='5'">
+                                    <span style="font-size: 16px;font-weight: bold">总行零售业务部({{ it.approveUserName }})</span>
+                                    <span v-if="it.status=='0'" style="color: #FF9430">待审核</span>
+                                    <span v-if="it.status=='1'" style="color: #44C966">通过</span>
+                                    <span v-if="it.status=='2'" style="color: #F91717">驳回</span>
+                                </div>
+                                <div class="states" v-if="it.stage=='6'">
+                                    <span style="font-size: 16px;font-weight: bold">总行零售业务部({{ it.approveUserName }})</span>
+                                    <span v-if="it.status=='0'" style="color: #FF9430">待审核</span>
+                                    <span v-if="it.status=='1'" style="color: #44C966">通过</span>
+                                    <span v-if="it.status=='2'" style="color: #F91717">驳回</span>
+                                </div>
+                                <div v-if="it.opinion !='' && it.opinion" class="time"
+                                     style="color: #333;font-size: 14px;margin-bottom: 10px;">
+                                    拒绝原因：<span style="font-size: 15px;font-weight: 500;word-break: break-all" v-html="it.opinion "></span>
+                                </div>
+                                <div class="time">
+                                    <span>{{ it.updateTime }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <!--<div v-for="(item, index) in approveRecordList">
+                <div class="contentPart">
+                    <div class="contentLine">
+                        <div v-if="item.stage=='1'">支行长审核意见</div>
+                        <div v-if="item.stage=='2'">零售部经理审批</div>
+                        <div v-if="item.stage=='3'">分管副行长审批</div>
+                        <div v-if="item.stage=='4'">总行零售部团队主管审批</div>
+                        <div v-if="item.stage=='5'">总行零售部副总审批</div>
+                        <div v-if="item.stage=='6'">总行零售部总经理审批</div>
+                        <div>
+                            <div v-if="item.status=='0'">待处理</div>
+                            <div v-if="item.status=='1'">同意</div>
+                            <div v-if="item.status=='2'">驳回</div>
+                        </div>
+                    </div>
+                    <div class="contentLine">
+                        <div>审核时间</div>
+                        <div>{{item.updateTime ? item.updateTime : '&#45;&#45;'}}</div>
+                    </div>
+                </div>
+            </div>-->
+
+        </div>
+
+        <div class="contentPart" style="margin-top: 10px" v-if="detail.approveStatus=='01'">
+            <div  style="display: block;">
+                <div style="display: flex;align-items: center;justify-content: space-between;padding: 12px;">
+                    <div style="color: #666">审核意见</div>
+                    <div style="display: flex">
+                        <div @click="selectSubmitInfo('1')" style="display: flex;align-items: center;margin-right: 15px">
+                            <img v-if="status=='1'" class="pass" src="../image/ckend.png">
+                            <img v-if="status=='2'" class="pass" src="../image/noCkend.png">
+                            <img v-if="status==''" class="pass" src="../image/noCkend.png"><p>通过</p>
+                        </div>
+                        <div @click="selectSubmitInfo('2')" style="display: flex;align-items: center">
+                            <img v-if="status=='2'" class="refuse" src="../image/ckend.png">
+                            <img v-if="status=='1'" class="refuse" src="../image/noCkend.png">
+                            <img v-if="status==''" class="refuse" src="../image/noCkend.png"><p>驳回</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style=" background:rgba(255,255,255,1); border-radius:4px; padding: 5px 12px;border-top: 1px solid #e1e1e1" v-if="opinionflag=='2'">
+                        <textarea style="width:96%; height:70px; padding: 10px 2%; background:rgba(243,244,248,1); border-radius:4px; font-size:16px; font-family:PingFangSC-Regular,PingFang SC;
+                        border:none; " rows="5" v-model='opinion' maxlength='500' placeholder="请输入拒绝原因"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="contentPart" v-if="tab=='1'">
+            <div class="contentLine" v-if="nextUserFlag">
+                <div>下一步审核人</div>
+                <div class="selectState display" style="position: relative">
+                    <input class="v-test" placeholder="请选择" v-model='nextApproveUserName' readonly style="width: 100%" @click="showTap(1)">
+                    <img src="../image/arrow.png" class="icon">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottomButton"  v-if="detail.approveStatus=='01' && finishShow=='0'">
+        <div class="submitButton" @click="submitBindtap('0')">提 交</div>
+    </div>
+    <div class="bottomButton"  v-if="detail.approveStatus=='01' && finishShow=='1'">
+        <div style="width: 45%" class="submitButton" @click="submitBindtap('1')">结 束</div>
+        <div style="width: 45%" class="submitButton" @click="submitBindtap('0')">提 交</div>
+
+    </div>
+    <!--<div class="" v-if="detail.approveStatus=='02' || detail.approveStatus=='03'">
+
+    </div>-->
+    <van-popup v-model="popupBottomShow1" @click-overlay="closeOverlayBindtap" :close-on-click-overlay="false"
+               position="bottom">
+        <van-picker show-toolbar item-height="50px" visible-item-count="5" :title="popupObject1.title"
+                    :columns="popupObject1.columns" @cancel="closeOverlayBindtap" @confirm="onConfirm">
+        </van-picker>
+    </van-popup>
+</div>
+</body>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/server.js?v=20211022"></script>
+<script src="../../common/js/watermark.js"></script>
+<script type="text/javascript" src="../js/randomCheck/checkRegisterApprove.js?v=2.2.5"></script>
+<script src="../../common/js/vConsole.min.js"></script>
+<script>
+    //var vConsole = new VConsole();
+    //初始化微信社区
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem','chooseImage','uploadImage','downloadImage', 'startRecord', 'stopRecord', 'translateVoice','closeWindow']);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+    function getUserFinish(){
+        // 调用水印
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+
+</html>

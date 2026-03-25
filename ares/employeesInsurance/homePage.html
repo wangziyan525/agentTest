@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="css/homePage.css">
+    <title>员工保险销售资质备案管理</title>
+</head>
+
+<body>
+    <div class="container" v-cloak>
+        <div  class="topArea">
+            <img  class="topImg" src="./images/homepageTop.jpg" >
+        </div>
+        <div class="regist"> 
+                <div v-if="registStatus == '3'" class="successRegist">您已完成保险销售资格备案!</div>
+            <img v-if="registStatus == '0' || registStatus == '1' " class="midImg" src="./images/unregist.png" >
+            <img v-if="registStatus == '3' " class="midImg" src="./images/regist.png" >
+            <button style="border-color: none" class="registBtn" id="registBtn" @click="toApply('BA')">{{registText}}</button>
+        </div>
+        <div class="btmBtnArea" v-if = "registStatus != '1' &&  registStatus != '0'">
+            <div  class="btmBtn" @click="toApply('ZX')">注销</div>
+            <div  class="btmBtn" @click="toApply('BG')">变更</div>
+        </div>
+    </div>
+        
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+
+
+<script src="../common/js/vConsole.min.js"></script> 
+<script src="js/homePage.js"></script>
+<script>
+     //var vConsole = new VConsole();
+    initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+    wx.ready(function () {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

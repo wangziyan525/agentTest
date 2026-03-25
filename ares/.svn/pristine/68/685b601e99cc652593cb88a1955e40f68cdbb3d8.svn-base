@@ -1,0 +1,162 @@
+body{
+    font-size:15px;
+}
+/* ------------------------------------------- 信息 ------------------------------------ */
+.detail_box{
+    color: #333;
+}
+.detail_title{
+    padding:15px;
+    box-sizing: border-box;
+}
+.detail_t{
+    background: #fff;
+    line-height: 20px;
+}
+.detail_t>div{
+    padding:15px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    color: #999;
+}
+.detail_t>div>span:first-child{
+    min-width:100px;
+}
+.detail_t>div>span:nth-child(2n){
+    color: #333;
+    text-align: right;
+}
+.select_people{
+    background: #fff;
+    padding: 15px;
+    box-sizing: border-box;
+    margin-top:10px;
+}
+.more{
+    width:8px;
+    height:14px;
+    margin-left: 6px;
+}
+.approval_list{
+    padding: 10px 0;
+    background: white;
+}
+.approval_m{
+    display: flex;
+    justify-content: space-between;
+    padding:8px 12px 0 19px;
+}
+
+.approval_m:last-child{
+    margin-bottom: 0;
+}
+.approvalAposition{
+    font-size:14px;
+    color: #999;
+}
+.time{
+    font-size:12px;
+    opacity: 0.6;
+    margin-right:10px;
+}
+.reason{
+    padding-top:6px;
+    font-size: 12px;
+    line-height: 16px;
+}
+.name{
+    font-size:13px;
+    padding-top: 6px;
+}
+.appNmae{
+    padding-bottom:12px;
+    width: 94%;
+}
+.left{
+    width: 5px;
+    margin-right: 12px;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+}
+.left i{
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #0465FF;
+    line-height: 50px;
+    margin-top:5px;
+}
+.left::before{
+    content: '';
+    width: 1px;
+    height: 45px;
+    background: #0465FF;
+    position: absolute;
+    top: -40px;
+}
+.left::after{
+    content: '';
+    width: 1px;
+    height: -webkit-calc(100% - 40px);
+    background: #0465FF;
+    position: absolute;
+    bottom: 30.5px;
+}
+.approval_m:first-child .left::before{
+    display: none;
+}
+.approval_m:last-child .left::after{
+    display: none;
+}
+.resonText{
+    background: #fff;
+    padding: 12px 15px;
+    box-sizing: border-box;
+}
+.textClass{
+    background: #f5f5f5;
+    width: 100%;
+    padding:10px;
+    box-sizing: border-box;
+    line-height:18px;
+    font-size: 14px;
+}
+.agreeBox{
+    padding:12px 15px;
+    background: #fff;
+    font-weight: bold;
+    color: #333333;
+}
+.approve img{
+    width:18px;
+    height:18px;
+    margin-right:12px;
+}
+.approve>div:first-child{
+    margin-right: 36px;
+}
+/* ------------------------------------------- 按钮 ------------------------------------ */
+.btn_box{
+    padding:40px 15px;
+    box-sizing: border-box;
+}
+.btn{
+    display: block;
+    padding: 12px 0;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+    border-radius: 6px;
+    text-align: center;
+    background: #4675c9;
+    color: #fff;
+}
+
+/* 完成页面 */
+.sucess_img{
+    width:88px;
+    height:88px;
+}

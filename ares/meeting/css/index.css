@@ -1,0 +1,204 @@
+.container{
+    padding: 10px 12px;
+}
+
+.section_main {
+    background-color: #fff;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.view_content {
+    padding: 13px 10px;
+}
+
+.view_content_A {
+    padding: 13px 10px 10px 10px;
+}
+
+.view_down_textarea .van-cell {
+    background-color: #f3f4f8;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 10px;
+    padding: 8px 12px;
+}
+
+.main_item {
+    background-color: #fff;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.main_item:first-child {
+    margin-top: 0;
+}
+
+.meeting_img_icon .meeting_img_icon_item {
+    width: 30.3%;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.meeting_img_icon .meeting_img_icon_item img {
+    width: 100%;
+}
+
+.checked_icon {
+    width: 20px;
+    height: 20px;
+}
+
+.icon_checked_container:first-child {
+    margin-right: 30px;
+}
+
+.icon_checked_container img {
+    width: 20px;
+    margin-right: 5px;
+}
+
+.equipment_container {
+    margin-left: 10px;
+    margin-bottom: 5px;
+    padding: 3px 5px;
+    border: 1px solid #efefef;
+    color: #999;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.equipment_container_hover {
+    border-color: #4675c9;
+    color: #4675c9;
+}
+
+/*input上传*/
+.enterInfo{
+    flex: 1;
+    width: 100%;
+    display: block;
+    border: none;
+    outline: none;
+    background-color: #fff;
+    box-shadow: none;
+    -webkit-appearance: none;
+    font-size: 15px;
+    color: #333;
+    line-height: 20px;
+    text-align: right;
+    padding: 0 0 0 7px;
+    box-sizing: border-box;
+}
+
+/* 新增 */
+.tips{
+    line-height:16px;
+    color: red;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+}
+.tips span{
+    font-size:12px;
+}
+.footer_box{
+    position: fixed;
+    width:100%;
+    bottom:0;
+    left: 0;
+    background: #f7f7fa;
+}
+.footer_box>div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.footer_box span{
+    flex: 1;
+    text-align: center;
+    padding: 15px 0;
+    box-sizing: border-box;
+}
+.footer_box span{
+    position: relative;
+}
+.footer_box span::after{
+    content: " ";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1px;
+    bottom: 0;
+    border-right: 1px solid rgba(0,0,0,0.1);
+    color: rgba(0,0,0,0.1);
+    -webkit-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+    -webkit-transform: scaleX(0.5);
+    transform: scaleX(0.5);
+}
+.ewm_t{
+    text-align: center;
+    padding: 10px 0;
+    box-sizing: border-box;
+    position: relative;
+}
+.ewm_close{
+    position: absolute;
+    top:50%;
+    left:15px;
+    transform: translateY(-50%);
+    width:18px;
+    height:18px;
+}
+.ewm_img_box{
+    text-align: center;
+    padding:40px 0;
+    box-sizing: border-box;
+}
+.ewm_img{
+    width:60%;
+}
+.signIn_title{
+    text-align: center;
+}
+.signIn_title .weui-icon_msg{
+    font-size:80px;
+    padding:20px;
+    box-sizing: border-box;
+}
+.signIn_title .weui-icon-success{
+    color: #0085dd;
+}
+.signIn_title>div{
+    font-size:20px;
+    font-weight:bold;
+}
+.signIn_title span{
+    font-size:17px;
+}
+.signIn_box{
+    padding:0 20px;
+    box-sizing: border-box;
+}
+.personList{
+    text-align: left;
+    padding:20px;
+    box-sizing: border-box;
+}
+.personList>div{
+    display: inline-block;
+    width: 18%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+.personList img{
+    width: 100%;
+    border-radius: 6px;
+    vertical-align: top;
+    margin-bottom: 6px;
+}
+.personList p{
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+}

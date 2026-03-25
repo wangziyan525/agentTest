@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=2.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none">
+
+        <div  v-if="page=='page1'">
+            <div  class="title">基本信息</div>
+            <div class="baseInfoPart">
+                <div class="baseLine">
+                    <div>姓名</div>
+                    <div>{{userInfo.userName}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>性别</div>
+                    <div>{{userInfo.gender}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>员工ID</div>
+                    <div>{{userInfo.userId}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>出生年月</div>
+                    <div>{{userInfo.birthDay}}</div>
+                </div>
+                
+                <div class="baseLine">
+                    <div>入行时间</div>
+                    <div>{{userInfo.inTime}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>所在单位</div>
+                    <div>{{userInfo.bu_descr}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>所在部门（支行）</div>
+                    <div>{{userInfo.ssbm}}</div>
+                </div>
+                <div class="baseLine">
+                    <div>所在岗位</div>
+                    <div>{{userInfo.position}}</div>
+                </div>
+                <div class="baseLine selectChoose" @click="showPopup('degreeOfEducation')">
+                    <div>文化程度</div>
+                    <div>{{degreeOfEducation?degreeOfEducation:"请选择"}}</div>
+                </div>
+                <div class="baseLine selectChoose" @click="choosePicker()">
+                    <div>参加工作时间</div>
+                    <div>{{workTime?workTime:"请选择"}}</div>
+                </div>
+                <div class="textPart">
+                    <div class="textTitle">家庭常驻详细住址（可接收信函）</div>
+                    <div class="textAreaPart" >
+                        <div class="yuyinTextArea">
+                            <van-field type="textarea" v-model="permanentAddress" rows="3" autosize placeholder="请填写" maxlength="100"></van-field>
+                        </div>   
+                    </div>
+                </div>
+            </div>
+            <van-popup
+                    v-model="popupDataShow"
+                    position="bottom"
+                    :close-on-click-overlay="false">
+                <van-datetime-picker
+                        v-model="currentDate"
+                        type="date"
+                        title="选择时间"
+                        :min-date="minDate"
+                        :max-date="maxDate"
+                        @confirm="getTime"
+                        @cancel="popupDataShow=false"
+                >
+                </van-datetime-picker>
+
+            </van-popup>
+            
+            <div class="applyButton" @click="nextBut">
+                <div>下一步</div>
+            </div>
+        </div>
+        <div>
+            <van-popup v-model="popupShow" position="bottom">
+                <van-picker
+                        show-toolbar
+                        :columns="popupList"
+                        @confirm="onConfirm"
+                        @cancel="cancelPopup"
+                >
+                </van-picker>
+            </van-popup>
+        </div>
+        <div v-if="page=='page2'">
+            <div  class="title">排查项目</div>
+            <div v-for="(item,index) in list">
+                <div class="checkPart">
+                    <div class="firstTitle">{{item.firstTitle}}</div>
+                    <div class="secondPart" v-for="(item1,index1) in item.secondQuestion">
+                        <div class="secondTitle">{{index1+1}}、{{item1.secondTitle}}</div>
+                        <div class="secondResult">
+                            <div @click="chooseItem(index,index1,'1')"><img :src="item1.result=='1'?'images/choose.png':'images/unchoose.png'">{{item1.resultType=='0'?"是":"有"}}</div>
+                            <div @click="chooseItem(index,index1,'0')"><img :src="item1.result=='0'?'images/choose.png':'images/unchoose.png'">{{item1.resultType=='0'?"否":"无"}}</div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+
+           <div class="otherQuestion">
+                <div class="otherTitle">其他需要说明的情况</div>
+                <div class="textAreaPart" >
+                    <div class="yuyun-box" @click="showRecorddiv">
+                        <img src="./images/yuyin.png " />可尝试语音输入
+                    </div>
+                    <div class="yuyinTextArea">
+                        <van-field type="textarea" v-model="otherDescription" rows="3" autosize placeholder="请输入" maxlength="100"></van-field>
+                    </div>   
+                </div>
+                <div style="position: relative;">
+                    <div class="recodeblock" @click="startRecord()">
+                        <img src="images/luyin.gif"> <div start="no" class="luyinbtn">开始说话</div>
+                    </div>
+                </div>
+           </div>
+           <div class="baseInfoPart">
+                <div class="baseLine selectChoose" @click="showPopup('investigateUserId')">
+                    <div>排查人</div>
+                    <div>{{investigateUserName?investigateUserName:"请选择"}}</div>
+                </div>
+           </div>
+           <div class="warnMessage">
+                <div>填表说明：</div>
+                <div>1、本表基本信息由员工本人填写； </div>
+                <div>2、排查结果由排查人根据排查情况打“✓”；</div>
+                <div>3、排查人为被排查人直接上级管理人员（普通员工由经理级人员排查，经理级人员由分管总经理级人员排查，本单位内总经理级人员相互排查，若仅有总经理级人员一人，则由部门分管行领导对总经理级人员进行排查）；排查结束后在相应位置处签字。</div>
+        
+            </div>
+            
+            <div class="toSubmit" >
+                <div @click="page='page1'">上一步</div>
+                <div @click="submit()">提交</div>
+            </div>
+
+        </div>
+        <div v-if="page=='page3'">
+            <div class="resultPart">
+                <img src="images/result.png">
+                <div>提交成功</div>
+            </div>
+            
+            <div class="confirm" @click="toExit">确认</div>
+       </div>
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="js/apply.js?v=1.1"></script>
+<script type="text/javascript" src="js/dataJson.js"></script>
+
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','startRecord', 'stopRecord','invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js?v=1.1"></script>
+</html>

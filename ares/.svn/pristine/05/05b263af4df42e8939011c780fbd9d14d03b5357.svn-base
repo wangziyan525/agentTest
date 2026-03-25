@@ -1,0 +1,75 @@
+.container{
+    padding: 10px 12px;
+}
+
+.section_main {
+    background-color: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.view_content {
+    padding: 13px 10px;
+}
+
+.view_content_A {
+    padding: 13px 10px 10px 10px;
+}
+
+.view_down_textarea .van-cell {
+    background-color: #f3f4f8;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 10px;
+    padding: 8px 12px;
+}
+
+.main_item {
+    background-color: #fff;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.main_item:first-child {
+    margin-top: 0;
+}
+
+.meeting_img_icon .meeting_img_icon_item {
+    width: 30.3%;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.meeting_img_icon .meeting_img_icon_item img {
+    width: 100%;
+}
+
+.checked_icon {
+    width: 20px;
+    height: 20px;
+}
+
+.icon_checked_container:first-child {
+    margin-right: 30px;
+}
+
+.icon_checked_container img {
+    width: 20px;
+    margin-right: 5px;
+}
+
+.equipment_container {
+    margin-left: 10px;
+    margin-bottom: 5px;
+    padding: 3px 5px;
+    border: 1px solid #efefef;
+    color: #999;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.equipment_container_hover {
+    border-color: #4675c9;
+    color: #4675c9;
+}

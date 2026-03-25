@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/index.css">
+
+    <title>西安银行</title>
+    <!-- 西安银行投资交易系统 -->
+</head>
+<body>
+    <div class="container" v-cloak>
+        <header class="header_container display ">
+            <!-- <div
+                class="_bottom_link display flex justify_content_right"
+                :class="searchData.CmbNm ? 'color272727' : 'color999999'"
+                @click="searchHandle">
+                {{ searchData.CmbNm ? searchData.CmbNm : '请选择' }}
+            </div> -->
+            <div
+                class="display flex triangle fs13"
+                @click="searchHandle">
+                {{ searchData.CmbNm || '请选择' }}
+            </div>
+            <div
+                class="display flex triangle fs13"
+                @click="popupTime.show = true">
+                {{ searchData.QryDt || '请选择' }}
+            </div>
+        </header>
+        <div class="content" >
+            <section
+                class="section_main"
+                v-for="(item, index) in listData"
+                :key="index">
+                <div class="view_content_title view_content display">
+                    <div class=" color272727 fw600">交易信息</div>
+                    <div
+                        class="view_right display flex justify_content_right color4675c9"
+                        @click="slideHandle(index)">
+                        {{ slideList[index] ? '收起' : '展开' }}
+                    </div>
+                </div>
+                <div v-if="slideList[index]">
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">业绩基准(%)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.AcvBase || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">综合成本(%)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.CmprhCost || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">AUM(亿元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.Aum || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">组合持仓资产市值(亿元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.CmbHldrAstMktVal || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">估值收益率(%)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.VltnYldRt || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">持有期收益(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.HldTrmYld || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">票息(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.Cpn || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">当日估增(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.TayEstAcrtn || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">交易损益(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.TranMprmYld || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">基金损益(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.FndMprmYld || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">收入总计(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.IncmTot || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">各项税费(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.PerOptnRev || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">组合总收益(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.CmbTotYld || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">客户基准下限(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.ClitBsLwLt || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">客户基准上限(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.ClitBsUpLt || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">超额业绩报酬(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.ExsPerfRewd || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">20%超额(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.PrtgTwyExs || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">80%超额(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.PrtgEgtyExs || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">客户总收益(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.ClitOvrlYld || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">前日单位净值</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.LstDyUtNtWth || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">预计单位净值</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.ExpcUtNtWth || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">净值增长</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.NtWthAdd || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">净值增长率</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.NtWthAddPct || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">净值增长率年化</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.NtWthAddPctAuld || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">前日客户份额</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.LstDyClitLot || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">当日客户份额</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.TayClitLot || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">前日超额余额(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.LstDyExsBal || '' }}
+                        </div>
+                    </div>
+                    <div class="view_content display border_top">
+                        <div class="view_left color666666">今日预计超额余额(万元)</div>
+                        <div class="view_right display flex justify_content_right">
+                            {{ item.TayExpcExsBal || '' }}
+                        </div>
+                    </div>
+                </div>
+                
+            </section>
+        </div>
+        <van-popup
+            v-model="combination.show"
+            position="bottom">
+            <van-picker
+                title="选择"
+                show-toolbar
+                :columns="combination.list"
+                @cancel="combination.show = false"
+                @confirm="combinationConfirm">
+            </van-picker>
+        </van-popup>
+
+        <!-- 开会时间 -->
+        <van-popup
+            v-model="popupTime.show"
+            position="bottom">
+            <van-datetime-picker
+                show-toolbar
+                title="请选择"
+                type="date"
+                v-model="popupTime.currentDate"
+                @cancel="popupTime.show = false"
+                @confirm="popupTimeConfirm">
+            </van-datetime-picker>
+        </van-popup>
+    </div>
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/index.js"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem', 'invoke','selectEnterpriseContact'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

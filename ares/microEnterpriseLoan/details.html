@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="css/details.css">
+
+    <title>营销统计</title>
+</head>
+
+<body>
+    <div class="container" v-cloak>
+        <div class="listTopPart">
+            <div class="listOneLine" style="align-items: center">
+                <div style="padding-left: 10px"></div>
+                <div class="keyInput">
+                    <input style="border:none;outline:none;background: #f5f6f7;" type="text" readonly v-model="date"
+                        placeholder="请选择时间">
+                </div>
+                <div style="margin-left: auto;margin-right: 10px" @click="DateRangeshow = true">
+                    <img src="images/arrowDown.png">
+                </div>
+            </div>
+        </div>
+        <div class="dataContainer" v-if="nodata == false">
+            <div class="orgName">{{totalDataList.orgName}}</div>
+            <div class="totalData">汇总数据</div>
+            <div class="parsent">
+                <div class="child">
+                    <div class="totalDataTitle">贷款余额</div>
+                    <div class="totalDataValue">￥{{totalDataList.dkYuE}}</div>
+                </div>
+                <div class="child">
+                    <div class="totalDataTitle">交易笔数</div>
+                    <div class="totalDataValue">{{totalDataList.jyCount}}</div>
+                </div>
+                <div class="child">
+                    <div class="totalDataTitle">交易金额</div>
+                    <div class="totalDataValue">￥{{totalDataList.jyAmnt}}</div>
+                </div>
+    
+            </div>
+            <div class="parsent">
+                <div class="child">
+                    <div class="totalDataTitle">还款本金</div>
+                    <div class="totalDataValue">￥{{totalDataList.hkBenJin}}</div>
+                </div>
+                <div class="child">
+                    <div class="totalDataTitle">还款利息</div>
+                    <div class="totalDataValue">￥{{totalDataList.hkInterest}}</div>
+                </div>
+    
+            </div>
+            <div class="parsent">
+                <div class="child">
+                    <div class="totalDataTitle">年度投放笔数</div>
+                    <div class="totalDataValue">{{totalDataList.yearDepNum}}</div>
+                </div>
+                <div class="child">
+                    <div class="totalDataTitle">年度投放金额</div>
+                    <div class="totalDataValue">￥{{totalDataList.yearDepAmnt}}</div>
+                </div>
+            </div>
+        </div>
+        <div  class="nodate" v-if="nodata">
+                <div class="noMessage">
+                    <img src="images/noList.png">
+                </div>
+                暂无数据
+            </div> 
+        <van-popup v-model="DateRangeshow" position="bottom" :close-on-click-overlay="false">
+            <van-datetime-picker type='date' v-model='currentDate' :max-date='maxRangeDate' title="选择年月日"
+                @confirm='onDateRangeConfirm' @close="DateRangeshow=false" />
+        </van-popup>
+    </div>
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/details.js"></script>
+<script src="js/moment.js"></script>
+<script src="../common/js/vConsole.min.js"></script>
+
+<script>
+    //  var vConsole = new VConsole();
+    initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+    wx.ready(function () {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    } 
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

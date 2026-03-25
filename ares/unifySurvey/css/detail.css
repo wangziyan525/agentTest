@@ -1,0 +1,256 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f5f6f7;
+    overflow: hidden;
+}
+#app{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+/* ------------------------------- 基础信息 --------------------------------------------*/
+.baseInfo{
+    width: 100%;
+    margin-top: 10px;
+}
+.baseInfo .infos{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    background-color: #fff;
+}
+.baseInfo .infos:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.baseInfo .infos:last-child:before{
+    display: none;
+}
+.baseInfo .infos span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+}
+.baseInfo .infos span:nth-child(1){
+    width: 150px;
+    color: #666;
+    margin-right: 10px;
+}
+.baseInfo .infos span:nth-child(2){
+    flex: 1;
+    color: #333;
+    white-space: normal;
+    word-break: break-all;
+    text-align: right;
+}
+.baseInfo .infos1{
+    width: 100%;
+    background-color: #fff;
+    position: relative;
+}
+.baseInfo .infos1::before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.baseInfo .infos1 span{
+    display: block;
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+}
+.baseInfo .infos1 span:nth-child(1){
+    color: #666;
+    padding: 15px 12px 0;
+}
+.baseInfo .infos1 span:nth-child(2){
+    color: #333;
+    line-height: 25px;
+}
+.baseInfo .infos1 .addPic{
+    width: 100%;
+    background-color: #fff;
+    padding: 0 15px 25px;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.infos1 .addPic .pic{
+    width: calc((100% - 50px)/3);
+    height: 0;
+    padding-top: calc((100% - 50px)/3);
+    background-color: #F5F6F7;
+    border-radius: 4px;
+    margin-top: 15px;
+    position: relative;
+    overflow: hidden;
+}
+.infos1 .addPic .pic:nth-child(3n+2){
+    margin: 15px 25px 0;
+}
+.infos1 .addPic .pic .picter{
+    display: block;
+    width: 100%;
+    position: absolute;
+    top:0;
+}
+.infos1 .addPic .pic .loadding{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top:0;
+    left:0;
+}
+.infos1 .addPic .pic .loadding img{
+    display: block;
+    width: 25px;
+    height: 25px;
+}
+
+.baseInfo .infos2{
+    width: 100%;
+    background-color: #fff;
+    position: relative;
+}
+.baseInfo .infos2 .title{
+    width: 100%;
+    font-size: 15px;
+    line-height: 20px;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    position: relative;
+    color: #666;
+}
+.baseInfo .infos2 .title::before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.baseInfo .infos2 .applyModel{
+    width: 100%;
+}
+.baseInfo .infos2 .applyModel .apply{
+    width: 100%;
+    display: flex;   
+    padding: 15px 12px;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+}
+.baseInfo .infos2 .applyModel .apply .left{
+    width: 100px;
+    color: #666;
+}
+.baseInfo .infos2 .applyModel .apply .right{
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+.baseInfo .infos2 .applyModel .apply .right .applyItem{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.baseInfo .infos2 .applyModel .apply .right .applyItem:nth-child(1){
+    margin-right: 20px;
+}
+.baseInfo .infos2 .applyModel .apply .right .applyItem img{
+    display: block;
+    width: 15px;
+    margin-right: 10px;
+}
+.baseInfo .infos2 .applyModel .apply .right .applyItem span{
+    font-size: 15px;
+    line-height: 20px;
+    color: #333;
+}
+
+.toReason{
+    width: 100%;
+    padding: 0px 15px 15px;
+    box-sizing: border-box;
+    position: relative;
+    background-color: #fff;
+    border-radius: 0 0 4px 4px;
+}
+.toReason textarea{
+    resize: none;
+    border:none;
+    display: block;
+    width: 100%;
+    height: 150px;
+    padding: 12px 12px;
+    box-sizing: border-box;
+    background: #F5F5F5;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #333330;
+    line-height: 20px;
+    outline: none;
+    resize: none;
+}
+textarea::-webkit-input-placeholder {
+    color: #999999;
+}
+/* ------------------------------------------ 按钮 --------------------------------------------------------- */
+.btn{
+    width: 100%;
+    height: 45px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    margin-top: 30px;
+}
+.btn .bigBtn{
+    width: 100%;
+    height: 100%;
+    background-color: #0465FF;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 15px;
+    text-align: center;
+    line-height: 45px;
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>人员管理</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=3.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none">
+       <div v-if="page=='page1'">
+            <div class="listTopPart" style="padding: 10px;">
+                <div class="listOneLine">
+                    <img src="images/search.png">
+                    <div class="keyInput">                    
+                        <van-field type="text" v-model="searchWord" placeholder="输入机构号搜索" maxlength="10" ></van-field>
+                    </div>
+                    <div class="keySearchBtn" @click="queryList()">搜索</div>
+                </div>
+            </div>
+            
+            <div v-if="list.length>0">
+                <div class="stationList" v-for="item in list">
+                    <div class="firstTopLineNew">{{item.orgname}}-{{item.orgid}}</div>
+                    <div class="stationListContent">
+                        <div class="stationListContentLeft">
+                            <div v-if="item.datatype01">支行审批人员：{{item.datatype01}}</div>
+                            <div v-if="item.datatype02">管理行审批人员：{{item.datatype02}}</div>
+                            <div v-if="item.datatype03">总行管理人员：{{item.datatype03}}</div>
+                        </div>
+                        <div class="stationListContentRight" @click="editBtn(item.orgid)">
+                            编辑
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div  class="nodate" v-else>
+                <div class="noMessage">
+                    <img src="images/noMessage.png">
+                </div>
+                暂无数据
+            </div>
+            <div style="height: 80px;"></div>
+            <div class="footApply" >
+                <div @click="addtBtn">
+                    <img src="images/addImg.png" class="applyEdit">
+                    <span>新增</span>
+                </div>
+            </div>
+            
+       </div>
+      
+
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js"></script>
+<script type="text/javascript" src="js/phjdLeaderMain.js"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

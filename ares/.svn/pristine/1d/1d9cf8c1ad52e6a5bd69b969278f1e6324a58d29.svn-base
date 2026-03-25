@@ -1,0 +1,208 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f5f6f7;
+    overflow: hidden;
+}
+#app{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+/* -------------------------------------------- 基础信息 -------------------------------------- */
+.baseInfo{
+    width: 95%;
+    margin: 10px auto;
+    background: #fff;
+    border-radius: 6px;
+}
+.baseInfo .info{
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    position: relative;
+}
+.baseInfo .info:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.baseInfo .info:last-child:before{
+    display: none;
+}
+.baseInfo .info span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+}
+.baseInfo .info span:nth-child(1){
+    width: 130px;
+    color: #a2a2a2;
+    margin-right: 10px;
+}
+.baseInfo .info span:nth-child(2){
+    flex: 1;
+    color: #313448;
+    white-space: normal;
+    word-break: break-all;
+    text-align: right;
+    /* display: flex;
+    justify-content: flex-end; */
+}
+.baseInfo .info input{
+    flex: 1;
+    width: 100%;
+    display: block;
+    border: none;
+    outline: none;
+    background-color: #fff;
+    box-shadow: none;
+    -webkit-appearance: none;
+    font-size: 15px;
+    color: #333;
+    line-height: 20px;
+    border-radius: 6px;
+    text-align: right;
+}
+input::-webkit-input-placeholder{
+    color: #a96a72;
+}
+.baseInfo .info em{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+    margin-left: 10px;
+}
+/* -------------------------------------------- 保存 -------------------------------------- */
+.btn{
+    width: 95%;
+    margin: 10px auto;
+}
+.btn span{
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    box-sizing: border-box;
+    background: #4675c9;
+    color: #fff;
+    font-size: 15px;
+    line-height: 20px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* ---------------------------------遮罩层------------------------ */
+.popupContent{
+    width: 100%;
+    height: 100%;
+    padding: 15px 35px;
+    box-sizing: border-box;
+}
+.popupContent .rate{
+    width: 100%;
+    position: relative;
+}
+.popupContent .rate::after{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.popupContent .rate:last-child::after{
+    display: none;
+}
+.popupContent .rate .title{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0px 10px;
+    box-sizing: border-box;
+}
+.popupContent .title .left{
+    display: flex;
+}
+.popupContent .rate .title .left i{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10px;
+    margin-right: 15px;
+}
+.popupContent .rate .title .left i img{
+    display: block;
+    width: 100%;
+}
+.popupContent .rate .title .left span{
+    font-size: 15px;
+    line-height: 20px;
+    color: #333;
+}
+.popupContent .rate .title .right{
+    flex:1;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: right;
+}
+.popupContent .rate .title .reseted{
+    color: #793939;
+}
+.popupContent .rate .title .reseting{
+    color: #37a93b;
+}
+
+.popupContent .rate .rateMain{
+    width: 100%;
+    padding: 10px 0 20px;
+    box-sizing: border-box;
+    display: flex;
+}
+.popupContent .rate .rateMain .rateDe{
+    width: 33%;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+.popupContent .rate .rateMain .rateDe span{
+    display: block;
+    font-size: 13px;
+    line-height: 20px;
+}
+.popupContent .rate .rateMain .rateDe span:nth-child(1){
+    color: #999;
+    margin-bottom: 7px;
+}
+.popupContent .rate .rateMain .rateDe span:nth-child(2){
+    color: #666;
+}
+.popupContent .rate .rateMain .rateDe:nth-child(2){
+    border-left: 1px solid #eaeaea;
+    border-right: 1px solid #eaeaea;
+}

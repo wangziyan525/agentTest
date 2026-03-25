@@ -1,0 +1,95 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+    name="viewport" />
+  <link rel="stylesheet" href="../common/css/weui.min.css">
+  <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+  <link rel="stylesheet" href="../common/css/vant-2.12.css">
+  <link rel="stylesheet" href="css/list.css">
+  <title>临时提额预约</title>
+</head>
+<body>
+  <div id="app" v-cloak>
+
+    <!-- Tab标签 -->
+    <div class="tab-wrap">
+      <div class="tab-list">
+        <div class="tab-item" :class="{ active: activeTab === index }" v-for="(tab, index) in tabList" :key="index"
+          @click="handleTabChange(index)">
+          {{ tab.name }}
+        </div>
+      </div>
+    </div>
+
+    <!-- 列表 -->
+    <div class="list-container">
+        <van-list v-model="loading" :finished="finished" @load="loadData" :immediate-check="false">
+      <!-- 无数据状态 -->
+      <div class="empty-wrap" v-if="list.length == 0">
+        <img src="https://img.yzcdn.cn/vant/empty-image-default.png" alt="无数据">
+        <span>暂无数据</span>
+      </div>
+
+      <!-- 列表数据 -->
+      <template v-else>
+        <div class="list-card" v-for="(item, index) in list" :key="index" @click="handleItemClick(item)">
+          <div class="card-header">
+            <span class="card-name">{{ item.clientNm }}({{ item.identNum }})</span>
+            <img class="card-arrow" src="images/rightArrow.png" alt="">
+          </div>
+          <div class="card-body">
+            <div class="card-row">
+              <span class="card-label">银行卡</span>
+              <span class="card-value">西安银行借记卡({{ item.crdNum }})</span>
+            </div>
+            <div class="card-row">
+              <span class="card-label">申请时间</span>
+              <span class="card-value">{{ item.aplyTm }}</span>
+            </div>
+          </div>
+        </div>
+        <!-- 底部提示 -->
+        <div class="list-finished" v-if="finished">已到最底部了</div>
+      </template>
+    </van-list>
+    </div>
+
+    <!-- 底部按钮 -->
+    <div class="bottom-btn-wrap">
+      <button class="bottom-btn" @click="handleAdd">新增临时提额申请</button>
+    </div>
+  </div>
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+
+<script type="text/javascript" src="../common/js/watermark.js"></script>
+<script src="./../common/js/server.js"></script>
+<script src="js/list.js"></script>
+<script src="../common/js/axiosRequest.js"></script>
+
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+
+<script>
+  //  var vConsole = new VConsole();
+  initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+  wx.ready(function () {
+    wx.hideAllNonBaseMenuItem();
+  });
+  function getUserFinish() {
+    var username = $.parseJSON($.cookie("user")).name;
+    __canvasWM({
+      content: username
+    });
+    initFun()
+  }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

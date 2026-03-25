@@ -1,0 +1,23 @@
+.midArea{
+    display: flex; 
+    width: 90%;
+    align-items: center;
+    justify-content: center;
+    z-index:2;
+    background-color:#ffffff;
+    height: 40vh;
+    flex-direction: column
+}
+.midAreaBtn{
+    background: #1577FF;
+    border-radius: 8px;
+     padding: 14px 0px; 
+     width: 70%; 
+     text-align: center;
+     font-size: 17px;
+     font-family: PingFangSC-Medium, PingFang SC;
+     height: 2vh; 
+     font-weight: 500;
+     color: #FFFFFF;line-height: 17px; 
+     margin-top: 4vh; 
+}

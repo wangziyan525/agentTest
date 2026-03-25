@@ -1,0 +1,11 @@
+.session-item-title {
+    max-width: 180px;
+}
+
+.session-item-text {
+    align-items: center;
+}
+
+.border-top-bofore:first-child {
+    border-top: none;
+}

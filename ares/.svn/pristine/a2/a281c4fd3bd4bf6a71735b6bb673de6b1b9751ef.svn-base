@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=2.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none">
+
+        <!-- <div class="listTopPart">
+            <div class="listOneLine">
+                <img src="images/search.png">
+                <div class="keyInput">                    
+                    <van-field type="text" v-model="userName" placeholder="请输入员工姓名" maxlength="50" ></van-field>
+                </div>
+                
+            </div>
+            <div class="keySearchBtn" @click="queryList">搜索</div>
+            <div class="keySearchBtn" @click="exports">导出</div>
+        </div> -->
+        <div class="tabList">
+            <div :class="completeStatus=='0'?'activeTab':''"  @click="chooseTab('0')">未签名</div>
+            <div :class="completeStatus=='1'?'activeTab':''"  @click="chooseTab('1')">未完成排查</div>
+            <div :class="completeStatus=='2'?'activeTab':''"  @click="chooseTab('2')">已完成</div>
+        </div>
+        <div v-if="list.length>0">
+            <div class="listContent" style="padding: 0;" v-for="item in list" >
+                
+                <div style="padding: 10px;">
+                    <div class="listLine">
+                        <div>机构名称：<span>{{item.ssbm}}</span></div>
+                    </div>
+                    <div class="listLine">
+                        <div>员工姓名：<span>{{item.userName}}</span></div>
+                    </div>
+                    <!-- <div class="listLine">
+                        <div>提交时间：{{item.createTime}}</div>
+                    </div>
+                    <div class="listLine">
+                        <div>审核状态：{{statusOpt[item.status]}}</div>
+                    </div> -->
+                   
+                </div>
+                <div>
+                   
+                    <div class="operationPart"   >
+                        <div style="border-right: 1px solid #e1e1e1;color:#888"  v-if="item.pdfStatus=='0'" >
+                            <div>未签名</div>
+                        </div>
+
+                        <div style="border-right: 1px solid #e1e1e1;"  v-if="item.pdfStatus=='1'" @click="goView(item.userId)">
+                            <div>查看签名</div>
+                        </div>
+                        <div v-if="item.misconductStatus=='0'" style="color:#888">
+                            <div>未完成排查</div>
+                        </div>
+                        <div  @click="goDetail(item.id)"  v-if="item.misconductStatus=='1'">
+                            <div>查看详情</div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div v-else class="nodate">
+            <div class="noMessage">
+                <img src="images/noMessage.png">
+            </div>
+            暂无数据
+        </div>
+        <div style="height: 100px"></div>
+        <div class="footTab" @click="exports">
+            <div class="applyButton" >
+                <div>导出</div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js?v=20211022"></script>
+<script type="text/javascript" src="js/managerList.js"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

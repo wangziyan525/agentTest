@@ -1,0 +1,435 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f5f6f7;
+    overflow: hidden;
+}
+#app{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+/* ------------------------------ 标题 -------------------------- */
+.title{
+    width: 100%;
+    padding: 22px 12px 15px;
+    box-sizing: border-box;
+    font-size: 19px;
+    line-height: 26px;
+    color: #000000;
+    font-weight: 600;
+    background-color: #fff;
+}
+.title em{
+    display: inline-block;
+    margin-left: 20px;
+    padding: 1px 5px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 20px;
+}
+.title .em0,
+.title .em1{
+    border: 1px solid #FF9430;
+    color: #FF9430;
+    background-color: #FFFAF5;
+
+}
+.title .em2{
+    border: 1px solid #44C966;
+    color: #44C966;
+    background-color: #F5FFF5;
+
+}
+/* ------------------------------ 汇报 -------------------------- */
+.report{
+    width: 100%;
+    padding: 0px 16px 12px;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+.report .reportTime{
+    width: 100%;
+    font-size: 14px;
+    line-height: 20px;
+    color: #9DA0A3;
+    text-align: justify;
+    margin-bottom: 5px;
+}
+.report .examineDep{
+    width: 100%;
+    display: flex;
+}
+.report .examineDep .deplingd{
+    font-size: 14px;
+    line-height: 20px;
+    color: #9DA0A3;
+}
+.report .examineDep .addPeople{
+    display: flex;
+    align-items: center;
+    background: #E7F0FF;
+    border-radius: 3px;
+    font-size: 12px;
+    line-height: 22px;
+    color: #4675C9;
+    padding-right: 5px;
+    box-sizing: border-box;
+}
+.report .examineDep .addPeople img{
+    display: block;
+    width: 10px;
+    padding: 0 5px;
+}
+.report .examineDep .delPeople{
+    display: flex;
+    align-items: center;
+    background: #F1F1F1;
+    border-radius: 3px;
+    font-size: 12px;
+    line-height: 22px;
+    color: #000;
+    padding: 0 5px;
+    box-sizing: border-box;
+}
+.report .examineDep .delPeople img{
+    display: block;
+    width: 12px;
+    padding-left: 5px;
+}
+/* ---------------------------- 底部提交 ----------------------- */
+.btn{
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+.btn .bigBtn{
+    width: 100%;
+    font-size: 15px;
+    line-height: 20px;
+    padding: 12px 0;
+    box-sizing: border-box;
+    text-align: center;
+    background: #267EF0;
+    border-radius: 6px;
+    color: #fff;
+}
+/* ---------------------------- 考核填写 ----------------------- */
+/* .van-swipe-item{
+    min-height: 200px !important;
+    max-height: 400px !important;
+    overflow-y: auto !important;
+} */
+.examine{
+    width: 100%;
+    flex: 1;
+    margin-top: 10px;
+}
+.examine .tabs{
+    width: 100%;
+    background: #fff;
+}
+.van-tab{
+    font-size: 16px !important;
+}
+.van-tabs--line .van-tabs__wrap{
+    height: 56px !important;
+}
+.van-tab--active{
+    color: #4675C9 !important;
+}
+.examine .examineCt{
+    width: 100%;
+    position: relative;
+    background-color: #fff;
+    overflow: hidden;
+    /* overflow-x: auto; */
+}
+.examine .examineCt:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top:-1px;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.examine .examineCt .examineCtList{
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+}
+.examine .examineCt .examineCtList textarea{
+    resize: none;
+    border:none;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #F5F5F5;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #333330;
+    line-height: 20px;
+    outline: none;
+    resize: none;
+    margin: 10px auto 15px;
+    min-height: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.examine .examineCt .ctBtn{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+.examine .examineCt .ctBtn span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+    padding: 5px 20px;
+    border: 1px solid #267EF0;
+    border-radius: 6px;
+}
+.examine .examineCt .ctBtn span:nth-child(1){
+    color: #267EF0;
+    background-color: transparent;
+    margin-right: 12px;
+}
+.examine .examineCt .ctBtn span:nth-child(2){
+    color: #fff;
+    background-color: #267EF0;
+}
+.examine .examineCt .examineCtList1{
+    min-height: 100px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 20px 0;
+    padding: 0 16px !important;
+    box-sizing: border-box;
+}
+.examine .examineCt .examineCtList1 span{
+    font-size: 15px;
+    color: #000;
+    line-height: 24px;
+    word-break: break-all;
+}
+/* ------------------------------------- 遮罩层 -------------------------------------------- */
+.popupContent{
+    width: 100%;
+    height: 100%;
+}
+.popupContent .choosePeopleList{
+    width: 100%;
+    padding: 13px 16px;
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    position: relative;
+}
+.popupContent .choosePeopleList:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.popupContent .choosePeopleList .left{
+    font-size: 15px;
+    color: #000;
+    line-height: 20px;
+}
+.popupContent .choosePeopleList .right{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.popupContent .choosePeopleList .right img{
+    display: block;
+    width: 20px;
+}
+/* ---------------------------------- 流转信息 ------------------------------- */
+.flowInfo{
+    width: 100%;
+}
+.flowInfo .flowList{
+    width: 100%;
+    margin-top: 10px;
+    background-color: #fff;
+}
+.flowInfo .flowList .flowLis{
+    width: 100%;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+}
+.flowInfo .flowList .flowLis::before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.flowInfo .flowList .flowLis:first-child::before{
+    display: none;
+}
+.flowInfo .flowList .flowLis span{
+    display: block;
+    width: 50%;
+    font-size: 15px;
+    line-height: 20px;
+}
+.flowInfo .flowList .flowLis span:nth-child(1){
+    color: #666;
+}
+.flowInfo .flowList .flowLis span:nth-child(2){
+    color: #000;
+    text-align: right;
+}
+.flowInfo .flowList .flowLis1{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.flowInfo .flowList .flowLis1::before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #ddd;
+    color: #ddd;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.flowInfo .flowList .flowLis1 span:nth-child(1){
+    display: block;
+    padding: 15px 12px;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+    color: #666;
+}
+.flowInfo .flowList .flowLis1 span:nth-child(2){
+    display: block;
+    padding: 0px 12px 15px;
+    box-sizing: border-box;
+    font-size: 15px;
+    line-height: 20px;
+    color: #000;
+}
+/* 职务 */
+.positionModle{
+    width: 100%;
+    margin-top: 10px;
+    padding: 15px 16px;
+    box-sizing: border-box;
+    display: flex;
+    background-color: #fff;
+}
+.positionModle span{
+    width: 70px;
+    font-size: 15px;
+    color: #333;
+    line-height: 20px;
+}
+.positionModle input{
+    flex: 1;
+    width: 100%;
+    display: block;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    font-size: 15px;
+    color: #666;
+    line-height: 20px;
+    box-sizing: border-box;
+    text-align: right;
+}
+
+/*-------------------------------------------- 新的填写内容 ------------------------------------- */
+.fillIn{
+    width: 400%;
+    display: flex;
+    transition: transform 0.5s ease;
+}
+.fillIn .examineCtList2{
+    width: 25%;
+    padding: 16px;
+    box-sizing: border-box;
+}
+.fillIn .examineCtList2 textarea{
+    resize: none;
+    border:none;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #F5F5F5;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #333330;
+    line-height: 20px;
+    outline: none;
+    resize: none;
+    margin: 10px auto 15px;
+    min-height: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.fillIn .examineCtList2 .ctBtn{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+.fillIn .examineCtList2 .ctBtn span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+    padding: 5px 20px;
+    border: 1px solid #267EF0;
+    border-radius: 6px;
+}
+.fillIn .examineCtList2 .ctBtn span:nth-child(1){
+    color: #267EF0;
+    background-color: transparent;
+    margin-right: 12px;
+}
+.fillIn .examineCtList2 .ctBtn span:nth-child(2){
+    color: #fff;
+    background-color: #267EF0;
+}

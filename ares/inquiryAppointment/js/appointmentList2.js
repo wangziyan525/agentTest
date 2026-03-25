@@ -1,0 +1,72 @@
+function initFun() {
+    new Vue({
+        el: '#app',
+        data: {
+            baseUrl: {
+                userListUrl: 'qywx/clinic/queryDocAppointSelf.xa',
+                deviceListUrl:'qywx/clinic/queryDeviceAppointSelf.xa',
+            },
+            viewFlag:false,
+            tabs: [{ text: '问诊预约', id: "1" }, { text: '理疗设备预约', id: "2" }],
+            tabIndex: 0,
+            list: [],
+        },
+        created() {
+            if(sessionStorage.getItem('tabIndex')){
+                this.tabIndex = sessionStorage.getItem('tabIndex')?sessionStorage.getItem('tabIndex'):0;
+                sessionStorage.removeItem('tabIndex')
+            }
+            this.getList();
+        },
+        methods: {
+            //获取url参数
+            getQueryString(name) {
+                let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                let r = window.location.search.substr(1).match(reg);
+                if (r != null)
+                    return (r[2]);
+                return null;
+            },
+            // 获取列表数据
+            getList() {
+                var that = this;
+                var url = ""
+                if(that.tabIndex==0){
+                    url = that.baseUrl.userListUrl;//问诊预约列表
+                }else if(that.tabIndex==1){
+                    url = that.baseUrl.deviceListUrl;//设备预约列表
+                }
+                $http(url, true,{}, false)
+                    .then(res => {
+                        that.viewFlag = true;
+                        if(that.tabIndex==0){
+                            that.list = res.data.docInfos;//问诊预约列表
+                        }else if(that.tabIndex==1){
+                            that.list = res.data.deviceInfos;//设备预约列表
+                        }
+                        that.list.map((v,i)=>{
+                            var timeList = v.startApoint.split(' ');
+                            if(timeList[1].split(':')[0]<13){
+                                v['timeText'] = '上午';
+                            }else{
+                                v['timeText'] = '下午';
+                            }
+                            v['date'] = timeList[0];
+                            v['time'] = timeList[1];
+                        })
+                    });
+            },
+            tabTap(index, id) {
+                this.tabIndex = index;
+                this.viewFlag = false;
+                this.list = [];
+                this.getList();
+            },
+            // 跳转详情
+            toDetail(id){
+                sessionStorage.setItem('tabIndex',this.tabIndex)
+                window.location.href = './detail.html?id='+id;
+            }
+        }
+    })
+};

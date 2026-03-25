@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+    name="viewport" />
+  <link rel="stylesheet" href="../common/css/weui.min.css">
+  <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+  <link rel="stylesheet" href="../common/css/vant-2.12.css">
+  <link rel="stylesheet" href="css/tipsConfig.css">
+  <title>西安银行</title>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <!-- 内容区域 -->
+    <div class="content">
+      <!-- 标题输入 -->
+      <div class="form-section">
+        <div class="form-item">
+          <span class="form-label">提示标题</span>
+          <input class="form-input" type="text" v-model="title" placeholder="请输入标题">
+        </div>
+      </div>
+
+      <div class="section-gap"></div>
+
+      <!-- 提示内容列表 -->
+      <div class="tips-section">
+        <div class="section-header">
+          <span class="section-title">提示内容</span>
+          <span class="add-btn" @click="addTipItem">+ 添加一条</span>
+        </div>
+
+        <div class="tip-item" v-for="(item, index) in tipsList" :key="index">
+          <div class="tip-header">
+            <span class="tip-index">第{{ index + 1 }}条</span>
+            <span class="delete-btn" v-if="tipsList.length > 1" @click="deleteTipItem(index)">删除</span>
+          </div>
+          <textarea class="tip-textarea" v-model="tipsList[index].content" placeholder="请输入提示内容" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 预览区域 -->
+    <div class="preview-section" v-if="title || hasContent">
+      <div class="preview-title">预览效果</div>
+      <div class="preview-box">
+        <div class="preview-header">{{ title || '温馨提示' }}</div>
+        <div class="preview-content">
+          <div class="preview-item" v-for="(item, index) in tipsList" :key="index" v-if="item.content">
+            <span class="preview-num">{{ index + 1 }}.</span>
+            <span class="preview-text">{{ item.content }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部按钮 -->
+    <div class="bottom-btn-wrap">
+      <button class="bottom-btn" @click="handleSubmit">保存配置</button>
+    </div>
+  </div>
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js"></script>
+<script src="./../common/js/server.js"></script>
+<script src="js/tipsConfig.js"></script>
+<script src="../common/js/vConsole.min.js"></script>
+
+<script>
+  //  var vConsole = new VConsole();
+  initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+  wx.ready(function () {
+    wx.hideAllNonBaseMenuItem();
+  });
+  function getUserFinish() {
+    var username = $.parseJSON($.cookie("user")).name;
+    __canvasWM({
+      content: username
+    });
+    initFun()
+  }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>
+

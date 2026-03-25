@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="./css/testResult.css">
+
+    <title>考试结果</title>
+</head>
+
+<body>
+    <div class="container" v-clack>
+        <div>
+           <img src="./images/testResult.jpg" alt="">
+        </div>
+        <div class="result-container">
+            <img class="scoreTitle" src="./images/testScore.png" alt="">
+            <!-- 进度环容器 -->
+            <div class="progress-ring-container">
+                <svg width="220" height="220">
+                    <!-- 背景圆环 -->
+                    <circle class="progress-ring-bg" cx="110" cy="110" r="92"></circle>
+                    <!-- 进度圆环 -->
+                    <circle id="progressRing" class="progress-ring-progress excellent" cx="110" cy="110" r="92"
+                        stroke-dasharray="578" stroke-dashoffset="58"></circle>
+                </svg>
+
+                <!-- 中间分数显示 -->
+                <div class="score-display">
+                    <div class="score-value " id="scoreValue">0</div>
+                    <div class="score-percentage" id="scorePercentage">满分0分</div>
+                </div>
+            </div>
+
+            <!-- <div class="score-label label-excellent" id="scoreLabel">优秀</div> -->
+            <div class="scoreLabel" id="scoreLabel">考试通过</div>
+
+            <!-- 控制面板 -->
+            <div class="testBtn" id="testBtn" onclick="nextStep()">签订个人承诺书</div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="../common/js/vConsole.min.js"></script>
+
+<script>
+    var testResult = JSON.parse(localStorage.getItem('testResult'));
+    //var vConsole = new VConsole();
+    initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+    wx.ready(function () {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        updateScore(testResult.score.score, testResult.score.fullscore)
+    }
+    // 获取DOM元素
+const progressRing = document.getElementById('progressRing');
+const scoreValue = document.getElementById('scoreValue');
+const scorePercentage = document.getElementById('scorePercentage');
+const scoreLabel = document.getElementById('scoreLabel');
+const scoreInput = document.getElementById('scoreInput');
+const testBtn = document.getElementById('testBtn');
+
+// 圆环周长 (2 * π * r)
+const circumference = 2 * Math.PI * 92; // 约578
+progressRing.style.strokeDasharray = `${circumference}`;
+
+// 更新成绩显示
+function updateScore(score,fullScore) {
+    // 计算进度
+    const percentage = score / fullScore;
+    const offset = circumference - (percentage * circumference);
+    progressRing.style.strokeDashoffset = offset;
+    
+    // 移除所有颜色类
+    progressRing.classList.remove('excellent', 'good', 'pass', 'fail');
+    
+    // 根据成绩设置颜色和标签
+    if (score >= fullScore) {
+        progressRing.classList.add('excellent');
+        scoreValue.classList.add('label-excellent');
+        scoreLabel.textContent = '考试通过';
+        testBtn.textContent = '签订个人承诺书';
+
+    }  else {
+        progressRing.classList.add('fail');
+        scoreValue.classList.add('label-fail');
+        scoreLabel.textContent = '考试未通过';
+        testBtn.textContent = '重新考试';
+    }
+    
+    // 更新分数显示
+    scoreValue.textContent = score;
+    scorePercentage.textContent = `满分${fullScore}分`;
+};
+function nextStep(){
+    if(testResult.score.score == testResult.score.fullscore){
+        window.location.href = "commitment.html?v=1.0"
+    }else{
+        window.location.href = "test.html"
+    }
+}
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

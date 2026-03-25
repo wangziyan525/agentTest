@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>西安银行</title>
+    <link rel="stylesheet" href="./../common/css/weui.min.css">
+    <link rel="stylesheet" href="./../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="./../common/css/vant-2.12.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        .device-notice {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .device-notice h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #1976D2;
+        }
+        .device-notice ol {
+            padding-left: 20px;
+        }
+        .device-notice li {
+            margin-bottom: 8px;
+        }
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            aspect-ratio: 16/9;
+        }
+        #cameraView, #videoPreview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            background-color: #000;
+        }
+        #videoPreview {
+            display: none;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        .control-group {
+            margin-bottom: 15px;
+        }
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        select, input[type="range"] {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 16px;
+        }
+        input[type="range"] {
+            padding: 0;
+            height: 24px;
+            -webkit-appearance: none;
+            background: #e0e0e0;
+            border-radius: 12px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #2196F3;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .value-display {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background-color: #2196F3;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1976D2;
+        }
+        .btn-secondary {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+        .btn-warning {
+            background-color: #ff9800;
+            color: white;
+        }
+        .btn-warning:hover {
+            background-color: #f57c00;
+        }
+        .status-message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            min-height: 20px;
+            color: #e53935;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            margin-top: 15px;
+            overflow: hidden;
+            display: none;
+        }
+        #uploadProgress {
+            width: 0%;
+            height: 24px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 24px;
+            color: white;
+            font-size: 14px;
+            transition: width 0.3s ease;
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+            button {
+                padding: 12px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="device-notice" id="deviceNotice" style="display: none !important;">
+        <h3>用户提示</h3>
+        <ol>
+            <li>如果预览画面黑屏但能正常录制，请尝试切换摄像头</li>
+            <li>确保已授予浏览器相机权限</li>
+            <li>建议在良好光照环境下使用</li>
+            <li>如问题持续，请尝试更新软件</li>
+        </ol>
+    </div>
+
+    <div class="video-wrapper">
+        <video id="cameraView"
+
+               playsinline="true"
+               x5-video-player-fullscreen="ture"
+               x5-video-player-type="h5"
+               x5-playsinline="true"
+               x-webkit-airplay="true"
+               webkit-playsinline="true"
+               preload="auto"
+               controls></video>
+        <video id="videoPreview"
+               playsinline="true"
+               x5-video-player-fullscreen="ture"
+               x5-video-player-type="h5"
+               x5-playsinline="true"
+               x-webkit-airplay="true"
+               webkit-playsinline="true"
+               preload="auto"
+               controls></video>
+    </div>
+
+    <div class="controls">
+<!--        <div class="control-group">-->
+<!--            <label for="videoQuality">视频质量</label>-->
+<!--            <select id="videoQuality">-->
+<!--                <option value="low" selected>流畅 (480p)</option>-->
+<!--                <option value="medium">标清 (720p)</option>-->
+<!--                <option value="high">高清 (1080p)</option>-->
+<!--            </select>-->
+<!--        </div>-->
+
+        <div class="control-group" style="display: none !important;">
+            <label for="frameRate">帧率: <span id="frameRateValue">30</span> fps</label>
+            <input type="range" id="frameRate" min="10" max="60" value="30">
+        </div>
+        <div class="control-group" style="display: none">
+            <label for="duration">录制时长: <span id="durationValue">120</span> 秒</label>
+            <input type="range" id="duration" min="5" max="120" value="120">
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button id="switchCameraBtn" class="btn-secondary" style="display: none !important;">
+            <span id="switchCameraText">切换后置摄像头</span>
+        </button>
+        <button id="startBtn" class="btn-primary">开始录制</button>
+        <button id="reloadBtn" style="display: none" class="btn-primary">重新录制</button>
+        <button id="stopBtn" class="btn-warning" disabled>停止录制</button>
+    </div>
+    <div class="button-group" style="display: none !important;">
+        <button id="saveBtn" class="btn-primary" disabled>保存到相册</button>
+    </div>
+    <div class="button-group">
+        <button id="uploadBtn" class="btn-primary" disabled>上传视频</button>
+        <button id="localBtn" class="btn-secondary">本地相册上传</button>
+    </div>
+
+    <div class="progress-container" id="progressContainer">
+        <div id="uploadProgress">0%</div>
+    </div>
+
+    <div class="status-message" id="statusMessage"></div>
+    <input class="changePdf" type="file" name="file" id="videoInput"  accept="video/*" @change="uploadFile" style="display: none" >
+</div>
+<script src="./../common/js/vue.min.js"></script>
+<script src="./../common/js/vant-2.12.min.js"></script>
+<script src="./../common/js/base.js"></script>
+<script src="./../common/js/jquery-2.1.3.min.js"></script>
+<script src="./../common/js/jquery.cookie_jq.js"></script>
+<script src="./../common/js/jquery-weui.min.js"></script>
+<script src="./../common/js/jssdk.js"></script>
+<script src="js/fileSaver.js"></script>
+<script src="../common/js/vConsole.min.js"></script>
+<script>
+    // var vConsole = new VConsole();
+    document.addEventListener('DOMContentLoaded', function() {
+        // DOM元素
+        const cameraView = document.getElementById('cameraView');
+        const videoPreview = document.getElementById('videoPreview');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const localBtn = document.getElementById('localBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const reloadBtn = document.getElementById('reloadBtn');
+        const switchCameraBtn = document.getElementById('switchCameraBtn');
+        const switchCameraText = document.getElementById('switchCameraText');
+        const deviceNotice = document.getElementById('deviceNotice');
+        const progressContainer = document.getElementById('progressContainer');
+        const uploadProgress = document.getElementById('uploadProgress');
+        const statusMessage = document.getElementById('statusMessage');
+        const videoInput = document.getElementById('videoInput')
+        // 参数控制
+        // const videoQuality = document.getElementById('videoQuality');
+        const frameRate = document.getElementById('frameRate');
+        const frameRateValue = document.getElementById('frameRateValue');
+        const duration = document.getElementById('duration');
+        const durationValue = document.getElementById('durationValue');
+
+
+        // 更新参数显示
+        frameRate.addEventListener('input', () => frameRateValue.textContent = frameRate.value);
+        duration.addEventListener('input', () => durationValue.textContent = duration.value);
+
+        // 环境检测
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isXiaomi = /Mi\s|Redmi|Xiaomi/i.test(navigator.userAgent);
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+        if (isAndroid) {
+            //deviceNotice.style.display = 'block';
+
+            // 安卓设备特殊属性设置
+            cameraView.setAttribute('x5-video-player-type', 'h5');
+            cameraView.setAttribute('x5-video-player-fullscreen', 'false');
+            cameraView.setAttribute('x5-video-orientation', 'portrait');
+        }
+
+        // 视频录制变量
+        let mediaStream = null;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let currentCamera = 'environment'; // 'user'或'environment'
+        let recordingTimer = null;
+        let remainingTime = 0;
+        let currentMimeType = '';
+
+        // 显示状态信息
+        function showStatus(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.style.color = isError ? '#e53935' : '#43a047';
+        }
+
+        // 初始化摄像头
+        async function initCamera() {
+            showStatus('正在初始化摄像头...');
+
+            try {
+                // 停止之前的流
+                if (mediaStream) {
+                    mediaStream.getTracks().forEach(track => track.stop());
+                }
+
+                // 安卓设备使用更宽松的约束
+                const constraints = {
+                    audio: false,
+                    video: {
+                        facingMode: currentCamera,
+                        width: getResolution().width,
+                        height: getResolution().height,
+                        frameRate: { ideal: parseInt(frameRate.value) },
+                        advanced: [{ zoom: 0.5 }]
+                    }
+                };
+
+                // 小米设备特殊处理
+                if (isXiaomi) {
+                    constraints.video = {
+                        facingMode: currentCamera,
+                        width: { exact: 640 },
+                        height: { exact: 480 },
+                        frameRate: { ideal: 24 },
+                        advanced: [{ zoom: 0.5 }]
+                    };
+                }
+
+                // 获取媒体流
+                mediaStream = await navigator.mediaDevices.getUserMedia(constraints)
+                    .catch(async (error) => {
+                        console.warn('首选配置失败，尝试回退配置', error);
+                        // 回退到最基本的配置
+                        return navigator.mediaDevices.getUserMedia({
+                            audio: false,
+                            video: {
+                                facingMode: currentCamera,
+                                advanced: [{ zoom:0.5 }]
+                            }
+                        });
+                    });
+
+                // 安卓设备特殊处理
+                if (isAndroid) {
+                    // 延迟设置srcObject以解决黑屏问题
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                    cameraView.srcObject = mediaStream;
+                    await new Promise(resolve => {
+                        cameraView.onloadedmetadata = resolve;
+                        setTimeout(resolve, 1000); // 超时处理
+                    });
+                } else {
+                    cameraView.srcObject = mediaStream;
+                }
+
+                // 检查是否真的获取到了视频轨道
+                const videoTracks = mediaStream.getVideoTracks();
+                if (videoTracks.length === 0) {
+                    throw new Error('无法访问摄像头');
+                }
+
+                showStatus('摄像头已就绪');
+                startBtn.disabled = false;
+
+            } catch (error) {
+                console.error('摄像头初始化失败:', error);
+                showStatus(`摄像头初始化失败: ${error.message}`, true);
+                startBtn.disabled = true;
+
+                // 提示用户检查权限
+                if (error.name === 'NotAllowedError') {
+                    alert('请允许浏览器访问摄像头权限');
+                }
+            }
+        }
+
+        // 获取分辨率
+        function getResolution() {
+            // switch (videoQuality.value) {
+            //     case 'high':
+            //         return isAndroid ? { width: { ideal: 1280 }, height: { ideal: 720 } }
+            //             : { width: { ideal: 1920 }, height: { ideal: 1080 } };
+            //     case 'medium':
+            //         return { width: { ideal: 1280 }, height: { ideal: 720 } };
+            //     case 'low':
+            //         return { width: { ideal: 854 }, height: { ideal: 480 } };
+            //     default:
+            //         return { width: { ideal: 854 }, height: { ideal: 480 } };
+            // }
+            //默认480分辨率
+            return { width: { ideal: 854 }, height: { ideal: 480 } };
+        }
+
+        // 获取支持的MIME类型
+        function getSupportedMimeTypes() {
+            const possibleTypes = [
+                'video/webm;codecs=vp9,opus',
+                'video/webm;codecs=vp8,opus',
+                'video/webm;codecs=h264,opus',
+                'video/mp4;codecs=h264,aac',
+                'video/webm',
+                'video/mp4'
+            ];
+
+            return possibleTypes.filter(mimeType => {
+                return MediaRecorder.isTypeSupported(mimeType);
+            });
+        }
+        //播放视频
+        function playVideo(){
+            const viedoPlay = document.getElementById('cameraView');
+            viedoPlay.play();
+        }
+        //重新录制
+        function reloadPage(){
+            window.location.reload();
+        }
+        reloadBtn.addEventListener('click', reloadPage)
+        // 开始录制
+        startBtn.addEventListener('click', async function() {
+            try {
+
+                // 检查是否有媒体流
+                if (!mediaStream) {
+                    showStatus('请先初始化摄像头', true);
+                    return;
+                }
+                //禁用本地相册上传
+                localBtn.disabled = true;
+                // 获取支持的MIME类型
+                const supportedMimeTypes = getSupportedMimeTypes();
+                if (supportedMimeTypes.length === 0) {
+                    throw new Error('您的浏览器不支持任何视频录制格式');
+                }
+                //自动预览拍摄中的视频
+                playVideo();
+
+                // 获取视频轨道用于焦距控制
+                const videoTrack = mediaStream.getVideoTracks()[0];
+                videoTrack.applyConstraints({
+                    advanced: [{ zoom: 0.5 }]
+                }).then(() => {
+                    console.log(`焦距已调整为: 0.5x`);
+                }).catch(err => {
+                    console.error('焦距调整失败:', err);
+                });
+
+                // 选择最佳的MIME类型
+                currentMimeType = supportedMimeTypes.find(t => t.includes('vp9')) ||
+                    supportedMimeTypes.find(t => t.includes('vp8')) ||
+                    supportedMimeTypes[0];
+
+                const options = {
+                    mimeType: currentMimeType,
+                    audioBitsPerSecond: 128000,
+                    videoBitsPerSecond: 2500000 // 2.5 Mbps
+                };
+
+                // 检查MediaRecorder是否可用
+                if (typeof MediaRecorder === 'undefined') {
+                    throw new Error('您的浏览器不支持视频录制');
+                }
+                // 创建MediaRecorder实例
+                mediaRecorder = new MediaRecorder(mediaStream, options);
+
+                // 收集录制的数据块
+                recordedChunks = [];
+                mediaRecorder.ondataavailable = function(event) {
+                    if (event.data.size > 0) {
+                        recordedChunks.push(event.data);
+                    }
+                };
+
+                // 录制完成处理
+                mediaRecorder.onstop = function() {
+                    clearInterval(recordingTimer);
+                    remainingTime = 0;
+
+                    const blob = new Blob(recordedChunks, { type: currentMimeType });
+                    recordedBlob = new Blob(recordedChunks, { type: currentMimeType });
+                    videoPreview.src = URL.createObjectURL(blob);
+                    videoPreview.style.display = 'block';
+                    cameraView.style.display = 'none';
+
+                    startBtn.disabled = false;
+                    stopBtn.disabled = true;
+                    uploadBtn.disabled = false;
+                    saveBtn.disabled = false;
+
+                    showStatus('录制完成，可以上传');
+                };
+
+                // 错误处理
+                mediaRecorder.onerror = function(event) {
+                    console.error('录制错误:', event.error);
+                    showStatus(`录制错误: ${event.error.message}`, true);
+                    resetUI();
+                };
+
+                // 开始录制
+                mediaRecorder.start(100); // 每100ms收集一次数据
+
+                // 设置录制时长定时器
+                remainingTime = parseInt(duration.value);
+                updateTimerDisplay();
+                recordingTimer = setInterval(function() {
+                    remainingTime--;
+                    updateTimerDisplay();
+                    if (remainingTime <= 0) {
+                        stopRecording();
+                    }
+                }, 1000);
+
+                // 更新UI
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                uploadBtn.disabled = true;
+                saveBtn.disabled = true;
+
+                showStatus('正在录制...');
+
+            } catch (error) {
+                console.error('录制失败:', error);
+                showStatus(`录制失败: ${error.message}`, true);
+                resetUI();
+            }
+        });
+
+        // 更新计时器显示
+        function updateTimerDisplay() {
+            startBtn.textContent = `录制中 (${remainingTime}s)`;
+        }
+
+        // 停止录制
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+            }
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(track => track.stop());
+            }
+            //展示重新录制按钮
+            $("#reloadBtn").show();
+            $("#startBtn").css("display","none");
+        }
+
+        stopBtn.addEventListener('click', stopRecording);
+
+        // 上传视频
+        uploadBtn.addEventListener('click', function() {
+            if (recordedChunks.length === 0) {
+                showStatus('没有可上传的视频', true);
+                return;
+            }
+
+            const blob = new Blob(recordedChunks, { type: currentMimeType });
+            uploadVideo(blob);
+
+        });
+
+        // 上传视频到服务器
+        function uploadVideo(blob) {
+            var token = localStorage.getItem("X-Token");
+            const formData = new FormData();
+            const fileExtension = currentMimeType.includes('mp4') ? 'mp4' : 'webm';
+            const fileName = `video_${Date.now()}.${fileExtension}`;
+
+            formData.append('file', blob, fileName);
+
+            formData.append('quality','low');
+            formData.append('frameRate', frameRate.value);
+            formData.append('duration', duration.value);
+            formData.append('mimeType', currentMimeType);
+
+            const xhr = new XMLHttpRequest();
+
+            // 上传进度
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    const percentComplete = Math.round((event.loaded / event.total) * 100);
+                    uploadProgress.style.width = percentComplete + '%';
+                    uploadProgress.textContent = percentComplete + '%';
+                }
+            };
+
+            // 上传完成
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    $.alert("","视频上传成功",function () {
+                        //携带ID返回apply页面
+                        localStorage.setItem("downloadId",JSON.parse(xhr.responseText).data);
+                        window.location.href = 'apply.html';
+                    });
+                    resetUI();
+                } else {
+                    showStatus(`上传失败: ${xhr.statusText}`, true);
+                }
+                progressContainer.style.display = 'none';
+            };
+
+            // 上传错误
+            xhr.onerror = function() {
+                showStatus('上传出错，请检查网络连接', true);
+                progressContainer.style.display = 'none';
+            };
+
+            // 显示进度条
+            progressContainer.style.display = 'block';
+            uploadProgress.style.width = '0%';
+            uploadProgress.textContent = '0%';
+
+            showStatus('正在上传视频...');
+
+            // 发送请求
+            xhr.open('POST', 'https://weixin.xacbank.com.cn/newwxqy/mini-function/safetyCheck/NoAuthUser/upload/File')
+            xhr.setRequestHeader('X-Token',token)
+            xhr.send(formData);
+
+        }
+
+        // 切换摄像头
+        switchCameraBtn.addEventListener('click', function() {
+            currentCamera = currentCamera === 'user' ? 'environment' : 'user';
+            switchCameraText.textContent = currentCamera === 'user'
+                ? '切换后置摄像头'
+                : '切换前置摄像头';
+
+            showStatus('正在切换摄像头...');
+
+            // 安卓设备需要完全重置
+            if (isAndroid) {
+                if (mediaStream) {
+                    mediaStream.getTracks().forEach(track => track.stop());
+                }
+                cameraView.srcObject = null;
+            }
+
+          initCamera();
+        });
+
+        // 本地相册上传
+        localBtn.addEventListener('click', function() {
+            videoInput.click();
+            videoInput.addEventListener('change',function (event) {
+                uploadFile(event);
+            })
+
+        });
+
+        //上传文件
+        function uploadFile(event){
+            const uploadFileUrl = 'https://weixin.xacbank.com.cn/newwxqy/mini-function/safetyCheck/NoAuthUser/upload/File'
+            var fileObj = event.target.files[0];
+            console.log(fileObj)
+            if(fileObj && fileObj.type.startsWith('image/')){
+                $.alert("", "不允许上传图片文件!");
+                event.target.value= ''
+                return;
+            }
+            if (fileObj.size / 1024 > 204800) {
+                $.alert('', '视频不能超过200M', function () {})
+            }else{
+                var token = localStorage.getItem("X-Token");
+                var form = new FormData(); // FormData 对象
+                form.append("file", fileObj); // 文件对象
+                let xhr = new XMLHttpRequest()
+                xhr.open('POST', uploadFileUrl)
+                xhr.setRequestHeader('X-Token',token)
+                xhr.send(form)
+                $.showLoading('上传视频中...')
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        $.hideLoading()
+                        event.target.value= '';
+                        if($.parseJSON(xhr.responseText).retcode == 'success'){
+                            //携带ID返回apply页面
+                            localStorage.setItem("downloadId",JSON.parse(xhr.responseText).data);
+                            window.location.href = 'apply.html';
+                        }else {
+                            $.alert("","视频上传失败，请重新上传");
+
+                        }
+                    }
+                };
+            }
+        }
+        // 重置UI
+        function resetUI() {
+            videoPreview.style.display = 'none';
+            cameraView.style.display = 'block';
+            startBtn.textContent = '开始录制';
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            uploadBtn.disabled = true;
+            recordedChunks = [];
+            progressContainer.style.display = 'none';
+
+            // 停止所有媒体轨道
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(track => track.stop());
+            }
+
+            showStatus('准备就绪');
+        }
+        // 保存到相册
+        saveBtn.addEventListener('click', function() {
+            if (!recordedBlob) {
+                showStatus('没有可保存的视频', true);
+                return;
+            }
+
+            showStatus('正在保存到相册...');
+
+            // 创建下载链接
+            const url = URL.createObjectURL(recordedBlob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+
+            // 根据平台设置文件名
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            if (isIOS) {
+                a.download = `video-${timestamp}.mp4`;
+            } else {
+                a.download = `video-${timestamp}.mp4`;
+            }
+
+            document.body.appendChild(a);
+            a.click();
+
+            // 清理
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                showStatus('视频已保存到相册');
+            }, 100);
+
+            // Android特殊处理
+            if (isAndroid) {
+                try {
+                    // 尝试通过WebView接口保存
+                    if (window.JSBridge && typeof window.JSBridge.saveToAlbum === 'function') {
+                        recordedBlob.arrayBuffer().then(buffer => {
+                            const bytes = new Uint8Array(buffer);
+                            window.JSBridge.saveToAlbum(bytes, 'video/mp4');
+                            showStatus('视频已保存到相册');
+                        });
+                        return;
+                    }
+
+                    // 尝试使用FileSaver
+                    if (typeof saveAs !== 'undefined') {
+                        saveAs(recordedBlob, `video-${timestamp}.mp4`);
+                        showStatus('视频已保存到相册');
+                        return;
+                    }
+                } catch (e) {
+                    console.error('保存失败:', e);
+                }
+            }
+        });
+        // 初始化应用
+        initCamera();
+    });
+</script>
+</body>
+</html>

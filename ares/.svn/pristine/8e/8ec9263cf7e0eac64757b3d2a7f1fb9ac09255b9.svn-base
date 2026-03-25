@@ -1,0 +1,72 @@
+var baseUrl = {
+    queryListUrl:'phjdData/queryStationList.xa',//查询
+    
+}
+var vm
+function initFun () {
+    vm = new Vue({
+        el:"#app",
+        data:{
+            page:"page1",
+            searchWord:"",
+            list:[],
+            
+           
+            
+        },
+        created(){
+            this.queryList();
+            $("#app").show();
+        },
+        mounted(){
+    
+        },
+        methods:{
+            async queryList(){
+                var that=this;
+                var param={};
+                param.stationname=that.searchWord;
+                const res = await $http(baseUrl.queryListUrl, true,param, true);
+                if (res.retcode === 'success'){
+                    that.list=res.data;//基本信息
+                    
+                }
+                else{
+                    vant.Dialog.alert({
+                        message: res.retmsg
+                    }).then(() => {
+                        wx.closeWindow();
+                    }); 
+                }
+            },
+
+            addtBtn(){
+                window.location.href="addStationname.html?type=0";
+            },
+
+            editBtn(item){
+                window.location.href="addStationname.html?type=1&id="+item.id;
+            },
+
+            viewBtn(item){
+                window.location.href="addStationname.html?type=2&id="+item.id;
+            }
+
+             
+                
+
+         }
+            
+           
+           
+           
+            
+            
+    
+    })
+}
+
+
+
+
+

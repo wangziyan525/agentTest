@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no,viewport-fit=cover">
+    <title>西安银行</title>
+    <!-- 系统选择 -->
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+
+        /* .main_section {
+            padding: 10px 0;
+            flex-wrap: wrap;
+        }
+        .section_item {
+            margin-left: 10px;
+            margin-bottom: 10px;
+            padding: 3px 5px;
+            border: 1px solid #e1e1e1;
+            color: rgb(51, 48, 48);
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .section_item_hover {
+            border-color: #4675c9;
+            color: #4675c9;
+        } */
+
+        .container  {
+            min-height: 100vh;
+        }
+        
+        .main_container {
+            min-height: 100vh;
+            background-image: url('images/index_bg.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+
+        header {
+            padding: 50px 0 30px;
+        }
+
+        .title_icon {
+            height: 29px;
+            width: 293px;
+            font-size: 0;
+            margin: 0 auto 10px;
+        }
+
+        .title_icon img {
+            width: 100%;
+        }
+
+        .main_text {
+            font-family: PingFangSC-Regular;
+            font-size: 14px;
+            color: #8994B7;
+            letter-spacing: 0;
+            text-align: center;
+            font-weight: 400;
+        }
+
+        .main_section {
+            padding: 0 15px;
+        }
+
+        .main_content {
+            background-image: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 100%);
+            border: 1px solid rgba(255,255,255,1);
+            box-shadow: 0px 4px 8px 0px rgba(48,54,93,0.06);
+            border-radius: 14px;
+            padding: 0 15px;
+        }
+
+        .section_item {
+            display: flex;
+            font-family: PingFangSC-Regular;
+            font-size: 15px;
+            color: #000000;
+            letter-spacing: 0;
+            font-weight: 400;
+            padding: 15px 0;
+            border-top: 1px solid rgba(246,248,251,1);;
+        }
+
+        .section_item:first-child {
+            border-top: 0;
+        }
+
+        .section_item_text {
+            flex: 1;
+        }
+
+        .session_item_container_right_link {
+            position: relative;
+            padding-right: 10px;
+        }
+
+        .session_item_container_right_link::before {
+            content: " ";
+            display: inline-block;
+            height: 8px;
+            width: 8px;
+            border-width: 1px 1px 0 0;
+            border-color: #999;
+            border-style: solid;
+            /* -webkit-transform: matrix(.71,.71,-.71,.71,0,0); */
+            transform: matrix(.71,.71,-.71,.71,0,0);
+            position: relative;
+            top: 50%;
+            position: absolute;
+            margin-top: -4px;
+            right: 0px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container" v-cloak>
+        <!-- <section class="main_section display">
+            <div
+                class="section_item "
+                v-for= "(item, index) in sysList"
+                :class="item.status ? 'section_item_hover' : ''"
+                @click="equipmentHandle(item, index)">
+                {{ item.sysNumber }}
+            </div>
+        </section> -->
+        <div class="main_container">
+            <header>
+                <div class="title_icon">
+                    <img src="images/index_title.png" alt="">
+                </div>
+                <div class="main_text">请选择信息系统</div>
+            </header>
+            <section class="main_section">
+                <div class="main_content">
+                    <div
+                        class="section_item"
+                        v-for="(item, index) in sysList"
+                        :key="index"
+                        @click="equipmentHandle(item, index)">
+                        <div class="section_item_text">{{ item.sysNumber }}</div>
+                        <div class="session_item_container_right_link"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/clipboard.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/index.js"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem', 'invoke','selectEnterpriseContact'])
+    wx.ready(function() {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

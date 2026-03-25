@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>建档立卡</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=3.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none">
+       <div v-if="page=='page1'">
+           <div class="indexOne" @click="goList('1')">
+               <img src="images/indexImg1.png">
+               <div>企业建档</div>
+           </div>
+           <div class="indexOne" @click="goList('2')">
+                <img src="images/indexImg2.png">
+                <div>个体建档</div>
+            </div>
+            <div class="indexOne" @click="goList('3')">
+                <img src="images/indexImg3.png">
+                <div>农户建档</div>
+            </div>
+
+
+           
+            
+       </div>
+       <div v-if="page=='page2'">
+            <div class="dataList">
+                <div class="dataTitle">建档情况<span></span></div>
+                <div class="gradeChoose" >
+                    <div :class="chooseDate=='0'?'chooseItem':''" @click="chooseTyle('0')">全部</div>
+                    <div :class="chooseDate=='1'?'chooseItem':''" @click="chooseTyle('1')">今日</div>
+                    <div :class="chooseDate=='2'?'chooseItem':''" @click="chooseTyle('2')">本周</div>
+                    <div :class="chooseDate=='3'?'chooseItem':''" @click="chooseTyle('3')">本月</div>
+                    <div :class="chooseDate=='4'?'chooseItem':''" @click="chooseTyle('4')">自定义</div>
+
+                </div>
+               
+                <van-popup 
+                        v-model="DateRangeshow"
+                        position="bottom"
+                        :close-on-click-overlay="false">
+                        <van-calendar v-model='DateRangeshow' :min-date="minRangeDate" :max-date="maxRangeDate"  allow-same-day color='#0465FF' type="range" 
+                        class="calendar" @confirm='onDateRangeConfirm' @close="DateRangeshow=false"></van-calendar>
+
+                 </van-popup>
+                <div class="chooseDateLine" v-if="chooseDate!='0' && StatStrtTm">统计时间：{{StatStrtTm}} 至 {{StatEndTm}}</div>
+                <div class="chooseDateLine" v-else ></div>
+                <div class="dataContent">
+                    <div class="totalNum">累计建档：<span>{{Number(common.EntpEstbDocAcctNum)+Number(common.IdvlEstbDocAcctNum)+Number(common.AgrcEstbDocAcctNum)}}</span>户</div>
+                    <div class="dataDetail">
+                        <div class="dataDetailOne">
+                            <div class="dataIcon"><img src="images/icon1.png">企业</div>
+                            <div class="dataNum">共建档：<span>{{common.EntpEstbDocAcctNum}}</span></div>
+                            <div class="dataNum">有效建档：<span>{{common.EntpEfftEstbDocAcctNum}}</span></div>
+                        </div>
+                        <div class="dataDetailOne">
+                            <div class="dataIcon"><img src="images/icon2.png">个体</div>
+                            <div class="dataNum">共建档：<span>{{common.IdvlEstbDocAcctNum}}</span></div>
+                            <div class="dataNum">有效建档：<span>{{common.IdvlEfftEstbDocAcctNum}}</span></div>
+                        </div>
+                        <div class="dataDetailOne">
+                            <div class="dataIcon"><img src="images/icon3.png">农户</div>
+                            <div class="dataNum">共建档：<span>{{common.AgrcEstbDocAcctNum}}</span></div>
+                            <div class="dataNum">有效建档：<span>{{common.AgrcEfftEstbDocAcctNum}}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warnText" style="width: 90%;font-size: 13px;">
+                <div>企业：统一社会信用代码（必须）+上传招牌照片（必须）+资金用途/期望额度/利率接受范围（任选其一），</div>
+                <div style="margin-top: 4px;">个体、农户：身份证号（必须）+资金用途/期望额度/利率接受范围/拍照经营照片（任选其一），算入有效建档。</div>
+            </div>
+       </div>
+       <div style="height: 88px;"></div>
+       <div class="footTab">
+            <div class="footOne" >
+                <img :src="page=='page1'?'images/indexChoose.png':'images/index.png'">
+                <div :class="page=='page1'?'choosetab':''">我的建档</div>
+            </div>
+            <div class="footOne" @click="toPage()">
+                <img :src="page=='page2'?'images/listChoose.png':'images/list.png'">
+                <div :class="page=='page2'?'choosetab':''">建档数据</div>
+            </div>
+       </div>
+
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js"></script>
+<script type="text/javascript" src="js/index.js?v=3"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

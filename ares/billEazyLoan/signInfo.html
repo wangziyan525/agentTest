@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="css/signInfo.css">
+
+    <title>【西银票易贷】签约信息</title>
+</head>
+
+<body>
+    <div class="container" v-cloak>
+        <div class="signArea"  v-if="page == '1'">
+            <div class="signHeader">
+                <div class="selectOption" @click="enterChooseCompany">
+                    <div class="selectName">{{showData.companyName}}</div>
+                    <div class="selectImg"></div>
+                </div>
+                <div class="selectOption" @click="showChooseTimeModel">
+                    <div class="selectName">{{showData.signDate}}</div>
+                    <div class="selectImg"></div>
+                </div>
+                <div class="selectOption" @click="statusShow = true">
+                    <div class="selectName">{{showData.signStatus}}</div>
+                    <div class="selectImg"></div>
+                </div>
+            </div>
+            <div class="custom-btm">
+                <div class="detailTotalNum">共<span class="totalNum">{{total}}</span>条签约信息</div>
+                <div class="btm-table">
+                    <div class="detailList" v-for="(item,index) in signList">
+                        <div class="detailListCol">
+                            <div class="detailListTitle">一级机构名称：</div>
+                            <div class="detailValue">{{item.DataCntnt.orgOneName}}</div>
+                        </div>
+                        <div class="detailListCol">
+                            <div class="detailListTitle">二级机构号：</div>
+                            <div class="detailValue">{{item.DataCntnt.orgTwoId}}</div>
+                        </div>
+                        <div class="detailListCol">
+                            <div class="detailListTitle">二级机构支行名称：</div>
+                            <div class="detailValue">{{item.DataCntnt.orgTwoName}}</div>
+                        </div>
+                        <div class="detailListCol">
+                            <div class="detailListTitle">企业名称：</div>
+                            <div class="detailValue">{{item.DataCntnt.firmName}}</div>
+                        </div>
+                        <div class="detailListCol">
+                            <div class="detailListTitle">客户号：</div>
+                            <div class="detailValue">{{item.DataCntnt.custNo}}</div>
+                        </div>
+                        <div class="detailListCol">
+                            <div class="detailListTitle">管户经理工号：</div>
+                            <div class="detailValue">{{item.DataCntnt.custManagerNo}}</div>
+                        </div>
+                        <div class="detailListCol">
+                            <div class="detailListTitle">管户经理姓名：</div>
+                            <div class="detailValue">{{item.DataCntnt.custManagerName}}</div>
+                        </div>
+                        <div class="detailListCol">
+                            <div class="detailListTitle">签约时间：</div>
+                            <div class="detailValue">{{item.DataCntnt.signTime}}</div>
+                        </div>
+                        <div class="detailListCol">
+                            <div class="detailListTitle">签约状态：</div>
+                            <div class="detailValue">{{formatStatus(item.DataCntnt.signStatus)}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nodate" v-if="nodata2">
+                    <div class="noMessage">
+                        <img src="images/noList.png">
+                    </div>
+                    暂无数据
+                </div>
+            </div>
+            <div class="nodate" v-if="nodata">
+                <div class="noMessage">
+                    <img src="images/noList.png">
+                </div>
+                暂无数据
+            </div>
+
+            <div class="btns">
+                <div class="export" @click="exportData">导出</div>
+            </div>
+
+            <!--签约状态弹窗-->
+            <van-popup v-model="statusShow" position="bottom">
+                <div class="statusListArea">
+                    <div class="statusList" v-for="(item,key) in chooseSignStatusMap" :key='key'>
+                        <div :class="{'selected' : selectedKey == key}" @click="chooseStatus(item,key)">{{item}}</div>
+                    </div>
+                    <div class="statusList" style="margin-top:8px" @click="statusShow = false">取消</div>
+                </div>
+
+            </van-popup>
+            <!--遮罩层(时间)-->
+            <van-action-sheet v-model="isshowChooseTime" title="签约时间">
+                <div class="popupContent">
+                    <div style="width: 100%;height: 30px"></div>
+                    <div class="diyTime">
+                        <div class="startTime" @click="switchTab('start')" :class ="{selectedDate : activeTab == 'start' }">
+                            <input type="text" placeholder="开始时间" readonly v-model="startTimeShow">
+                            <!-- <i><img src="./image/xuanzhe.png" alt=""></i> -->
+                        </div>
+                        <span>至</span>
+                        <div class="endTime" @click="switchTab('end')" :class ="{selectedDate : activeTab == 'end' }">
+                            <input type="text" placeholder="结束时间" readonly v-model="endTimeShow">
+                            <!-- <i><img src="./image/xuanzhe.png" alt=""></i> -->
+                        </div>
+                    </div>
+                    <div class="picker-wrapper">
+                        <van-datetime-picker type="year-month" v-model="currentDate" :min-date='minDate'
+                            :max-date='maxDate' :formatter="formatter"   @change="handleDateChange">
+                        </van-datetime-picker>
+                    </div>
+
+                    <div class="searchBtn">
+                        <span @click="isshowChooseTime = false">取消</span>
+                        <span @click="filterTimeSearch()">确认</span>
+                    </div>
+                </div>
+            </van-action-sheet>
+        </div>
+        <div class="searchArea" v-if="page == '2'">
+            <div class="searchHeader">
+                <div class="closeSearch" @click="closeSearchPage"></div>
+                <div class="inputSearch">
+                    <div class="inputSearchImg" ></div>
+                    <div class="keyInput">
+                        <van-field type="text" v-model="searchWord" placeholder="请输入客户名称" maxlength="50"></van-field>
+                    </div>
+                </div>
+                <div class="clickSearch" @click="enterpriseFind">搜索</div>
+            </div>
+            <div class="searchListArea" v-for="(item,index) in companyList">
+                <div class="searchList" @click="chooseCompany(item)">{{item.DataCntnt.firmName}}
+                </div>
+            </div>
+            <div class="nodate" v-if="nodata">
+                <div class="noMessage">
+                    <img src="images/noList.png">
+                </div>
+                暂无数据
+            </div>
+        </div>
+    </div>
+        
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/signInfo.js"></script>
+<script src="js/moment.js"></script>
+<script src="../common/js/vConsole.min.js"></script> 
+   
+<script>
+    //  var vConsole = new VConsole();
+    initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+    wx.ready(function () {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

@@ -1,0 +1,918 @@
+var baseUrl = {
+    submitSafetyCheck: "safetyCheck/submitSafetyCheck.xa",
+    getSubmitSafetyCheckInfo: "safetyCheck/getSubmitSafetyCheckInfo.xa",
+    getPower: "safetyCheck/submitSafetyCheck.xa",
+    downLoadImgUrl: 'safetyCheck/downCheckFile.xa',//下载图片https://weixintest.xacbank.com.cn/newwxqy
+    uploadFileUrl: base.domain + newBase.newwxqy + 'mini-function/safetyCheck/NoAuthUser/upload/File',
+    downloadSafetyCheckVideo: 'safetyCheck/downloadSafetyCheckVideo.xa',//下载视频uploadFileUrl:base.context+"generalFileUpload/safetyCheck/uploadSafetyCheckVideo.xa",
+    IsPublicHolidays: 'safetyCheck/safetyCheckWork.xa',
+}
+
+function initFun() {
+    new Vue({
+        el: "#app",
+        data: {
+            baseUrl: {
+                uploadImage: 'safetyCheck/uploadCheckImg.xa', // 上传图片
+            },
+            id: '',
+            detail: {
+
+            },
+            tab: '',
+            today: '',
+            windowInfo: { title: '门窗', sequence: 'A', status: '1', showFlag: '0', addImgList: [], mediaIds: [], replaceIndex: '', describe: '', yuNum: 0, addImgListOld: [], mediaIdsOld: [] },
+            defendInfo: { title: '自卫器具', sequence: 'B', status: '1', showFlag: '0', addImgList: [], mediaIds: [], replaceIndex: '', describe: '', yuNum: 0, addImgListOld: [], mediaIdsOld: [] },
+            railingInfo: { title: '防弹玻璃/护栏', sequence: 'C', status: '1', showFlag: '0', addImgList: [], mediaIds: [], replaceIndex: '', describe: '', yuNum: 0, addImgListOld: [], mediaIdsOld: [] },
+            powerInfo: { title: '电源', sequence: 'D', status: '1', showFlag: '0', addImgList: [], mediaIds: [], replaceIndex: '', describe: '', yuNum: 0, addImgListOld: [], mediaIdsOld: [] },
+            selfEqInfo: { title: '自助设备', sequence: 'E', status: '1', showFlag: '0', addImgList: [], mediaIds: [], replaceIndex: '', describe: '', yuNum: 0, addImgListOld: [], mediaIdsOld: [] },
+            monitorInfo: { title: '监控设备', sequence: 'F', status: '1', showFlag: '0', addImgList: [], mediaIds: [], replaceIndex: '', describe: '', yuNum: 0, addImgListOld: [], mediaIdsOld: [] },
+            fireInfo: { title: '消防设备', sequence: 'G', status: '1', showFlag: '0', addImgList: [], mediaIds: [], replaceIndex: '', describe: '', yuNum: 0, addImgListOld: [], mediaIdsOld: [] },
+            pickUpInfo: { title: '接送库', sequence: 'H', status: '1', showFlag: '0', addImgList: [], mediaIds: [], replaceIndex: '', describe: '', yuNum: 0, arrive: '1', arriveVideo: '', addImgListOld: [], mediaIdsOld: [] },
+
+            videoShow: false,
+            path: ''
+        },
+        created() {
+        },
+        mounted() {
+            var year = new Date().getFullYear();
+            var month = new Date().getMonth() + 1;
+            var date = new Date().getDate();
+            if (month < 10) {
+                month = '0' + month;
+            }
+            if (date < 10) {
+                date = '0' + date;
+            }
+            this.today = year + '/' + month + '/' + date;
+            this.checkPubHolTime();
+            var bodyHeight = $(window).height();
+            $('.container').css({ 'max-height': bodyHeight - 110 + 'px' });
+            const fileName = this.getQueryString('downloadId');
+            if (fileName == undefined) {
+                fileName = ''
+            }
+            if (fileName) {
+                this.downloadFile(fileName)
+            }
+            this.pickUpInfo.arriveVideo = fileName;
+
+        },
+        methods: {
+            /**
+             * 时间必须控制在上午06:00-12：00，下午，下午14:00-22：00时间段内
+             */
+            checkTime() {
+                let timeNow = new Date().getHours()
+                if (timeNow >= 6 && timeNow < 12) {
+                    this.tab = '0'
+                }
+                if (timeNow >= 14 && timeNow < 22) {
+                    this.tab = '1'
+                }
+
+                if (timeNow >= 6 && timeNow < 12 || timeNow >= 14 && timeNow < 22) {
+                    this.getDetail()
+                } else {
+                    $.alert("", "安全检查需在以下时间段内进行：\n上午06:00-12：00\n下午14:00-22：00时间段内", function () {
+                        wx.closeWindow();
+                        WeixinJSBridge.invoke('closeWindow', {}, function (res) {
+                        });
+                    });
+                }
+
+            },
+            /**
+            * 时间必须控制在上午06:00-12：00，下午，下午14:00-22：00时间段内
+            */
+            async checkPubHolTime() {
+                var param = {};
+                let IsPubHol = ''
+                const res = await $http(baseUrl.IsPublicHolidays, true, param, true);
+                if (res.retcode == 'success') {
+                    IsPubHol = res.data;
+                }
+                else {
+                    $.alert("", res.retmsg, function () {
+                    });
+                }
+                //是节假日
+                if (IsPubHol == "0") {
+                    let timeNow = new Date().getHours()
+                    let minutes = new Date().getMinutes()
+                    totalMinutes = timeNow * 60 + minutes;
+                    const strat = 12 * 60 + 30;
+                    const end = 22 * 60;
+                    if (totalMinutes >= strat && totalMinutes < end) {
+                        this.tab = '1'
+                        this.getDetail()
+                    } else if (timeNow >= 6 && timeNow < 12) {
+                        this.tab = '0'
+                        this.getDetail()
+                    } else {
+                        $.alert("", "安全检查需在以下时间段内进行：\n上午06:00-12:00\n下午12:30-22:00时间段内", function () {
+                            wx.closeWindow();
+                            WeixinJSBridge.invoke('closeWindow', {}, function (res) {
+                            });
+                        });
+                    }
+                } else {
+                    //不是节假日
+                    let timeNow = new Date().getHours()
+                    if (timeNow >= 6 && timeNow < 12) {
+                        this.tab = '0'
+                    }
+                    if (timeNow >= 14 && timeNow < 22) {
+                        this.tab = '1'
+                    }
+
+                    if (timeNow >= 6 && timeNow < 12 || timeNow >= 14 && timeNow < 22) {
+                        this.getDetail()
+                    } else {
+                        $.alert("", "安全检查需在以下时间段内进行：\n上午06:00-12：00\n下午14:00-22：00时间段内", function () {
+                            wx.closeWindow();
+                            WeixinJSBridge.invoke('closeWindow', {}, function (res) {
+                            });
+                        });
+                    }
+                }
+            },
+
+
+            //获取url参数
+            getQueryString(name) {
+                let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                let r = window.location.search.substr(1).match(reg);
+                if (r != null)
+                    return (r[2]);
+                return null;
+            },
+            showTap(num) {
+                this.type = num;
+                this['popupBottomShow' + num] = true;
+            },
+            closeOverlayBindtap() {
+                let num = this.type;
+                this['popupBottomShow' + num] = false;
+            },
+            onConfirm(param) {
+                let num = this.type;
+                this['popupBottomShow' + num] = false;
+                if (num == 1) {
+                    this.cardType = param.val;
+                    this.idTypeName = param.text;
+                }
+
+            },
+            changeStatus(i, type) {
+                this[type].status = i
+            },
+            isArrive(i) {
+                this.pickUpInfo.arrive = i
+            },
+            showMore(type) {
+                var that = this
+                if (that[type].showFlag == '0') {
+                    that[type].showFlag = '1';
+                    if (that[type].mediaIdsOld.length > 0) {
+                        that.downLoadImgUrl(type, that[type].mediaIdsOld)
+                    }
+                    if (type == 'pickUpInfo') {
+                        this.downloadFile(that[type].arriveVideo)
+                    }
+                } else {
+                    that[type].showFlag = '0'
+                }
+            },
+            sumTotle(type) {
+                if (this[type].describe != '' && this[type].describe != undefined) {
+                    this[type].yuNum = this[type].describe.length
+                } else {
+                    this[type].yuNum = 0
+                }
+            },
+            getRole() {
+                let that = this;
+
+                let param = {}
+                $http(baseUrl.getPower, true, params, true)
+                    .then(res => {
+                        if (res.retcode == 'success') {
+                            that.detail = res.data
+                        } else {
+                            $.alert("", res.retmsg, function () {
+
+                            });
+                        }
+                    });
+            },
+
+            // 上传图片
+            upload(num, name) {
+                debugger
+                let that = this;
+                let len = that[name].addImgList.length;
+                let len1 = that[name].addImgListOld.length;
+                let count = num - len - len1
+                wx.chooseImage({
+                    count: count,
+                    sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['camera'],
+                    success: function (res) {
+                        that.uploadImage(res.localIds, 0, name);
+                    },
+                    fail: function (res) {
+                        $.alert("", res.errMsg);
+                    }
+                });
+            },
+            uploadImage(localIds, index, name) {
+                var that = this;
+                wx.uploadImage({
+                    localId: localIds[index], // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 0, // 默认为1，显示进度提示
+                    success: function (res) {
+                        that.uploadServer(localIds, index, res.serverId, 0, name)
+                    },
+                    fail: function (res) {
+                        $.alert("", "图片上传失败，请稍后再试");
+                    }
+                });
+            },
+            uploadServer(localIds, index, serverId, flag, name) {
+                let that = this;
+                let params = {
+                    mediaId: serverId
+                }
+                $http(this.baseUrl.uploadImage, true, params, false)
+                    .then(res => {
+                        console.log(res, '上传')
+                        if (flag == 0) { //上传
+                            that[name].mediaIds.push(res.data);
+                            that.getLocalImgData(localIds, index, serverId, name)
+                        } else if (flag == 1) { //替换
+                            that[name].mediaIds[that[name].replaceIndex] = res.data;
+                            that.replaceLocalImgData(localIds, index, serverId, name);
+                        }
+
+                    });
+            },
+            getLocalImgData(localIds, index, serverId, name) {
+                var that = this;
+                wx.getLocalImgData({
+                    localId: localIds[index],
+                    success: function (res) {
+                        var localData = res.localData;
+                        if (!localData.startsWith('data:')) {
+                            localData = 'data:image/png;base64,' + localData;
+                        }
+                        that[name].addImgList.push(localData);
+                        that.$forceUpdate();
+                        if (index < localIds.length - 1) {
+                            index += 1;
+                            that.uploadImage(localIds, index, name);
+                        }
+                    }, fail: function (res) {
+                        $.alert("", "获取本地图片出错!");
+                    }
+                })
+            },
+            // 删除图片
+            deleteImg(index, name) {
+                this[name].addImgList.splice(index, 1);
+                this[name].mediaIds.splice(index, 1);
+            },
+            // 删除图片
+            deleteImg1(index, name) {
+                this[name].addImgListOld.splice(index, 1);
+                this[name].mediaIdsOld.splice(index, 1);
+            },
+            // 删除视频
+            deleteVideo() {
+                this.pickUpInfo.arriveVideo = '';
+                this.videoShow = false;
+            },
+            // 修改补录图片
+            replaceImg(num, index, name) {
+                let that = this;
+                let len = that[name].addImgList.length;
+                let len1 = that[name].addImgListOld.length;
+                let count = num - len - len1;
+                that[name].replaceIndex = index;
+                wx.chooseImage({
+                    count: count,
+                    sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    success: function (res) {
+                        that.replaceImage(res.localIds, 0, name);
+                    },
+                    fail: function (res) {
+                        $.alert("", res.errMsg);
+                    }
+                });
+            },
+            replaceImage(localIds, index, name) {
+                var that = this;
+                $.showLoading('加载中...');
+                wx.uploadImage({
+                    localId: localIds[index], // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {
+                        that.uploadServer(localIds, index, res.serverId, 1, name)
+                    },
+                    fail: function (res) {
+                        $.alert("", "图片上传失败，请稍后再试");
+                    }
+                });
+            },
+            replaceLocalImgData(localIds, index, serverId, name) {
+                var that = this;
+                wx.getLocalImgData({
+                    localId: localIds[index],
+                    success: function (res) {
+                        var localData = res.localData;
+                        if (!localData.startsWith('data:')) {
+                            localData = 'data:image/png;base64,' + localData;
+                        }
+                        that[name].addImgList.splice(that[name].replaceIndex, 1, localData);
+                        that.$forceUpdate();
+                    }, fail: function (res) {
+                        $.alert("", "获取本地图片出错!");
+                    }
+                })
+            },
+            handleUpload() {
+                this.$refs.selectFile.click();
+            },
+
+
+            //上传文件
+            uploadFile(event) {
+
+                var fileObj = event.target.files[0];
+                console.log(fileObj)
+                if (fileObj && fileObj.type.startsWith('image/')) {
+                    $.alert("", "不允许上传图片文件!");
+                    event.target.value = ''
+                    return;
+                }
+                if (fileObj.size / 1024 > 204800) {
+                    $.alert('', '视频不能超过200M', function () { })
+                } else {
+                    var token = localStorage.getItem("X-Token");
+                    var form = new FormData(); // FormData 对象
+                    form.append("file", fileObj); // 文件对象
+                    let xhr = new XMLHttpRequest()
+                    xhr.open('POST', baseUrl.uploadFileUrl)
+                    xhr.setRequestHeader('X-Token', token)
+                    xhr.send(form)
+                    $.showLoading('上传视频中...')
+                    xhr.onreadystatechange = () => {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            $.hideLoading()
+                            event.target.value = '';
+                            if ($.parseJSON(xhr.responseText).retcode == 'success') {
+                                /*$.alert("","上传成功",function () {
+                                });*/
+                                //this.path = $.parseJSON(xhr.responseText).data.path;
+                                this.pickUpInfo.arriveVideo = $.parseJSON(xhr.responseText).data;
+                                this.downloadFile(this.pickUpInfo.arriveVideo)
+                            } else {
+                                $.alert("", "视频上传失败，请重新上传");
+
+                            }
+                        }
+                    };
+                }
+            },
+            //下载视频
+            downloadFile(fileName) {
+                let that = this;
+                let params = {
+                    mediaId: fileName
+                }
+                if (fileName != '' && fileName != undefined) {
+                    $http(baseUrl.downloadSafetyCheckVideo, true, params, false)
+                        .then(res => {
+                            if (res.retcode == 'success') {
+                                that.videoShow = true;
+
+                                // that.path = 'https://weixin.xacbank.com.cn/wxqy + res.data
+                                that.path = base.domain + newBase.wxqy + 'upload/' + res.data
+
+                            } else if (res.retcode == '20') {
+                                $.alert("", res.retmsg, function () {
+                                });
+                            } else {
+                                $.alert("", "视频下载失败，请重新展开检查项目加载视频", function () {
+                                });
+                            }
+
+                        });
+                }
+
+
+                /*$.ajax({
+                    url: base.context + baseUrl.downloadSafetyCheckVideo,
+                    type: 'POST',
+                    beforeSend: function(XMLHttpRequest){
+                        if(loading){
+                            $.showLoading('视频加载中...');
+                        }
+                        XMLHttpRequest.setRequestHeader('X-Token',localStorage.getItem("X-Token") ? localStorage.getItem("X-Token") : '');
+                    },
+                    timeout:60*1000,
+                    contentType:'application/json;charset=utf-8;',
+                    data: JSON.stringify(params),
+                    success: function (res) {
+                        that.videoShow = true;
+                        that.path = 'https://weixintest.xacbank.com.cn/wxqy'+res
+                    },
+                    error: function (xhr,status,error) {
+                        if (error.status == 401) {
+                            var formUrl = window.location.href;
+                            if (formUrl.indexOf(base.domain) == -1) {
+                                alert("非法访问","");
+                                return;
+                            }
+                            var formUrls = window.location.href.split('?');
+                            var link = formUrls[0];
+                            if(formUrl.indexOf('code=') > 0 && formUrls.length >1){
+                                var arg = "";
+                                var args = formUrls[1].split("&");
+                                for(var i=0;i<args.length;i++){
+                                    if(args[i].indexOf("code=") < 0){
+                                        arg += "&"+args[i];
+                                    }
+                                }
+                                link += "?"+arg.substr(1,arg.length);
+                            }
+
+                            var url='https://open.weixin.qq.com/connect/oauth2/authorize?appid='+base.appid+'&redirect_uri='+encodeURIComponent(link)+'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect';
+                            top.location.replace(url);
+                        }
+                        $.alert("系统异常，请稍后再试","");
+                    },
+                    complete: function (xhr) {
+                        if(loading) {
+                            $.hideLoading();
+                        }
+                    }
+                });*/
+            },
+            async getDetail() {
+                var that = this;
+                var param = {};
+                param.date = that.today;
+                param.timeStatus = that.tab;
+                param.buDescr = '';
+                param.ssbm = '';
+                param.submitStatus = '0';
+
+                const res = await $http(baseUrl.getSubmitSafetyCheckInfo, true, param, true);
+                if (res.retcode === 'success') {
+                    that.id = res.data.id;
+                    if (res.data.submitStatus == '0') {
+                        if (res.data.safetyCheckListResults) {
+                            that.assembleData(res.data.safetyCheckListResults);
+                        }
+
+                    } else {
+                        $.alert('', ' 该部门已提交过', function () {
+                            wx.closeWindow();
+                            WeixinJSBridge.invoke('closeWindow', {}, function (res) {
+                            });
+                        })
+                    }
+
+                } else if (res.retcode == 'user.no.permission') {
+                    $.alert('', res.retmsg, function () {
+                        wx.closeWindow();
+                        WeixinJSBridge.invoke('closeWindow', {}, function (res) {
+                        });
+                    })
+                } else {
+                    $.alert("", res.retmsg, function () {
+
+                    });
+                }
+            },
+            assembleData(dataInfo) {
+                var that = this;
+                for (var i = 0; i < dataInfo.length; i++) {
+                    if (dataInfo[i].sequence == "A") {
+                        that.windowInfo.showFlag = '0';
+                        that.windowInfo.status = dataInfo[i].status;
+                        that.windowInfo.describe = dataInfo[i].describe;
+                        if (dataInfo[i].describe != '' && dataInfo[i].describe != undefined) {
+                            that.windowInfo.yuNum = dataInfo[i].describe.length;
+                        }
+                        that.windowInfo.mediaIdsOld = dataInfo[i].mediaIds ? dataInfo[i].mediaIds.split(',') : [];
+                        //that.downLoadImgUrl('windowInfo',dataInfo[i].mediaIds)
+                    } else if (dataInfo[i].sequence == "B") {
+                        that.defendInfo.showFlag = '0';
+                        that.defendInfo.status = dataInfo[i].status;
+                        that.defendInfo.describe = dataInfo[i].describe;
+                        if (dataInfo[i].describe != '' && dataInfo[i].describe != undefined) {
+                            that.defendInfo.yuNum = dataInfo[i].describe.length;
+                        }
+                        that.defendInfo.mediaIdsOld = dataInfo[i].mediaIds ? dataInfo[i].mediaIds.split(',') : [];
+                        //that.downLoadImgUrl('defendInfo',dataInfo[i].mediaIds)
+                    } else if (dataInfo[i].sequence == "C") {
+                        that.railingInfo.showFlag = '0';
+                        that.railingInfo.status = dataInfo[i].status;
+                        that.railingInfo.describe = dataInfo[i].describe;
+                        if (dataInfo[i].describe != '' && dataInfo[i].describe != undefined) {
+                            that.railingInfo.yuNum = dataInfo[i].describe.length;
+                        }
+                        that.railingInfo.mediaIdsOld = dataInfo[i].mediaIds ? dataInfo[i].mediaIds.split(',') : [];
+                        //that.downLoadImgUrl('railingInfo',dataInfo[i].mediaIds)
+                    } else if (dataInfo[i].sequence == "D") {
+                        that.powerInfo.showFlag = '0';
+                        that.powerInfo.status = dataInfo[i].status;
+                        that.powerInfo.describe = dataInfo[i].describe;
+                        if (dataInfo[i].describe != '' && dataInfo[i].describe != undefined) {
+                            that.powerInfo.yuNum = dataInfo[i].describe.length;
+                        }
+                        that.powerInfo.mediaIdsOld = dataInfo[i].mediaIds ? dataInfo[i].mediaIds.split(',') : [];
+                        //that.downLoadImgUrl('powerInfo',dataInfo[i].mediaIds)
+                    } else if (dataInfo[i].sequence == "E") {
+                        that.selfEqInfo.showFlag = '0';
+                        that.selfEqInfo.status = dataInfo[i].status;
+                        that.selfEqInfo.describe = dataInfo[i].describe;
+                        if (dataInfo[i].describe != '' && dataInfo[i].describe != undefined) {
+                            that.selfEqInfo.yuNum = dataInfo[i].describe.length;
+                        }
+                        that.selfEqInfo.mediaIdsOld = dataInfo[i].mediaIds ? dataInfo[i].mediaIds.split(',') : [];
+                        //that.downLoadImgUrl('selfEqInfo',dataInfo[i].mediaIds)
+                    } else if (dataInfo[i].sequence == "F") {
+                        that.monitorInfo.showFlag = '0';
+                        that.monitorInfo.status = dataInfo[i].status;
+                        that.monitorInfo.describe = dataInfo[i].describe;
+                        if (dataInfo[i].describe != '' && dataInfo[i].describe != undefined) {
+                            that.monitorInfo.yuNum = dataInfo[i].describe.length;
+                        }
+                        that.monitorInfo.mediaIdsOld = dataInfo[i].mediaIds ? dataInfo[i].mediaIds.split(',') : [];
+                        //that.downLoadImgUrl('monitorInfo',dataInfo[i].mediaIds)
+                    } else if (dataInfo[i].sequence == "G") {
+                        that.fireInfo.showFlag = '0';
+                        that.fireInfo.status = dataInfo[i].status;
+                        that.fireInfo.describe = dataInfo[i].describe;
+                        if (dataInfo[i].describe != '' && dataInfo[i].describe != undefined) {
+                            that.fireInfo.yuNum = dataInfo[i].describe.length;
+                        }
+                        that.fireInfo.mediaIdsOld = dataInfo[i].mediaIds ? dataInfo[i].mediaIds.split(',') : [];
+                        //that.downLoadImgUrl('fireInfo',dataInfo[i].mediaIds)
+                    } else if (dataInfo[i].sequence == "H") {
+                        that.pickUpInfo.showFlag = '0';
+                        that.pickUpInfo.status = dataInfo[i].status;
+                        that.pickUpInfo.arrive = dataInfo[i].arrive;
+                        that.pickUpInfo.describe = dataInfo[i].describe;
+                        if (dataInfo[i].describe != '' && dataInfo[i].describe != undefined) {
+                            that.pickUpInfo.yuNum = dataInfo[i].describe.length;
+                        }
+                        that.pickUpInfo.mediaIdsOld = dataInfo[i].mediaIds ? dataInfo[i].mediaIds.split(',') : [];
+
+                        that.pickUpInfo.arriveVideo = dataInfo[i].arriveVideo ? dataInfo[i].arriveVideo : that.pickUpInfo.arriveVideo;
+                        //that.downLoadImgUrl('pickUpInfo',dataInfo[i].mediaIds)
+                    }
+                }
+            },
+            downLoadImgUrl(name, imgArr) {
+                var that = this;
+                that[name].addImgListOld = [];
+                if (imgArr && imgArr.length > 0) {
+                    for (var i = 0; i < imgArr.length; i++) {
+                        var params = {};
+                        params.mediaId = imgArr[i];
+                        $http(baseUrl.downLoadImgUrl, false, params, true)
+                            .then(res => {
+                                if (res.retcode == 'success') {
+                                    that[name].addImgListOld.push('data:image/jpg;base64,' + res.data);
+                                    //that.$forceUpdate();
+                                } else {
+                                    $.alert("", "图片下载失败，请重新展开检查项目加载图片", function () {
+
+                                    });
+                                }
+                            });
+
+                    }
+                }
+
+            },
+            /**
+             * 提交审批
+             */
+            submitBindtap(type, kind) {
+                var that = this;
+                //接送库为到达时,接口上送删除接送库视频
+                if (that.pickUpInfo.arrive == '1') {
+                    that.pickUpInfo.arriveVideo = '';
+                }
+                let params = {};
+
+                var windowInfoImg = that.windowInfo.mediaIds.concat(that.windowInfo.mediaIdsOld);
+                var defendInfoImg = that.defendInfo.mediaIds.concat(that.defendInfo.mediaIdsOld);
+                var railingInfoImg = that.railingInfo.mediaIds.concat(that.railingInfo.mediaIdsOld);
+                var powerInfoImg = that.powerInfo.mediaIds.concat(that.powerInfo.mediaIdsOld);
+                var selfEqInfoImg = that.selfEqInfo.mediaIds.concat(that.selfEqInfo.mediaIdsOld);
+                var monitorInfoImg = that.monitorInfo.mediaIds.concat(that.monitorInfo.mediaIdsOld);
+                var fireInfoImg = that.fireInfo.mediaIds.concat(that.fireInfo.mediaIdsOld);
+                var pickUpInfoImg = that.pickUpInfo.mediaIds.concat(that.pickUpInfo.mediaIdsOld);
+                //校验门窗
+                if (type == 0) {
+
+                } else {
+                    var timeNow = new Date().getHours()
+                    if (timeNow >= 6 && timeNow < 12 || timeNow >= 14 && timeNow < 22) {
+                    } else {
+                        $.alert("", "安全检查需在以下时间段内进行：\n上午06:00-12：00\n下午14:00-22：00时间段内");
+                        return;
+                    }
+
+                    if (that.windowInfo.status == '') {
+                        $.alert("", '请选择门窗检查结果');
+                        return;
+                    }
+                    if (that.windowInfo.status == '0') {
+                        if (that.windowInfo.describe.length == 0) {
+                            $.alert("", '请填写门窗问题描述');
+                            return;
+                        }
+                    }
+                    if (windowInfoImg.length == 0) {
+                        $.alert("", '请至少上传1张门窗影像资料');
+                        return;
+                    }
+
+                    //校验自卫器具
+                    if (that.defendInfo.status == '') {
+                        $.alert("", '请选择自卫器具检查结果');
+                        return;
+                    }
+                    if (that.defendInfo.status == '0') {
+                        if (that.defendInfo.describe.length == 0) {
+                            $.alert("", '请填写自卫器具问题描述');
+                            return;
+                        }
+                    }
+                    if (defendInfoImg.length < 2) {
+                        $.alert("", '请至少上传2张自卫器具影像资料');
+                        return;
+                    }
+
+                    //校验防弹玻璃/护栏
+                    if (that.railingInfo.status == '') {
+                        $.alert("", '请选择防弹玻璃/护栏检查结果');
+                        return;
+                    }
+                    if (that.railingInfo.status == '0') {
+                        if (that.railingInfo.describe.length == 0) {
+                            $.alert("", '请填写防弹玻璃/护栏问题描述');
+                            return;
+                        }
+                    }
+                    if (railingInfoImg.length == 0) {
+                        $.alert("", '请至少上传1张防弹玻璃/护栏影像资料');
+                        return;
+                    }
+
+                    //校验电源
+                    if (that.powerInfo.status == '') {
+                        $.alert("", '请选择电源检查结果');
+                        return;
+                    }
+                    if (that.powerInfo.status == '0') {
+                        if (that.powerInfo.describe.length == 0) {
+                            $.alert("", '请填写电源问题描述');
+                            return;
+                        }
+                    }
+                    if (powerInfoImg.length == 0) {
+                        $.alert("", '请至少上传1张电源影像资料');
+                        return;
+                    }
+
+                    //校验自助设备
+                    if (that.selfEqInfo.status == '') {
+                        $.alert("", '请选择自助设备检查结果');
+                        return;
+                    }
+                    if (that.selfEqInfo.status == '0') {
+                        if (that.selfEqInfo.describe.length == 0) {
+                            $.alert("", '请填写自助设备问题描述');
+                            return;
+                        }
+                    }
+                    if (selfEqInfoImg.length < 1) {
+                        $.alert("", '请至少上传1张自助设备影像资料');
+                        return;
+                    }
+
+                    //校验监控设备
+                    if (that.monitorInfo.status == '') {
+                        $.alert("", '请选择监控设备检查结果');
+                        return;
+                    }
+                    if (that.monitorInfo.status == '0') {
+                        if (that.monitorInfo.describe.length == 0) {
+                            $.alert("", '请填写监控设备问题描述');
+                            return;
+                        }
+                    }
+                    if (monitorInfoImg.length < 2) {
+                        $.alert("", '请上传2张监控设备影像资料');
+                        return;
+                    }
+
+                    //校验消防设备
+                    if (that.fireInfo.status == '') {
+                        $.alert("", '请选择消防设备检查结果');
+                        return;
+                    }
+                    if (that.fireInfo.status == '0') {
+                        if (that.fireInfo.describe.length == 0) {
+                            $.alert("", '请填写消防设备问题描述');
+                            return;
+                        }
+                    }
+                    if (fireInfoImg.length < 1) {
+                        $.alert("", '请至少上传1张消防设备影像资料');
+                        return;
+                    }
+                    //校验接送库
+                    if (that.pickUpInfo.status == '') {
+                        $.alert("", '请选择接送库检查结果');
+                        return;
+                    }
+                    if (that.pickUpInfo.status == '0') {
+                        if (that.pickUpInfo.describe.length == 0) {
+                            $.alert("", '请填写接送库问题描述');
+                            return;
+                        }
+                    }
+                    /*if(that.pickUpInfo.arrive=='1'){
+                        if(pickUpInfoImg.length<2){
+                            $.alert("", '请上传前后车牌影像资料');
+                            return;
+                        }
+                    }*/
+                    if (that.pickUpInfo.arrive == '0') {
+                        if (that.pickUpInfo.arriveVideo == '' || that.pickUpInfo.arriveVideo == undefined) {
+                            $.alert("", '请上传接送库视频');
+                            return;
+                        }
+                    }
+
+                }
+                var windowInfoSub = Object.assign({}, that.windowInfo);
+                var defendInfoSub = Object.assign({}, that.defendInfo);
+                var railingInfoSub = Object.assign({}, that.railingInfo);
+                var powerInfoSub = Object.assign({}, that.powerInfo);
+                var selfEqInfoSub = Object.assign({}, that.selfEqInfo);
+                var monitorInfoSub = Object.assign({}, that.monitorInfo);
+                var fireInfoSub = Object.assign({}, that.fireInfo);
+                var pickUpInfoSub = Object.assign({}, that.pickUpInfo);
+
+                if (windowInfoSub.status == '1') {
+                    windowInfoSub.describe = ''
+                }
+                if (defendInfoSub.status == '1') {
+                    defendInfoSub.describe = ''
+                }
+                if (railingInfoSub.status == '1') {
+                    railingInfoSub.describe = ''
+                }
+                if (powerInfoSub.status == '1') {
+                    powerInfoSub.describe = ''
+                }
+                if (selfEqInfoSub.status == '1') {
+                    selfEqInfoSub.describe = ''
+                }
+                if (monitorInfoSub.status == '1') {
+                    monitorInfoSub.describe = ''
+                }
+                if (fireInfoSub.status == '1') {
+                    fireInfoSub.describe = ''
+                }
+                if (pickUpInfoSub.status == '1') {
+                    pickUpInfoSub.describe = ''
+                }
+
+
+                windowInfoSub.mediaIds = windowInfoImg ? windowInfoImg.join(',') : '';
+                defendInfoSub.mediaIds = defendInfoImg ? defendInfoImg.join(',') : '';
+                railingInfoSub.mediaIds = railingInfoImg ? railingInfoImg.join(',') : '';
+                powerInfoSub.mediaIds = powerInfoImg ? powerInfoImg.join(',') : '';
+                selfEqInfoSub.mediaIds = selfEqInfoImg ? selfEqInfoImg.join(',') : '';
+                monitorInfoSub.mediaIds = monitorInfoImg ? monitorInfoImg.join(',') : '';
+                fireInfoSub.mediaIds = fireInfoImg ? fireInfoImg.join(',') : '';
+                if (pickUpInfoSub.arrive == '0') {
+                    pickUpInfoSub.mediaIds = ''
+                    //pickUpInfoSub.mediaIds = pickUpInfoImg ? pickUpInfoImg.join(',') : '';
+                } else {
+                    pickUpInfoSub.mediaIds = ''
+                }
+
+
+                delete windowInfoSub.addImgList; delete windowInfoSub.addImgListOld; delete windowInfoSub.mediaIdsOld;
+                delete defendInfoSub.addImgList; delete defendInfoSub.addImgListOld; delete defendInfoSub.mediaIdsOld;
+                delete railingInfoSub.addImgList; delete railingInfoSub.addImgListOld; delete railingInfoSub.mediaIdsOld;
+                delete powerInfoSub.addImgList; delete powerInfoSub.addImgListOld; delete powerInfoSub.mediaIdsOld;
+                delete selfEqInfoSub.addImgList; delete selfEqInfoSub.addImgListOld; delete selfEqInfoSub.mediaIdsOld;
+                delete monitorInfoSub.addImgList; delete monitorInfoSub.addImgListOld; delete monitorInfoSub.mediaIdsOld;
+                delete fireInfoSub.addImgList; delete fireInfoSub.addImgListOld; delete fireInfoSub.mediaIdsOld;
+                delete pickUpInfoSub.addImgList; delete pickUpInfoSub.addImgListOld; delete pickUpInfoSub.mediaIdsOld;
+                var safetyCheckListResults = [];
+
+                safetyCheckListResults.push(windowInfoSub); safetyCheckListResults.push(defendInfoSub); safetyCheckListResults.push(railingInfoSub);
+                safetyCheckListResults.push(powerInfoSub); safetyCheckListResults.push(selfEqInfoSub); safetyCheckListResults.push(monitorInfoSub);
+                safetyCheckListResults.push(fireInfoSub); safetyCheckListResults.push(pickUpInfoSub);
+                params.safetyCheckListResults = safetyCheckListResults;
+                params.status = type;
+                params.id = that.id;
+
+                var tips = '';
+                if (type == '0') {
+                    tips = '请确认是否保存'
+                } else {
+                    tips = '请确认是否提交'
+                }
+                if (kind == 'href') {
+                    $http(baseUrl.submitSafetyCheck, true, params, true)
+                        .then(res => {
+                            if (res.retcode == 'success') {
+                                window.location.href = '1002.html?v=20251029';
+                            } else {
+                                $.alert("", res.retmsg, function () {
+
+                                });
+                            }
+                        });
+                } else {
+                    vant.Dialog.confirm({
+                        title: tips,
+                        message: ""
+                    }).then(() => {
+                        $http(baseUrl.submitSafetyCheck, true, params, true)
+                            .then(res => {
+                                if (res.retcode == 'success') {
+                                    if (type == '0') {
+                                        $.alert("", "保存成功", function () {
+                                            window.location.reload()
+                                        });
+                                    } else {
+                                        $.alert("", "提交成功", function () {
+                                            window.location.href = 'statement.html';
+                                        });
+                                    }
+
+                                } else {
+                                    $.alert("", res.retmsg, function () {
+
+                                    });
+                                }
+                            });
+                    }).catch(() => {
+
+                    })
+                }
+
+
+
+            },
+            // 敏感信息脱敏
+            desensitizeIdNo(str, start, end) {
+                if (!str && (start + end) >= str.length) {
+                    return '';
+                }
+                let text1 = str.substring(0, start);
+                let text3 = str.substring(end, str.length);
+                let text2 = '';
+                for (let i = 0; i < end - start; i++) {
+                    text2 += "*";
+                };
+                return text1 + text2 + text3;
+            },
+
+            //查看图片
+            bigImg(i) {
+                var imageUrls = new Array();
+                imageUrls.push(this.imgList[i].src);
+                vant.ImagePreview(imageUrls);
+            },
+            //播放视频
+            videoPlay() {
+                $('#pickUpInfoVideo').play();
+            },
+            hrefPage() {
+                //调用临时保存接口
+                this.submitBindtap('0', 'href')
+            },
+        }
+    })
+}
+
+
+

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="css/assignList.css">
+    <link rel="stylesheet" href="css/common.css">
+    <title>贷款客户申请</title>
+</head>
+
+<body>
+    <div class="container" v-cloak>
+        <!-- 搜索区域 -->
+        <div class="search-wrapper">
+            <div class="search-box">
+                <van-icon name="search"></van-icon>
+                <input type="text" v-model="searchText" placeholder="请输入企业/个体户/自然人名称搜索">
+                <button class="search-btn" @click="handleSearch">搜索</button>
+            </div>
+        </div>
+
+        <!-- Tab 切换 -->
+        <div class="tab-wrapper">
+            <div class="tabs">
+                <div class="tab-item" :class="{ active: activeTab === 'pending' }" @click="switchTab('pending')">
+                    待分配
+                </div>
+                <div class="tab-item" :class="{ active: activeTab === 'assigned' }" @click="switchTab('assigned')">
+                    已分配
+                </div>
+            </div>
+        </div>
+
+        <!-- 列表区域 -->
+        <div class="list-wrapper">
+            <van-list v-model="loading" :finished="finished" @load="onLoad" :immediate-check="false">
+                <!-- 已分配列表 -->
+                <template>
+                    <div class="customer-card" v-for="item in dataList" :key="item.id" v-if="dataList.length > 0">
+                        <div class="card-header" @click="goDetail(item)">
+                            <span class="name">{{ item.companyName }}</span>
+                            <span v-if="activeTab === 'assigned' " class="status"
+                                :class="getStatusClass(item.datastage)">{{ item.statusText}}</span>
+                            <van-icon name="arrow" class="arrow"></van-icon>
+                        </div> 
+                        <div class="card-body"　@click="goDetail(item)">
+                            <div class="info-row">
+                                <span class="label">客户类型：</span>
+                                <span class="value">{{ item.custtype }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">资金需求：</span>
+                                <span class="value">{{ item.fundingrequ }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">资金用途：</span>
+                                <span class="value">{{item.purpose}}</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="phone-info">
+                                <span class="label">申请时间：</span>
+                                <span class="value">{{ item.createtime }}</span>
+                            </div>
+                            <!-- <div class="assign" @click="goDetail(item)" v-if="item.datastage == '-1'">
+                                分配
+                            </div> -->
+                        </div>
+                    </div>
+                </template>
+
+                <!-- 空状态 -->
+                <div class="empty-wrapper"
+                    v-if="(activeTab === 'assigned' && dataList.length === 0)   ||  (activeTab === 'pending' && dataList.length === 0)">
+                    <div class="empty-icon">
+                        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                            <!-- 文档主体 -->
+                            <path d="M30 15 L75 15 L90 30 L90 105 L30 105 Z" fill="#E8F4FC" stroke="#A8D4F0"
+                                stroke-width="2" />
+                            <!-- 折角 -->
+                            <path d="M75 15 L75 30 L90 30" fill="#D4E9F7" stroke="#A8D4F0" stroke-width="2" />
+                            <!-- 横线 -->
+                            <line x1="45" y1="50" x2="75" y2="50" stroke="#A8D4F0" stroke-width="3"
+                                stroke-linecap="round" />
+                            <line x1="45" y1="65" x2="75" y2="65" stroke="#A8D4F0" stroke-width="3"
+                                stroke-linecap="round" />
+                            <line x1="45" y1="80" x2="65" y2="80" stroke="#A8D4F0" stroke-width="3"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="empty-text">暂无数据</div>
+                </div>
+            </van-list>
+        </div>
+
+        <!-- 底部按钮 -->
+        <div class="bottom-btn-wrapper">
+            <button class="bottom-btn" @click="goManagerStatus">
+                <img src="./images/manager.png" alt="" class="managerIcon">
+                客户经理对接情况
+            </button>
+        </div>
+
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/axios.min.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js"></script>
+<script src="./../common/js/server.js"></script>
+<script src="js/assignList.js"></script>
+<script src="js/DICT.js"></script>
+<script src="../common/js/axiosRequest.js"></script>
+
+<script src="../common/js/vConsole.min.js"></script>
+
+<script>
+    //  var vConsole = new VConsole();
+    initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+    wx.ready(function () {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

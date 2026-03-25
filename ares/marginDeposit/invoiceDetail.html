@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>在线承兑开票审批</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/invoiceDetail.css?v=0.0.8">
+</head>
+<body>
+
+    <div id="app" v-cloak>
+
+        <!-- 审批信息 -->
+        <template v-if="isApproved">
+            <div class="baseInfo">
+                <div class="title">审批信息</div>
+                <div class="content">
+                    <div class="infoRow" v-if="approvalInfo.AUTH_FLAG == 0 || approvalInfo.AUTH_FLAG == 1">
+                        <span>审批结果</span><span :class="approvalInfo.AUTH_FLAG == 0?'status1':'status2'">{{approvalInfo.AUTH_FLAG==0?'审批通过':'审批拒绝'}}</span>
+                    </div>
+                    <div class="infoRow" v-if="approvalInfo.AUTH_FLAG == 1 && approvalInfo.REJECT_REASON && approvalInfo.REJECT_REASON != '' ">
+                        <span>拒绝理由</span><span>{{approvalInfo.REJECT_REASON}}</span>
+                    </div>
+                    <div class="infoRow">
+                        <span>审批时间</span><span>{{approvalInfo.UPDATETIME}}</span>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- 基础信息 -->
+        <div class="baseInfo">
+            <div class="title">企业信息</div>
+            <div class="content">
+                <div class="infoRow">
+                    <span>企业名称</span><span>{{infos.DRWR_NAME}}</span>
+                </div>
+                <div class="infoRow">
+                    <!-- <span>业务类型</span><span>{{infos.BUSS_TYPE==0?'单笔':infos.BUSS_TYPE==1?'批量':'--'}}</span> -->
+                    <span>业务类型</span><span>在线承兑开票</span>
+                </div>
+                <div class="infoRow">
+                    <span>提交时间</span><span>{{infos.SUBMIT_TIME}}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 票据信息 -->
+        <div class="baseInfo">
+            <div class="title">票据信息</div>
+            <div class="content">
+                <div class="infoRow">
+                    <span>出票⼈名称</span><span>{{infos.DRWR_NAME}}</span>
+                </div>
+                <div class="infoRow">
+                    <span>出票⼈账号</span><span>{{infos.DRWR_ACCT}}</span>
+                </div>
+                <div class="infoRow">
+                    <span>票据总⾦额</span><span>{{numFormat(infos.BILL_TOT_AMT)}}</span><em>元</em>
+                </div>
+                <div class="infoRow" v-if="infos.BILL_TOT_NUM && infos.BILL_TOT_NUM != '' && infos.BILL_TOT_NUM > 0">
+                    <span>票据总笔数</span>
+                    <div class="allNumber" @click="toBillDetail">
+                        <p>{{infos.BILL_TOT_NUM}}</p>
+                        <p>查看详情</p>
+                    </div>
+                    <i @click="toBillDetail"><img src="./image/jinru.png" alt=""></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 利率信息 -->
+        <template v-if="!isApproved">
+            <div class="baseInfo">
+                <div class="title">利率信息（⽹银保证⾦开户使⽤）</div>
+                <div class="content">
+                    <div class="infoRow">
+                        <span>利率</span>
+                        <input type="text" placeholder="请输⼊（通过时必输）" v-model="approveInfo.OPEN_ACCT_RATE" @input="openAcctRateLength"  @blur="scrollBank">
+                        <em>%</em>
+                    </div>
+                    <div class="infoRow" @click="choosePickerType">
+                        <span>计息⽅式</span>
+                        <input type="text" placeholder="请选择（通过时必输）" readonly v-model="approveInfo.PAY_TYPE">
+                        <i><img src="./image/jinru.png" alt=""></i>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template v-if="isApproved && approvalInfo.AUTH_FLAG == 0">
+            <div class="baseInfo">
+                <div class="title">利率信息（⽹银保证⾦开户使⽤）</div>
+                <div class="content">
+                    <div class="infoRow">
+                        <span>利率</span><span>{{infos.OPEN_ACCT_RATE}}</span><em>%</em>
+                    </div>
+                    <div class="infoRow">
+                        <span>计息⽅式</span><span>{{infos.PAY_TYPE==2?'按季计息':infos.PAY_TYPE==5?'销户结息':'--'}}</span>
+                    </div>
+                </div>
+            </div>
+        </template>
+        
+
+        <!-- 承兑⼈信息 -->
+        <template v-if="!isApproved">
+            <div class="baseInfo">
+                <div class="title">承兑⼈信息（合同签署使⽤）</div>
+                <div class="content">
+                    <div class="infoRow">
+                        <span>承兑⼈名称</span>
+                        <!-- <input type="text" placeholder="请输⼊（通过时必输）" v-model="approveInfo.ACCP_NAME"> -->
+                        <div class="likeInput" 
+                            ref="ACCP_NAME"
+                            contenteditable="true" 
+                            placeholder="通过时必输，例：科技路直属⽀⾏"
+                            @input="handleAccpNameInput"
+                            @blur="scrollBank"
+                        ></div>
+                    </div>
+                    <div class="infoRow">
+                        <span>法定代表⼈</span><input type="text" placeholder="请输⼊（通过时必输）" maxlength="25" v-model.trim="approveInfo.ACCP_LEGAL_NAME"  @blur="scrollBank">
+                    </div>
+                    <div class="infoRow">
+                        <span>通讯地址</span>
+                        <!-- <input type="text" placeholder="请输⼊（通过时必输）" v-model="approveInfo.ACCP_ADDR"> -->
+                        <div class="likeInput" 
+                            ref="ACCP_ADDR"
+                            contenteditable="true" 
+                            placeholder="请输⼊（通过时必输）"
+                            @input="handleAccpAddrInput"
+                            @blur="scrollBank"
+                        ></div>
+                    </div>
+                    <div class="infoRow">
+                        <span>联系电话</span><input type="text" placeholder="请输⼊（通过时必输）"  v-model.trim="approveInfo.ACCP_MOBILE"  @input="mobileTest(1)"  @blur="scrollBank">
+                    </div>
+                    <div class="infoRow">
+                        <span>邮编</span>
+                        <input type="number" placeholder="请输⼊（非必输）" maxlength="6" v-model.trim="approveInfo.ACCP_ZIP_CODE" @input="accpZipCodeTest(1)"  @blur="scrollBank">
+                    </div>
+                    <div class="infoRow">
+                        <span>传真</span>
+                        <input type="text" placeholder="请输⼊（非必输）"  v-model.trim="approveInfo.ACCP_FAX" @input="accpFaxTest(1)"  @blur="scrollBank">
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template  v-if="isApproved && approvalInfo.AUTH_FLAG == 0">
+            <div class="baseInfo">
+                <div class="title">承兑⼈信息（合同签署使⽤）</div>
+                <div class="content">
+                    <div class="infoRow">
+                        <span>承兑⼈名称</span><span>{{infos.ACCP_NAME}}</span>
+                    </div>
+                    <div class="infoRow">
+                        <span>法定代表⼈</span><span>{{infos.ACCP_LEGAL_NAME}}</span>
+                    </div>
+                    <div class="infoRow">
+                        <span>通讯地址</span><span>{{infos.ACCP_ADDR}}</span>
+                    </div>
+                    <div class="infoRow">
+                        <span>联系电话</span><span>{{infos.ACCP_MOBILE}}</span>
+                    </div>
+                    <div class="infoRow" v-if="infos.ACCP_ZIP_CODE && infos.ACCP_ZIP_CODE != ''">
+                        <span>邮编</span><span>{{infos.ACCP_ZIP_CODE}}</span>
+                    </div>
+                    <div class="infoRow" v-if="infos.ACCP_FAX && infos.ACCP_FAX != ''">
+                        <span>传真</span><span>{{infos.ACCP_FAX}}</span>
+                    </div>
+                </div>
+            </div>
+        </template>
+        
+
+        <!-- 承兑申请⼈信息 -->
+        <template v-if="!isApproved">
+            <div class="baseInfo">
+                <div class="title">承兑申请⼈信息（合同签署使⽤）</div>
+                <div class="content">
+                    <div class="infoRow">
+                        <span style="width: 120px;">承兑申请⼈名称</span>
+                        <!-- <input type="text" placeholder="请输⼊（通过时必输）" v-model="approveInfo.REQ_NAME"> -->
+                        <span>{{infos.DRWR_NAME}}</span>
+                    </div>
+                    <div class="infoRow">
+                        <span>法定代表⼈</span><input type="text" placeholder="请输⼊（通过时必输）" maxlength="25" v-model.trim="approveInfo.REQ_LEGAL_NAME"  @blur="scrollBank">
+                    </div>
+                    <div class="infoRow">
+                        <span>通讯地址</span>
+                        <!-- <input type="text" placeholder="请输⼊（通过时必输）" v-model="approveInfo.REQ_ADDR"> -->
+                        <div class="likeInput" 
+                            ref="REQ_ADDR"
+                            contenteditable="true" 
+                            placeholder="请输⼊（通过时必输）"
+                            @input="handleReqAddrInput"
+                            @blur="scrollBank"
+                        ></div>
+                    </div>
+                    <div class="infoRow">
+                        <span>联系电话</span><input type="text" placeholder="请输⼊（通过时必输）"  v-model.trim="approveInfo.REQ_MOBILE"  @input="mobileTest(2)"  @blur="scrollBank">
+                    </div>
+                    <div class="infoRow">
+                        <span>邮编</span>
+                        <input type="number" placeholder="请输⼊（非必输）" maxlength="6" v-model.trim="approveInfo.REQ_ZIP_CODE"  @input="accpZipCodeTest(2)"  @blur="scrollBank">
+                    </div>
+                    <div class="infoRow">
+                        <span>传真</span><input type="text"  placeholder="请输⼊（非必输）" v-model.trim="approveInfo.REQ_FAX" @input="accpFaxTest(2)"  @blur="scrollBank">
+                    </div>
+                </div>
+            </div>
+        </template>
+        <template v-if="isApproved && approvalInfo.AUTH_FLAG == 0"> 
+            <div class="baseInfo">
+                <div class="title">承兑申请⼈信息（合同签署使⽤）</div>
+                <div class="content">
+                    <div class="infoRow">
+                        <span>承兑申请⼈名称</span><span>{{infos.REQ_NAME}}</span>
+                    </div>
+                    <div class="infoRow">
+                        <span>法定代表⼈</span><span>{{infos.REQ_LEGAL_NAME}}</span>
+                    </div>
+                    <div class="infoRow">
+                        <span>通讯地址</span><span>{{infos.REQ_ADDR}}</span>
+                    </div>
+                    <div class="infoRow">
+                        <span>联系电话</span><span>{{infos.REQ_MOBILE}}</span>
+                    </div>
+                    <div class="infoRow" v-if="infos.REQ_ZIP_CODE && infos.REQ_ZIP_CODE != ''">
+                        <span>邮编</span><span>{{infos.REQ_ZIP_CODE}}</span>
+                    </div>
+                    <div class="infoRow" v-if="infos.REQ_FAX && infos.REQ_FAX != ''">
+                        <span>传真</span><span>{{infos.REQ_FAX}}</span>
+                    </div>
+                </div>
+            </div>
+        </template>
+        
+
+        <!-- 按钮 -->
+        <template v-if="!isApproved">
+            <div class="btn" v-if="!isClicked">
+                <span class="smallBtn" @click="toRefuse">拒绝</span>
+                <span class="smallBtn" @click="toApproval(0)">同意</span>
+            </div>
+            <div class="btn" v-else>
+                <span class="smallBtn" style="opacity: .5;">拒绝</span>
+                <span class="smallBtn" style="opacity: .5;">同意</span>
+            </div>
+        </template>
+        <template v-else>
+            <div class="btn">
+                <span class="bigBtn" @click="back">返回</span>
+            </div>
+        </template>
+
+
+        <!-- 拒绝弹框 -->
+        <van-popup v-model="refusePopup">
+            <div class="refuseModel">
+                <div class="title">审批拒绝</div>
+                <div class="refuseCt">
+                    <div class="refuseTip"><em>*</em>请输⼊您要拒绝的原因！（必填）</div>
+                    <textarea cols="30" rows="4" placeholder="请输⼊拒绝原因" v-model.trim="reason" maxlength="30"  @blur="scrollBank"></textarea>
+                    <div class="refuseBtn">
+                        <span @click="refusePopup=false">取消</span>
+                        <span @click="toApproval(1)">确定</span>
+                    </div>
+                </div>
+            </div>
+        </van-popup>
+
+        <!-- 下拉选择 -->
+        <van-popup v-model="showPickerType" position="bottom">
+
+            <div class="chooseStatusModel">
+                <div class="titles">
+                    <span>请选择计息⽅式</span>
+                    <i @click="showPickerType=false"><van-icon name="cross"/></i>
+                </div>
+                <div class="cts">
+                    <template v-for="(it,i) in chooseTypeList">
+                        <div class="itemCt" @click="selectStatus(i)">
+                            <span>{{it.name}}</span>
+                            <template v-if="it.isChoose">
+                                <i><img src="./image/selected.png" alt=""></i>
+                            </template>
+                            <template v-else>
+                                <i></i>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </van-popup>
+
+    </div>
+
+</body>
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/jwxwork.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js?v=1.2"></script>
+<script type="text/javascript" src="../common/js/vConsole.min.js"></script>
+<script type="text/javascript" src="../common/js/newServer.js"></script>
+<script type="text/javascript" src="./js/invoiceDetail.js?v=202508140480525881232299822"></script>
+<script>
+
+    // var vConsole = new VConsole();
+
+    //ios页面回退不刷新
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem','invoke']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+
+    function getUserFinish() {
+        action();
+    }
+
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

@@ -1,0 +1,701 @@
+var vm;
+
+function initFun () {
+    vm = new Vue({
+        el: '.container',
+        data: {
+            baseUrl: {
+                getUserTypeUrl: 'qywx/newMeet/getUserType.xa', // 查询当前登录人
+                queryLocationUrl: 'qywx/newMeet/queryLocation.xa', // 查询会议位置
+                queryFloorUrl: 'qywx/newMeet/queryFloor.xa', // 查询楼层
+                queryMeetRootListUrl: 'qywx/newMeet/queryMeetRootList.xa', // 查询会议室
+                getPhotoDataUrl: 'qywx/newMeet/getPhotoData.xa',
+                queryUserUrl: 'qywx/newMeet/queryUser.xa', // 管理人员查询会议参与人
+                queryFwPersonUrl: 'qywx/newMeet/queryFwPerson.xa', // 查询服务人员
+                addMeetUrl: 'qywx/newMeet/addMeet.xa', // 新增会议
+                checkTimeUrl: 'qywx/newMeet/checkTime.xa', // 会议时间校验
+            },
+            userType: '',
+            formData: {
+                location: '',
+                theme: '',
+                floor: '',
+                meetingRoomId: '',
+                roomName: '',
+                place: '',
+                currentDate: '',
+                startTime: '',
+                endTime: '',
+                noticeTimeType: '',
+                sustainType: '',
+                meetingType: '',
+                needEquipment: [],
+                attendLoginName: '',
+                attendWorkCode: '',
+                attendLoginId: '',
+                isServiceStaff: '',
+                serviceLoginIds: '',
+                serviceLoginId: '',
+            },
+            needEquipmentList: [],
+            isMeetingRoom: false,
+            finished: false,
+            loading: false,
+            pageIndex: 1,
+            pageSize: 10,
+            meetingToidStr: [],
+            meetingTonameStr: [],
+            meetingRoomList: [
+            ],
+            popupCurrentDate: {
+                show: false,
+                title: '请选择',
+                currentDate: new Date(),
+                minDate: new Date(),
+
+            },
+            popupLocation: {
+                show: false,
+                title: '请选择',
+                list: [
+                    // {
+                    //     text: '未来国际',
+                    //     value: '1'
+                    // }
+                ]
+            },
+            popupFloor: {
+                show: false,
+                title: '请选择',
+                list: [
+                ]
+            },
+            popupStartTime: {
+                show: false,
+                title: '请选择',
+                currentDate: '',
+            },
+
+            popupEndTime: {
+                show: false,
+                title: '请选择',
+                minTime: '',
+                currentDate: '',
+                minMinute: ''
+            },
+
+            popupNoticeTimeType: {
+                show: false,
+                title: '请选择',
+                list: [
+                    {
+                        text: '提前10分钟',
+                        value: '1'
+                    },
+                    {
+                        text: '提前30分钟',
+                        value: '2'
+                    },
+                    {
+                        text: '提前1小时',
+                        value: '3'
+                    },
+                    {
+                        text: '提前2小时',
+                        value: '4'
+                    }
+                ]
+            },
+            popupServiceLogin: {
+                show: false,
+                list: [
+                    
+                ]
+            },
+            popupMeetingPerson: {
+                show: false,
+                list: [
+                    
+                ]
+            },
+
+            popupSustainType: {
+                show: false,
+                title: '请选择',
+                list: [
+                    {
+                        text: '一小时',
+                        value: '1'
+                    },
+                    {
+                        text: '两小时',
+                        value: '2'
+                    },
+                    {
+                        text: '三小时',
+                        value: '3'
+                    },
+                    {
+                        text: '四小时',
+                        value: '4'
+                    },
+                    {
+                        text: '五小时',
+                        value: '5'
+                    }
+                ]
+            },
+
+            popupMeetingType: {
+                show: false,
+                title: '请选择',
+                list: [
+                    {
+                        text: '普通会议',
+                        value: '0'
+                    },
+                    {
+                        text: '视频会议',
+                        value: '1'
+                    },
+                    {
+                        text: '接待会议',
+                        value: '2'
+                    }
+                ]
+            },
+            
+            submitStatus: false
+        },
+
+        created () {
+            this.getUserType();
+            if (localStorage.getItem('temporaryData')) {
+                this.temporaryDataRender(JSON.parse(localStorage.getItem('temporaryData')))
+            }
+            if (localStorage.getItem('needEquipmentList')) {
+                this.needEquipmentList = JSON.parse(localStorage.getItem('needEquipmentList'));
+            }
+            this.queryLocation();
+        },
+
+        methods: {
+            /**
+             * 
+             * @param {*} item 
+             * @param {*} index 
+             */
+            equipmentHandle (item, index) {
+                this.needEquipmentList[index].status = !this.needEquipmentList[index].status;
+                this.formData.needEquipment = this.needEquipmentList.filter(item => { if (item.status) return item }).map(text => { return text.lable });
+                // console.log()
+            },
+
+            getUserType () {
+                $http(this.baseUrl.getUserTypeUrl,false,{}, false)
+                .then(res => {
+                    this.userType = res.data.roleType;
+                })
+            },
+
+            /**
+             * 查询会议位置
+             */
+            queryLocation () {
+                $http(this.baseUrl.queryLocationUrl,true,{}, false)
+                .then(res => {
+                    this.popupLocation.list = res.data.map(item => {
+                        return {
+                            text: item.location,
+                            value: item.location
+                        }
+                    })
+                });
+            },
+            /**
+             * 渲染临时存储数据
+             * @param {*} param 
+             */
+            temporaryDataRender (param) {
+                this.formData = {
+                    ...param
+                };
+                // this.meetingRoomList = this.meetingRoomList.map(item => {
+                //     return {
+                //         ...item,
+                //         isChecked: item.meetingRoomId == param.meetingRoomId ? true : false
+                //     }
+                // })
+                this.popupCurrentDate.currentDate = new Date(param.currentDate);
+                this.popupStartTime.currentDate = param.startTime;
+                this.meetingToidStr = param.attendLoginId.split(',');
+                this.meetingTonameStr = param.attendLoginName.split(',');
+                this.popupEndTime.currentDate = param.endTime;
+                this.popupEndTime.minTime = param.startTime.split(':')[0];
+                this.popupEndTime.minMinute = param.startTime.split(':')[1];
+            },
+
+            /**
+             * 临时存储
+             */
+            temporaryHandle () {
+                
+                localStorage.setItem('temporaryData', JSON.stringify(this.formData));
+                localStorage.setItem('needEquipmentList', JSON.stringify(this.needEquipmentList));
+                vant.Toast('临时保存成功')
+            },
+
+            /**
+             * 会议参与人
+             */
+
+            personHandle () {
+                let that = this;
+                wx.invoke("selectEnterpriseContact", {
+                    "fromDepartmentId": -1,// 必填，表示打开的通讯录从指定的部门开始展示，-1表示自己所在部门开始, 0表示从最上层开始
+                    "mode": "multi",// 必填，选择模式，single表示单选，multi表示多选
+                    "type": ["user"],// 必填，选择限制类型，指定department、user中的一个或者多个
+                    "selectedDepartmentIds": [],// 非必填，已选部门ID列表。用于多次选人时可重入，single模式下请勿填入多个id
+                    "selectedUserIds": that.meetingToidStr// 非必填，已选用户ID列表。用于多次选人时可重入，single模式下请勿填入多个id
+                }, function (res) {
+                    if (res.err_msg == "selectEnterpriseContact:ok") {
+                        if (typeof res.result == 'string') {
+                            res.result = JSON.parse(res.result) //由于目前各个终端尚未完全兼容，需要开发者额外判断result类型以保证在各个终端的兼容性
+                        }
+                        var selectedUserList = res.result.userList; // 已选的成员列表
+                        that.meetingToidStr = [];
+                        that.meetingTonameStr = [];
+                        for (var i = 0; i < selectedUserList.length; i++) {
+                            var user = selectedUserList[i];
+                            var userId = user.id; // 已选的单个成员ID
+                            var userName = user.name;// 已选的单个成员名称
+                            that.meetingToidStr.push(userId);
+                            that.meetingTonameStr.push(userName);
+                        }
+                        console.log(selectedUserList)
+                        that.formData.attendLoginId = that.meetingToidStr.join();
+                        that.formData.attendLoginName = that.meetingTonameStr.join();
+                        // $('#meetingperson span').text(meetingTonameStr.toString());
+                    }
+                }
+                );
+            },
+
+            inputHandle () {
+                $http(this.baseUrl.queryUserUrl, true, {
+                    userName: this.formData.attendLoginName
+                }, false).then(res => {
+                    if (res.data.length > 0) {
+                        this.popupMeetingPerson.list = res.data.map(item => {
+                            return {
+                                text: `${item.bu_descr}/${item.name}`,
+                                ...item
+                            }
+                        })
+                        this.popupMeetingPerson.show = true;
+                    }
+                    
+                })
+            },
+
+            popupMeetingPersonConfirm (param) {
+                this.formData.attendLoginName = param.name;
+                this.formData.attendLoginId = param.humancode;
+                this.formData.attendWorkCode = param.humancode;
+                this.popupMeetingPerson.show = false;
+            },
+
+            /**
+             * 提交会议
+             */
+            submitHandle () {
+                
+                if (this.submitStatus) return
+                console.log(this.formData)
+                if (this.formData.location == '') return vant.Toast('请选择');
+                if (this.formData.theme == '') return vant.Toast('请输入');
+                if (this.formData.floor == '') return vant.Toast('请选择');
+                if (this.formData.meetingRoomId == '') return vant.Toast('请选择');
+                if (this.formData.currentDate == '') return vant.Toast('请选择');
+                if (this.formData.startTime == '') return vant.Toast('请选择');
+                if (this.formData.endTime == '') return vant.Toast('请选择');
+                if (this.formData.noticeTimeType == '') return vant.Toast('请选择');
+                if (this.formData.needEquipment.length == 0) return vant.Toast('请选择');
+
+                if (this.userType == '管理人员') {
+                    if (this.formData.sustainType == '') return vant.Toast('请选择');
+                }
+                if (this.formData.meetingType == '') return vant.Toast('请选择');
+                if (this.formData.attendLoginName == '') return vant.Toast('请选择');
+                if (this.formData.attendLoginId == '') return vant.Toast('请选择');
+                if (this.formData.isServiceStaff == '1' && this.userType == '管理人员') {
+                    if (this.formData.serviceLoginIds == '') return vant.Toast('请选择');
+                }
+                let params = {
+                    location: this.formData.location,
+                    floor: this.formData.floor,
+                    startTime: `${this.formData.currentDate} ${this.formData.startTime}:00`,
+                    endTime: `${this.formData.currentDate} ${this.formData.endTime}:00`,
+                    meetingRoomId: this.formData.meetingRoomId,
+                    place: this.formData.place,
+                    currentDate: this.formData.currentDate,
+                    theme: this.formData.theme,
+                    noticeTimeType: this.formData.noticeTimeType,
+                    sustainType: this.formData.sustainType,
+                    meetingType: this.formData.meetingType,
+                    needEquipment: this.formData.needEquipment.join(),
+                    attendLoginName: this.formData.attendLoginName,
+                    attendLoginId: this.formData.attendLoginId,
+                    attendWorkCode: this.formData.attendLoginId,
+                    serviceLoginId: this.formData.isServiceStaff == '1' && this.userType == '管理人员' ? this.formData.serviceLoginIds : ''
+                }
+                this.submitStatus = true;
+                $http(this.baseUrl.addMeetUrl,true,params, true)
+                .then(res => {
+                    this.submitStatus = false;
+                    if (res.retcode === 'success') {
+                        localStorage.removeItem('temporaryData');
+                        localStorage.removeItem('needEquipmentList');
+                        $.alert("",res.retmsg, function () {
+                            window.location.href = 'views/list.html'
+                        });
+                    } else {
+                        $.alert("",res.retmsg, function () {
+                        });
+                    }
+                });
+                // 
+            },
+
+
+            meetingRoomHandle () {
+                if (this.formData.location == '' && this.formData.floor == '') return vant.Toast('请选择位置与楼层');
+                this.pageIndex = 1;
+                this.finished = false,
+                this.loading = true;
+                this.meetingRoomList = [];
+                this.needEquipmentList = [];
+                this.formData.needEquipment = [];
+                this.queryMeetRootList();
+                // 会议室请求
+                this.isMeetingRoom = true;
+                
+            },
+
+            queryMeetRootList () {
+                let params = {
+                    location: this.formData.location,
+                    floor: this.formData.floor,
+                    pageIndex: this.pageIndex,
+                    pageSize: this.pageSize
+                };
+                $http(this.baseUrl.queryMeetRootListUrl,true,params, false)
+                .then(res => {
+                    for (let i = 0; i < res.data.length; i ++) {
+                        this.meetingRoomList.push({
+                            ...res.data[i],
+                            pictures: ''
+                        });
+                    }
+
+                    this.loading = false;
+
+                    if (10 > res.data.length) {
+                        this.finished = true;
+                    } else {
+                        this.searchDataList.pageNum++
+                    }
+                })
+
+                
+            },
+
+
+            /**
+             * 会议时间校验
+             * @param {*} param 
+             * @param {*} index 
+             */
+
+            checkTime () {
+                let that = this;
+                if (this.formData.startTime == '') return;
+                if (this.formData.endTime == '') return;
+                if (this.formData.meetingRoomId == '') return;
+                if (this.formData.currentDate == '') return;
+                if (this.formData.location == '') return;
+                if (this.formData.floor == '') return;
+                if (this.formData.sustainType == '') return;
+                let params = {
+                    startTime: `${this.formData.currentDate} ${this.formData.startTime}:00`,
+                    endTime: `${this.formData.currentDate} ${this.formData.endTime}:00`,
+                    meetingRoomId: this.formData.meetingRoomId,
+                    currentDate: this.formData.currentDate,
+                    location: this.formData.location,
+                    floor: this.formData.floor,
+                    sustainType: this.formData.sustainType
+                }
+                $http(this.baseUrl.checkTimeUrl,true,params, true)
+                .then(res => {
+                    if (res.retcode != 'success') {
+                        $.alert("",res.retmsg, function () {
+                            that.formData.startTime = '';
+                            that.formData.endTime = '';
+                            that.formData.currentDate = '';
+                            localStorage.removeItem('temporaryData');
+                            localStorage.removeItem('needEquipmentList');
+                        });
+                    }
+                })
+
+            },
+
+            lookPictures (param, index) {
+                $http(this.baseUrl.getPhotoDataUrl,true,{
+                    nameUrl: param.picture
+                }, false).then(res => {
+                    this.meetingRoomList[index].pictures = 'data:image/png;base64,' + res.data;
+                })
+            },
+
+            /**
+             * 会议室选择
+             * @param {*} item 
+             * @param {*} index 
+             */
+
+            meetingCheckedHandle (param, index) {
+                this.meetingRoomList = this.meetingRoomList.map(item => {
+                    return {
+                        ...item,
+                        isChecked: false
+                    }
+                });
+
+                this.meetingRoomList[index].isChecked = true;
+                this.formData.meetingRoomId = param.meetingRoomId;
+                this.formData.roomName = param.roomName;
+                this.formData.place = param.departmentName
+                this.formData.isServiceStaff = param.isServiceStaff;
+                this.needEquipmentList = param.equipment.split('、').map(item => {
+                    return {lable: item, status: false}
+                })
+                this.formData.serviceLoginId = '';
+                this.formData.serviceLoginIds = '';
+                this.isMeetingRoom = false;
+                if (this.userType == '管理人员') {
+                    this.checkTime();
+                }
+            },
+            
+            /**
+             * 唤醒弹框
+             * @param {*} key 
+             */
+            popupHandle (key) {
+                
+                // 楼层
+                if (key == 'popupFloor') {
+                    if (this.formData.location == '') return vant.Toast('请选择');
+                    $http(this.baseUrl.queryFloorUrl,true,{
+                        location: this.formData.location
+                    }, false)
+                    .then(res => {
+                        this.popupFloor.list = res.data.map(item => {
+                            return {
+                                text: `${item.floor}楼`,
+                                value: item.floor
+                            }
+                        })
+                        this[key].show = true;
+                    });
+                    
+                }
+
+                else if (key == 'popupServiceLogin') {
+                    $http(this.baseUrl.queryFwPersonUrl,true,{}, false)
+                    .then(res => {
+                        this.popupServiceLogin.list = res.data.map(item => {
+                            return {
+                                text: item.userName,
+                                value: item.loginId,
+                                status: false
+                            }
+                        })
+                        this[key].show = true;
+                    });
+                    
+                }else {
+                    if (key == 'popupEndTime' && this.formData.startTime == '') return vant.Toast('请选择开始时间');
+                    this[key].show = true;
+                }
+            },
+
+            /**
+             * 预约日期
+             */
+            popupCurrentDateConfirm (param) {
+                this.formData.currentDate = formatDate(param);
+                this.popupCurrentDate.show = false;
+                if (this.userType == '管理人员') {
+                    this.checkTime();
+                }
+            },
+
+            /**
+             * 开始时间
+             */
+            popupStartTimeConfirm (param) {
+                console.log(param)
+                console.log(param.split(':'))
+                this.formData.startTime = param;
+                this.popupEndTime.currentDate = param;
+                this.popupEndTime.minTime = param.split(':')[0];
+                this.popupEndTime.minMinute = param.split(':')[1];
+                this.formData.endTime = '';
+                this.popupStartTime.show = false;
+                if (this.userType == '管理人员') {
+                    this.checkTime();
+                }
+            },
+
+            /**
+             * 结束时间
+             */
+            popupEndTimeConfirm (param) {
+                this.formData.endTime = param;
+                this.popupEndTime.show = false;
+                
+                if (this.userType == '管理人员') {
+                    this.checkTime();
+                }
+                
+                
+            },
+
+            /**
+             * 通知时间
+             */
+            popupNoticeTimeTypeConfirm (param) {
+                console.log(param)
+                this.formData.noticeTimeType = param.value;
+                this.popupNoticeTimeType.show = false;
+            },
+
+            /**
+             * 服务人员选择
+             * @param {*} param 
+             */
+
+            popupServiceLoginConfirm (param) {
+                this.formData.serviceLoginId = param.text;
+                this.formData.serviceLoginIds = param.value;
+                this.popupServiceLogin.show = false
+            },
+
+            /**
+             * 持续时间
+             * @param {*} param 
+             */
+
+            popupSustainTypeConfirm (param) {
+                this.formData.sustainType = param.value;
+                this.popupSustainType.show = false;
+                if (this.userType == '管理人员') {
+                    this.checkTime();
+                }
+            },
+
+            /**
+             * 会议类型
+             * @param {*} param 
+             */
+
+            popupMeetingTypeConfirm (param) {
+                console.log(param)
+                this.formData.meetingType = param.value;
+                this.popupMeetingType.show = false;
+            },
+
+
+            /**
+             * 位置
+             * @param {*} param 
+             */
+
+            popupLocationConfirm (param) {
+                this.formData.location = param.text;
+                this.formData.floor = '';
+                this.formData.meetingRoomId = '';
+                this.formData.roomName = '';
+                this.formData.place = '';
+                this.needEquipmentList = [];
+                this.formData.needEquipment = [];
+                this.formData.isServiceStaff = '';
+                this.formData.serviceLoginId = '';
+                this.formData.serviceLoginIds = '';
+                this.popupLocation.show = false;
+                if (this.userType == '管理人员') {
+                    this.checkTime();
+                }
+            },
+
+            /**
+             * 楼层
+             * @param {*} param 
+             */
+
+            popupFloorConfirm (param) {
+                this.formData.floor = param.value;
+                this.formData.meetingRoomId = '';
+                this.formData.roomName = '';
+                this.formData.place = '';
+                this.needEquipmentList = [];
+                this.formData.needEquipment = [];
+                this.formData.isServiceStaff = '';
+                this.formData.serviceLoginId = '';
+                this.formData.serviceLoginIds = '';
+                this.popupFloor.show = false;
+                if (this.userType == '管理人员') {
+                    this.checkTime();
+                }
+            },
+            /**
+             * 服务人员选择
+             */
+            handleChecked (index) {
+                this.popupServiceLogin.list[index].status = !this.popupServiceLogin.list[index].status;
+            },
+
+            /**
+             * 确定人员选择
+             */
+
+            handleApproveUserChecked () {
+                let checkedServiceLogin = this.popupServiceLogin.list.filter(item => {
+                    if (item.status) return item;
+                })
+                this.formData.serviceLoginIds = checkedServiceLogin.map(item => {
+                    return item.value
+                }).join();
+                this.formData.serviceLoginId = checkedServiceLogin.map(item => {
+                    return item.text
+                }).join()
+
+                this.popupServiceLogin.show = false;
+            },
+
+            /**
+             * 
+             * @param {*} imgListKey 图片
+             */
+
+            previewHandle (imgListKey) {
+                vant.ImagePreview({
+                    images: [imgListKey],
+                    startPosition: 0
+                })
+            }
+        }
+    })
+};

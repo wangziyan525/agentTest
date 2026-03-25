@@ -1,0 +1,58 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f5f6f7;
+    overflow: hidden;
+}
+#app{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+/* ---------------------------- 提交结果 ----------------------- */
+.subType{
+    width: 100%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.subType i{
+    width: 80px;
+    height: 80px;
+}
+.subType i img{
+    display: block;
+    width: 100%;
+}
+.subType span{
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 24px;
+    font-size: 20px;
+    line-height: 28px;
+    color: #000;
+}
+/* ---------------------------- 职务模块 ----------------------- */
+.btn{
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+.btn .bigBtn{
+    width: 200px;
+    font-size: 15px;
+    line-height: 20px;
+    padding: 12px 0;
+    box-sizing: border-box;
+    text-align: center;
+    background: #267EF0;
+    border-radius: 6px;
+    color: #fff;
+}

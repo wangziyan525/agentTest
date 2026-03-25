@@ -1,0 +1,250 @@
+var baseUrl = {
+    queryRole:'/phjdData/checkPower.xa',//查询是否有权限
+    queryListUrl:'/phjdData/queryTJData.xa',//查询
+    
+}
+var vm
+function initFun () {
+    vm = new Vue({
+        el:"#app",
+        data:{
+            datatype:"",
+            page:"page1",
+            chooseDate:"0",
+
+            StatStrtTm:"",
+            StatEndTm:"",
+            DateRangeshow:false,
+            maxRangeDate:new Date(),
+            minRangeDate:new Date(1950,0,1),
+            currentRangeDate:new Date(),
+            EstbDocMnBy:"",//1-企业;2-个体;3-农户
+
+            common:{
+                EntpEstbDocAcctNum:0,
+                EntpEfftEstbDocAcctNum:0,
+                IdvlEstbDocAcctNum:0,
+                IdvlEfftEstbDocAcctNum:0,
+                AgrcEstbDocAcctNum:0,
+                AgrcEfftEstbDocAcctNum:0,
+            }
+           
+            
+        },
+        created(){
+            var that=this;
+            var datatype=GetQueryString("datatype")?GetQueryString("datatype"):"1";//datatype   1 普惠  2  服务站 
+            that.datatype=datatype;
+            that.queryRole();
+            
+            $("#app").show();
+            
+        },
+        mounted(){
+            
+    
+        },
+        methods:{
+            async queryRole(){
+                var that=this;
+                if(that.datatype=="2"){
+                    var param={};
+                    param.datatype="2";
+                    const res = await $http(baseUrl.queryRole, true,param, true);
+    
+                    if (res.retcode === 'success'){
+                        
+                    }
+                    else{
+                        vant.Dialog.alert({
+                            message: res.retmsg
+                        }).then(() => {
+                            wx.closeWindow();
+                        }); 
+                    }
+                }
+                
+            },
+            /**
+             * 选择查询类型
+             * @param {*} param 
+             */
+            chooseTyle(param){
+                var that=this;
+                that.chooseDate=param;
+                if(param=="0"){//全部
+                    that.StatStrtTm="";
+                    that.StatEndTm="";
+                    that.queryList();
+                }else if(param=="1"){//今日
+                    var date = new Date();
+                    let rangdate = that.getDateRange(date,0,true);
+                    //昨天
+                    that.StatStrtTm=rangdate;
+                    that.StatEndTm=rangdate;
+                    that.queryList();
+                }else if(param=="2"){//本周
+                    var date = new Date();
+                    var dayOfWeek=date.getDay();
+
+                    var today = that.getDateRange(date,0,true);
+                    var monday="";
+                    if(dayOfWeek>0){
+                        monday = that.getDateRange(date,dayOfWeek-1,true);
+                    }else{
+                        monday = that.getDateRange(date,6,true);
+                    }
+                    //本周
+                    that.StatStrtTm=monday;
+                    that.StatEndTm=today;
+                    that.queryList();
+                    
+                }else if(param=="3"){//按月，默认这个月
+                    var date = new Date();
+
+                    var year =date.getFullYear();
+                    var month=date.getMonth()+ 1;
+                    let day = date.getDate()
+          
+                    if (month < 10) {
+                        month = '0' + month
+                    }
+                
+                    if (day < 10) {
+                        day = '0' + day
+                    }
+                    that.StatStrtTm=year + '-' + month + '-01';
+                    that.StatEndTm=year + '-' + month + '-'+day;
+                    that.queryList();
+                }else if(param=="4"){
+                    that.DateRangeshow=true;
+                }
+
+                
+            },
+            
+            /**
+             * 计算前几天日期
+             * @param {*} dateNow 
+             * @param {*} intervalDays 
+             * @param {*} bolPastTime 
+             */
+            getDateRange(dateNow,intervalDays,bolPastTime){
+                let oneDayTime = 24 * 60 * 60 * 1000;
+                let lastDay;
+                if(bolPastTime == true){
+                    lastDay = new Date(dateNow.getTime() - intervalDays * oneDayTime);
+                    return this.formateDate(lastDay);
+                }else{
+                    lastDay = new Date(dateNow.getTime() + intervalDays * oneDayTime);
+                    return this.formateDate(lastDay);
+                }
+             },
+             formateDate(time){
+                let year = time.getFullYear()
+                let month = time.getMonth() + 1
+                let day = time.getDate()
+          
+                if (month < 10) {
+                  month = '0' + month
+                }
+          
+                if (day < 10) {
+                  day = '0' + day
+                }
+          
+                return year + '-' + month + '-' + day ;
+          
+             },
+             onDateRangeConfirm(date) {
+                var that=this;
+                console.log(date, "内容")
+                const [start, end] = date;
+                that.DateRangeshow = false;
+                that.StatStrtTm = that.formateDate(start);
+                that.StatEndTm = that.formateDate(end);
+                that.queryList();
+                
+            },
+            onDateRangeCancel(){
+                var that=this;
+                that.DateRangeshow = false;
+            },
+
+            toPage(){
+                // var that=this;
+                // if(param=="page2"){
+                //     that.chooseDate="0";
+                //     that.queryList();
+                // }
+                // that.page=param;
+                var that=this;
+                if(that.datatype=="1"){
+                    window.location.href="rank.html"
+                }else if(that.datatype=="2"){
+                    window.location.href="rank2.html"
+                }
+                
+            },
+            
+
+            async queryList(){
+                var that=this;
+                var param={};
+                param.StatStrtTm=that.StatStrtTm?that.StatStrtTm.replace(/-/g,""):"";
+                param.StatEndTm=that.StatEndTm?that.StatEndTm.replace(/-/g,""):"";
+                const res = await $http(baseUrl.queryListUrl, true,param, true);
+
+                if (res.retcode === 'success'){
+                    that.common=res.data;//基本信息
+                    if(JSON.stringify(that.common)=="{}"){
+                        that.common.EntpEstbDocAcctNum=0;
+                        that.common.EntpEfftEstbDocAcctNum=0;
+                        that.common.IdvlEstbDocAcctNum=0;
+                        that.common.IdvlEfftEstbDocAcctNum=0;
+                        that.common.AgrcEstbDocAcctNum=0;
+                        that.common.AgrcEfftEstbDocAcctNum=0;
+                    }
+                    
+                }
+                else{
+                    vant.Dialog.alert({
+                        message: res.retmsg
+                    }).then(() => {
+                        //wx.closeWindow();
+                    }); 
+                }
+            },
+
+            goList(flag){
+                window.location.href="list.html?flag="+flag+"&datatype="+this.datatype;
+            }
+            
+            
+
+            
+            
+            
+            
+
+
+                
+                
+                
+                
+
+         }
+            
+           
+           
+           
+            
+            
+    
+    })
+}
+
+
+
+
+

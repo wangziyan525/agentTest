@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+    <title>新增机构</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/detail.css?v=0.0.72">
+    <link rel="stylesheet" href="./css/addPeople.css?v=0.0.132">
+</head>
+<body>
+
+    <div id="app" v-cloak>
+
+
+        <!-- 详情 -->
+        <div class="main">
+            <div class="item">
+                <span>机构号</span>
+                <input type="text" placeholder="请输入机构号" v-model.trim="stepNo">
+            </div>
+            <div class="item" style="position: relative;">
+                <span>机构名称</span>
+                <input type="text" placeholder="机构名称" v-model.trim="stepName" @input="stepNameChnage">
+                <div class="stepList" v-if="isShowStepList">
+                    <template v-for="(it,i) in stepList">
+                        <div class="stepLis" @click="selectStep(i)">{{it}}</div>
+                    </template>
+                </div>
+            </div>
+            <div class="item">
+                <span>省市区</span>
+                <input type="text" v-model="stepAddress" readonly @click="toSelectStepAddress" placeholder="请选择省市区">
+                <i><img src="./image/jinru.png" alt=""></i>
+            </div>
+            <div class="item">
+                <span>详细地址</span>
+                <input type="text" v-model.trim="stepAddDetail" placeholder="请输入详细地址">
+            </div>
+            <div class="item1" @click="expandLeader" :class="leaderListExpand?'upItem1':''">
+                <div class="total">
+                    负责人
+                    <img src="./image/xuanzhe.png" alt="" :class="leaderListExpand?'':'rotate'">
+                </div>
+                <div class="add" @click.stop="toAddPeople(1)">
+                    <img src="./image/addpeople.png" alt="">
+                    <span>添加</span>
+                </div>
+            </div>
+            <div class="peopleList" :class="leaderListExpand?'expanded':''">
+                <template v-if="leaderList.length > 0">
+                    <template v-for="(it,i) in leaderList">
+                        <div class="peopleLisItem">
+                            <div class="name">{{it.idcardname}}</div>
+                            <div class="delete" @click="deletePeople(i,it.idcardname,'1')"><img src="./image/delete.png" alt=""></div>
+                        </div>
+                    </template>
+                </template>
+                <template v-else>
+                    <div class="noList">
+                        <span>暂无人员</span>
+                    </div>
+                </template>
+            </div>
+            <div class="item1" @click="expandCustManager" :class="custManagerListExpand?'upItem1':''">
+                <div class="total">
+                    客户经理
+                    <img src="./image/xuanzhe.png" alt="" :class="custManagerListExpand?'':'rotate'">
+                </div>
+                <div class="add" @click.stop="toAddPeople(2)">
+                    <img src="./image/addpeople.png" alt="">
+                    <span>添加</span>
+                </div>
+            </div>
+            <div class="peopleList" :class="custManagerListExpand?'expanded':''">
+                <template v-if="custManagerList.length > 0">
+                    <template v-for="(it,i) in custManagerList">
+                        <div class="peopleLisItem">
+                            <div class="name">{{it.idcardname}}</div>
+                            <div class="delete" @click="deletePeople(i,it.idcardname,'2')"><img src="./image/delete.png" alt=""></div>
+                        </div>
+                    </template>
+                </template>
+                <template v-else>
+                    <div class="noList">
+                        <span>暂无人员</span>
+                    </div>
+                </template>
+            </div>
+
+        </div>
+
+        <!-- 底部按钮 -->
+        <div class="footBtn">
+            <span class="bigBtn" @click="toAddAgency">提 交</span>
+        </div>
+
+        <!-- 省市区选择 -->
+        <van-popup v-model="isShowCityPupop" position="bottom">
+            <van-area
+                title="选择省市区"
+                @cancel="isShowCityPupop=false"
+                @confirm="selectedCity"
+                :area-list="areaList">
+            </van-area>
+        </van-popup>
+
+
+        <!-- 新增人员 -->
+        <van-popup v-model="isShowAddPeopleModel" round position="bottom" :style="{height:'85%'}">
+
+            <div class="adddPeopleModel">
+                <!-- 搜索框 -->
+                <div class="searchModel">
+                    <div class="search">
+                        <i><img src="./image/search.png" alt=""></i>
+                        <input type="text" v-model.trim="keyword" placeholder="请输入员工姓名搜索">
+                        <span @click="getPeopleList">搜 索</span>
+                    </div>
+                </div>
+
+                <!-- 列表内容 -->
+                <div class="main1">
+                    <template v-if="isHaveList">
+                        <template v-for="(item,index) in peopleList">
+                            <div class="listItem" @click="peopleSelected(index)">
+                                <div class="name">{{item.idcardname}}</div>
+                                <div class="toSelect">
+                                    <template v-if="item.isSelect">
+                                        <img src="./image/choosed.png" alt="">
+                                    </template>
+                                    <template v-else>
+                                        <img src="./image/noChosoe.png" alt="">
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                    <template v-if="noList">
+                        <div class="noList">
+                            <img src="./image/noList.png" alt="">
+                            <span>暂无数据</span>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- 底部按钮 -->
+                <div class="footBtn" v-if="isHaveList">
+                    <div class="allSelect" @click="allSelect">
+                        <template v-if="isAllSelected">
+                            <img src="./image/choosed.png" alt="">
+                        </template>
+                        <template v-else>
+                            <img src="./image/noChosoe.png" alt="">
+                        </template>
+                        <span>{{isAllSelected?'取消全选':'全选'}}</span>
+                    </div>
+                    <div class="selectBtn" @click="selectedPeopleConfim">
+                        确认选择（{{selectedTotal}}）
+                    </div>
+
+                </div>
+            </div>
+
+        </van-popup>
+
+
+    </div>
+
+</body>
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/jwxwork.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js?v=1.2"></script>
+<script type="text/javascript" src="../common/js/vConsole.min.js"></script>
+<script type="text/javascript" src="../common/js/server.js"></script>
+<script type="text/javascript" src="./js/area.js"></script>
+<script type="text/javascript" src="./js/addAgency.js?v=202508140523"></script>
+<script>
+
+    // var vConsole = new VConsole();
+
+    window.addEventListener('pageshow',function (e) {
+        if(e.persisted){
+            location.reload();
+        }
+    });
+
+
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem','invoke','chooseImage','uploadImage','previewImage']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+
+    function getUserFinish() {
+        action();
+    }
+
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

@@ -1,0 +1,144 @@
+[v-cloak] {
+    display: none !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #f5f6f7;
+    overflow: hidden;
+}
+#app{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* ------------------------------------------------ 列表 -------------------------------------- */
+.main{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+.main .applyDetail{
+    width: 100%;
+    margin-top: 10px;
+    background-color: #fff;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+.main .applyDetail .detail{
+    width: 100%;
+    padding: 15px 0;
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+}
+.main .applyDetail .detail:after{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height: 1px;
+    border-bottom:1px solid #E6E7E8;
+    color: #E6E7E8;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.main .applyDetail .detail:last-child::after{
+    display: none;
+}
+.main .applyDetail .detail span{
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    line-height: 20px;
+    color: #000;
+    font-weight: 400;
+}
+.main .applyDetail .detail input{
+    flex: 1;
+    width: 100%;
+    display: block;
+    border: none;
+    outline: none;
+    background-color: #fff;
+    box-shadow: none;
+    -webkit-appearance: none;
+    font-size: 15px;
+    color: #666;
+    line-height: 20px;
+    text-align: right;
+    padding: 0 0 0 7px;
+    box-sizing: border-box;
+}
+.main .subBtn{
+    margin-top: 60px;
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+.main .subBtn span{
+    display: block;
+    width: 100%;
+    padding: 15px 0;
+    box-sizing: border-box;
+    background: #267EF0;
+    border-radius: 6px;
+    font-size: 15px;
+    line-height: 16px;
+    color: #fff;
+    text-align: center;
+}
+/* ------------------------------- 结果页 ----------------------------- */
+.main1{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.main1 .ct{
+    width: 100%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.main1 .ct img{
+    display: block;
+    width: 80px;
+    margin-top: -20px;
+}
+.main1 .ct span{
+    display: block;
+    text-align: center;
+    margin-top: 24px;
+    font-family: PingFangSC-Medium;
+    font-size: 20px;
+    line-height: 20px;
+    color: #000000;
+    text-align: center;
+    font-weight: 500;
+}
+.main1 .resultBtn{
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+}
+.main1 .resultBtn span{
+    display: block;
+    width: 200px;
+    height: 46px;
+    font-size: 15px;
+    line-height: 16px;
+    text-align: center;
+    padding: 15px 0;
+    box-sizing: border-box;
+    background-color: #267EF0;
+    border-radius: 6px;
+    color: #fff;
+}

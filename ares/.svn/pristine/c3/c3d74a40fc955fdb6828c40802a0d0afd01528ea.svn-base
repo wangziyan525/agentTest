@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport" />
+    <title>党委书记接待日登记</title>
+    <script src="../common/js/vue.min.js"></script>
+    <script src="../common/js/vant-2.12.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <!-- <link rel="stylesheet" href="css/common.css?v=1.0.1"> -->
+    <link rel="stylesheet" type="text/css" href="./css/index.css?v=1.0">
+    <link rel="stylesheet" type="text/css" href="./css/registHomepage.css?v=1.0">
+</head>
+<body>
+<div id="app" class="v-app" style="background: #F9FAFB;height: 100%" v-clack>
+    <div>
+        <div style="display: flex;align-items: flex-start">
+            <img src="./image/homepageTop.jpg" style="width: 100%;height:100%;z-index: 1;">
+        </div>
+        <div style="display: flex;flex-direction: column;;margin-top:-10vh;align-items: center">
+            <div class="midArea" >
+                <img src="./image/homepageMid.png" style=" margin-top:-5vh;width: 24vh;height: 17.6vh;">
+                <div class="midAreaBtn"  @click="registInput()">
+                    登记
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="font-size: 14px;font-family: PingFangSC-Regular, PingFang SC;font-weight: 400;color: #1677FF;line-height: 20px;  margin-top: 1px;display: flex;justify-content: center;align-items: center;margin-top: 30%; ">
+        <div style="border-bottom: 1px solid #1677FF;" @click="registRecord()">
+            登记记录
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/jwxwork.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="../common/js/vConsole.min.js"></script>
+<script>
+    // var vConsole = new VConsole();
+    var appInfo = {};
+    //初始化微信社区
+    $(function () {
+        initJSSDK();
+        wx.config({
+            beta: true,
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: app.json.appId, // 必填，公众号的唯一标识
+            timestamp: app.json.timestamp, // 必填，生成签名的时间戳
+            nonceStr: app.json.nonceStr, // 必填，生成签名的随机串
+            signature: app.json.signature,// 必填，签名，见附录1
+            jsApiList: ['hideAllNonBaseMenuItem', 'chooseImage', 'uploadImage', 'downloadImage', 'invoke', 'navigateToAddCustomer'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+    
+    function getUserFinish() {
+        action();
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+    }
+    function action() {
+        new Vue({
+            el: "#app",
+            data: {
+                quanxian:false,
+                tiaozhuan:false,//判断是否跳转
+                // iostz:false,
+                text:0,//定时
+                hmtext:0,//ios定时
+                jindu:0,
+                url:"",
+                type:"",
+                Trustimg:'https://xtrusttest.xacbank.com.cn/title.ico?v=' + new Date(),
+                handleTitle:'',
+                linkTitle:'',
+                 baseUrl : {getRole: "dwDate/checkPow.xa",}
+            },
+            created: function () {
+
+            },
+            mounted: function () {
+                // this.getRole();
+                $("#app").show();
+            },
+            methods: {
+            //     getRole() {
+            //     var that = this;
+            //     let params = {};
+
+            //     $http(that.baseUrl.getRole,true,params, true)
+            //         .then(res => {
+            //             if(res.retcode == 'success'){
+            //                  //管理员权限
+            //                 //  res.data = true;
+            //                 if(res.data == true){
+            //                     window.location.href = "list.html";
+            //                 }
+            //             }else{
+            //                 $.alert("",res.retmsg,function () {
+            //                     wx.closeWindow();
+            //                 });
+            //             }
+            //         });
+            // }, 
+                registInput(){
+                    window.location.href = "registInput.html";
+                },
+                registRecord(){
+                    window.location.href = "registRecord.html";
+                },
+            }
+        })
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+<script src="../common/js/watermark.js?v=1.2"></script>
+</html>

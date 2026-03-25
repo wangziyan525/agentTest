@@ -1,0 +1,765 @@
+[v-cloak]{
+    display: none;
+}
+.hrefPth{
+    text-decoration: underline !important;
+}
+html,body{
+    width: 100vw;
+    height: 100vh;
+    background-color:#f6f6f6;
+    overflow:auto;
+}
+.weui-dialog{
+    border-radius: 12px !important;
+}
+.weui-dialog .weui-dialog__hd{
+    padding: 2em 1.5em 1.5em;
+}
+.weui-toast{
+    margin-left: 0 !important;
+    top:auto;
+}
+*{
+    -webkit-overflow-scrolling: touch !important;
+    -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+    -webkit-tap-highlight-color: transparent !important;
+    font-family: 'Microsoft YaHei', Tahoma, Arial, sans-serif;
+}
+/*--------------------------------------------------------------------------- 基础信息 -----------------------------------------------*/
+.basis{
+    width: 94%;
+    margin: 10px auto 0;
+    background-color: #fff;
+    border-radius: 4px;
+}
+.basis .infos{
+    width: 100%;
+    padding: 15px 12px;
+    line-height: 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+.basis .infos::after{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #DDD;
+    -ms-transform: scaleY(.3);
+    -webkit-transform: scaleY(.3);
+    transform: scaleY(.3);
+    position: absolute;
+    top: -3px;
+    left: 0;
+}
+.basis .infos:nth-child(1)::after{
+    display: none;
+}
+.basis .infos span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+    color: #999;
+}
+.basis .infos span:nth-child(1){
+    width: 150px;
+}
+.basis .infos span:nth-child(2){
+    /* width: 60%; */
+    flex:1;
+    color: #333;
+    text-align: right;
+}
+.searchDiv{
+    width: 100%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    padding: 8px 0 8px 3%;;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e1e1e1;
+}
+.searchDiv input{
+    width: 80%;
+    background: #f3f4f8;
+    height: 38px;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-size: 15px;
+    border: none;
+}
+.searchDiv>p{
+    width: 20%;
+    text-align: center;
+    color: #0764FF;
+    font-size: 16px;
+}
+/* ----------------------------------------------------------------------附件------------------------------------------------------ */
+.adnexa{
+    width: 94%;
+    margin: 0 auto;
+}
+/* 附件的title */
+.adnexa .title{
+    width: 100%;
+}
+.adnexa .title span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+    color: #000;
+    margin: 15px 0;
+    position: relative;
+    padding-left: 12px;
+}
+.adnexa .title span::before{
+    content: '';
+    width: 2px;
+    height: 80%;
+    background-color: #3C6ADF;
+    position: absolute;
+    top: 10%;
+    left: 0;
+}
+/* 附件内容 */
+.adnexa .adnexaLists{
+    width: 100%;
+    background-color: #fff;
+    border-radius: 4px;
+}
+.adnexa .adnexaLists .adnexaLis{
+    width: 100%;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    position: relative;
+}
+.adnexa .adnexaLists .adnexaLis a{
+    font-size: 13px;
+    line-height: 20px;
+    color: #264CD8;
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+.adnexa .adnexaLists .adnexaLis::after{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #DDD;
+    -ms-transform: scaleY(.3);
+    -webkit-transform: scaleY(.3);
+    transform: scaleY(.3);
+    position: absolute;
+    top: -3px;
+    left: 0;
+}
+.adnexa .adnexaLists .adnexaLis:nth-child(1)::after{
+    display: none;
+}
+/* ---------------------------------------------------------------审批流程 ------------------------------------------------------*/
+/* 审批流程的title */
+.flows{
+    width: 94%;
+    margin: 0 auto;
+}
+.flows .title{
+    width: 100%;
+}
+.flows .title span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+    color: #000;
+    margin: 15px 0;
+    position: relative;
+    padding-left: 12px;
+}
+.flows .title span::before{
+    content: '';
+    width: 2px;
+    height: 80%;
+    background-color: #3C6ADF;
+    position: absolute;
+    top: 10%;
+    left: 0;
+}
+/*审批流程*/
+.flows .content{
+    width: 100%;
+    padding: 0px 13px;
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 4px;
+}
+.flows .content .list{
+    width: 100%;
+    display: flex;
+}
+.flows .content .list .left{
+    width: 5px;
+    margin-right: 12px;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+}
+.flows .content .list .left i{
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #0465FF;
+    line-height: 50px;
+    margin-top: 19px;
+}
+.flows .content .list .left::before{
+    content: '';
+    width: 1px;
+    height: 20px;
+    background: #0465FF;
+    position: absolute;
+    top: -5px;
+}
+.flows .content .list .left::after{
+    content: '';
+    width: 1px;
+    height:-webkit-calc(100%  - 24px);
+    background: #0465FF;
+    position: absolute;
+    bottom: -5px;
+}
+.flows .content .list:first-child .left::before{
+    display: none;
+}
+.flows .content .list:last-child .left::after{
+    display: none;
+}
+.flows .content .list .right{
+    flex: 1;
+    position: relative;
+}
+.flows .content .list .right:after{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #DDD;
+    -ms-transform: scaleY(.3);
+    -webkit-transform: scaleY(.3);
+    transform: scaleY(.3);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+.flows .content .list:last-child .right:after{
+    display: none;
+}
+.flows .content .list .states{
+    width: 100%;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 12px;
+}
+.flows .content .list .states .le{
+    /* 附件如果是左右的，就是40%，如果没有右边的则是100%，同时html上也要做出对应的修改 */
+    /* width: 40%; */
+    width: 100%;
+    margin-right: 10px;
+}
+.flows .content .list .states .le span{
+    display: block;
+    width: 100%;
+    font-size: 15px;
+    color: #333;
+    line-height: 21px;
+}
+.flows .content .list .states .ri span{
+    line-height: 21px;
+}
+.flows .content .list .states .ri{
+    font-size: 15px;
+}
+.flows .content .list .time{
+    font-size: 13px;
+    color: #666;
+    padding-bottom: 12px;
+}
+.flows .content .list .states .refuse{
+    color: #FF1313;
+}
+.flows .content .list .remark{
+    width: 100%;
+    margin: 10px 0;
+}
+.flows .content .list .remark textarea{
+    resize: none;
+    border:none;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #F5F5F5;
+    border-radius: 3px;
+    font-size: 15px;
+    color: #999;
+    line-height: 20px;
+    outline: none;
+    resize: none;
+}
+textarea::-webkit-input-placeholder {
+    color: #999999;
+}
+.flows .content .list .time{
+    width: 100%;
+}
+.flows .content .list .time span{
+    display: block;
+    width: 100%;
+    font-size: 13px;
+    color: #999;
+    line-height: 20px;
+}
+/* -----------------------------------------------------------我的审批 --------------------------------------*/
+/* 语音输入style */
+.toApproval{
+    width: 100%;
+    background-color: #fff;
+    border-radius: 2px;
+}
+.toApproval .list{
+    width: 100%;
+    padding: 0 2px 0 12px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content:space-between;
+    font-size: 15px;
+    line-height: 50px;
+    color: #999999;
+    letter-spacing: 0;
+    position: relative;
+}
+.toApproval .list::before{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #DDD;
+    -ms-transform: scaleY(.3);
+    -webkit-transform: scaleY(.3);
+    transform: scaleY(.3);
+    position: absolute;
+    top: -3px;
+    left: 0;
+}
+.toApproval .list span{
+    display: block;
+}
+.toApproval .list:first-child::before{
+    display: none;
+}
+.toApproval .list span:nth-child(1){
+    width: 20%;
+}
+.toApproval .list .ct{
+    flex:1;
+    display: flex;
+    flex-direction: row-reverse;
+
+}
+.toApproval .list .ct .option{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+}
+.toApproval .list .ct .option i{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    background: url(../image/noCkend.png)no-repeat;
+    background-size: 100% 100%;
+}
+.toApproval .list .ct .option .select{
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background: url(../image/ckend.png)no-repeat;
+    background-size: 100% 100%;
+}
+.toApproval .listDep{
+    position: relative;
+}
+.toApproval input{
+    flex:1;
+    border: none;
+    font-size: 15px;
+    padding-right: 25px;
+    box-sizing: border-box;
+    color: #333333;
+    caret-color:#333333;
+    text-align: right;
+}
+.toApproval input::-webkit-input-placeholder {
+    color: #999999;
+}
+.toApproval .listDep::after{
+    content: '';
+    width: 20px;
+    height: 100%;
+    background: url('../image/to.png')no-repeat center;
+    background-size: 40% auto;
+    position: absolute;
+    top: 1px;
+    right: 5px;
+}
+.toReason{
+    width: 100%;
+    padding: 0 12px;
+    box-sizing: border-box;
+    /* position: relative; */
+}
+.toReason::before{
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #DDD;
+    -ms-transform: scaleY(.3);
+    -webkit-transform: scaleY(.3);
+    transform: scaleY(.3); 
+    position: absolute;
+    top: -3px;
+    left: 0;
+}
+.toReason .title{
+    width: 100%;
+    height: 50px;
+    font-size: 15px;
+    line-height: 50px;
+}
+.toReason .speech{
+    width: 100%;
+    height: 43px;
+    border: 1px solid #264CD8;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.toReason .speech img{
+    display: block;
+    margin-right: 10px;
+    width: 15px;
+    height: 21px;
+}
+.toReason .speech span{
+    color: #264CD8;
+    font-size: 15px;
+    line-height: 43px;
+}
+.toReason textarea{
+    resize: none;
+    border:none;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #F5F5F5;
+    border-radius: 4px;
+    font-size: 15px;
+    color: #333330;
+    line-height: 20px;
+    outline: none;
+    resize: none;
+    margin: 10px auto 15px;
+}
+textarea::-webkit-input-placeholder {
+    color: #999999;
+}
+/* 弹框输入style */
+.reject{
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(0,0,0,.6);
+    position: fixed;
+    left: 0;
+    top:0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+.contentReason{
+    width: 90%;
+    background: #fff;
+    border-radius: 5px;
+    margin-top: -80px;
+}
+.contentReason .title{
+    width: 100%;
+    line-height: 50px;
+    font-size: 15px;
+    text-align: center;
+}
+.contentReason textarea{
+    display: block;
+    resize: none;
+    border:none;
+    width: 90%;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #F5F5F5;
+    border-radius: 3px;
+    font-size: 15px;
+    color: #333;
+    line-height: 20px;
+    outline: none;
+    resize: none;
+    margin: 0 auto;
+}
+.contentReason textarea::-webkit-input-placeholder {
+   color: #999999;
+}
+.contentReason .btn{
+    padding: 25px 5%;
+    margin: 0 !important;
+    display: flex;
+    justify-content: space-between;
+}
+.contentReason .btn span{
+    display: block;
+    width: 47%;
+    height: 36px;
+    border-radius: 4px;
+    font-size: 15px;
+    border: 1px solid #0465FF;;
+    line-height: 36px;
+    color: #fff;
+    text-align: center;
+}
+.contentReason .btn .smallBtn1{
+    color: #0465FF;
+    border: 1px solid #0465FF;
+}
+.contentReason .btn .smallBtn2{
+    background-color: #0465FF;
+}
+/* -------------------------------------------------------------------按钮 -------------------------------------------------------*/
+/*按钮*/
+.btn{
+    width: 100%;
+    padding: 0 13px;
+    box-sizing: border-box;
+    display: flex;
+    margin: 50px auto;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.btn .btnBig{
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    height: 40px;
+    border-radius: 50px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #3C6ADF;
+    text-align: center;
+    line-height: 40px;
+    margin-top: 10px;
+}
+.btn .btnSmall{
+    display: block;
+    width: 46%;
+    height: 38px;
+    margin: 0 auto;
+    border-radius: 50px;
+    font-size: 15px;
+    color: #fff;
+    text-align: center;
+    line-height: 38px;
+}
+.btn .btnSmall:nth-child(1){
+    border: 1px solid #3C6ADF;
+    color: #3C6ADF;
+}
+.btn .btnSmall:nth-child(2){
+    border: 1px solid #3C6ADF;
+    background-color: #3C6ADF;
+}
+/* -------------------------------------------------------- 录音界面 -------------------------------------------------- */
+.record{
+    width: 100vw !important;
+    height: 100vh !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.record .content{
+    margin-top: -80px;
+    background:rgba(37,38,45,.7);
+    border-radius: 4px;
+    padding:20px 30px;
+    box-sizing: border-box;
+}
+.record .content img{
+    display: block;
+    width: 80px;
+}
+.record .content span{
+    display: block;
+    width: 80px;
+    height: 30px;
+    background: #fff;
+    border-radius: 7px;
+    margin-top:15px;
+    color: #000;
+    text-align: center;
+    font-size: 13px;
+    line-height: 30px;
+}
+
+
+/* 提示 */
+.tip{
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    font-weight: bold;
+    text-align: center;
+}
+.tip span{
+    font-size: 13px;
+    color: #333;
+}
+
+/* 我的审批 */
+.myApproval{
+    width: 94%;
+    margin: 10px auto 0;
+}
+.myApprovala .title{
+    width: 100%;
+}
+.myApproval .title span{
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+    color: #000;
+    margin: 15px 0;
+    position: relative;
+    padding-left: 12px;
+}
+.myApproval .title span::before{
+    content: '';
+    width: 2px;
+    height: 80%;
+    background-color: #3C6ADF;
+    position: absolute;
+    top: 10%;
+    left: 0;
+}
+.toApproval{
+    width: 100%;
+    background-color: #fff;
+    border-radius: 2px;
+}
+.toApproval .list{
+    width: 100%;
+    padding: 0 2px 0 12px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content:space-between;
+    font-size: 15px;
+    line-height: 50px;
+    color: #999999;
+    letter-spacing: 0;
+    position: relative;
+}
+/*.toApproval .list::before{*/
+/*    content: '';*/
+/*    width: 100%;*/
+/*    height: 2px;*/
+/*    background: #DDD;*/
+/*    -ms-transform: scaleY(.3);*/
+/*    -webkit-transform: scaleY(.3);*/
+/*    transform: scaleY(.3);*/
+/*    position: absolute;*/
+/*    top: -3px;*/
+/*    left: 0;*/
+/*}*/
+.toApproval .list span{
+    display: block;
+}
+.toApproval .list:first-child::before{
+    display: none;
+}
+.toApproval .list span:nth-child(1){
+    width: 20%;
+}
+.toApproval .list span:nth-child(2){
+    color: #333;
+}
+.toApproval .list .proval{
+    flex:1;
+    display: flex;
+    flex-direction: row-reverse;
+}
+.toApproval .list .proval .option{
+    display: flex;
+    /*width: 33.3%;*/
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+}
+.toApproval .list .proval .option i{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    background: url(../image/noCkend.png)no-repeat;
+    background-size: 100% 100%;
+}
+.toApproval .list .proval .option .select{
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background: url(../image/ckend.png)no-repeat;
+    background-size: 100% 100%;
+}
+.toApproval .listDep{
+    position: relative;
+}
+.toApproval input{
+    flex:1;
+    border: none;
+    font-size: 15px;
+    padding-right: 25px;
+    box-sizing: border-box;
+    color: #333333;
+    caret-color:#333333;
+    text-align: right;
+}
+.toApproval input::-webkit-input-placeholder {
+    color: #999999;
+}
+.toApproval .listDep::after{
+    content: '';
+    width: 20px;
+    height: 100%;
+    background: url('../image/to.png')no-repeat center;
+    background-size: 40% auto;
+    position: absolute;
+    top: 1px;
+    right: 5px;
+}
+#infosDiv>div:after{
+    height: 0px !important;
+}
+#infosDiv>div{
+    border-bottom: 1px solid #ddd;
+}
+#infosDiv>div:last-child{
+    border-bottom: none;
+}

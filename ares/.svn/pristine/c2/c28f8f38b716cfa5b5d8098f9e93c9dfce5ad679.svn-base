@@ -1,0 +1,121 @@
+[v-cloak]{
+    display: none;
+}
+html,body{
+    width: 100%;
+    min-height: 100vh;
+    background-color:#f6f6f6;
+}
+*{
+    -webkit-overflow-scrolling: touch !important;
+    -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+    -webkit-tap-highlight-color: transparent !important;
+    font-family: 'Microsoft YaHei', Tahoma, Arial, sans-serif;
+}
+.weui-dialog{
+    border-radius: 8px !important;
+    font-size: 17px;
+}
+.weui-dialog .weui-dialog__hd{
+    padding: 20px;
+}
+.weui-dialog__ft,.weui-dialog__btn{
+    font-size: 17px;
+    color: #4675C9;
+}
+
+.tab{
+    height: 50px;
+    display: flex;
+    justify-content: start;
+    font-size: 15px;
+    align-items: center;
+    background: #fff;
+    position: relative;
+}
+.tab p{
+    position: absolute;
+    height: 25px;
+    right: 50%;
+    background: #e9e9e9;
+    width: 1px;
+}
+.tab>div{
+    width: 49%;
+    height: 50px;
+    line-height: 50px;
+    color: #999;
+    text-align: center;
+    font-size: 16px;
+}
+.activeTab{
+    color: #4675C9 !important;
+    border-bottom: 3px solid #4675C9;
+    box-sizing: border-box;
+    display: inline-block;
+    height: 50px;
+    font-weight: 500;
+}
+.title{
+    height: 50px;
+    padding: 10px 15px;
+    color: #999;
+}
+.contentPart{
+    background: #fff;
+    font-size: 16px;
+}
+.contentLine{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+}
+.contentLine>p:first-child{
+    font-weight: 500;
+}
+.contentLine>p:nth-child(2){
+    display: flex;
+    align-items: center;
+}
+.contentLine>p img{
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+}
+.border-bottom{
+    border-bottom: 1px solid #eee;
+}
+.titles{
+    font-size: 16px;
+    padding: 15px;
+}
+.ListLine{
+    display: flex;
+}
+.ListLine>div{
+    color: #999;
+    text-align: left;
+    font-size: 14px;
+    padding: 0 15px 15px 15px;
+}
+.imgOne{
+    width: 25%;
+    box-sizing: border-box;
+    padding:10px;
+}
+.uploadIMg{
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-top: 100%;
+}
+.uploadIMg>img{
+    width:100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    object-fit: fill;
+    border-radius: 4px;
+    /* border: 1px solid #ddd; */
+}

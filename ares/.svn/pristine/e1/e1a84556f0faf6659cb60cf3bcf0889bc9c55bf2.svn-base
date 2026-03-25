@@ -1,0 +1,289 @@
+
+[v-cloak]{
+  display: none!important;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f5f5f5;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  height: 100vh;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 顶部导航栏 */
+.nav-bar {
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  padding: 44px 16px 12px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.nav-back {
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  left: 16px;
+}
+
+.nav-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  flex: 1;
+}
+
+/* 客户经理信息 */
+.manager-info {
+  background: #fff;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.manager-name {
+  font-size: 15px;
+  color: #333;
+}
+
+.manager-name span {
+  font-weight: 600;
+  color: #333;
+}
+
+.manager-phone {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.phone-number {
+  font-size: 15px;
+  color: #4A90E2;
+  text-decoration: underline;
+}
+
+.phone-icon {
+  font-size: 18px;
+  color: #4A90E2;
+}
+
+/* 状态Tab */
+.status-tabs {
+  background: #fff;
+  display: flex;
+  flex-shrink: 0;
+}
+
+.status-tab {
+  flex: 1;
+  text-align: center;
+  padding: 14px 0;
+  font-size: 16px;
+  color: #333;
+  position: relative;
+  cursor: pointer;
+}
+
+.status-tab.active {
+  color: #4A90E2;
+  font-weight: 600;
+}
+
+.status-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 3px;
+  background: #4A90E2;
+  border-radius: 2px;
+}
+
+/* 统计条 */
+.count-bar {
+  background: #f5f5f5;
+  padding: 10px 16px;
+  font-size: 14px;
+  /* color: #fff; */
+  flex-shrink: 0;
+}
+
+/* 列表区域 */
+.list-container {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #f5f5f5;
+  padding: 10px;
+}
+
+.list-item {
+  background: #fff;
+  margin-bottom: 10px;
+  padding: 16px;
+  border-radius: 4px;
+}
+
+.list-item:first-child {
+  margin-top: 0;
+}
+
+.list-item:last-child {
+  margin-bottom: 0;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.company-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  flex: 1;
+  margin-right: 10px;
+  line-height: 1.4;
+}
+
+.status-tag {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.status-tag.wait {
+  color: #4A90E2;
+}
+
+.status-tag.done {
+  color: #4A90E2;
+}
+
+.status-tag.reject {
+  color: #F56C6C;
+}
+
+.status-tag.allow {
+  color: #67C23A;
+}
+
+.status-tag .van-icon {
+  margin-left: 4px;
+}
+
+.item-info {
+  margin-bottom: 10px;
+}
+
+.info-row {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.8;
+  display: flex;
+}
+
+.info-label {
+  color: #999;
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.info-value {
+  color: #666;
+  flex: 1;
+}
+
+.item-footer {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+  margin-top: 6px;
+}
+
+.contact-phone {
+  font-size: 14px;
+  color: #999;
+}
+
+.contact-phone span {
+  color: #333;
+}
+
+/* 空状态样式 */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  padding: 60px 20px;
+}
+
+.empty-icon {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 20px;
+}
+
+.empty-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.empty-text {
+  font-size: 16px;
+  color: #999;
+}
+
+/* 加载更多 */
+.load-more {
+  text-align: center;
+  padding: 16px;
+  color: #999;
+  font-size: 14px;
+}
+.phone{
+  width: 16px;
+  padding-left: 4px;
+  vertical-align: middle
+}
+.status-tag.success {
+  color: #52C41A;
+}
+
+.status-tag.processing {
+  color: #1890FF;
+}
+
+.status-tag.warning {
+  color: #FA8C16;
+}
+.status-tag.fail {
+  color: #FF4D4F;
+}

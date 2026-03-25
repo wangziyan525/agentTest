@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+    name="viewport" />
+  <link rel="stylesheet" href="../common/css/weui.min.css">
+  <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+  <link rel="stylesheet" href="../common/css/vant-2.12.css">
+  <link rel="stylesheet" href="css/branchMangerList.css">
+  <title>客户经理对接情况</title>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <!-- 时间筛选标签 -->
+    <div class="time-tabs">
+      <div v-for="(tab, index) in timeTabs" :key="index" class="time-tab" :class="{ active: activeTab === index }"
+        @click="onTabChange(index)">
+        {{ tab }}
+      </div>
+    </div>
+
+    <!-- 日期筛选行 -->
+    <div class="date-filter" @click="openDatePicker">
+      <span class="date-filter-label">筛选日期</span>
+      <span class="date-filter-value">
+        {{ displayDate }}
+        <van-icon name="arrow" class="arrow" v-if="activeTab !== 3" />
+      </span>
+    </div>
+
+    <!-- 实时汇总数据 -->
+    <div class="section-title">实时汇总数据</div>
+    <div class="summary-section">
+      <div class="summary-row">
+        <div class="summary-item">
+            <div class="summary-value">{{ summaryData.waitAssign }}</div>
+          <div class="summary-label">待分配</div>
+         
+        </div>
+        <div class="summary-item">
+            <div class="summary-value">{{ summaryData.doAssign }}</div>
+          <div class="summary-label">已分配</div>
+     
+        </div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-item">
+          <div class="summary-value">{{ summaryData.waitDock }}</div>
+          <div class="summary-label">待对接</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-value">{{ summaryData.doDock }}</div>
+          <div class="summary-label">已对接</div>
+        </div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-item">
+          <div class="summary-value">{{ summaryData.notAccess }}</div>
+          <div class="summary-label">不予准入</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-value">{{ summaryData.canAccess }}</div>
+          <div class="summary-label">可准入</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 数据明细标题 -->
+    <div class="data-header">
+      <span class="data-header-title">数据明细</span>
+      <span class="download-btn" @click="downloadData">
+        <van-icon name="down" />
+        下载明细表
+      </span>
+    </div>
+
+    <!-- 数据明细表格 -->
+    <!-- 有数据时显示表格 -->
+    <div class="data-table" v-if="tableData.length > 0">
+      <!-- 表头 -->
+      <div class="table-header">
+        <div class="table-header-cell col-name">客户经理姓名</div>
+        <div class="table-header-cell col-data">待对接</div>
+        <div class="table-header-cell col-data">已对接</div>
+        <div class="table-header-cell col-data">不予准入</div>
+        <div class="table-header-cell col-data">可准入</div>
+      </div>
+      <!-- 表格内容 -->
+      <div class="table-row" v-for="(item, index) in tableData" :key="index">
+        <div class="table-cell col-name link" @click="goToDetail(item)">{{ item.name }}</div>
+        <div class="table-cell col-data">{{ item.waitDock }}</div>
+        <div class="table-cell col-data">{{ item.doDock }}</div>
+        <div class="table-cell col-data">{{ item.notAccess }}</div>
+        <div class="table-cell col-data">{{ item.canAccess }}</div>
+      </div>
+    </div>
+    <!-- 无数据时显示空状态 -->
+    <div class="empty-state" v-else>
+      <div class="empty-icon">
+        <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="15" width="80" height="95" rx="4" fill="#E8F4FC" stroke="#7EB8E7" stroke-width="2" />
+          <path d="M75 15V35H95" stroke="#7EB8E7" stroke-width="2" fill="#E8F4FC" />
+          <rect x="35" y="50" width="50" height="6" rx="2" fill="#7EB8E7" />
+          <rect x="35" y="65" width="40" height="6" rx="2" fill="#7EB8E7" />
+          <rect x="35" y="80" width="45" height="6" rx="2" fill="#7EB8E7" />
+        </svg>
+      </div>
+      <div class="empty-text">暂无数据</div>
+    </div>
+
+    <!-- 底部安全区域 -->
+    <div class="safe-area-bottom"></div>
+
+    <!-- 日期选择器弹窗 - 按日 -->
+    <van-popup v-model="showDatePicker" position="bottom">
+      <van-datetime-picker v-model="currentDate" type="date" title="选择日期" :max-date="maxDate" @confirm="onDateConfirm"
+        @cancel="showDatePicker = false" />
+    </van-popup>
+
+    <!-- 月份选择器弹窗 - 按月 -->
+    <van-popup v-model="showMonthPicker" position="bottom">
+      <van-datetime-picker v-model="currentDate" type="year-month" title="选择月份" :max-date="maxDate"
+        @confirm="onMonthConfirm" @cancel="showMonthPicker = false" />
+    </van-popup>
+
+    <!-- 年份选择器弹窗 - 按年 -->
+    <van-popup v-model="showYearPicker" position="bottom">
+      <van-picker title="选择年份" show-toolbar :columns="yearColumns" :default-index="defaultYearIndex"
+        @confirm="onYearConfirm" @cancel="showYearPicker = false" />
+    </van-popup>
+  </div>
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/branchMangerList.js"></script>
+<script src="../common/js/vConsole.min.js"></script>
+
+<script>
+  //  var vConsole = new VConsole();
+  initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+  wx.ready(function () {
+    wx.hideAllNonBaseMenuItem();
+  });
+  function getUserFinish() {
+    var username = $.parseJSON($.cookie("user")).name;
+    __canvasWM({
+      content: username
+    });
+    initFun()
+  } 
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

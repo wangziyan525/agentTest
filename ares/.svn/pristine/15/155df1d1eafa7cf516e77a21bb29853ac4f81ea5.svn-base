@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <title>非融资性保函申请详情</title>
+    <!-- <link rel="stylesheet" href="../../common/css/jquery-weui.min.new.css"> -->
+    <link rel="stylesheet" href="../../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../common/css/vant-1.2.3.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/details.css">
+</head>
+
+<body>
+    <div class="container" v-cloak>
+        <section class="main_section fs15" v-if="page == '1'">
+            <div class="main_section_item" v-if="dataList.status != '0'">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    审批信息
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        审批状态
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{getReviewStatusText(dataList.status)}}
+                        <img src="../images/arrowB.png" @click="showReview()" class="arrow">
+                    </div>
+                </div>
+                <div class="__item_list display" v-if="dataList.status  == '3' ">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        拒绝原因
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{dataList.remark}}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        审批时间
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{dataList.updateTime}}
+                    </div>
+                </div>
+            </div>
+            <div class="main_section_item">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    企业基本
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        企业名称
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{dataList.COMP_NAME}}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        证件类型
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{getCertificateTypeText(dataList.COMP_IDT)}}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        证件号码
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{dataList.COMP_IDT_NO}}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        地址
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{dataList.COMP_ADD}}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        帐号
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{dataList.ACCT_NO}}
+                    </div>
+                </div>
+            </div>
+            <div class="main_section_item">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    业务申请信息
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        保函类型
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{ dataList.BUSI_TYPE}}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        申请币种
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{dataList.APPLY_CCY}}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        申请金额
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{dataList.TRAN_AMT}}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        申请期限(天)
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{dataList.APPLY_MON}}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        联系人姓名
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{dataList.CONTACT_NAME}}
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        联系手机号码
+                    </div>
+                    <div class="__item_list_right flex color272727 display align_item_center justify_content_right">
+                        {{dataList.CONTACT_MOBILE}}
+                    </div>
+                </div>
+            </div>
+            <div class="main_section_item">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    <div class="flex">
+                        营业执照
+                    </div>
+
+                </div>
+                <div class="attachment_container display">
+                    <div class="attachment_item" v-for="item in showList1">
+                        <div class="display align_item_center justify_content_center">
+                            <div class="icon_container" v-if="item.type == 'pdf'" @click='wactchPdf(item)'>
+                                <img src="../images/pdf@2x.png" alt="">
+                            </div>
+                            <div class="icon_container" v-else>
+                                <img :src="'data:image/'+item.type+';base64,'+item.base64" alt=""
+                                    @click="bigImg('data:image/'+item.type+';base64,'+item.base64)">
+                            </div>
+                        </div>
+                        <div class="attachment_text fs10 margin_top_5 color666666 display align_item_center justify_content_center"
+                            v-if="item.type == 'pdf'" style="white-space:normal;word-break:break-all">
+                            {{item.name}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main_section_item">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    <div class="flex">
+                        法人身份证
+                    </div>
+                </div>
+                <div class="attachment_container display">
+                    <div class="attachment_item" v-for="item in showList2">
+                        <div class="display align_item_center justify_content_center">
+                            <div class="icon_container" v-if="item.type == 'pdf'" @click='wactchPdf(item)'>
+                                <img src="../images/pdf@2x.png" alt="">
+                            </div>
+                            <div class="icon_container" v-else>
+                                <img :src="'data:image/'+item.type+';base64,'+item.base64" alt=""
+                                    @click="bigImg('data:image/'+item.type+';base64,'+item.base64)">
+                            </div>
+                        </div>
+                        <div class="attachment_text fs10 margin_top_5 color666666 display align_item_center justify_content_center"
+                            v-if="item.type == 'pdf'" style="white-space:normal;word-break:break-all">
+                            {{item.name}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main_section_item">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    <div class="flex">
+                        基础交易资料
+                    </div>
+                </div>
+                <div class="attachment_container display">
+                    <div class="attachment_item" v-for="item in showList3">
+                        <div class="display align_item_center justify_content_center">
+                            <div class="icon_container" v-if="item.type == 'pdf'" @click='wactchPdf(item)'>
+                                <img src="../images/pdf@2x.png" alt="">
+                            </div>
+                            <div class="icon_container" v-else>
+                                <img :src="'data:image/'+item.type+';base64,'+item.base64" alt=""
+                                    @click="bigImg('data:image/'+item.type+';base64,'+item.base64)">
+                            </div>
+                        </div>
+                        <div class="attachment_text fs10 margin_top_5 color666666 display align_item_center justify_content_center"
+                            v-if="item.type == 'pdf'" style="white-space:normal;word-break:break-all">
+                            {{item.name}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main_section_item" v-if="role == 'operate'  && dataList.status == '1' ">
+                <div class="fs15 main_section_item_header display color272727 fw600">
+                    审批信息
+                </div>
+                <div class="__item_list display">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        <span style="color:red">*</span> 审批意见
+                    </div>
+                    <div style="display: flex">
+                        <div @click="selectSubmitInfo('1')"
+                            style="display: flex;align-items: center;margin-right: 15px"><img class="pass icon"
+                                style="width:20px;height:20px;margin-right: 3px" src="../images/unselect.png">同意</div>
+                        <div @click="selectSubmitInfo('2')" style="display: flex;align-items: center"><img
+                                class="refuse icon" style="width:20px;height:20px;margin-right: 3px"
+                                src="../images/unselect.png">拒绝</div>
+                    </div>
+                </div>
+                <div class="__item_list display" v-if="status=='2'">
+                    <div class="__item_list_left display color666666 align_item_center">
+                        拒绝原因
+                    </div>
+                </div>
+                <div class="__item_list display">
+                    <div style=" background:rgba(255,255,255,1); border-radius:4px; padding: 5px 0px;width: 95%;"
+                        v-if="status=='2'">
+                        <textarea style="width:96%; height:70px; padding: 10px 2%; background:rgba(243,244,248,1); border-radius:4px; font-size:16px; font-family:PingFangSC-Regular,PingFang SC;
+                        border:none; " rows="5" v-model='remark' maxlength='100'
+                            placeholder="请输入拒绝原因(审批拒绝时必填)"></textarea>
+                    </div>
+                </div>
+
+            </div>
+            <div class="btn btns">
+                <p v-if="role == 'operate' && dataList.status == '1'" class="submit"
+                    @click="updateFinacGuaranteeLetterDataFlow()">提交</p>
+                <p v-if="role == 'Manager' && dataList.status == '0'" class="submit" @click="selectMangerList()">转办</p>
+
+            </div>
+        </section>
+
+        <div class="now_container85"></div>
+        <div class="searchArea" v-if="page == '2'">
+            <div class="searchHeader">
+                <div class="inputSearch">
+                    <div class="inputSearchImg"></div>
+                    <div class="keyInput">
+                        <van-field type="text" v-model="searchWord" placeholder="请输入审批人名称" maxlength="10"></van-field>
+                    </div>
+                </div>
+                <div class="clickSearch" @click="getManagerList">搜索</div>
+            </div>
+            <div class="searchListArea" v-for="(item,index) in managerList">
+                <div class="searchList" @click="chooseCompany(item)">{{item.idcardname}}-{{item.userid}}
+                </div>
+            </div>
+            <div class="nodate" v-if="nodata">
+                <div class="noMessage">
+                    <img src="../images/noList.png">
+                </div>
+                暂无数据
+            </div>
+        </div>
+        <!-- 流转信息弹框 -->
+        <van-popup v-model="showReviewFlag" round position="bottom" closeable close-icon="close">
+            <div class="flowModel" v-if="reviewList.length > 0">
+                <div class="title">查看审批流程</div>
+                <div class="flowCt">
+                    <!-- 运营经理 -->
+                    <template>
+                        <div class="flow">
+                            <div class="left"><i><img src="../images/flow.png" alt=""></i></div>
+                            <div class="right">
+                                <div class="peopleType">审批专员</div>
+                                <div class="nameTime">
+                                    <div class="name">
+                                        <template>
+                                            {{reviewList[0].name}}
+                                            (
+                                            <span class="status1">已转办</span>
+                                            )
+                                        </template>
+                                    </div>
+                                    <template>
+                                        <div class="time">{{reviewList[0].updateTime}}</div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-if='reviewList[1]'>
+                        <div class="flow">
+                            <div class="left"><i><img src="../images/flow.png" alt=""></i></div>
+                            <div class="right">
+                                <div class="peopleType">审批员</div>
+                                <div class="nameTime">
+                                    <div class="name">
+                                        <template>
+                                            {{reviewList[1].name}}
+                                            (
+                                            <span class="status1"> {{getReviewListText(reviewList[1].status)}}</span>
+                                            )
+                                        </template>
+                                    </div>
+                                    <template>
+                                        <div class="time">{{reviewList[1].updateTime}}</div>
+                                    </template>
+
+
+                                </div>
+                                <div v-if="reviewList[1].status == '2'" class="reason">拒绝原因：{{reviewList[1].remark}}
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </van-popup>
+    </div>
+</body>
+<script type="text/javascript" src="../../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../../common/js/base.js"></script>
+<script type="text/javascript" src="../../common/js/jssdk.js"></script>
+<script src="../../common/js/watermark.js"></script>
+<script src="../../common/js/server.js"></script>
+<script src="../js/signDetails.js"></script>
+<script>
+    initJSSDK(['hideAllNonBaseMenuItem', 'previewImage'])
+    wx.ready(function () {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+</script>
+<script type="text/javascript" src="../../common/js/getUserInfo.js"></script>
+
+</html>

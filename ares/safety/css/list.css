@@ -1,0 +1,14 @@
+
+.main_container {
+    padding: 0 12px;
+}
+
+.main_item {
+    background-color: #fff;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.main_item:first-child {
+    margin-top: 0;
+}

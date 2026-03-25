@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>总行部室管理效能现场检查</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/detail.css?v=0.0.4">
+</head>
+<body>
+
+    <div id="app" v-cloak>
+
+        <div class="datailBox">
+            <div class="detail">
+                <div class="dt"><span>部门名称</span><span>{{infos.depName}}</span></div>
+                <div class="dt"><span>作风类型</span><span>{{readWayCategory(infos.wayCategory)}}</span></div>
+                <div class="dt" v-if="infos.userObject.length > 0"><span>员工号</span><span>{{getCode(infos.userObject)}}</span></div>
+                <div class="dt" v-if="infos.userObject.length > 0"><span>员工姓名</span><span>{{getName(infos.userObject)}}</span></div>
+                <div class="dt" v-if="infos.submitYear && infos.submitYear !='' && infos.submitMonth && infos.submitMonth !=''">
+                    <span>上报时间</span><span>{{infos.submitYear}}年{{infos.submitMonth}}月</span>
+                </div>
+                <template v-if="filesList.length > 0 ">
+                    <div class="filesShow">
+                        <div class="title">现场拍摄</div>
+                        <div class="files">
+                            <tempalte v-for="(it,i) in filesList">
+                                <span style="word-break: break-all" @click="watchFiles(it.inspectionId,it.resourceId,it.orginalFileName,it.orginalFileName)">{{it.orginalFileName}}</span>
+                            </tempalte>
+                        </div>
+                    </div>
+                </template>
+                <div class="dt"><span>备注</span><span>{{infos.context}}</span></div>
+            </div>
+            <div style="width: 100%;height: 50px"></div>
+
+        </div>
+
+
+        <!-- 照片弹框 -->
+        <van-action-sheet v-model="isShowPics" @click-overlay="clearVideo">
+            <div class="main2">
+                <div class="ship">
+                    <video
+                            :key="videoUrl"
+                            playsinline="true"
+                            x5-video-player-fullscreen="ture"
+                            x5-video-player-type="h5"
+                            x5-playsinline="true"
+                            x-webkit-airplay="true"
+                            webkit-playsinline="true"
+                            preload="auto"
+                            style="background: #f5f5f5"
+                            autoplay
+                            controls
+                    >
+                        <source :src="videoUrl" type="video/mp4">
+                    </video>
+                </div>
+                <div class="videoTitle">{{videoTitle}}</div>
+                <div style="width: 100%;height: 30px;"></div>
+            </div>
+        </van-action-sheet>
+
+    </div>
+
+</body>
+</html>
+
+
+<!-- 引入 Vue 和 Vant 的 JS 文件 -->
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/jwxwork.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js?v=1.2"></script>
+<script type="text/javascript" src="../common/js/vConsole.min.js"></script>
+<script type="text/javascript" src="../common/js/server.js"></script>
+<script type="text/javascript" src="./js/server.js"></script>
+<script type="text/javascript" src="../common/js/compressPhoto.js"></script>
+<script type="text/javascript" src="./js/detail.js?v=0.0.29"></script>
+<script>
+
+    // var vConsole = new VConsole();
+
+
+    //初始化微信社区
+    $(function () {
+        initJSSDK([ 'hideAllNonBaseMenuItem']);
+        wx.ready(function () {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+
+    function getUserFinish() {
+        action();
+    }
+
+
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>

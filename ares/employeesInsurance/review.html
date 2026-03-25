@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+        name="viewport" />
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="css/review.css">
+
+    <title>保险资格备案审查</title>
+</head>
+
+<body>
+    <div class="container" v-cloak>
+        <div class="topArea">
+            <div class="listline">
+                <div>申请类型</div>
+                <div>{{userinfo.type}}</div>
+            </div>
+            <div class="listline">
+                <div>姓名</div>
+                <div>{{userinfo.name}}</div>
+            </div>
+            <div class="listline">
+                <div>证件号码</div>
+                <div>{{userinfo.idc}}</div>
+            </div>
+            <div class="listline">
+                <div>民族</div>
+                <div>{{userinfo.nation}}</div>
+            </div>
+            <div class="listline">
+                <div>政治面貌</div>
+                <div>{{userinfo.mass}}</div>
+            </div>
+            <div class="listline">
+                <div>文化程度</div>
+                <div>{{userinfo.educationLevel}}</div>
+            </div>
+            <div class="listline">
+                <div>移动电话</div>
+                <div>{{userinfo.mobile}}</div>
+            </div>
+        </div>
+        <div class="midArea">
+            <div class="listline">
+                <div>所属机构代码</div>
+                <div>{{userinfo.oldOrgid}}</div>
+            </div>
+            <div class="listline">
+                <div>所属支行</div>
+                <div>{{userinfo.oldSsbm}}</div>
+            </div>
+        </div>
+        <div class="btmArea"  v-if = "type == '1'">
+            <div class="listline" style="padding: 13px 0px 8px 0px">
+                <div>相关资料</div>
+            </div>
+            <div class="listline">
+                <div style="margin-right:10px;">
+                    <img class="btmImg" id="idImg" src="./images/addImg.png" @click="bigImg(idImgBase64)" alt="">
+                    <div class="imgTitle">证件照片</div>
+                </div>
+                <div>
+                    <img class="btmImg" id="cns" src="./images/addImg.png" @click="bigImg(cnsBase64)" alt="">
+                    <div class="imgTitle">承诺书</div>
+                </div>
+            </div>
+        </div>
+        <div class="midArea">
+            <div class="listline" style="margin-top:9px">
+                <div>申请时间</div>
+                <div>{{userinfo.applyTime}}</div>
+            </div>
+        </div>
+        <div class="midArea" v-if="'leaderCheckData' in userinfo ">
+                <div class="listline" style="margin-top:9px">
+                    <div>支行长审核意见</div>
+                    <div>{{userinfo.leaderStatus == '1' ? '同意' : '拒绝'}}</div>
+                </div>
+                <div class="listline" style="margin-top:9px">
+                        <div>审核时间</div>
+                        <div>{{userinfo.leaderCheckData}}</div>
+                    </div>
+            </div>
+            <div class="midArea" v-if="'managerCheckDate' in userinfo ">
+                    <div class="listline" style="margin-top:9px">
+                        <div>零售部</div>
+                        <div>{{userinfo.managerStatus == '1' ? '同意' : '拒绝'}}</div>
+                    </div>
+                    <div class="listline" style="margin-top:9px">
+                            <div>审核时间</div>
+                            <div>{{userinfo.managerCheckDate}}</div>
+                        </div>
+                </div>
+        <div class="midArea" v-if="registStatus">
+            <div class="listline">
+                <div>审核意见</div>
+                <div>
+                    <van-radio-group v-model="radio" direction="horizontal" id="radioStatus" :disabled="ban">
+                        <van-radio name="1">通过</van-radio>
+                        <van-radio name="2">驳回</van-radio>
+                    </van-radio-group>
+                </div>
+            </div>
+        </div>
+        <div v-if="btmShow" class="testBtn" @click="checkInsuranceApplyData">{{btmText}}</div>
+
+    </div>
+
+
+
+</body>
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script src="../common/js/server.js"></script>
+<script src="js/review.js"></script>
+<script src="../common/js/vConsole.min.js"></script>
+
+<script>
+    //var vConsole = new VConsole();
+    initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'selectEnterpriseContact'])
+    wx.ready(function () {
+        wx.hideAllNonBaseMenuItem();
+    });
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({
+            content: username
+        });
+        initFun()
+    }
+    // initFun()
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+
+</html>

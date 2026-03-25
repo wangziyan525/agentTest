@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>建档立卡</title>
+    <link rel="stylesheet" href="../common/css/vant-2.12.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/weui.min.css">
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/index.css?v=4.0">
+</head>
+<body style="overflow: hidden">
+    <div id="app" style="overflow-y: scroll;height: 100%;display:none">
+       <div v-if="page=='page1'">
+           <div class="indexOne" @click="goList('1')">
+               <img src="images/indexImg1.png">
+               <div>小微企业建档</div>
+           </div>
+           <div class="indexOne" @click="goList('2')">
+                <img src="images/indexImg2.png">
+                <div>个体建档</div>
+            </div>
+            <div class="indexOne" @click="goList('3')" >
+                <img src="images/indexImg3.png">
+                <div>农户建档</div>
+            </div>
+
+
+           
+            
+       </div>
+       <div style="height: 88px;"></div>
+       <div class="footTab">
+            <div class="footOne" >
+                <img :src="page=='page1'?'images/indexChoose.png':'images/index.png'">
+                <div :class="page=='page1'?'choosetab':''">我的建档</div>
+            </div>
+            <div class="footOne" @click="toPage()">
+                <img :src="page=='page2'?'images/listChoose.png':'images/list.png'">
+                <div :class="page=='page2'?'choosetab':''">建档数据</div>
+            </div>
+       </div>
+    </div>
+</body>
+<script src="../common/js/vue.min.js"></script>
+<script src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/base.js?v=202110220"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script src="./../common/js/server.js"></script>
+<script type="text/javascript" src="js/index.js?v=5"></script>
+<!-- <script src="../common/js/vConsole.min.js"></script> -->
+<script type="text/javascript">
+    // var vConsole = new VConsole();
+    
+    function getUserFinish(){
+            initJSSDK(['hideAllNonBaseMenuItem','invoke','closeWindow']);
+
+           wx.ready(function() {
+               wx.hideAllNonBaseMenuItem();
+               WeixinJSBridge.on('menu:setfont', function() {
+                    WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : '0' });
+                });
+
+           });
+           // 调用水印
+           var username = $.parseJSON($.cookie("user")).name;
+           __canvasWM({
+               content: username
+           });
+           initFun()
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

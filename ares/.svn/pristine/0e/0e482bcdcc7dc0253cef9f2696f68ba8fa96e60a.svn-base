@@ -1,0 +1,371 @@
+
+
+[v-cloak]{
+    display: none;
+}
+
+html, body {
+    min-height: 100vh;
+    background-color: #f3f4f6;
+}
+/* page1-------------------------------------------- */
+.signHeader{
+    display: flex;
+    background: #FFFFFF;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+.selectOption{
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+.selectName{
+    text-align: center;
+}
+.selectImg{
+    width: 14px;
+    height: 14px;
+    background-image: url('../images/noSelect.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: 0px 4px;
+}
+.custom-btm{
+    margin:12px 0px 55px 0px; 
+    padding: 12px;
+    background: #FFFFFF;   
+}
+.totalNum{
+    font-size: 12px;
+color: #0465FF;
+line-height: 17px;
+font-weight: 400;
+margin: 0px 2px;
+}
+.detailTotalNum{
+    font-size: 12px;
+color: #999999;
+line-height: 17px;
+font-weight: 400;
+padding: 5px 0px; 
+}
+.btm-table{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #FFFFFF;
+    border: 1px solid rgba(245,246,247,1);
+    border-radius: 4px;
+}
+.detailListTitle{
+    font-size: 13px;
+    color: #999999;
+    font-weight: 400;
+    width: 40%;
+}
+.detailValue{
+    font-size: 13px;
+    color: #3B3B3B;
+    font-weight: 400;
+}
+.detailList{
+    padding: 10px 12px;
+    margin-bottom: 10px
+}
+.listItem{
+    display: flex;
+    
+}
+.listItem div{
+    flex: 1;
+    text-align: center
+} 
+.detailListCol{
+    display: flex;
+    
+}
+.btns{
+    background: #FFFFFF;
+    border-radius: 0px 0px 6px 6px;
+    padding: 8px 12px;
+}
+.export{
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #FFFFFF;
+    text-align: center;
+    font-weight: 400;
+    background: #0465FF;
+border-radius: 6px;
+/* width: 80%; */
+padding: 12px;
+margin: 0 auto;
+}
+/* signstatus */
+.statusListArea{
+    background: #F5F6F7;
+}
+.statusList{
+    background: #FFFFFF;
+    font-size: 16px;
+/* color: #3B3B3B; */
+text-align: center;
+font-weight: 400;
+padding: 15px 0px;
+border-bottom: 1px solid rgba(153, 153, 153, 0.25);
+    border-radius: 8px 8px 0px 0px;
+}
+.selected{
+    color: #0465FF!important;
+}
+
+/* page2-------------------------------------------- */
+.searchHeader{
+    background: #3975C6;
+    display: flex;
+    align-items: center;
+}
+.closeSearch{
+    width: 16px;
+    height: 16px;
+    background-image: url('../images/close.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin:10px  0px 10px 15px;
+    
+}
+.inputSearch{
+    display: flex;
+    align-items: center;
+    width: 75%;
+    background: rgba(247,247,247,0.20);
+border-radius: 6px;
+margin:10px 12px
+}
+.inputSearchImg{
+    width: 14px;
+    height: 14px;
+    background-image: url('../images/search.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: 0px 10px;
+}
+.clickSearch{
+    font-size: 15px;
+color: #FFFFFF;
+font-weight: 400;
+}
+.keyInput{
+    flex: 1;
+    font-size: 15px;
+
+}
+
+.keyInput .van-field__control{
+    text-align: left;
+    overflow: hidden;
+    font-size: 15px;
+color: #FFFFFF;
+font-weight: 400;
+
+}
+.van-cell{
+    background-color:transparent!important;
+    padding: 7px 0px!important
+}
+.keyInput ::placeholder {
+    opacity: 0.6;
+font-family: PingFangSC-Regular;
+font-size: 15px;
+color: #FFFFFF;
+font-weight: 400;
+}
+.searchListArea{
+    margin: 0px  15px;
+
+}
+.searchList{
+    font-size: 14px;
+color: #3B3B3B;
+font-weight: 400;
+padding: 15px 0px;
+border-bottom: 1px solid rgba(153,153,153,0.15)
+
+}
+.searchList div:last-of-type{
+    margin-bottom: 20px
+}
+.nodate{
+    text-align: center;
+    margin: 20px auto;
+    font-size: 15px;
+    color: #999999;
+}
+.noMessage{
+    width:160px;
+    margin: 50px auto 10px;
+}
+.noMessage>img{
+    width:100%;
+}
+/* ---------------------------------遮罩层(时间选择)------------------------ */
+.popupContent{
+    width: 100%;
+    height: 100%;
+}
+.popupContent .title{
+    width: 100%;
+    font-size: 14px;
+    color: #333333;
+    line-height: 20px;
+    padding: 5px 0;
+    box-sizing: border-box;
+    font-weight: 500;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+/*时间段*/
+.popupContent .daiTime{
+    width: 100%;
+    display: flex;
+    margin: 20px 0;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+.popupContent .daiTime span{
+    display: flex;
+    width: calc((100% - 30px)/4);
+    padding: 6px 0;
+    box-sizing: border-box;
+    background: #F2F2F2;
+    border-radius: 5px;
+    font-size: 12px;
+    line-height: 20px;
+    color: #333333;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.popupContent .daiTime span:nth-child(4n+2){
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.popupContent .daiTime span:nth-child(4n+3){
+    margin-right: 10px;
+}
+.popupContent .daiTime .diyTimeActive{
+    background: #4675C9;
+    color: #fff;
+}
+/*自定义时间*/
+.popupContent .diyTime{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+.popupContent .diyTime .startTime,
+.popupContent .diyTime .endTime{
+    width: calc((100% - 40px)/2);
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    background: #F2F2F2;
+    border-radius: 50px;
+}
+
+
+.popupContent .diyTime .startTime input,
+.popupContent .diyTime .endTime input{
+    width: 100%;
+    background: #F2F2F2;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    font-size: 14px;
+    color: #333;
+    line-height: 14px;
+    text-align: center;
+}
+.popupContent .diyTime span{
+    width: 40px;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: center;
+    color: #999;
+}
+/*状态筛选*/
+.popupContent .diyStatus{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 20px 0;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+.popupContent .diyStatus span{
+    display: flex;
+    width: calc((100% - 20px)/3);
+    padding: 6px 0;
+    box-sizing: border-box;
+    background: #F2F2F2;
+    border-radius: 16px;
+    font-size: 12px;
+    line-height: 20px;
+    color: #333333;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.popupContent .diyStatus span:nth-child(3n+2){
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.popupContent .diyStatus span:nth-child(4){
+    margin-top: 15px;
+}
+.popupContent .diyStatus .diyTimeActive{
+    background: #4675C9;
+    color: #fff;
+}
+/* ----------------------------- 按钮 ------------------------------- */
+.searchBtn{
+    width: 100%;
+    display: flex;
+    border-top: 0.5px solid rgba(238,238,238,1);
+    margin-top: 30px;
+}
+.searchBtn span{
+    display: block;
+    width: 50%;
+    font-size: 15px;
+    line-height: 50px;
+    letter-spacing: 0;
+    text-align: center;
+}
+.searchBtn span:nth-child(1){
+    background: #fff;
+}
+.searchBtn span:nth-child(2){
+    background: #4675C9;
+    color: #fff;
+}
+.searchModel .choosed{
+    background: #077BFF !important;
+    color: #fff !important;
+}
+.van-picker__cancel, .van-picker__confirm{
+    display: none!important
+}
+.selectedDate{
+    color: #0465FF;
+    border: 1px solid rgba(4,101,255,1);
+
+}
