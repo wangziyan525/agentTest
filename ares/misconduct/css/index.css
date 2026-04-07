@@ -110,6 +110,7 @@ html,body {
 }
 .baseLine{
     display: flex;
+    align-items: flex-start;
     padding: 10px 0;
     border-bottom: 1px solid #eee;
 }
@@ -117,15 +118,27 @@ html,body {
     font-size: 17px;
     color: #666666;
     font-weight: 400;
-    min-width: 8em;
-    
+    width: 40%;
+    flex: 0 0 40%;
+    max-width: 40%;
+    box-sizing: border-box;
 }
 .baseLine>div:nth-of-type(2){
     text-align: right;
     font-size: 17px;
     color: #000000;
     font-weight: 400;
-    flex: 1;
+    width: 60%;
+    flex: 0 0 60%;
+    max-width: 60%;
+    min-width: 0;
+    box-sizing: border-box;
+    white-space: normal;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+.linkValue{
+    color: #267EF0 !important;
 }
 .textPart{
     padding: 10px 0;
@@ -419,6 +432,12 @@ html,body {
     margin: 20px auto;
     font-size: 15px;
     color: #999999;
+}
+.sectionTitle{
+    color:#727272;
+    font-size: 13px;
+    width: 92%;
+    margin: 14px auto 8px;
 }
 .noMessage{
     width:160px;

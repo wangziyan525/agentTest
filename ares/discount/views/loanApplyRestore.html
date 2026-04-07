@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport">
+    <title>转贴现卖出查询</title>
+    <link rel="stylesheet" href="../css/loanApplyRestore.css">
+</head>
+<body class="loan-restore-page">
+    <div class="loan-restore-screen" id="loanRestoreApp">
+        <header class="loan-restore-header">
+            <div class="loan-restore-statusbar" aria-hidden="true">
+                <div class="loan-restore-statusbar__left">
+                    <span class="loan-restore-statusbar__signal"></span>
+                    <span class="loan-restore-statusbar__carrier">Sketch</span>
+                    <span class="loan-restore-statusbar__wifi"></span>
+                </div>
+                <div class="loan-restore-statusbar__time">9:41 AM</div>
+                <div class="loan-restore-statusbar__right">
+                    <span class="loan-restore-statusbar__battery-text">100%</span>
+                    <span class="loan-restore-statusbar__battery">
+                        <span class="loan-restore-statusbar__battery-cap"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="loan-restore-navbar">
+                <button class="loan-restore-back" type="button" aria-label="返回"></button>
+                <div class="loan-restore-navbar__title">转贴现卖出查询</div>
+            </div>
+            <div class="loan-restore-tabs" aria-label="页面切换">
+                <button class="loan-restore-tabs__item loan-restore-tabs__item--active" data-tab="apply" type="button">转贴现卖出申请</button>
+                <button class="loan-restore-tabs__item" data-tab="result" type="button">卖出结果查询</button>
+                <span class="loan-restore-tabs__line"></span>
+            </div>
+        </header>
+
+        <section class="loan-restore-filter" aria-label="筛选条件">
+            <button class="loan-restore-filter__item" id="loanRestoreLeftFilter" type="button">
+                <span id="loanRestoreLeftLabel">银票</span>
+                <img alt="" class="loan-restore-filter__icon" src="../images/loanApply-arrow-down.png">
+            </button>
+            <span class="loan-restore-filter__divider" aria-hidden="true"></span>
+            <button class="loan-restore-filter__item" id="loanRestoreRightFilter" type="button">
+                <span id="loanRestoreRightLabel">筛选</span>
+                <img alt="" class="loan-restore-filter__icon loan-restore-filter__icon--up" src="../images/loanApply-arrow-up.png">
+            </button>
+        </section>
+
+        <main class="loan-restore-main">
+            <section class="loan-restore-panel loan-restore-panel--active" data-panel="apply">
+                <div class="loan-restore-card">
+                    <div class="loan-restore-card__head">
+                        <label class="loan-restore-check">
+                            <input class="loan-restore-check__input loan-restore-apply-check" type="checkbox" checked>
+                            <span class="loan-restore-check__icon"></span>
+                        </label>
+                        <div class="loan-restore-card__number">4040112223348255</div>
+                        <div class="loan-restore-card__tag loan-restore-card__tag--cool">银票</div>
+                    </div>
+                    <div class="loan-restore-card__body">
+                        <div class="loan-restore-row"><span>票面金额</span><span>¥1,233,234.00</span></div>
+                        <div class="loan-restore-row"><span>子票区间</span><span>000000000001,00006000000</span></div>
+                        <div class="loan-restore-row"><span>出票日期</span><span>2025-05-18</span></div>
+                        <div class="loan-restore-row"><span>到期日期</span><span>2025-10-30</span></div>
+                        <div class="loan-restore-row"><span>出票人名称</span><span>陕西莲湖华阳物流有限公司</span></div>
+                        <div class="loan-restore-row"><span>收票人名称</span><span>西安文旅科技有限公司</span></div>
+                        <div class="loan-restore-row"><span>承兑人名称</span><span>西安银行高新科技路支行</span></div>
+                    </div>
+                </div>
+
+                <div class="loan-restore-card">
+                    <div class="loan-restore-card__head">
+                        <label class="loan-restore-check">
+                            <input class="loan-restore-check__input loan-restore-apply-check" type="checkbox" checked>
+                            <span class="loan-restore-check__icon"></span>
+                        </label>
+                        <div class="loan-restore-card__number">4040112223348255</div>
+                        <div class="loan-restore-card__tag loan-restore-card__tag--warm">银票</div>
+                    </div>
+                    <div class="loan-restore-card__body">
+                        <div class="loan-restore-row"><span>票面金额</span><span>¥1,233,234.00</span></div>
+                        <div class="loan-restore-row"><span>子票区间</span><span>000000000001,00006000000</span></div>
+                        <div class="loan-restore-row"><span>出票日期</span><span>2025-05-18</span></div>
+                        <div class="loan-restore-row"><span>到期日期</span><span>2025-10-30</span></div>
+                        <div class="loan-restore-row"><span>出票人名称</span><span>陕西莲湖华阳物流有限公司</span></div>
+                        <div class="loan-restore-row"><span>收票人名称</span><span>西安文旅科技有限公司</span></div>
+                        <div class="loan-restore-row"><span>承兑人名称</span><span>西安银行高新科技路支行</span></div>
+                    </div>
+                </div>
+
+                <div class="loan-restore-card">
+                    <div class="loan-restore-card__head">
+                        <label class="loan-restore-check">
+                            <input class="loan-restore-check__input loan-restore-apply-check" type="checkbox" checked>
+                            <span class="loan-restore-check__icon"></span>
+                        </label>
+                        <div class="loan-restore-card__number">4040112223348255</div>
+                        <div class="loan-restore-card__tag loan-restore-card__tag--cool">银票</div>
+                    </div>
+                    <div class="loan-restore-card__body">
+                        <div class="loan-restore-row"><span>票面金额</span><span>¥1,233,234.00</span></div>
+                        <div class="loan-restore-row"><span>子票区间</span><span>000000000001,00006000000</span></div>
+                        <div class="loan-restore-row"><span>出票日期</span><span>2025-05-18</span></div>
+                        <div class="loan-restore-row"><span>到期日期</span><span>2025-10-30</span></div>
+                        <div class="loan-restore-row"><span>出票人名称</span><span>陕西莲湖华阳物流有限公司</span></div>
+                        <div class="loan-restore-row"><span>收票人名称</span><span>西安文旅科技有限公司</span></div>
+                        <div class="loan-restore-row"><span>承兑人名称</span><span>西安银行高新科技路支行</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="loan-restore-panel" data-panel="result">
+                <div class="loan-restore-card loan-restore-card--result">
+                    <div class="loan-restore-card__head loan-restore-card__head--result">
+                        <div class="loan-restore-card__number">4040112223348255</div>
+                        <div class="loan-restore-card__tag loan-restore-card__tag--warm">银票</div>
+                        <span class="loan-restore-card__more"></span>
+                    </div>
+                    <div class="loan-restore-card__body">
+                        <div class="loan-restore-row"><span>报价单编号</span><span>234567865432134545</span></div>
+                        <div class="loan-restore-row"><span>票据总数</span><span>2</span></div>
+                        <div class="loan-restore-row"><span>票据总金额</span><span>¥19,200.00</span></div>
+                        <div class="loan-restore-row"><span>结算金额</span><span>¥18,624.00</span></div>
+                        <div class="loan-restore-row"><span>应付利息</span><span>¥586.00</span></div>
+                        <div class="loan-restore-row"><span>交易日期</span><span>2025-06-25</span></div>
+                        <div class="loan-restore-row"><span>批次状态</span><span class="loan-restore-row__danger">交易失败</span></div>
+                    </div>
+                </div>
+
+                <div class="loan-restore-card loan-restore-card--result">
+                    <div class="loan-restore-card__head loan-restore-card__head--result">
+                        <div class="loan-restore-card__number">4040112223348255</div>
+                        <div class="loan-restore-card__tag">银票</div>
+                        <span class="loan-restore-card__more"></span>
+                    </div>
+                    <div class="loan-restore-card__body">
+                        <div class="loan-restore-row"><span>报价单编号</span><span>234567865432134545</span></div>
+                        <div class="loan-restore-row"><span>票据总数</span><span>2</span></div>
+                        <div class="loan-restore-row"><span>票据总金额</span><span>¥19,200.00</span></div>
+                        <div class="loan-restore-row"><span>结算金额</span><span>¥18,624.00</span></div>
+                        <div class="loan-restore-row"><span>应付利息</span><span>¥586.00</span></div>
+                        <div class="loan-restore-row"><span>交易日期</span><span>2025-06-25</span></div>
+                        <div class="loan-restore-row"><span>批次状态</span><span class="loan-restore-row__danger">交易失败</span></div>
+                    </div>
+                </div>
+
+                <div class="loan-restore-card loan-restore-card--result">
+                    <div class="loan-restore-card__head loan-restore-card__head--result">
+                        <div class="loan-restore-card__number">4040112223348255</div>
+                        <div class="loan-restore-card__tag loan-restore-card__tag--cool">银票</div>
+                        <span class="loan-restore-card__more"></span>
+                    </div>
+                    <div class="loan-restore-card__body">
+                        <div class="loan-restore-row"><span>报价单编号</span><span>234567865432134545</span></div>
+                        <div class="loan-restore-row"><span>票据总数</span><span>2</span></div>
+                        <div class="loan-restore-row"><span>票据总金额</span><span>¥19,200.00</span></div>
+                        <div class="loan-restore-row"><span>结算金额</span><span>¥18,624.00</span></div>
+                        <div class="loan-restore-row"><span>应付利息</span><span>¥586.00</span></div>
+                        <div class="loan-restore-row"><span>交易日期</span><span>2025-06-25</span></div>
+                        <div class="loan-restore-row"><span>批次状态</span><span class="loan-restore-row__danger">交易失败</span></div>
+                    </div>
+                </div>
+
+                <div class="loan-restore-bottom-tip">已到最底部了</div>
+            </section>
+        </main>
+
+        <footer class="loan-restore-footer" id="loanRestoreFooter">
+            <div class="loan-restore-footer__bar">
+                <label class="loan-restore-check loan-restore-check--all">
+                    <input id="loanRestoreCheckAll" class="loan-restore-check__input" type="checkbox">
+                    <span class="loan-restore-check__icon"></span>
+                    <span class="loan-restore-check__label">全选本页</span>
+                </label>
+                <div class="loan-restore-footer__count"><span id="loanRestoreSelectedCount">3</span>/<span id="loanRestoreTotalCount">3</span></div>
+            </div>
+            <button class="loan-restore-footer__submit" id="loanRestoreSubmit" type="button">转贴现卖出申请</button>
+        </footer>
+    </div>
+
+    <div class="loan-restore-mask" id="loanRestoreMask" hidden></div>
+
+    <section class="loan-restore-sheet" data-sheet="bill-type" hidden>
+        <div class="loan-restore-sheet__header">
+            <div class="loan-restore-sheet__title">选择票据类型</div>
+            <button class="loan-restore-sheet__close" type="button" aria-label="关闭"></button>
+        </div>
+        <div class="loan-restore-sheet__options">
+            <button class="loan-restore-option loan-restore-option--selected" data-value="银票" type="button">
+                <span>银票</span>
+                <span class="loan-restore-option__mark"></span>
+            </button>
+            <button class="loan-restore-option" data-value="商票" type="button">
+                <span>商票</span>
+                <span class="loan-restore-option__mark"></span>
+            </button>
+        </div>
+        <div class="loan-restore-sheet__actions">
+            <button class="loan-restore-sheet__action loan-restore-sheet__action--ghost" data-action="reset-bill" type="button">重置</button>
+            <button class="loan-restore-sheet__action loan-restore-sheet__action--primary" data-action="confirm-bill" type="button">确认</button>
+        </div>
+    </section>
+
+    <section class="loan-restore-sheet" data-sheet="date" hidden>
+        <div class="loan-restore-sheet__header">
+            <div class="loan-restore-sheet__title">请选择查询日期</div>
+            <button class="loan-restore-sheet__close" type="button" aria-label="关闭"></button>
+        </div>
+        <div class="loan-restore-date">
+            <div class="loan-restore-date__label">自定义时间</div>
+            <div class="loan-restore-date__range">
+                <button class="loan-restore-pill loan-restore-pill--date" type="button">2025-06-20</button>
+                <span class="loan-restore-date__line"></span>
+                <button class="loan-restore-pill loan-restore-pill--date" type="button">2025-06-25</button>
+            </div>
+            <div class="loan-restore-date__label loan-restore-date__label--group">时间段</div>
+            <div class="loan-restore-quick">
+                <button class="loan-restore-quick__item loan-restore-quick__item--active" type="button">当日</button>
+                <button class="loan-restore-quick__item" type="button">近七天</button>
+                <button class="loan-restore-quick__item" type="button">近一月</button>
+                <button class="loan-restore-quick__item" type="button">近三月</button>
+            </div>
+        </div>
+        <div class="loan-restore-sheet__actions">
+            <button class="loan-restore-sheet__action loan-restore-sheet__action--ghost" data-action="reset-date" type="button">重置</button>
+            <button class="loan-restore-sheet__action loan-restore-sheet__action--primary" data-action="confirm-date" type="button">确认</button>
+        </div>
+    </section>
+
+    <section class="loan-restore-sheet" data-sheet="filter" hidden>
+        <div class="loan-restore-sheet__header">
+            <div class="loan-restore-sheet__title">请选择筛选条件</div>
+            <button class="loan-restore-sheet__close" type="button" aria-label="关闭"></button>
+        </div>
+        <div class="loan-restore-form">
+            <div class="loan-restore-form__group">
+                <div class="loan-restore-form__label">票据类型</div>
+                <button class="loan-restore-pill loan-restore-pill--wide" type="button">
+                    <span>银票</span>
+                    <img alt="" class="loan-restore-pill__arrow" src="../images/loanApply-arrow-down.png">
+                </button>
+            </div>
+            <div class="loan-restore-form__group">
+                <div class="loan-restore-form__label">出票日期</div>
+                <div class="loan-restore-form__range">
+                    <button class="loan-restore-pill" type="button">起始日期</button>
+                    <span class="loan-restore-form__line"></span>
+                    <button class="loan-restore-pill" type="button">终止日期</button>
+                </div>
+            </div>
+            <div class="loan-restore-form__group">
+                <div class="loan-restore-form__label">到期日期</div>
+                <div class="loan-restore-form__range">
+                    <button class="loan-restore-pill" type="button">起始日期</button>
+                    <span class="loan-restore-form__line"></span>
+                    <button class="loan-restore-pill" type="button">终止日期</button>
+                </div>
+            </div>
+            <div class="loan-restore-form__group">
+                <div class="loan-restore-form__label">票面金额</div>
+                <div class="loan-restore-form__range">
+                    <button class="loan-restore-pill" type="button">¥最低金额</button>
+                    <span class="loan-restore-form__line"></span>
+                    <button class="loan-restore-pill" type="button">¥最高金额</button>
+                </div>
+            </div>
+        </div>
+        <div class="loan-restore-sheet__actions">
+            <button class="loan-restore-sheet__action loan-restore-sheet__action--ghost" data-action="reset-filter" type="button">重置</button>
+            <button class="loan-restore-sheet__action loan-restore-sheet__action--primary" data-action="confirm-filter" type="button">确认</button>
+        </div>
+    </section>
+
+    <script src="../js/loanApplyRestore.js"></script>
+</body>
+</html>

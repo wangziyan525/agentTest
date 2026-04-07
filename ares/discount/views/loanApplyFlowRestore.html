@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" name="viewport">
+    <title>转贴现卖出查询</title>
+    <link rel="stylesheet" href="../css/loanApplyFlowRestore.css">
+</head>
+<body class="loan-flow-page">
+    <div class="loan-flow-screen" id="loanFlowRestoreApp">
+        <header class="loan-flow-header">
+            <div class="loan-flow-statusbar" aria-hidden="true">
+                <div class="loan-flow-statusbar__left">
+                    <span class="loan-flow-statusbar__signal"></span>
+                    <span class="loan-flow-statusbar__carrier">Sketch</span>
+                    <span class="loan-flow-statusbar__wifi"></span>
+                </div>
+                <div class="loan-flow-statusbar__time">9:41 AM</div>
+                <div class="loan-flow-statusbar__right">
+                    <span class="loan-flow-statusbar__battery-text">100%</span>
+                    <span class="loan-flow-statusbar__battery">
+                        <span class="loan-flow-statusbar__battery-cap"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="loan-flow-navbar">
+                <button class="loan-flow-back" type="button" aria-label="返回"></button>
+                <div class="loan-flow-navbar__title">转贴现卖出查询</div>
+            </div>
+            <div class="loan-flow-tabs" aria-label="页面切换">
+                <button class="loan-flow-tabs__item loan-flow-tabs__item--active" data-tab="apply" type="button">转贴现卖出申请</button>
+                <button class="loan-flow-tabs__item" data-tab="result" type="button">卖出结果查询</button>
+                <span class="loan-flow-tabs__line"></span>
+            </div>
+        </header>
+
+        <section class="loan-flow-filter" aria-label="筛选条件">
+            <button class="loan-flow-filter__item" id="loanFlowLeftFilter" type="button">
+                <span id="loanFlowLeftLabel">银票</span>
+                <img alt="" class="loan-flow-filter__icon" src="../images/loanApply-arrow-down.png">
+            </button>
+            <span class="loan-flow-filter__divider" aria-hidden="true"></span>
+            <button class="loan-flow-filter__item" id="loanFlowRightFilter" type="button">
+                <span id="loanFlowRightLabel">筛选</span>
+                <img alt="" class="loan-flow-filter__icon loan-flow-filter__icon--up" src="../images/loanApply-arrow-up.png">
+            </button>
+        </section>
+
+        <main class="loan-flow-main">
+            <section class="loan-flow-panel loan-flow-panel--active" data-panel="apply">
+                <div class="loan-flow-card">
+                    <div class="loan-flow-card__head">
+                        <label class="loan-flow-check" for="loanFlowApply0">
+                            <input checked class="loan-flow-check__input loan-flow-apply-check" id="loanFlowApply0" type="checkbox">
+                            <span class="loan-flow-check__icon"></span>
+                        </label>
+                        <div class="loan-flow-card__number">4040112223348255</div>
+                        <div class="loan-flow-card__tag loan-flow-card__tag--warm">商票</div>
+                    </div>
+                    <div class="loan-flow-card__body">
+                        <div class="loan-flow-row"><span>票面金额</span><span>¥1,233,234.00</span></div>
+                        <div class="loan-flow-row"><span>子票区间</span><span>000000000001,00006000000</span></div>
+                        <div class="loan-flow-row"><span>出票日期</span><span>2025-05-18</span></div>
+                        <div class="loan-flow-row"><span>到期日期</span><span>2025-10-30</span></div>
+                        <div class="loan-flow-row"><span>出票人名称</span><span>陕西莲湖华阳物流有限公司</span></div>
+                        <div class="loan-flow-row"><span>收票人名称</span><span>西安文旅科技有限公司</span></div>
+                        <div class="loan-flow-row"><span>承兑人名称</span><span>西安银行高新科技路支行</span></div>
+                    </div>
+                </div>
+
+                <div class="loan-flow-card">
+                    <div class="loan-flow-card__head">
+                        <label class="loan-flow-check" for="loanFlowApply1">
+                            <input checked class="loan-flow-check__input loan-flow-apply-check" id="loanFlowApply1" type="checkbox">
+                            <span class="loan-flow-check__icon"></span>
+                        </label>
+                        <div class="loan-flow-card__number">4040112223348255</div>
+                        <div class="loan-flow-card__tag loan-flow-card__tag--warm">商票</div>
+                    </div>
+                    <div class="loan-flow-card__body">
+                        <div class="loan-flow-row"><span>票面金额</span><span>¥1,233,234.00</span></div>
+                        <div class="loan-flow-row"><span>子票区间</span><span>000000000001,00006000000</span></div>
+                        <div class="loan-flow-row"><span>出票日期</span><span>2025-05-18</span></div>
+                        <div class="loan-flow-row"><span>到期日期</span><span>2025-10-30</span></div>
+                        <div class="loan-flow-row"><span>出票人名称</span><span>陕西莲湖华阳物流有限公司</span></div>
+                        <div class="loan-flow-row"><span>收票人名称</span><span>西安文旅科技有限公司</span></div>
+                        <div class="loan-flow-row"><span>承兑人名称</span><span>西安银行高新科技路支行</span></div>
+                    </div>
+                </div>
+
+                <div class="loan-flow-card">
+                    <div class="loan-flow-card__head">
+                        <label class="loan-flow-check" for="loanFlowApply2">
+                            <input checked class="loan-flow-check__input loan-flow-apply-check" id="loanFlowApply2" type="checkbox">
+                            <span class="loan-flow-check__icon"></span>
+                        </label>
+                        <div class="loan-flow-card__number">4040112223348255</div>
+                        <div class="loan-flow-card__tag loan-flow-card__tag--warm">商票</div>
+                    </div>
+                    <div class="loan-flow-card__body">
+                        <div class="loan-flow-row"><span>票面金额</span><span>¥1,233,234.00</span></div>
+                        <div class="loan-flow-row"><span>子票区间</span><span>000000000001,00006000000</span></div>
+                        <div class="loan-flow-row"><span>出票日期</span><span>2025-05-18</span></div>
+                        <div class="loan-flow-row"><span>到期日期</span><span>2025-10-30</span></div>
+                        <div class="loan-flow-row"><span>出票人名称</span><span>陕西莲湖华阳物流有限公司</span></div>
+                        <div class="loan-flow-row"><span>收票人名称</span><span>西安文旅科技有限公司</span></div>
+                        <div class="loan-flow-row"><span>承兑人名称</span><span>西安银行高新科技路支行</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="loan-flow-panel" data-panel="result">
+                <div class="loan-flow-card loan-flow-card--result">
+                    <div class="loan-flow-card__head loan-flow-card__head--result">
+                        <div class="loan-flow-card__number">4040112223348255</div>
+                        <div class="loan-flow-card__tag loan-flow-card__tag--warm">商票</div>
+                        <span class="loan-flow-card__more"></span>
+                    </div>
+                    <div class="loan-flow-card__body">
+                        <div class="loan-flow-row"><span>报价单编号</span><span>234567865432134545</span></div>
+                        <div class="loan-flow-row"><span>票据总数</span><span>2</span></div>
+                        <div class="loan-flow-row"><span>票据总金额</span><span>¥19,200.00</span></div>
+                        <div class="loan-flow-row"><span>结算金额</span><span>¥18,624.00</span></div>
+                        <div class="loan-flow-row"><span>应付利息</span><span>¥586.00</span></div>
+                        <div class="loan-flow-row"><span>交易日期</span><span>2025-06-25</span></div>
+                        <div class="loan-flow-row"><span>批次状态</span><span class="loan-flow-row__status loan-flow-row__status--pending">待签收</span></div>
+                    </div>
+                </div>
+
+                <div class="loan-flow-card loan-flow-card--result">
+                    <div class="loan-flow-card__head loan-flow-card__head--result">
+                        <div class="loan-flow-card__number">4040112223348255</div>
+                        <div class="loan-flow-card__tag loan-flow-card__tag--warm">商票</div>
+                        <span class="loan-flow-card__more"></span>
+                    </div>
+                    <div class="loan-flow-card__body">
+                        <div class="loan-flow-row"><span>报价单编号</span><span>234567865432134545</span></div>
+                        <div class="loan-flow-row"><span>票据总数</span><span>2</span></div>
+                        <div class="loan-flow-row"><span>票据总金额</span><span>¥19,200.00</span></div>
+                        <div class="loan-flow-row"><span>结算金额</span><span>¥18,624.00</span></div>
+                        <div class="loan-flow-row"><span>应付利息</span><span>¥586.00</span></div>
+                        <div class="loan-flow-row"><span>交易日期</span><span>2025-06-25</span></div>
+                        <div class="loan-flow-row"><span>批次状态</span><span class="loan-flow-row__status loan-flow-row__status--success">签收成功</span></div>
+                    </div>
+                </div>
+
+                <div class="loan-flow-card loan-flow-card--result">
+                    <div class="loan-flow-card__head loan-flow-card__head--result">
+                        <div class="loan-flow-card__number">4040112223348255</div>
+                        <div class="loan-flow-card__tag loan-flow-card__tag--cool">银票</div>
+                        <span class="loan-flow-card__more"></span>
+                    </div>
+                    <div class="loan-flow-card__body">
+                        <div class="loan-flow-row"><span>报价单编号</span><span>234567865432134545</span></div>
+                        <div class="loan-flow-row"><span>票据总数</span><span>2</span></div>
+                        <div class="loan-flow-row"><span>票据总金额</span><span>¥19,200.00</span></div>
+                        <div class="loan-flow-row"><span>结算金额</span><span>¥18,624.00</span></div>
+                        <div class="loan-flow-row"><span>应付利息</span><span>¥586.00</span></div>
+                        <div class="loan-flow-row"><span>交易日期</span><span>2025-06-25</span></div>
+                        <div class="loan-flow-row"><span>批次状态</span><span class="loan-flow-row__status loan-flow-row__status--danger">交易失败</span></div>
+                    </div>
+                </div>
+
+                <div class="loan-flow-bottom-tip">已到底层了</div>
+            </section>
+        </main>
+
+        <footer class="loan-flow-footer" id="loanFlowFooter">
+            <div class="loan-flow-footer__bar">
+                <label class="loan-flow-check loan-flow-check--all" for="loanFlowCheckAll">
+                    <input class="loan-flow-check__input" id="loanFlowCheckAll" type="checkbox">
+                    <span class="loan-flow-check__icon"></span>
+                    <span class="loan-flow-check__label">全选本页</span>
+                </label>
+                <div class="loan-flow-footer__count"><span id="loanFlowSelectedCount">3</span>/<span id="loanFlowTotalCount">3</span></div>
+            </div>
+            <button class="loan-flow-footer__submit" id="loanFlowSubmit" type="button">转贴现卖出申请</button>
+        </footer>
+    </div>
+
+    <div class="loan-flow-mask" id="loanFlowMask" hidden></div>
+
+    <section class="loan-flow-sheet loan-flow-sheet--bill" data-sheet="bill-type" hidden>
+        <div class="loan-flow-sheet__title loan-flow-sheet__title--single">选择票据类型</div>
+        <div class="loan-flow-sheet__options">
+            <button class="loan-flow-option loan-flow-option--selected" data-value="银票" type="button">
+                <span>银票</span>
+                <span class="loan-flow-option__mark"></span>
+            </button>
+            <button class="loan-flow-option" data-value="商票" type="button">
+                <span>商票</span>
+                <span class="loan-flow-option__mark"></span>
+            </button>
+        </div>
+    </section>
+
+    <section class="loan-flow-sheet loan-flow-sheet--date" data-sheet="date" hidden>
+        <div class="loan-flow-sheet__header">
+            <div class="loan-flow-sheet__title">选择查询日期</div>
+            <button class="loan-flow-sheet__close" type="button" aria-label="关闭"></button>
+        </div>
+        <div class="loan-flow-date">
+            <div class="loan-flow-date__label">时间段</div>
+            <div class="loan-flow-quick">
+                <button class="loan-flow-quick__item loan-flow-quick__item--active" type="button">当日</button>
+                <button class="loan-flow-quick__item" type="button">近七天</button>
+                <button class="loan-flow-quick__item" type="button">近一月</button>
+                <button class="loan-flow-quick__item" type="button">近三月</button>
+            </div>
+        </div>
+        <div class="loan-flow-sheet__actions">
+            <button class="loan-flow-sheet__action loan-flow-sheet__action--ghost" data-action="reset-date" type="button">重置</button>
+            <button class="loan-flow-sheet__action loan-flow-sheet__action--primary" data-action="confirm-date" type="button">确认</button>
+        </div>
+    </section>
+
+    <section class="loan-flow-sheet loan-flow-sheet--filter" data-sheet="filter" hidden>
+        <div class="loan-flow-sheet__header">
+            <div class="loan-flow-sheet__title">筛选</div>
+            <button class="loan-flow-sheet__close" type="button" aria-label="关闭"></button>
+        </div>
+        <div class="loan-flow-form loan-flow-form--apply">
+            <div class="loan-flow-form__group loan-flow-form__group--wide">
+                <div class="loan-flow-form__label">票据类型</div>
+                <button class="loan-flow-pill loan-flow-pill--wide" type="button">
+                    <span>银票</span>
+                    <img alt="" class="loan-flow-pill__arrow" src="../images/loanApply-arrow-down.png">
+                </button>
+            </div>
+            <div class="loan-flow-form__group">
+                <div class="loan-flow-form__label">出票日期</div>
+                <div class="loan-flow-form__range">
+                    <button class="loan-flow-pill" type="button">起始日期</button>
+                    <span class="loan-flow-form__line"></span>
+                    <button class="loan-flow-pill" type="button">终止日期</button>
+                </div>
+            </div>
+            <div class="loan-flow-form__group">
+                <div class="loan-flow-form__label">到期日期</div>
+                <div class="loan-flow-form__range">
+                    <button class="loan-flow-pill" type="button">起始日期</button>
+                    <span class="loan-flow-form__line"></span>
+                    <button class="loan-flow-pill" type="button">终止日期</button>
+                </div>
+            </div>
+            <div class="loan-flow-form__group">
+                <div class="loan-flow-form__label">票面金额</div>
+                <div class="loan-flow-form__range">
+                    <button class="loan-flow-pill" type="button">¥ 最低金额</button>
+                    <span class="loan-flow-form__line"></span>
+                    <button class="loan-flow-pill" type="button">¥ 最高金额</button>
+                </div>
+            </div>
+        </div>
+        <div class="loan-flow-form loan-flow-form--result" hidden>
+            <div class="loan-flow-form__group">
+                <div class="loan-flow-form__label">票据总金额</div>
+                <div class="loan-flow-form__range">
+                    <button class="loan-flow-pill" type="button">¥ 最低金额</button>
+                    <span class="loan-flow-form__line"></span>
+                    <button class="loan-flow-pill" type="button">¥ 最高金额</button>
+                </div>
+            </div>
+        </div>
+        <div class="loan-flow-sheet__actions">
+            <button class="loan-flow-sheet__action loan-flow-sheet__action--ghost" data-action="reset-filter" type="button">重置</button>
+            <button class="loan-flow-sheet__action loan-flow-sheet__action--primary" data-action="confirm-filter" type="button">确认</button>
+        </div>
+    </section>
+
+    <script src="../js/loanApplyFlowRestore.js"></script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: #f5f6f7;
+    font-family: "PingFang SC", "PingFangSC-Regular", sans-serif;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.loan-apply-602-fresh-page {
+    color: #333333;
+}
+
+.loan-apply-602-fresh-screen {
+    width: 100%;
+    max-width: 375px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding-bottom: calc(104px + env(safe-area-inset-bottom));
+    background: #f5f6f7;
+    box-sizing: border-box;
+}
+
+.loan-apply-602-fresh-header {
+    height: 113px;
+    background: #ffffff;
+}
+
+.loan-apply-602-fresh-statusbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0 4px 0 7px;
+    height: 18px;
+    color: #666d7f;
+    font-size: 12px;
+    line-height: 17px;
+    box-sizing: border-box;
+}
+
+.loan-apply-602-fresh-statusbar__left,
+.loan-apply-602-fresh-statusbar__right {
+    display: flex;
+    align-items: center;
+}
+
+.loan-apply-602-fresh-statusbar__signal {
+    width: 16.5px;
+    height: 10px;
+    margin-top: 4px;
+    background:
+        linear-gradient(to top, #666d7f 100%, #666d7f 100%) left bottom/2px 4px no-repeat,
+        linear-gradient(to top, #666d7f 100%, #666d7f 100%) 3.5px bottom/2px 6px no-repeat,
+        linear-gradient(to top, #666d7f 100%, #666d7f 100%) 7px bottom/2px 8px no-repeat,
+        linear-gradient(to top, #666d7f 100%, #666d7f 100%) 10.5px bottom/2px 10px no-repeat;
+}
+
+.loan-apply-602-fresh-statusbar__carrier {
+    margin-left: 3.5px;
+}
+
+.loan-apply-602-fresh-statusbar__wifi {
+    width: 14.34px;
+    height: 10px;
+    margin: 4px 0 0 6px;
+    position: relative;
+}
+
+.loan-apply-602-fresh-statusbar__wifi::before,
+.loan-apply-602-fresh-statusbar__wifi::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    border: 1.4px solid #666d7f;
+    border-top-color: #666d7f;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    border-radius: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    box-sizing: border-box;
+}
+
+.loan-apply-602-fresh-statusbar__wifi::before {
+    top: 0;
+    width: 14px;
+    height: 14px;
+}
+
+.loan-apply-602-fresh-statusbar__wifi::after {
+    top: 3px;
+    width: 8px;
+    height: 8px;
+}
+
+.loan-apply-602-fresh-statusbar__time {
+    margin-left: 10px;
+}
+
+.loan-apply-602-fresh-statusbar__battery-text {
+    margin-right: 3px;
+}
+
+.loan-apply-602-fresh-statusbar__battery {
+    position: relative;
+    width: 24px;
+    height: 11.5px;
+    margin-top: 3.5px;
+    border: 1px solid rgba(102, 109, 127, 0.4);
+    border-radius: 2.5px;
+    box-sizing: border-box;
+}
+
+.loan-apply-602-fresh-statusbar__battery-fill {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 7.5px;
+    background: #2b2842;
+    border-radius: 0.5px;
+}
+
+.loan-apply-602-fresh-statusbar__battery-cap {
+    position: absolute;
+    top: 3px;
+    right: -3px;
+    width: 1.5px;
+    height: 4px;
+    background: rgba(102, 109, 127, 0.4);
+    border-radius: 0 1px 1px 0;
+}
+
+.loan-apply-602-fresh-navbar {
+    position: relative;
+    height: 60px;
+}
+
+.loan-apply-602-fresh-back {
+    position: absolute;
+    top: 34px;
+    left: 16px;
+    width: 8px;
+    height: 14px;
+    background: url("../images/loanApply602Fresh-back.png") center/8px 14px no-repeat;
+}
+
+.loan-apply-602-fresh-navbar__title {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    width: 110px;
+    margin-left: -55px;
+    font-size: 16px;
+    line-height: 22px;
+    color: #333333;
+    letter-spacing: -0.39px;
+    text-align: center;
+    font-weight: 400;
+}
+
+.loan-apply-602-fresh-tabs {
+    position: relative;
+    display: flex;
+    height: 35px;
+}
+
+.loan-apply-602-fresh-tabs::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 187px;
+    height: 3px;
+    background: #1482ff;
+}
+
+.loan-apply-602-fresh-tabs__item {
+    flex: 1;
+    font-size: 16px;
+    line-height: 22px;
+    color: #b2b2b2;
+    text-align: center;
+}
+
+.loan-apply-602-fresh-tabs__item--active {
+    color: #1482ff;
+    font-weight: 500;
+}
+
+.loan-apply-602-fresh-filter {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    margin-top: 10px;
+    background: #ffffff;
+}
+
+.loan-apply-602-fresh-filter__item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 15px;
+    line-height: 21px;
+    color: #333333;
+}
+
+.loan-apply-602-fresh-filter__divider {
+    width: 1px;
+    height: 18px;
+    border-left: 0.5px solid #e7eaee;
+    box-sizing: border-box;
+}
+
+.loan-apply-602-fresh-filter__icon {
+    width: 12px;
+    height: 7px;
+    display: block;
+}
+
+.loan-apply-602-fresh-list {
+    padding-top: 10px;
+}
+
+.loan-apply-602-fresh-card {
+    margin-bottom: 10px;
+}
+
+.loan-apply-602-fresh-card__summary {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 0 15px;
+    background: #ffffff;
+    border-bottom: 0.5px solid #e1e1e1;
+    box-sizing: border-box;
+}
+
+.loan-apply-602-fresh-card__number {
+    margin-left: 10px;
+    font-size: 15px;
+    line-height: 21px;
+    color: #333333;
+    font-weight: 400;
+}
+
+.loan-apply-602-fresh-card__tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 35px;
+    height: 18px;
+    margin-left: 10px;
+    padding: 0 6px;
+    border: 0.5px solid #ffe0ac;
+    border-radius: 2px;
+    background: #fef8ee;
+    font-size: 11px;
+    line-height: 16px;
+    color: #d09f4c;
+    box-sizing: border-box;
+}
+
+.loan-apply-602-fresh-card__details {
+    padding: 14px 15px 17px;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+.loan-apply-602-fresh-card__row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.loan-apply-602-fresh-card__row:first-child {
+    margin-top: 0;
+}
+
+.loan-apply-602-fresh-card__label,
+.loan-apply-602-fresh-card__value {
+    font-size: 13px;
+    line-height: 18px;
+}
+
+.loan-apply-602-fresh-card__label {
+    color: #999999;
+    flex: 0 0 auto;
+}
+
+.loan-apply-602-fresh-card__value {
+    color: #272727;
+    text-align: right;
+    word-break: break-all;
+}
+
+.loan-apply-602-fresh-check {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.loan-apply-602-fresh-check__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loan-apply-602-fresh-check__icon {
+    width: 15px;
+    height: 15px;
+    background: url("../images/loanApply602Fresh-unchecked.png") center/15px 15px no-repeat;
+    flex: 0 0 auto;
+}
+
+.loan-apply-602-fresh-check__input:checked + .loan-apply-602-fresh-check__icon {
+    background-image: url("../images/loanApply602Fresh-checked.png");
+}
+
+.loan-apply-602-fresh-check__text {
+    margin-left: 14px;
+    font-size: 15px;
+    line-height: 21px;
+    color: #333333;
+}
+
+.loan-apply-602-fresh-footer {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    width: min(100vw, 375px);
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.loan-apply-602-fresh-footer__selectbar {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 0 15px;
+    background: #ffffff;
+    border-top: 0.5px solid #e1e1e1;
+    border-bottom: 0.5px solid #e1e1e1;
+    box-sizing: border-box;
+}
+
+.loan-apply-602-fresh-footer__count {
+    margin-left: 13px;
+    font-size: 15px;
+    line-height: 21px;
+    color: #333333;
+    letter-spacing: 0.11px;
+}
+
+.loan-apply-602-fresh-footer__submit {
+    width: 100%;
+    height: calc(44px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: #1482ff;
+    font-size: 17px;
+    line-height: 24px;
+    color: #ffffff;
+    letter-spacing: 0.12px;
+    text-align: center;
+}
+
+.loan-apply-602-fresh-footer__submit:disabled {
+    opacity: 0.45;
+}

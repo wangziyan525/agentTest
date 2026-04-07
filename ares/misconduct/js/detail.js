@@ -41,6 +41,20 @@ function initFun () {
             batch:"",
 
         },
+        computed:{
+            showInvestmentDetail:function () {
+                return this.userInfo && this.userInfo.tzrzFlag !== undefined && this.userInfo.tzrzFlag !== null && this.userInfo.tzrzFlag !== "";
+            },
+            hasInvestmentDetail:function () {
+                return String(this.userInfo.tzrzFlag) === "1";
+            },
+            investmentDetailText:function () {
+                if (!this.showInvestmentDetail) {
+                    return "";
+                }
+                return this.hasInvestmentDetail ? "有" : "无";
+            }
+        },
         created(){
             var that=this;
             var id=GetQueryString("id");
@@ -133,6 +147,13 @@ function initFun () {
                 var that=this;
                 that.popupShow=false;
                 that.dataType="";
+            },
+            toDetails:function () {
+                var that = this;
+                if (!that.hasInvestmentDetail || !that.id) {
+                    return;
+                }
+                window.location.href = "investmentDetail.html?id=" + encodeURIComponent(that.id);
             },
             onConfirm(param){
                 var that=this;

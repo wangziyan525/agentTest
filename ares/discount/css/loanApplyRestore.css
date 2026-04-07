@@ -1,0 +1,669 @@
+:root {
+    --restore-blue: #1482ff;
+    --restore-bg: #f5f6f7;
+    --restore-panel: #ffffff;
+    --restore-text: #333333;
+    --restore-muted: #999999;
+    --restore-light: #b2b2b2;
+    --restore-line: #e1e1e1;
+    --restore-divider: #e7eaee;
+    --restore-tag-bg: #f6fcfe;
+    --restore-tag-border: #c1e3fc;
+    --restore-danger: #ff0000;
+    --restore-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+    background: var(--restore-bg);
+    font-family: PingFang SC, PingFangSC-Regular, Helvetica Neue, Arial, sans-serif;
+}
+
+body {
+    color: var(--restore-text);
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.loan-restore-page {
+    min-height: 100vh;
+}
+
+.loan-restore-screen {
+    max-width: 375px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: var(--restore-bg);
+}
+
+.loan-restore-screen--apply {
+    padding-bottom: calc(104px + env(safe-area-inset-bottom));
+}
+
+.loan-restore-screen--result {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+}
+
+.loan-restore-header {
+    background: var(--restore-panel);
+}
+
+.loan-restore-statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 18px;
+    padding: 0 7px;
+    color: #666d7f;
+    font-size: 12px;
+    line-height: 17px;
+}
+
+.loan-restore-statusbar__left,
+.loan-restore-statusbar__right {
+    display: flex;
+    align-items: center;
+}
+
+.loan-restore-statusbar__carrier {
+    margin: 0 6px 0 5px;
+}
+
+.loan-restore-statusbar__signal {
+    position: relative;
+    width: 16px;
+    height: 10px;
+}
+
+.loan-restore-statusbar__signal::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to right, #666d7f 0 2px, transparent 2px 4px, #666d7f 4px 6px, transparent 6px 8px, #666d7f 8px 10px, transparent 10px 12px, #666d7f 12px 14px, transparent 14px 16px);
+    clip-path: polygon(0 100%, 0 80%, 20% 80%, 20% 60%, 45% 60%, 45% 40%, 70% 40%, 70% 20%, 100% 20%, 100% 100%);
+}
+
+.loan-restore-statusbar__wifi {
+    position: relative;
+    width: 14px;
+    height: 10px;
+}
+
+.loan-restore-statusbar__wifi::before,
+.loan-restore-statusbar__wifi::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    border: 1px solid #666d7f;
+    border-top: 0;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-left-radius: 999px;
+    border-bottom-right-radius: 999px;
+    transform: translateX(-50%);
+}
+
+.loan-restore-statusbar__wifi::before {
+    bottom: 0;
+    width: 14px;
+    height: 8px;
+}
+
+.loan-restore-statusbar__wifi::after {
+    bottom: 1px;
+    width: 8px;
+    height: 5px;
+}
+
+.loan-restore-statusbar__battery-text {
+    margin-right: 4px;
+}
+
+.loan-restore-statusbar__battery {
+    position: relative;
+    width: 24px;
+    height: 11px;
+    border: 1px solid rgba(102, 109, 127, 0.4);
+    border-radius: 2.5px;
+}
+
+.loan-restore-statusbar__battery::before {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 18px;
+    height: 7px;
+    border-radius: 1px;
+    background: #2b2842;
+}
+
+.loan-restore-statusbar__battery-cap {
+    position: absolute;
+    top: 3px;
+    right: -3px;
+    width: 2px;
+    height: 4px;
+    border-radius: 0 1px 1px 0;
+    background: rgba(102, 109, 127, 0.4);
+}
+
+.loan-restore-navbar {
+    position: relative;
+    height: 60px;
+}
+
+.loan-restore-back {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 8px;
+    height: 14px;
+}
+
+.loan-restore-back::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-left: 1.5px solid #9b9b9b;
+    border-bottom: 1.5px solid #9b9b9b;
+    transform: rotate(45deg);
+}
+
+.loan-restore-navbar__title {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    width: 120px;
+    margin-left: -60px;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: -0.39px;
+    text-align: center;
+}
+
+.loan-restore-tabs {
+    position: relative;
+    display: flex;
+    height: 35px;
+}
+
+.loan-restore-tabs__item {
+    z-index: 1;
+    width: 50%;
+    color: var(--restore-light);
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+}
+
+.loan-restore-tabs__item--active {
+    color: var(--restore-blue);
+    font-weight: 500;
+}
+
+.loan-restore-tabs__line {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 187px;
+    height: 3px;
+    background: var(--restore-blue);
+    transition: transform 0.2s ease;
+}
+
+.loan-restore-filter {
+    position: sticky;
+    top: 0;
+    z-index: 8;
+    display: flex;
+    height: 50px;
+    margin-top: 10px;
+    background: var(--restore-panel);
+}
+
+.loan-restore-filter__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    color: var(--restore-text);
+    font-size: 15px;
+    line-height: 21px;
+}
+
+.loan-restore-filter__item--accent {
+    color: var(--restore-blue);
+}
+
+.loan-restore-filter__divider {
+    position: absolute;
+    top: 16px;
+    left: calc(50% - 0.5px);
+    width: 1px;
+    height: 18px;
+    background: var(--restore-divider);
+}
+
+.loan-restore-filter__icon {
+    width: 12px;
+    height: 7px;
+    margin-left: 6px;
+}
+
+.loan-restore-filter__icon--up {
+    width: 12px;
+    height: 7px;
+}
+
+.loan-restore-main {
+    padding-top: 10px;
+}
+
+.loan-restore-panel {
+    display: none;
+}
+
+.loan-restore-panel--active {
+    display: block;
+}
+
+.loan-restore-card {
+    margin-bottom: 10px;
+    background: var(--restore-panel);
+    overflow: hidden;
+}
+
+.loan-restore-card__head {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 0 15px;
+    border-bottom: 1px solid var(--restore-line);
+}
+
+.loan-restore-card__head--result {
+    position: relative;
+}
+
+.loan-restore-card__number {
+    margin-left: 10px;
+    color: var(--restore-text);
+    font-size: 15px;
+    line-height: 21px;
+}
+
+.loan-restore-card__head--result .loan-restore-card__number {
+    margin-left: 0;
+}
+
+.loan-restore-card__tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 18px;
+    margin-left: 10px;
+    border: 0.5px solid var(--restore-tag-border);
+    border-radius: 2px;
+    background: var(--restore-tag-bg);
+    color: var(--restore-blue);
+    font-size: 11px;
+    line-height: 16px;
+}
+
+.loan-restore-card__tag--cool {
+    border-color: #c1e3fc;
+    background: #f6fcfe;
+    color: var(--restore-blue);
+}
+
+.loan-restore-card__tag--warm {
+    border-color: #ffe0ac;
+    background: #fef8ee;
+    color: #d58b19;
+}
+
+.loan-restore-card__more {
+    position: absolute;
+    top: 20px;
+    right: 16px;
+    width: 6px;
+    height: 10px;
+    border-top: 1.5px solid var(--restore-muted);
+    border-right: 1.5px solid var(--restore-muted);
+    transform: rotate(45deg);
+}
+
+.loan-restore-card__body {
+    min-height: 205px;
+    padding: 14px 15px 13px;
+}
+
+.loan-restore-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+    color: var(--restore-muted);
+    font-size: 13px;
+    line-height: 18px;
+}
+
+.loan-restore-card--result .loan-restore-row {
+    color: var(--restore-light);
+}
+
+.loan-restore-row:last-child {
+    margin-bottom: 0;
+}
+
+.loan-restore-row span:last-child {
+    max-width: 220px;
+    color: #2e2e2e;
+    text-align: right;
+    word-break: break-all;
+}
+
+.loan-restore-row__danger {
+    color: var(--restore-danger) !important;
+}
+
+.loan-restore-check {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.loan-restore-check__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loan-restore-check__icon {
+    width: 15px;
+    height: 15px;
+    background: url("../images/loanApply-unchecked.png") center/15px 15px no-repeat;
+}
+
+.loan-restore-check__icon::after {
+    display: none;
+}
+
+.loan-restore-check__input:checked + .loan-restore-check__icon {
+    background-image: url("../images/loanApply-checked.png");
+}
+
+.loan-restore-bottom-tip {
+    padding: 11px 0 calc(10px + env(safe-area-inset-bottom));
+    color: var(--restore-muted);
+    font-size: 13px;
+    line-height: 18px;
+    text-align: center;
+}
+
+.loan-restore-footer {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    z-index: 10;
+    width: 100%;
+    max-width: 375px;
+    transform: translateX(-50%);
+}
+
+.loan-restore-footer__bar {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 0 15px;
+    border-top: 1px solid var(--restore-line);
+    background: var(--restore-panel);
+}
+
+.loan-restore-check--all .loan-restore-check__label {
+    margin-left: 14px;
+    font-size: 15px;
+    line-height: 21px;
+}
+
+.loan-restore-footer__count {
+    margin-left: 13px;
+    font-size: 15px;
+    line-height: 21px;
+    letter-spacing: 0.11px;
+}
+
+.loan-restore-footer__submit {
+    width: 100%;
+    height: calc(44px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--restore-blue);
+    color: #ffffff;
+    font-size: 17px;
+    line-height: 24px;
+}
+
+.loan-restore-footer__submit:disabled {
+    opacity: 0.5;
+}
+
+.loan-restore-mask {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    background: rgba(0, 0, 0, 0.28);
+}
+
+.loan-restore-sheet {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    z-index: 21;
+    width: 100%;
+    max-width: 375px;
+    transform: translateX(-50%);
+    border-radius: 10px 10px 0 0;
+    background: var(--restore-panel);
+    box-shadow: var(--restore-shadow);
+}
+
+.loan-restore-sheet[data-sheet="bill-type"],
+.loan-restore-sheet[data-sheet="date"],
+.loan-restore-sheet[data-sheet="filter"] {
+    min-height: 374px;
+}
+
+.loan-restore-sheet__header {
+    position: relative;
+    height: 56px;
+    border-bottom: 1px solid var(--restore-divider);
+}
+
+.loan-restore-sheet__title {
+    padding-top: 17px;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+}
+
+.loan-restore-sheet__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 12px;
+    height: 12px;
+}
+
+.loan-restore-sheet__close::before,
+.loan-restore-sheet__close::after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 0;
+    width: 12px;
+    height: 1px;
+    background: #8f8f8f;
+}
+
+.loan-restore-sheet__close::before {
+    transform: rotate(45deg);
+}
+
+.loan-restore-sheet__close::after {
+    transform: rotate(-45deg);
+}
+
+.loan-restore-sheet__options {
+    padding: 0 15px;
+}
+
+.loan-restore-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 54px;
+    border-bottom: 1px solid var(--restore-divider);
+    font-size: 16px;
+    line-height: 22px;
+}
+
+.loan-restore-option__mark {
+    width: 16px;
+    height: 16px;
+    background: url("../images/loanApply-unchecked.png") center/16px 16px no-repeat;
+}
+
+.loan-restore-option--selected .loan-restore-option__mark {
+    background-image: url("../images/loanApply-checked.png");
+}
+
+.loan-restore-date,
+.loan-restore-form {
+    padding: 15px;
+}
+
+.loan-restore-date__label,
+.loan-restore-form__label {
+    margin-bottom: 12px;
+    color: var(--restore-muted);
+    font-size: 12px;
+    line-height: 17px;
+}
+
+.loan-restore-date__label--group {
+    margin-top: 28px;
+}
+
+.loan-restore-date__range,
+.loan-restore-form__range {
+    display: flex;
+    align-items: center;
+}
+
+.loan-restore-date__line,
+.loan-restore-form__line {
+    width: 15px;
+    height: 1px;
+    margin: 0 15px;
+    background: var(--restore-muted);
+}
+
+.loan-restore-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 142px;
+    height: 36px;
+    border-radius: 48px;
+    background: #f5f5f5;
+    color: var(--restore-muted);
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.loan-restore-pill--date,
+.loan-restore-pill--wide {
+    color: var(--restore-text);
+}
+
+.loan-restore-pill--wide {
+    justify-content: center;
+    width: 345px;
+}
+
+.loan-restore-pill__arrow {
+    width: 12px;
+    height: 7px;
+    margin-left: 12px;
+}
+
+.loan-restore-quick {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.loan-restore-quick__item {
+    height: 36px;
+    border-radius: 18px;
+    background: #f5f5f5;
+    color: #999999;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.loan-restore-quick__item--active {
+    background: #eaf4ff;
+    color: var(--restore-blue);
+}
+
+.loan-restore-form__group + .loan-restore-form__group {
+    margin-top: 29px;
+}
+
+.loan-restore-sheet__actions {
+    display: flex;
+    margin-top: 10px;
+}
+
+.loan-restore-sheet__action {
+    width: 50%;
+    height: calc(50px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    font-size: 16px;
+    line-height: 22px;
+}
+
+.loan-restore-sheet__action--ghost {
+    border-top: 1px solid #e4e5e6;
+    background: #ffffff;
+    color: #201d34;
+}
+
+.loan-restore-sheet__action--primary {
+    background: var(--restore-blue);
+    color: #ffffff;
+}

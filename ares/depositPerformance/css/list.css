@@ -1,0 +1,317 @@
+[v-cloak] { display: none; }
+
+html, body {
+    background: #F6F7FD;
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ===== 日期筛选 ===== */
+.dp-date-filter {
+    padding: 10px 15px 5px;
+    display: flex;
+    gap: 12px;
+    background: #F6F7FD;
+}
+
+.dp-date-btn {
+    height: 26px;
+    border-radius: 13px;
+    padding: 0 20px;
+    font-size: 13px;
+    color: #FFFFFF;
+    background: #3975C6;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.dp-date-btn.inactive {
+    background: #FFFFFF;
+    color: #848484;
+}
+
+/* ===== 统计卡片 ===== */
+.dp-stats-grid {
+    padding: 5px 15px 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    background: #F6F7FD;
+}
+
+.dp-stat-card {
+    background: #FFFFFF;
+    border-radius: 8.59px;
+    height: 68px;
+    padding: 0 0 0 13px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dp-stat-label-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 3px;
+}
+
+.dp-stat-indicator {
+    width: 2px;
+    height: 10px;
+    border-radius: 1px;
+    flex-shrink: 0;
+}
+
+.dp-stat-label {
+    font-size: 13px;
+    color: #79899F;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+}
+
+.dp-stat-label-sm {
+    font-size: 12px;
+    color: #79899F;
+    font-weight: 400;
+    line-height: 19px;
+}
+
+.dp-stat-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+    margin-left: 9px;
+}
+
+.dp-stat-value {
+    font-size: 18px;
+    color: #3B3B3B;
+    font-weight: 600;
+    line-height: 25px;
+    text-align: left;
+}
+
+.dp-stat-unit {
+    font-size: 11px;
+    color: #3B3B3B;
+    font-weight: 400;
+}
+
+/* ===== 主白色卡片 ===== */
+.dp-main-card {
+    margin: 0 15px 20px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: left;
+}
+
+/* ===== 主 Tab ===== */
+.dp-main-tabs {
+    display: flex;
+    align-items: flex-end;
+    padding: 0;
+    height: 52px;
+    border-bottom: 1px solid #F6F6F6;
+}
+
+.dp-main-tab {
+    flex: 1;
+    text-align: center;
+    font-size: 16px;
+    color: #000000;
+    font-weight: 400;
+    cursor: pointer;
+    user-select: none;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.dp-main-tab.active {
+    color: #4675C9;
+    font-weight: 500;
+}
+
+.dp-main-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 46px;
+    height: 3px;
+    background: #4675C9;
+    border-radius: 1.5px;
+}
+
+/* ===== 分组筛选 ===== */
+.dp-group-filter {
+    padding: 9px 16px 8px 22px;
+    display: flex;
+    gap: 8px;
+}
+
+.dp-group-btn {
+    height: 29px;
+    border-radius: 16px;
+    padding: 0 17px;
+    font-size: 12px;
+    line-height: 17px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.dp-group-btn.active {
+    background: #EFF6FF;
+    border: 0.5px solid #267EF0;
+    color: #267EF0;
+    font-weight: 600;
+}
+
+.dp-group-btn.inactive {
+    background: #F5F5F5;
+    color: #848484;
+    font-weight: 400;
+}
+
+/* ===== 数据表格 ===== */
+.dp-table-container {
+    /* 渐隐遮罩依赖外层相对定位，便于固定在表格最右侧。 */
+    position: relative;
+    overflow: hidden;
+}
+
+.dp-table-scroll {
+    /* 表格列数多于移动端宽度，保留横向滚动能力。 */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* 左右各15px留白 */
+    padding: 0 15px;
+}
+
+.dp-table-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.dp-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    /* 最小宽度按设计稿列宽求和保留，避免窄屏下列被强行压缩换行。 */
+    min-width: 440px;
+}
+
+.dp-data-table thead {
+    background: transparent;
+}
+
+.dp-data-table thead th {
+    background: #F7F7F7;
+    font-size: 12px;
+    color: #9B9B9B;
+    font-weight: 400;
+    text-align: center;
+    border: none;
+    height: 58px;
+    vertical-align: middle;
+    line-height: 1.4;
+    padding: 0 4px;
+    white-space: nowrap;
+}
+
+.dp-data-table thead th.col-name {
+    text-align: left;
+    /* 内容对齐：22px，向左延伸覆盖 15px 留白区域 */
+    padding-left: 22px;
+    width: 88px;
+    /* 首列固定，横向滚动时名称列始终可见，方便对齐查看指标。 */
+    position: sticky;
+    /* 向左延伸 15px 覆盖滚动容器的 padding-left，防止滚动穿透 */
+    left: -15px;
+    /* 补偿向左延伸的 15px，保持文字与上下内容对齐 */
+    padding-left: 10px;
+    z-index: 2;
+    /* 必须设置背景色，否则滚动时后面的列会穿透显示 */
+    background: #F7F7F7;
+}
+
+.dp-data-table thead th.col-inc { width: 80px; }
+.dp-data-table thead th.col-pers { width: 56px; }
+.dp-data-table thead th.col-corp { width: 56px; }
+.dp-data-table thead th.col-bal { width: 116px; }
+.dp-data-table thead th.col-mom {
+    width: 56px;
+    /* 右边留白 22px，和左边内容对齐一致（滚动容器已有 15px padding-right） */
+    padding-right: 7px;
+}
+
+.dp-data-table tbody tr {
+    border-bottom: 1px solid #F6F6F6;
+    background: #FFFFFF;
+}
+
+.dp-data-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.dp-data-table tbody td {
+    font-size: 14px;
+    color: #3B3B3B;
+    font-weight: 400;
+    text-align: center;
+    height: 42px;
+    vertical-align: middle;
+    padding: 0 4px;
+    line-height: 1.4;
+    white-space: normal;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+}
+
+.dp-data-table tbody td.col-name {
+    text-align: left;
+    color: #4675C9;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    background: #FFFFFF;
+    /* tbody 的首列也要同步 sticky，并补白底遮住后续滚动列内容。 */
+    position: sticky;
+    /* 向左延伸 15px 覆盖滚动容器的 padding-left，防止滚动穿透 */
+    left: -15px;
+    /* 补偿向左延伸的 15px，保持文字与上下内容对齐 */
+    padding-left: 10px;
+    z-index: 1;
+}
+
+.dp-data-table tbody td.col-mom {
+    /* 右边留白 22px，和左边内容对齐一致（滚动容器已有 15px padding-right） */
+    padding-right: 7px;
+}
+
+/* 右侧渐隐遮罩 - 已移除，左右留白统一由表格首尾列的 padding 控制 */
+.dp-table-fade {
+    display: none;
+}
+
+/* ===== 无数据 / 列表底部 ===== */
+.dp-no-data {
+    text-align: center;
+    padding: 40px 0;
+    color: #9B9B9B;
+    font-size: 14px;
+}
+
+.dp-list-end {
+    text-align: center;
+    padding: 12px 0;
+    color: #C8C9CC;
+    font-size: 12px;
+}

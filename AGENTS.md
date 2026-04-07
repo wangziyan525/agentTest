@@ -1,202 +1,468 @@
-# ARES Project Guide
+# ARES 前端系统规范
 
-## 项目定位
+> 本文件是代码生成的**唯一约束基准**。生成任何页面或脚本前必须先读本文件，所有输出必须与本规范保持一致，不得自行引入新框架或改变技术栈。
 
-- 本仓库的核心前端项目是 `ares/`，它不是基于 `npm + 打包工具` 的单体前端工程，而是一个面向企业微信 / 微信生态的移动端静态页面仓库。
-- 代码组织方式以业务模块目录为单位，每个模块通常直接维护 `html + css + js + image(s)` 文件。
-- 当前仓库同时包含需求和设计输入：
-  - `需求.docx`：需求说明
-  - `接口.doc`：接口文档
-  - `ui/`：设计稿导出物，含 `links/`、`preview/`、`assets/`
+---
 
-## 启动时必须先建立的认知
+## 1. 项目定位
 
-- 优先把 `ares/` 看成“很多独立 H5 页面集合”，不要按 React / Vue CLI / Vite 项目思路处理。
-- 新需求默认先找 `ares/` 中同业务、同页面类型、同交互模式的现有实现参考，再决定修改或仿写。
-- 默认保持模块原有技术栈，不主动做 Vue2 到 Vue3、jQuery 到工程化框架、旧 JSSDK 到新架构的迁移。
-- 默认不新增 `package.json`、不引入构建链、不重组目录，除非用户明确要求。
+- 目录 `ares/` 是**多个独立 H5 业务页面**的集合，按模块组织，不是单体 SPA 工程。
+- 每个模块独立维护 `html + css + js + image(s)`，模块之间不共享组件。
+- 运行环境：**企业微信内嵌 H5**，依赖微信 JSSDK 鉴权和登录态。
 
-## 目录结构约定
+---
 
-### 1. `ares/`
+## 2. 技术栈（固定，不可升级）
 
-- `ares/` 下每个一级目录通常是一个独立业务模块，例如：
-  - `directTransfer/`
-  - `complianceCheck/`
-  - `netSafetyInspection/`
-  - `fmEhr/`
-- 常见模块结构：
-  - 页面文件：`*.html`
-  - 逻辑文件：`js/*.js`
-  - 样式文件：`css/*.css`
-  - 图片资源：`image/` 或 `images/`
-- 有些模块还有二级业务分组目录，例如：
-  - `ares/complianceCheck/rectify/`
-  - `ares/complianceCheck/randomCheck/`
-  - `ares/scoreInterview/firstExamine/`
+| 层级 | 技术 | 版本 |
+|------|------|------|
+| 模板引擎 | Vue2 | `vue.min.js`（CDN via 相对路径） |
+| UI 组件 | Vant 2.12 | `vant-2.12.min.js` / `vant-2.12.css` |
+| jQuery | jQuery 2.1.3 | `jquery-2.1.3.min.js` |
+| jQuery UI | jquery-weui | `jquery-weui.min.js` / `jquery-weui.min.css` |
+| 基础 CSS | WeUI | `weui.min.css` |
+| HTTP 封装 | `$http` | `server.js` 中导出 |
+| JSSDK | 企业微信 | `jssdk.js` |
+| 水印 | `__canvasWM` | `watermark.js` |
+| 登录态 | Cookie `user` | `getUserInfo.js` |
 
-### 2. `ares/common/`
+> **禁止**：不得引入 Vue3、Vant4、axios、React、vite、webpack 工程化构建。  
+> `ares/common/js/` 中存在多版本库（vant@4、vue@3），**仅供特殊模块使用，普通业务页不得引用**。
 
-- 这里是公共依赖与基础能力目录，优先复用，不要在业务模块里重复造轮子。
-- 常见公共文件：
-  - `ares/common/js/base.js`：域名、上下文、基础工具
-  - `ares/common/js/server.js`：统一 AJAX / 上传封装
-  - `ares/common/js/jssdk.js`：微信 JSSDK 初始化
-  - `ares/common/js/jwxwork.js`、`ares/common/js/jwxworkpro.js`、`ares/common/js/newJwxwork.js`：企业微信能力封装
-  - `ares/common/js/getUserInfo.js`：用户会话与登录态获取
-  - `ares/common/js/vue.min.js`：Vue2
-  - `ares/common/js/vue@3.2.36.js`：Vue3
-  - `ares/common/js/vant-2.12.min.js`、`ares/common/js/vant@4.6.3.min.js`：不同版本 Vant
+---
 
-### 3. `ui/`
+## 3. 目录结构规范
 
-- `ui/links/`：设计稿切页 HTML
-- `ui/preview/`：页面预览图
-- `ui/assets/`：设计资源导出
-- 当用户要求“按 UI 还原页面”时，先用 `ui/` 做页面映射，再落到 `ares/` 对应模块。
+```
+ares/
+├── common/                  # 公共依赖（只读，不修改）
+│   ├── css/
+│   │   ├── weui.min.css
+│   │   ├── jquery-weui.min.css
+│   │   └── vant-2.12.css
+│   └── js/
+│       ├── base.js          # 全局配置（appid、domain、context）
+│       ├── server.js        # $http / $Upload 封装
+│       ├── jssdk.js         # initJSSDK()
+│       ├── getUserInfo.js   # 登录态入口，调用 getUserFinish()
+│       ├── watermark.js     # __canvasWM()
+│       ├── vue.min.js
+│       ├── vant-2.12.min.js
+│       ├── jquery-2.1.3.min.js
+│       ├── jquery-weui.min.js
+│       ├── jquery.cookie_jq.js
+│       └── vConsole.min.js
+│
+└── <moduleName>/            # 业务模块（一级目录）
+    ├── css/
+    │   └── <page>.css
+    ├── js/
+    │   └── <page>.js
+    ├── image(s)/
+    └── <page>.html
+- 一级模块使用 `../common` 引用公共资源。
+- 图片目录名：`image/` 或 `images/`，沿用模块现状，新模块统一用 `images/`。
 
-## 技术栈判断规则
+---
 
-### 1. 主流现状
+## 4. 标准 HTML 页面骨架
 
-- 仓库内大量页面使用 Vue2。
-- 很多旧模块采用 `jQuery + weui/jquery-weui + Vue2 + Vant2` 组合。
-- 少量公共文件中已经存在 Vue3 / Vant4，但不能默认整仓已切换。
-- 没有发现统一的工程化构建配置，因此页面通常直接通过 `<script>` / `<link>` 相对路径引用资源。
+> 适用于绝大多数普通业务页（列表页、详情页、申请页）。
 
-### 2. 开发时的栈选择原则
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <title>页面标题</title>
+    <!-- 公共 CSS（顺序固定） -->
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <!-- 模块私有 CSS -->
+    <link rel="stylesheet" href="css/<page>.css">
+</head>
+<body>
+    <div id="app" v-cloak>
+        <!-- 页面内容 -->
+    </div>
+</body>
 
-- 修改旧页面时，严格沿用该页面现有栈和写法。
-- 新增页面时，优先沿用所在模块当前主流写法，不要只因为公共目录里有新版本库就切换技术栈。
-- 如果模块内已经形成自己的共享文件，例如：
-  - `ares/directTransfer/js/shared.js`
-  - `ares/directTransfer/js/store.js`
-  则优先复用该模块内部公共层，而不是跨模块复制代码。
+<!-- 公共 JS（顺序固定，不可乱序） -->
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/server.js"></script>
+<!-- 模块私有 JS -->
+<script type="text/javascript" src="js/<page>.js?v=1.0.0"></script>
+<!-- 调试用，上线注释掉 -->
+<!-- <script type="text/javascript" src="../common/js/vConsole.min.js"></script> -->
+<script>
+    // var vConsole = new VConsole();
 
-## 典型页面模式
+    // JSSDK 初始化
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'chooseImage', 'uploadImage']);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
 
-### 1. 老模块常见模式
+    // 登录态回调（getUserInfo.js 执行完后调用此函数）
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({ content: username });  // 水印
+        initFun();                           // 启动 Vue 实例
+    }
+</script>
+<!-- 登录态入口，必须放在最后 -->
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>
+```
 
-- HTML 底部按顺序引入：
-  - `../common/js/base.js`
-  - `../common/js/jquery-2.1.3.min.js`
-  - `../common/js/jquery-weui.min.js`
-  - `../common/js/jssdk.js`
-  - `../common/js/server.js`
-  - 页面自己的 `js/*.js`
-  - `../common/js/getUserInfo.js`
-- 页面中常定义 `getUserFinish()`，在用户信息获取成功后再初始化页面。
-- 常见调用链：
-  - `getUserInfo.js` 负责获取登录态
-  - `getUserFinish()` 中调用 `initJSSDK(...)`
-  - `wx.ready(...)` 内配置企业微信行为
-  - 最后执行页面自己的 `initFun()`
+### 骨架说明
 
-### 2. 新一点的独立静态页模式
+| 要素 | 说明 |
+|------|------|
+| `v-cloak` | 防止 Vue 渲染前显示原始模板花括号 |
+| `display:none` 初始 | 部分老页面用 `style="display:none"` + `$('#app').show()` 防闪，新页面用 `v-cloak` 替代 |
+| `getUserFinish()` | **不可省略**，这是登录态完成后的唯一入口 |
+| `initFun()` | **Vue 实例初始化函数**，定义在模块 JS 文件中 |
+| `getUserInfo.js` | **必须放在最后**，它会触发整个登录链路 |
+| JSSDK 权限列表 | 按页面实际需求增减，常用：`hideAllNonBaseMenuItem`、`invoke`、`chooseImage`、`uploadImage`、`startRecord`、`stopRecord`、`closeWindow` |
 
-- 代表模块：`ares/directTransfer/`
-- 特征：
-  - 直接通过静态 `html + css + js` 搭页面
-  - 使用 Vue2 + Vant2
-  - 模块内部维护共享逻辑和状态
-  - 会补充模块级说明文档，例如 `ares/directTransfer/README.md`
+---
 
-## 开发与修改规则
+## 5. 标准 JS 文件骨架
 
-### 1. 先参考，再实现
+> 文件名对应页面名，如 `list.js`、`detail.js`、`apply.js`。
 
-- 先找相似模块、相似页面、相似交互。
-- 优先复用已有页面骨架、命名风格、资源组织方式、弹层写法、列表写法、详情页写法。
-- 若用户给了 `ui/` 导出包，先完成 UI 页面与 `ares` 实际文件的映射。
-- 当用户要求“还原页面”“按 UI 出页面”这类任务时，默认新建页面承接还原结果，不直接修改旧页面，除非用户明确要求在原页面上改。
+```javascript
+// 接口地址集中管理（可选，也可以直接放在 data 里）
+var baseUrl = {
+    getList: 'module/getList.xa',
+    saveData: 'module/save.xa',
+};
 
-### 2. 目录和命名保持贴近现状
+var vm; // 暴露实例，方便外部调试
 
-- 页面文件一般直接放在模块目录或模块子目录下。
-- JS、CSS、图片资源优先放回各自模块的 `js/`、`css/`、`image/` 或 `images/`。
-- 不要随意把老模块改造成全局共享组件目录。
+function initFun() {
+    vm = new Vue({
+        el: '#app',
+        data: {
+            // ---- 接口地址（若不用 baseUrl 对象，在这里定义）----
+            // getListUrl: 'module/getList.xa',
 
-### 3. 相对路径必须谨慎
+            // ---- 分页 ----
+            pageNum: 1,
+            pageSize: 10,
+            list: [],
+            loading: false,
+            finished: false,
 
-- 本仓库大量页面位于二级目录甚至三级目录。
-- 修改或新增页面时，必须检查 `common/`、`css/`、`js/`、`image/` 的相对路径层级是否正确。
-- 例如：
-  - 一级模块页面通常使用 `../common/...`
-  - 二级子目录页面通常使用 `../../common/...`
+            // ---- Tab ----
+            activeTab: 0,
 
-### 4. 接口接入遵循现有封装
+            // ---- 弹窗/选择器 ----
+            showPicker: false,
+            pickerColumns: [],
 
-- 旧模块默认优先使用 `ares/common/js/server.js` 中的 `$http` / `$Upload`。
-- 接口地址通常基于 `base.context` 进行拼接。
-- 请求头中可能依赖 `X-Token`，不要绕开现有会话逻辑随意重写请求层。
+            // ---- 表单 ----
+            formData: {},
 
-### 5. 企业微信能力不要随意删改
+            // ---- 状态 ----
+            noData: false,
+            dataOver: false,
+        },
 
-- 如果页面已经使用 `initJSSDK`、`wx.ready`、`initAgentConf`、录音/拍照/上传等能力，修改时要保留原调用链。
-- 用户登录态、水印、菜单隐藏、关闭窗口、图片上传、录音识别等逻辑通常属于业务必需，不应因为“看起来旧”就移除。
+        created: function() {
+            // 读取 sessionStorage 恢复状态（如有）
+        },
 
-## 文档与输入源使用优先级
+        mounted: function() {
+            this.getList();
+        },
 
-### 1. 代码优先级
+        computed: {
+            // 派生状态
+        },
 
-- 第一参考：`ares/` 中现有同类页面
-- 第二参考：`ui/` 中设计稿导出
-- 第三参考：`需求.docx`
-- 第四参考：`接口.doc`
+        methods: {
+            // ---- 工具方法 ----
+            getQueryParam: function(name) {
+                var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+                var r = window.location.search.substr(1).match(reg);
+                return r ? decodeURIComponent(r[2]) : null;
+            },
 
-### 2. 当信息冲突时
+            toPage: function(url) {
+                window.location.href = url;
+            },
 
-- 页面结构、技术实现细节优先以 `ares/` 现有实现为准。
-- 新需求范围、页面增删改优先以 `需求.docx` 为准。
-- 字段、接口名、状态码优先以 `接口.doc` 和现有接口调用代码共同确认。
-- 不能确定时，明确标注“待确认”，不要把推测写成定论。
+            // ---- 数据请求 ----
+            getList: function() {
+                var that = this;
+                var params = {
+                    page: that.pageNum,
+                    limit: that.pageSize,
+                };
+                $http(baseUrl.getList, true, params, false)
+                    .then(function(res) {
+                        // res.data 是数组时追加，否则赋值
+                        that.list = that.list.concat(res.data || []);
+                        if ((res.data || []).length < that.pageSize) {
+                            that.finished = true;
+                            that.dataOver = true;
+                        } else {
+                            that.pageNum++;
+                        }
+                        that.noData = that.list.length === 0;
+                    });
+            },
 
-## 建议的工作流
+            // ---- 提交 ----
+            submit: function() {
+                var that = this;
+                var params = Object.assign({}, that.formData);
+                $.confirm('', '确认提交？', function() {
+                    $http(baseUrl.saveData, true, params, false)
+                        .then(function(res) {
+                            $.toast('提交成功', 'text');
+                            setTimeout(function() {
+                                window.history.back();
+                            }, 1500);
+                        });
+                });
+            },
 
-1. 先定位目标业务模块，确认是否已有相似页面。
-2. 读取对应 `html/css/js` 和公共依赖，判断该模块使用的具体技术栈。
-3. 如果有 `ui/`，先做设计稿到页面文件映射。
-4. 如果有接口需求，再读取 `接口.doc` 和现有 API 调用。
-5. 落地改动时优先小步修改，保持原目录结构和引用方式。
-6. 完成后检查页面初始化链、相对路径、资源引用、接口参数、微信能力调用是否完整。
+            // ---- 跳转详情 ----
+            toDetail: function(item) {
+                var url = 'detail.html?id=' + item.id;
+                window.location.href = url;
+            },
 
-## 验收清单
+            // ---- Picker 确认 ----
+            onPickerConfirm: function(value) {
+                this.formData.xxx = value.val;
+                this.showPicker = false;
+            },
+        },
 
-- 页面引用的 CSS / JS / 图片相对路径正确。
-- `initFun()`、`getUserFinish()`、`wx.ready()` 等入口函数链路没有断。
-- 若页面依赖登录态或水印，相关公共脚本仍然保留。
-- 若页面依赖 URL 参数、`sessionStorage`、模块级共享文件，跨页状态链路保持可用。
-- 新增页面时，命名、目录层级、资源组织方式与所在模块一致。
-- 没有无必要地引入新框架、新构建工具或大规模重构。
+        watch: {
+            // 需要联动时使用
+        }
+    });
+}
+```
 
-## 明确禁止事项
+### JS 骨架说明
 
-- 不要默认把项目改成 Vite / Webpack 工程。
-- 不要默认把老页面整体重写成 Vue3 或其他框架。
-- 不要跨模块复制大量公共代码，除非确认该模块本来就这样组织。
-- 不要忽略企业微信登录态、JSSDK、水印、上传、录音等现有业务依赖。
+| 要素 | 说明 |
+|------|------|
+| `function initFun()` | **入口函数名固定**，由 HTML 中 `getUserFinish()` 调用 |
+| `var vm` | 暴露到全局，便于调试和跨方法引用 |
+| `$http(url, loading, params, rawReturn)` | 第4个参数为 `true` 时原样返回 res，`false` 时自动处理 retcode |
+| `$.confirm / $.alert / $.toast` | 来自 jquery-weui，不使用原生 `alert/confirm` |
+| `sessionStorage` | 用于跨页面状态传递（如 tab 状态回传），不得用于持久存储 |
+| `$.parseJSON($.cookie("user")).name` | 获取当前登录用户名（在水印/权限判断时使用） |
 
-## 已知代表性参考
+---
 
-- `ares/directTransfer/README.md`：模块页面映射和共享文件说明的好例子。
-- `ares/common/js/base.js`：全局域名和上下文配置入口。
-- `ares/common/js/server.js`：旧模块接口调用封装入口。
-- `ares/common/js/getUserInfo.js`：旧模块登录态获取入口。
+## 6. $http 接口调用规范
 
-## 对后续 agent 的执行要求
+```javascript
+// 签名：$http(url, showLoading, params, rawReturn)
+// url: 相对路径，base.context 会自动拼接 /aresqywx/
+// showLoading: true 显示加载动画，false 不显示
+// params: 对象，自动序列化为 JSON
+// rawReturn: false = 仅在 retcode==='success' 时 resolve；true = 始终 resolve
 
-- 每次进入本仓库，先读本文件，再开始分析任务。
-- 回答和实现时默认以 `ares` 现有模式为基准，不按通用现代前端脚手架习惯做主观重构。
-- 做页面开发、样式调整、接口接入、文档整理时，都要优先引用当前仓库已有实现作为依据。
-- 当任务类型已有匹配的子 agent 时，默认优先实际调用对应子 agent 执行，而不是仅在主线程里“按该 agent 的流程”处理。
-- 子 agent 选择遵循现有配置：
-  - `ui-agent`：UI 还原、页面搭建、样式收口、前端交互落地
-  - `api-agent`：接口文档阅读、字段映射、接口对接准备
-  - `doc-agent`：需求整理、页面映射、流程拆解、开发文档补充
-  - `review-agent`：代码 review、风险扫描、回归点检查
-  - `test-agent`：测试验证、验收、自测和问题复现
-  - `orchestrator-agent`：需要多子 agent 协同时的任务统筹与分派
-- 只有在以下情况才可以不优先调用对应子 agent：
-  - 用户明确要求主线程直接处理
-  - 任务只是极小的只读确认，调用子 agent 反而增加额外开销
-  - 仓库中不存在与该任务匹配的子 agent 配置
+// 示例1：标准调用（retcode 自动处理）
+$http('module/list.xa', true, { page: 1 }, false)
+    .then(function(res) {
+        // res.data 是正常数据
+    });
+
+// 示例2：需要手动处理 retcode
+$http('module/save.xa', true, params, true)
+    .then(function(res) {
+        if (res.retcode === 'success') { /* 成功 */ }
+        else { $.alert('', res.retmsg); }
+    });
+```
+
+---
+
+## 7. 常见 UI 组件用法
+
+### 7.1 Tab 切换
+
+```html
+<!-- HTML -->
+<van-tabs v-model="activeTab" @change="onTabChange">
+    <van-tab title="标签1"></van-tab>
+    <van-tab title="标签2"></van-tab>
+</van-tabs>
+```
+
+### 7.2 下拉选择器
+
+```html
+<!-- HTML -->
+<van-popup v-model="showPicker" position="bottom">
+    <van-picker
+        show-toolbar
+        title="请选择"
+        item-height="50px"
+        :columns="pickerColumns"
+        @confirm="onPickerConfirm"
+        @cancel="showPicker = false">
+    </van-picker>
+</van-popup>
+```
+
+### 7.3 上拉加载更多
+
+```html
+<van-list v-model="loading" :finished="finished" finished-text="已到最底部了" @load="onLoad">
+    <div v-for="(item, index) in list" :key="index">
+        <!-- 列表项 -->
+    </div>
+</van-list>
+```
+
+### 7.4 时间选择器
+
+```html
+<van-popup v-model="showDatePicker" position="bottom">
+    <van-datetime-picker
+        type="date"
+        title="选择日期"
+        v-model="currentDate"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @confirm="onDateConfirm"
+        @cancel="showDatePicker = false">
+    </van-datetime-picker>
+</van-popup>
+```
+
+### 7.5 ActionSheet（底部面板）
+
+```html
+<van-action-sheet v-model="showSheet" title="请选择">
+    <div class="sheetContent">
+        <!-- 内容 -->
+        <div class="btnGroup">
+            <span @click="onReset">重置</span>
+            <span @click="onConfirm">确认</span>
+        </div>
+    </div>
+</van-action-sheet>
+```
+
+---
+
+## 8. 登录链路说明
+
+```
+页面加载
+  └─► getUserInfo.js 执行
+        └─► getuserCode() 检查 Session
+              ├─► Session 有效 → getUserFinish() ← 业务入口
+              │       └─► __canvasWM({ content: username })  // 水印
+              │       └─► initFun()                          // 启动 Vue
+              └─► Session 无效 → 微信 OAuth2 授权
+                    └─► getUserInfo(code) 换取用户信息
+                          └─► getUserFinish()
+```
+
+**关键约束：**
+- `getUserFinish()` 必须在 HTML 内联 `<script>` 中定义，不得移入模块 JS。
+- `initFun()` 必须在模块 JS 中定义，不得改名。
+- 部分老模块用 `action()` 替代 `initFun()`，新页面统一用 `initFun()`。
+
+---
+
+
+
+---
+
+## 10. 新增模块 Checklist
+
+- [ ] 目录放在 `ares/<moduleName>/`，与已有模块同级
+- [ ] CSS 放 `css/`，JS 放 `js/`，图片放 `images/`
+- [ ] HTML 使用第 4 节骨架，公共 JS 引用路径为 `../common/js/`
+- [ ] `getUserFinish()` 内调用水印 + `initFun()`
+- [ ] `getUserInfo.js` 放在 `</html>` 前最后一行
+- [ ] 接口路径使用相对路径（不含 `/aresqywx/`，由 `base.context` 拼接）
+- [ ] 不引入 Vue3 / Vant4 / axios / 工程化构建
+- [ ] 版本号写在私有 JS 的 `?v=x.x.x` 参数上，便于缓存刷新
+- [ ] vConsole 调试代码上线前注释掉
+
+---
+
+## 10.5 UI 1:1 还原强制策略
+
+- 当任务是根据 `ui/preview`、`ui/index.html`、`ui/assets` 还原页面时，默认必须**从设计稿重新生成目标页面**
+- “重新生成”指：先重新提取目标 artboard 规格，再重新产出目标 `html/css/js`，而不是以仓库里已有同名页面为实现起点
+- 即使仓库中已经存在同名页面、历史还原稿、`Restore` 页面或旧模块实现，也**只能作为对照参考**，不得直接在其基础上默认续改
+- 只有当用户明确表达“接着旧页面改”“复用现有实现继续收口”“不要重写”时，才允许以已有页面为起点
+- 如果用户明确指定了目标输出文件，也仍然要把该文件内容按设计稿重新生成，而不是因为该文件已存在就转为增量修补
+- 执行 `ui-1to1-restore-flow` 时，必须优先服从本节规则；如与 skill 默认习惯冲突，以本节为准
+
+---
+
+## 11. Skills 安装安全规范
+
+### 11.1 目录职责
+
+- `~/.codex/skills/.system/`：系统内置 skills，只读对待，不作为日常维护目录
+- `~/.codex/skills/`：本地自装和自维护 skills 的目录
+- 项目根目录下如存在 `.codex/` 软链接，应优先通过该入口查看真实生效目录
+
+### 11.2 安装前必须先做 vet
+
+- 任何来自 GitHub、skills.sh、第三方分享或未知来源的 skill，在安装前**必须先使用 `skill-vetter` 做完整安全审查**
+- 没有 vet report，不得直接安装
+- 不得只做口头判断、来源猜测或简化检查后直接安装
+
+### 11.3 `skill-vetter` 最低执行要求
+
+- 先确认来源、作者、仓库信誉、最近更新时间
+- 安装前阅读该 skill 的全部文件，而不只看 `SKILL.md`
+- 检查是否存在联网、凭证读取、敏感目录访问、提权、远程脚本下载、混淆代码等风险
+- 评估该 skill 实际需要的文件权限、命令权限和网络权限是否与用途匹配
+- 最终必须输出明确的 vet 结论：`SAFE TO INSTALL`、`INSTALL WITH CAUTION` 或 `DO NOT INSTALL`
+
+### 11.4 高风险情形
+
+出现以下任一情况时，不得跳过人工确认：
+
+- 需要读取 `~/.ssh`、`~/.aws`、`~/.config`、cookie、session、token 等敏感信息
+- 包含 `curl`、`wget`、远程脚本执行、`eval`、`exec`、base64 解码、混淆代码
+- 需要修改工作区外文件、系统配置或申请高权限
+- 来源不明、仓库信誉过低、文件内容与宣称用途明显不符
+
+### 11.5 安装执行顺序
+
+安装第三方 skill 时，必须按以下顺序执行：
+
+1. 使用 `find-skills` 或其他方式定位候选 skill
+2. 使用 `skill-vetter` 完成完整审查并输出 vet report
+3. 仅在 vet 结论允许时，才使用 `skill-installer` 或等效方式安装
+4. 安装后再次核对落地目录、`SKILL.md` 和附带脚本
+
+### 11.6 禁止事项
+
+- 不得因为“先装起来再看”而跳过 vet
+- 不得因为来源看起来像官方，就省略文件级审查
+- 不得在无法完成 vet 的情况下默认继续安装
+- 如遇网络或拉取失败，优先说明 vet 未完成，不得把“未审完”表述成“已安全”

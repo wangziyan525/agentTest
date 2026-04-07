@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <title>转贴现买入查询</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <link rel="stylesheet" href="css/pendingReceipt.css">
+</head>
+<body>
+    <div id="app" v-cloak>
+        <div class="pending-receipt-page">
+            <div class="page-header">
+                <div class="ios-status-bar">
+                    <div class="status-left">
+                        <div class="signal-bars">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <span class="carrier-text">Sketch</span>
+                        <div class="wifi-icon">
+                            <span class="wifi-arc wifi-arc-large"></span>
+                            <span class="wifi-arc wifi-arc-small"></span>
+                            <span class="wifi-dot"></span>
+                        </div>
+                    </div>
+                    <div class="status-time">9:41 AM</div>
+                    <div class="status-right">
+                        <span class="battery-percent">100%</span>
+                        <span class="bt-icon"></span>
+                        <div class="battery-icon">
+                            <span class="battery-charge"></span>
+                            <span class="battery-cap"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-bar">
+                    <div class="back-hit" @click="goBack">
+                        <img class="back-icon" src="images/back.png" alt="">
+                    </div>
+                    <div class="nav-title">转贴现买入查询</div>
+                </div>
+
+                <div class="tab-bar">
+                    <div class="tab-item" :class="{ active: activeTab === 0 }" @click="switchTab(0)">待签收</div>
+                    <div class="tab-item" :class="{ active: activeTab === 1 }" @click="switchTab(1)">签收结果查询</div>
+                    <div class="tab-line" :style="tabLineStyle"></div>
+                </div>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-trigger" :class="{ 'filter-trigger-active': showFilterSheet }" @click="toggleFilterSheet">
+                    <span>筛选</span>
+                    <img class="filter-arrow" :class="{ 'filter-arrow-active': showFilterSheet }" src="images/filter-down.png" alt="">
+                </div>
+            </div>
+
+            <div class="card-list" v-if="cards.length">
+                <div class="ticket-card" v-for="(item, index) in cards" :key="item.billNo + '-' + index">
+                    <div class="card-header">
+                        <div class="bill-no">{{ item.billNo }}</div>
+                        <div class="ticket-tag" :class="'ticket-tag-' + item.typeTheme">{{ item.ticketType }}</div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="detail-row" v-for="(detail, detailIndex) in item.details" :key="item.billNo + '-detail-' + detailIndex">
+                            <div class="detail-label">{{ detail.label }}</div>
+                            <div class="detail-value">{{ detail.value }}</div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer" @click="toSign(item)">去签收</div>
+                </div>
+
+                <div class="list-end">已到最底部了</div>
+            </div>
+
+            <div class="empty-state" v-else>
+                <div class="empty-text">暂无待签收数据</div>
+            </div>
+
+            <div class="filter-mask" v-if="showFilterSheet" @click="closeFilterSheet"></div>
+
+            <van-popup v-model="showFilterSheet" position="bottom" :overlay="false" class="filter-popup">
+                <div class="filter-panel">
+                    <div class="filter-panel-header">
+                        <img class="filter-close-icon" src="images/filter-close.png" alt="" @click="closeFilterSheet">
+                        <div class="filter-panel-title">请选择筛选条件</div>
+                    </div>
+
+                    <div class="filter-panel-body">
+                        <div class="filter-field">
+                            <div class="filter-label">交易对手机构号</div>
+                            <input v-model="filterForm.orgNo" class="filter-input" type="text" placeholder="请输入">
+                        </div>
+
+                        <div class="filter-field filter-field-quote">
+                            <div class="filter-label">报价单编号</div>
+                            <input v-model="filterForm.quoteNo" class="filter-input" type="text" placeholder="请输入">
+                        </div>
+
+                        <div class="filter-field filter-field-amount">
+                            <div class="filter-label">票据总金额</div>
+                            <div class="amount-row">
+                                <div class="amount-input-wrap">
+                                    <span class="amount-prefix">¥</span>
+                                    <input v-model="filterForm.minAmount" class="amount-input" type="text" placeholder="最低金额">
+                                </div>
+                                <div class="amount-divider"></div>
+                                <div class="amount-input-wrap">
+                                    <span class="amount-prefix">¥</span>
+                                    <input v-model="filterForm.maxAmount" class="amount-input" type="text" placeholder="最高金额">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-panel-footer">
+                        <button class="filter-footer-btn filter-footer-btn-reset" type="button" @click="resetFilter">重置</button>
+                        <button class="filter-footer-btn filter-footer-btn-confirm" type="button" @click="confirmFilter">确认</button>
+                    </div>
+                </div>
+            </van-popup>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/server.js"></script>
+<script type="text/javascript" src="js/pendingReceipt.js?v=1.0.0"></script>
+<script>
+    window.addEventListener('pageshow', function(e) {
+        if (e.persisted) { location.reload(); }
+    });
+
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'closeWindow']);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie('user')).name;
+        __canvasWM({ content: username });
+        initFun();
+    }
+</script>
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

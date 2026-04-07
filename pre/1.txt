@@ -1,0 +1,51 @@
+获取投资任职查询详情
+/misconduct/getInvestmentDetail.xa
+上送{
+   "employeeMisconductChecklistId": "0d9aa08562c247c59dea2064434e8453"
+} 
+返回
+
+
+{
+    "data": {
+        "PERSON_INFO": {
+            "BREAKLAW": [],
+            "ENTCASEINFO": [],
+            "EXCEPTIONLIST": [],
+            "FINALCASE": [],
+            "LIMITCONSUM": [],
+            "PUNISHBREAK": [],
+            "PUNISHED": [],
+            "RYPOSFR": [],
+            "RYPOSPER": [
+                {
+                    "APPRDATE": "",
+                    "CANDATE": "",
+                    "CREDITCODE": "91310114MA1GWJGX1K",
+                    "ENTID": "0ec3fa4d5a7a4aecca549b3b4a7eb677",
+                    "ENTNAME": "上海书途文化传播有限公司",
+                    "ENTSTATUS": "注销",
+                    "ENTTYPE": "有限责任公司(自然人独资)",
+                    "ENTTYPECODE": "",
+                    "ESDATE": "2019-09-30",
+                    "FRNAME": "卫荣虹",
+                    "POSITION": "监事",
+                    "REGCAP": "100.000000",
+                    "REGCAPCUR": "人民币元",
+                    "REGCITY": "",
+                    "REGNO": "310114003727939",
+                    "REGORGCITY": "",
+                    "REGORGDISTRICT": "",
+                    "REGORGPROVINCE": "上海市",
+                    "REVDATE": "",
+                    "RYNAME": "臧世华"
+                }
+            ],
+            "RYPOSSHA": []
+        }
+    },
+    "retmsg": "请求成功",
+    "retcode": "success"
+} 
+
+tzrzFlag 

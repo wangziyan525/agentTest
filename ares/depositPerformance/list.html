@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+          name="viewport" />
+    <title>普惠客户存款业绩</title>
+    <!-- 公共 CSS（顺序固定） -->
+    <link rel="stylesheet" href="../common/css/weui.min.css" />
+    <link rel="stylesheet" href="../common/css/jquery-weui.min.css" />
+    <link rel="stylesheet" href="../common/css/vant-2.12.css" />
+    <!-- 模块私有 CSS -->
+    <link rel="stylesheet" href="css/list.css">
+</head>
+<body>
+    <div id="app" v-cloak>
+
+        <!-- ===== 日期筛选 ===== -->
+        <div class="dp-date-filter">
+            <div class="dp-date-btn"
+                 :class="{inactive: dateType !== 'yesterday'}"
+                 @click="setDateType('yesterday')">昨日</div>
+            <div class="dp-date-btn"
+                :class="{inactive: dateType !== 'custom'}"
+                 @click="setDateType('custom')">
+                <span v-if="dateType !== 'custom'">自定义</span>
+                <span v-else>{{selectedDateStr}}</span>
+            </div>
+        </div>
+
+        <!-- ===== 统计卡片 2×2 ===== -->
+        <div class="dp-stats-grid">
+            <!-- 普惠客户数 -->
+            <div class="dp-stat-card">
+                <div class="dp-stat-label-row">
+                    <div class="dp-stat-indicator" style="background:#3788F5;"></div>
+                    <div class="dp-stat-label">普惠客户数</div>
+                </div>
+                <div class="dp-stat-value-row">
+                    <span class="dp-stat-value">{{stats.customerCount}}</span>
+                </div>
+            </div>
+            <!-- 普惠客户新增 -->
+            <div class="dp-stat-card">
+                <div class="dp-stat-label-row">
+                    <div class="dp-stat-indicator" style="background:#1BD06C;"></div>
+                    <div class="dp-stat-label">普惠客户新增</div>
+                </div>
+                <div class="dp-stat-value-row">
+                    <span class="dp-stat-value">{{stats.newCustomer}}</span>
+                </div>
+            </div>
+            <!-- 普惠存款余额 -->
+            <div class="dp-stat-card">
+                <div class="dp-stat-label-row">
+                    <div class="dp-stat-indicator" style="background:#FBC41E;"></div>
+                    <div class="dp-stat-label">普惠存款余额</div>
+                </div>
+                <div class="dp-stat-value-row">
+                    <span class="dp-stat-value">{{stats.balance}}</span>
+                    <span class="dp-stat-unit" v-if="stats.balance !== '--'">万元</span>
+                </div>
+            </div>
+            <!-- 普惠存款年日均新增 -->
+            <div class="dp-stat-card">
+                <div class="dp-stat-label-row">
+                    <div class="dp-stat-indicator" style="background:#0FDDB6;"></div>
+                    <div class="dp-stat-label-sm">普惠存款年日均新增</div>
+                </div>
+                <div class="dp-stat-value-row">
+                    <span class="dp-stat-value">{{stats.yearlyNew}}</span>
+                    <span class="dp-stat-unit" v-if="stats.yearlyNew !== '--'">万元</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== 主白色卡片（Tab + 分组 + 表格）===== -->
+        <div class="dp-main-card">
+
+            <!-- 主 Tab -->
+            <div class="dp-main-tabs">
+                <div class="dp-main-tab"
+                     :class="{active: activeMainTab === 0}"
+                     @click="setMainTab(0)">一级机构</div>
+                <div class="dp-main-tab"
+                     :class="{active: activeMainTab === 1}"
+                     @click="setMainTab(1)">经营支行</div>
+                <div class="dp-main-tab"
+                     :class="{active: activeMainTab === 2}"
+                     @click="setMainTab(2)">员工</div>
+            </div>
+
+            <!-- 分组筛选（仅一级机构时显示） -->
+            <div class="dp-group-filter" v-if="activeMainTab === 0">
+                <div class="dp-group-btn"
+                     v-for="(grp, index) in groups"
+                     :key="index"
+                     :class="activeGroup === index ? 'active' : 'inactive'"
+                     @click="setGroup(index)">{{grp}}</div>
+            </div>
+
+            <!-- 数据表格 + 上拉加载 -->
+            <van-list v-model="loading"
+                      :finished="finished"
+                      finished-text=""
+                      @load="onLoad"
+                      :immediate-check="false">
+                <div class="dp-table-container">
+                    <div class="dp-table-scroll">
+                        <table class="dp-data-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-name">
+                                        <span v-if="activeMainTab === 2">员工姓名</span>
+                                        <span v-else-if="activeMainTab === 1">支行名称</span>
+                                        <span v-else>机构名称</span>
+                                    </th>
+                                    <th class="col-inc">普惠客户新增</th>
+                                    <th class="col-pers">个人客户</th>
+                                    <th class="col-corp">对公客户</th>
+                                    <th class="col-bal">普惠存款余额累计余额</th>
+                                    <th class="col-mom">较上月</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item, index) in list" :key="index">
+                                    <td class="col-name" @click="toDetail(item)">{{item.name}}</td>
+                                    <td>{{item.newCustomer}}</td>
+                                    <td>{{item.personal}}</td>
+                                    <td>{{item.corporate}}</td>
+                                    <td>{{item.balance}}</td>
+                                    <td class="col-mom">{{item.monthOnMonth}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- 右侧渐隐遮罩（表示有更多列） -->
+                    <div class="dp-table-fade"></div>
+                </div>
+                <div class="dp-no-data" v-if="noData && !loading">暂无数据</div>
+                <div class="dp-list-end" v-if="finished && !noData">已到最底部了</div>
+            </van-list>
+
+        </div><!-- /dp-main-card -->
+
+        <!-- ===== 自定义日期选择器 ===== -->
+        <van-popup v-model="showStartPicker" position="bottom">
+            <van-datetime-picker
+                type="date"
+                title="选择日期"
+                v-model="currentPickerDate"
+                :min-date="minDate"
+                :max-date="maxDate"
+                @confirm="onStartDateConfirm"
+                @cancel="showStartPicker = false">
+            </van-datetime-picker>
+        </van-popup>
+
+    </div>
+</body>
+
+<!-- 公共 JS（顺序固定，不可乱序） -->
+<script type="text/javascript" src="../common/js/vue.min.js"></script>
+<script type="text/javascript" src="../common/js/vant-2.12.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../common/js/jquery.cookie_jq.js"></script>
+<script type="text/javascript" src="../common/js/base.js"></script>
+<script type="text/javascript" src="../common/js/jssdk.js"></script>
+<script type="text/javascript" src="../common/js/watermark.js"></script>
+<script type="text/javascript" src="../common/js/server.js"></script>
+<!-- 模块私有 JS -->
+<script type="text/javascript" src="js/list.js?v=1.0.0"></script>
+<!-- 调试用，上线注释掉 -->
+<!-- <script type="text/javascript" src="../common/js/vConsole.min.js"></script> -->
+<script>
+    // var vConsole = new VConsole();
+
+    // JSSDK 初始化
+    $(function() {
+        initJSSDK(['hideAllNonBaseMenuItem', 'invoke', 'closeWindow']);
+        wx.ready(function() {
+            wx.hideAllNonBaseMenuItem();
+        });
+    });
+
+    // 登录态回调
+    function getUserFinish() {
+        var username = $.parseJSON($.cookie("user")).name;
+        __canvasWM({ content: username });
+        initFun();
+    }
+</script>
+<!-- 登录态入口，必须放在最后 -->
+<script type="text/javascript" src="../common/js/getUserInfo.js"></script>
+</html>

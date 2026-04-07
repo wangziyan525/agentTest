@@ -1,0 +1,108 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - img [ref=e5] [cursor=pointer]
+    - generic [ref=e7]: 普惠客户存款业绩
+  - generic [ref=e8]:
+    - generic [ref=e9] [cursor=pointer]: 昨日
+    - generic [ref=e11] [cursor=pointer]: 自定义
+  - generic [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e16]: 普惠客户数
+      - generic [ref=e18]: "300"
+    - generic [ref=e19]:
+      - generic [ref=e22]: 普惠客户新增
+      - generic [ref=e24]: "200"
+    - generic [ref=e25]:
+      - generic [ref=e28]: 普惠存款余额
+      - generic [ref=e29]:
+        - generic [ref=e30]: "300"
+        - generic [ref=e31]: 万元
+    - generic [ref=e32]:
+      - generic [ref=e35]: 普惠存款年日均新增
+      - generic [ref=e36]:
+        - generic [ref=e37]: "200"
+        - generic [ref=e38]: 万元
+  - generic [ref=e39]:
+    - generic [ref=e40]:
+      - generic [ref=e41] [cursor=pointer]: 一级机构
+      - generic [ref=e42] [cursor=pointer]: 经营支行
+      - generic [ref=e43] [cursor=pointer]: 员工
+    - generic [ref=e44]:
+      - generic [ref=e45] [cursor=pointer]: 区行组
+      - generic [ref=e46] [cursor=pointer]: 分行组
+      - generic [ref=e47] [cursor=pointer]: 直属行组
+    - feed [ref=e48]:
+      - table [ref=e51]:
+        - rowgroup [ref=e52]:
+          - row "机构名称 普惠客户新增 个人客户 对公客户 累计余额 较上月" [ref=e53]:
+            - columnheader "机构名称" [ref=e54]
+            - columnheader "普惠客户新增" [ref=e55]
+            - columnheader "个人客户" [ref=e56]
+            - columnheader "对公客户" [ref=e57]
+            - columnheader "累计余额" [ref=e58]
+            - columnheader "较上月" [ref=e59]
+        - rowgroup [ref=e60]:
+          - row "区行名称A 500 100 400 400 400" [ref=e61]:
+            - cell "区行名称A" [ref=e62] [cursor=pointer]
+            - cell "500" [ref=e63]
+            - cell "100" [ref=e64]
+            - cell "400" [ref=e65]
+            - cell "400" [ref=e66]
+            - cell "400" [ref=e67]
+          - row "区行名称B 500 100 400 400 400" [ref=e68]:
+            - cell "区行名称B" [ref=e69] [cursor=pointer]
+            - cell "500" [ref=e70]
+            - cell "100" [ref=e71]
+            - cell "400" [ref=e72]
+            - cell "400" [ref=e73]
+            - cell "400" [ref=e74]
+          - row "区行名称C 500 100 400 400 400" [ref=e75]:
+            - cell "区行名称C" [ref=e76] [cursor=pointer]
+            - cell "500" [ref=e77]
+            - cell "100" [ref=e78]
+            - cell "400" [ref=e79]
+            - cell "400" [ref=e80]
+            - cell "400" [ref=e81]
+          - row "区行名称D 500 100 400 400 400" [ref=e82]:
+            - cell "区行名称D" [ref=e83] [cursor=pointer]
+            - cell "500" [ref=e84]
+            - cell "100" [ref=e85]
+            - cell "400" [ref=e86]
+            - cell "400" [ref=e87]
+            - cell "400" [ref=e88]
+          - row "区行名称E 500 100 400 400 400" [ref=e89]:
+            - cell "区行名称E" [ref=e90] [cursor=pointer]
+            - cell "500" [ref=e91]
+            - cell "100" [ref=e92]
+            - cell "400" [ref=e93]
+            - cell "400" [ref=e94]
+            - cell "400" [ref=e95]
+          - row "区行名称F 500 100 400 400 400" [ref=e96]:
+            - cell "区行名称F" [ref=e97] [cursor=pointer]
+            - cell "500" [ref=e98]
+            - cell "100" [ref=e99]
+            - cell "400" [ref=e100]
+            - cell "400" [ref=e101]
+            - cell "400" [ref=e102]
+          - row "区行名称G 500 100 400 400 400" [ref=e103]:
+            - cell "区行名称G" [ref=e104] [cursor=pointer]
+            - cell "500" [ref=e105]
+            - cell "100" [ref=e106]
+            - cell "400" [ref=e107]
+            - cell "400" [ref=e108]
+            - cell "400" [ref=e109]
+          - row "区行名称H 500 100 400 400 400" [ref=e110]:
+            - cell "区行名称H" [ref=e111] [cursor=pointer]
+            - cell "500" [ref=e112]
+            - cell "100" [ref=e113]
+            - cell "400" [ref=e114]
+            - cell "400" [ref=e115]
+            - cell "400" [ref=e116]
+          - row "区行名称I 500 100 400 400 400" [ref=e117]:
+            - cell "区行名称I" [ref=e118] [cursor=pointer]
+            - cell "500" [ref=e119]
+            - cell "100" [ref=e120]
+            - cell "400" [ref=e121]
+            - cell "400" [ref=e122]
+            - cell "400" [ref=e123]
+      - generic [ref=e124]: 已到最底部了

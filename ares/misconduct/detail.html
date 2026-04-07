@@ -64,6 +64,13 @@
                     <div>参加工作时间</div>
                     <div>{{userInfo.workTime?userInfo.workTime:""}}</div>
                 </div>
+                <div
+                    v-if="showInvestmentDetail"
+                    :class="hasInvestmentDetail ? 'baseLine selectChoose' : 'baseLine'"
+                    @click="toDetails()">
+                    <div>投资任职情况</div>
+                    <div :class="hasInvestmentDetail ? 'linkValue' : ''">{{investmentDetailText}}</div>
+                </div>
                 <div class="textPart">
                     <div class="textTitle">家庭常驻详细住址（可接收信函）</div>
                     <div class="textAreaPart" >

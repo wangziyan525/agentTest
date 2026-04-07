@@ -1,0 +1,4 @@
+interface:
+  display_name: "ARES Static Preview"
+  short_description: "Static preview mode for ARES pages"
+  default_prompt: "Use this skill to make an ARES Vue2/Vant2 page render in a local static preview environment without breaking the production skeleton."

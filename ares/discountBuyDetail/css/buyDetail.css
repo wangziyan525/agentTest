@@ -1,0 +1,247 @@
+/* 买入详情页样式 */
+
+/* 防止 FOUC */
+[v-cloak] {
+    display: none;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.buy-detail-page {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #ffffff;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 顶部导航栏 */
+.buy-detail-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #e8e8e8;
+    z-index: 100;
+}
+
+.buy-detail-back {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.buy-detail-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #333333;
+    text-align: center;
+}
+
+/* 主体内容区 */
+.buy-detail-content {
+    padding-top: 44px;
+    background-color: #f5f5f5;
+    min-height: calc(100vh - 44px - 70px);
+}
+
+/* 信息区块 */
+.buy-detail-section {
+    background-color: #f5f5f5;
+    padding: 16px 16px 8px;
+    margin-bottom: 12px;
+}
+
+.buy-detail-section--bills {
+    padding-bottom: 16px;
+}
+
+/* 信息行 */
+.buy-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.buy-detail-row:last-child {
+    border-bottom: none;
+}
+
+.buy-detail-label {
+    font-size: 14px;
+    color: #666666;
+    flex-shrink: 0;
+    width: 100px;
+}
+
+.buy-detail-value {
+    font-size: 14px;
+    color: #333333;
+    text-align: right;
+    word-break: break-all;
+}
+
+.buy-detail-value.amount-orange {
+    color: #ff7043;
+    font-weight: 500;
+}
+
+.buy-detail-value.rate-orange {
+    color: #ff9800;
+    font-weight: 500;
+}
+
+/* 票据明细区域 */
+.buy-detail-bill-header {
+    display: flex;
+    align-items: center;
+    padding: 8px 0 12px;
+    margin-bottom: 8px;
+}
+
+.buy-detail-bill-title {
+    font-size: 14px;
+    color: #666666;
+    margin-right: 12px;
+}
+
+.buy-detail-bill-tag {
+    font-size: 13px;
+    color: #999999;
+    flex: 1;
+}
+
+.buy-detail-bill-type {
+    font-size: 12px;
+    color: #1e90ff;
+    background-color: rgba(30, 144, 255, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* 票据列表 */
+.buy-detail-bill-list {
+    margin-top: 8px;
+}
+
+.buy-detail-bill-item {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+
+.buy-detail-bill-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(238, 238, 238, 0.5);
+}
+
+.buy-detail-bill-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.buy-detail-bill-label {
+    font-size: 12px;
+    color: #999999;
+    flex-shrink: 0;
+    width: 90px;
+}
+
+.buy-detail-bill-value {
+    font-size: 13px;
+    color: #333333;
+    text-align: right;
+    word-break: break-all;
+}
+
+/* 底部按钮区 */
+.buy-detail-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 12px 16px;
+    padding-bottom: calc(12px + constant(safe-area-inset-bottom));
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    border-top: 1px solid #e8e8e8;
+    z-index: 100;
+}
+
+.buy-detail-btn {
+    height: 48px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.buy-detail-btn:active {
+    opacity: 0.7;
+}
+
+.buy-detail-btn--reject {
+    flex: 1;
+    max-width: 45%;
+    background-color: #f0f0f0;
+    color: #666666;
+    margin-right: 12px;
+}
+
+.buy-detail-btn--sign {
+    flex: 1.5;
+    max-width: 55%;
+    background-color: #1e90ff;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 320px) {
+    .buy-detail-label {
+        font-size: 13px;
+        width: 90px;
+    }
+    
+    .buy-detail-value {
+        font-size: 13px;
+    }
+    
+    .buy-detail-bill-label {
+        font-size: 11px;
+        width: 80px;
+    }
+    
+    .buy-detail-bill-value {
+        font-size: 12px;
+    }
+}
